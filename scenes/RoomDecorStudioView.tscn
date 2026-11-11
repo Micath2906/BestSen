@@ -1,0 +1,367 @@
+[gd_scene load_steps=10 format=3 uid="uid://decorstudio001"]
+
+[ext_resource type="Script" path="res://scripts/RoomDecorStudioView.gd" id="1_decor"]
+[ext_resource type="Script" path="res://scripts/GizmoDrawer.gd" id="2_gizmo"]
+[ext_resource type="Texture2D" uid="uid://ksydadkp1g5y" path="res://assets/furnitures/PetMobileGameAsset/PetMobileGameAsset/Backgrounds/Classic/1.png" id="3_bg"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/icon_arrow_left.png" id="4_arrow_left"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_top_bar"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.97, 0.93, 0.92)
+border_width_bottom = 2
+border_color = Color(0.85, 0.75, 0.65, 0.8)
+shadow_color = Color(0, 0, 0, 0.12)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_circle"]
+bg_color = Color(0.92, 0.42, 0.38, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_res_pill"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.78, 0.7, 0.8)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_save"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.92, 0.45, 0.42, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.78, 0.32, 0.28, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_clear"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.42, 0.72, 0.55, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.28, 0.58, 0.42, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_preset"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.58, 0.45, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.42, 0.30, 0.68, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drawer"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.985, 0.96, 0.98)
+border_width_bottom = 2
+border_color = Color(0.85, 0.72, 0.6, 1)
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[node name="RoomDecorStudioView" type="Control"]
+custom_minimum_size = Vector2(540, 960)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_decor")
+
+[node name="RoomViewportArea" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RoomContainer" type="Control" parent="RoomViewportArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RoomBg" type="TextureRect" parent="RoomViewportArea/RoomContainer"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_bg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FloorTouchCatcher" type="Control" parent="RoomViewportArea/RoomContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FurnitureLayer" type="Node2D" parent="RoomViewportArea/RoomContainer"]
+y_sort_enabled = true
+
+[node name="GizmoOverlay" type="Node2D" parent="RoomViewportArea/RoomContainer"]
+script = ExtResource("2_gizmo")
+
+[node name="LeftPanel" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 270.0
+offset_right = 56.0
+offset_bottom = 530.0
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="IconZoom" type="Label" parent="LeftPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "🔍"
+horizontal_alignment = 1
+
+[node name="LblZoomTitle" type="Label" parent="LeftPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 9
+text = "Phóng To"
+horizontal_alignment = 1
+
+[node name="ZoomSlider" type="VSlider" parent="LeftPanel"]
+custom_minimum_size = Vector2(24, 160)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+min_value = 80.0
+max_value = 140.0
+value = 100.0
+
+[node name="LblZoomVal" type="Label" parent="LeftPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 10
+text = "100%"
+horizontal_alignment = 1
+
+[node name="TopBar" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(540, 56)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 56.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_top_bar")
+
+[node name="HBox" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="BtnBack" type="Button" parent="TopBar/HBox"]
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_circle")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_circle")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_circle")
+icon = ExtResource("4_arrow_left")
+icon_alignment = 1
+
+[node name="ResourceRow" type="HBoxContainer" parent="TopBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="MoodBox" type="PanelContainer" parent="TopBar/HBox/ResourceRow"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_res_pill")
+
+[node name="HBox" type="HBoxContainer" parent="TopBar/HBox/ResourceRow/MoodBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="Label" parent="TopBar/HBox/ResourceRow/MoodBox/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "❤️"
+
+[node name="LblMood" type="Label" parent="TopBar/HBox/ResourceRow/MoodBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+text = "85/100"
+
+[node name="GoldBox" type="PanelContainer" parent="TopBar/HBox/ResourceRow"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_res_pill")
+
+[node name="HBox" type="HBoxContainer" parent="TopBar/HBox/ResourceRow/GoldBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="Label" parent="TopBar/HBox/ResourceRow/GoldBox/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "🪙"
+
+[node name="LblGold" type="Label" parent="TopBar/HBox/ResourceRow/GoldBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.55, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "90.000đ"
+
+[node name="FishBox" type="PanelContainer" parent="TopBar/HBox/ResourceRow"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_res_pill")
+
+[node name="HBox" type="HBoxContainer" parent="TopBar/HBox/ResourceRow/FishBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="Label" parent="TopBar/HBox/ResourceRow/FishBox/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "🐟"
+
+[node name="LblFish" type="Label" parent="TopBar/HBox/ResourceRow/FishBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.55, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "120"
+
+[node name="BtnSave" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_save")
+text = "💾 Lưu"
+
+[node name="BtnClear" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_clear")
+text = "🔄 Xóa"
+
+[node name="BtnPreset" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_preset")
+text = "✨ Mẫu"
+
+[node name="DecorDrawer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(540, 195)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 58.0
+offset_bottom = 253.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_drawer")
+
+[node name="VBox" type="VBoxContainer" parent="DecorDrawer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TabsContainer" type="ScrollContainer" parent="DecorDrawer/VBox"]
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HBox" type="HBoxContainer" parent="DecorDrawer/VBox/TabsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnTabAll" type="Button" parent="DecorDrawer/VBox/TabsContainer/HBox"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Toàn bộ"
+
+[node name="BtnTabFurniture" type="Button" parent="DecorDrawer/VBox/TabsContainer/HBox"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "🛋️ Nội Thất"
+
+[node name="BtnTabDecor" type="Button" parent="DecorDrawer/VBox/TabsContainer/HBox"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "🖼️ Trang Trí"
+
+[node name="BtnTabCat" type="Button" parent="DecorDrawer/VBox/TabsContainer/HBox"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "🥣 Đồ Cho Mèo"
+
+[node name="BtnTabWallpaper" type="Button" parent="DecorDrawer/VBox/TabsContainer/HBox"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "🖌️ Nền Phòng"
+
+[node name="ItemsScroll" type="ScrollContainer" parent="DecorDrawer/VBox"]
+custom_minimum_size = Vector2(0, 135)
+layout_mode = 2
+size_flags_vertical = 3
+vertical_scroll_mode = 0
+
+[node name="ItemsHBox" type="HBoxContainer" parent="DecorDrawer/VBox/ItemsScroll"]
+layout_mode = 2
+theme_override_constants/separation = 10

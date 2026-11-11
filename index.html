@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mèo Tự Lập (Cat's Life Quest) - BestSen</title>
+  <style>
+    :root {
+      --bg-cream: #faf5ed;
+      --panel-bg: #fffcf7;
+      --cat-ui-border: #533b27;
+      --cat-ui-border-light: #7c5c43;
+      --cat-ui-bg: #faf4eb;
+      --cat-ui-wood: #eedcc9;
+      --accent-coral: #ff7657;
+      --accent-teal: #4ecdc4;
+      --accent-gold: #f9ca24;
+      --text-dark: #3a2618;
+      --text-muted: #796655;
+      --border-color: #d8c7b3;
+      --safe-green: #2ecc71;
+      --alert-red: #e74c3c;
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #2b2e4a;
+      font-family: var(--font-main);
+      color: var(--text-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Thiết kế khung mô phỏng Mobile Responsive đa thiết bị */
+    #app-frame {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      max-height: 920px;
+      background-color: var(--bg-cream);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 3px solid var(--cat-ui-border);
+    }
+
+    @media (max-width: 480px) {
+      #app-frame {
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100%;
+        border-radius: 0;
+        border: none;
+      }
+    }
+
+    /* TOP BAR 3 CHỈ SỐ SINH TỒN (PHONG CÁCH CAT-UI) */
+    #top-bar {
+      background: var(--cat-ui-wood);
+      border-bottom: 2.5px solid var(--cat-ui-border);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(83, 59, 39, 0.1);
+    }
+
+    .stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fffdf9;
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 2px solid var(--cat-ui-border);
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 2px 0 var(--cat-ui-border);
+    }
+
+    .stat-fish { color: #d35400; }
+    .stat-hunger { color: #27ae60; }
+    .stat-courage { color: #8e44ad; }
+
+    .stat-warning {
+      animation: pulse-warn 1s infinite alternate;
+      border-color: var(--alert-red) !important;
+      color: var(--alert-red) !important;
+    }
+
+    @keyframes pulse-warn {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.06); }
+    }
+
+    /* KHU VỰC NỘI DUNG CHÍNH */
+    #main-content {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* FLOATING PARTICLES / TEXT */
+    .floating-text {
+      position: absolute;
+      font-weight: 800;
+      font-size: 16px;
+      pointer-events: none;
+      z-index: 999;
+      animation: floatUp 0.85s ease-out forwards;
+      text-shadow: 1.5px 1.5px 0 #fff, -1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translate(-50%, 0) scale(0.8); opacity: 1; }
+      50% { transform: translate(-50%, -28px) scale(1.15); opacity: 1; }
+      100% { transform: translate(-50%, -55px) scale(1); opacity: 0; }
+    }
+
+    /* TALKING TOM BOUNCE & SQUISH ANIMATIONS */
+    .squish-anim {
+      animation: squishBounce 0.32s ease-out;
+    }
+
+    .hop-anim {
+      animation: hopBounce 0.4s ease-out;
+    }
+
+    @keyframes squishBounce {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.22, 0.78); }
+      65% { transform: scale(0.88, 1.15); }
+      85% { transform: scale(1.05, 0.95); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes hopBounce {
+      0% { transform: translateY(0); }
+      40% { transform: translateY(-28px) scale(1.05); }
+      70% { transform: translateY(0) scale(1.12, 0.88); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    /* VIEW 1: PHÒNG TRỌ (ROOM VIEW) */
+    .view-room {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 14px 16px;
+    }
+
+    /* BẢNG UI CHO MÈO (CAT DASHBOARD) */
+    .cat-ui-board {
+      background: #fff;
+      border: 1.5px solid var(--border-color);
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.03);
+    }
+
+    .cat-ui-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cat-ui-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #d35400;
+    }
+
+    .cat-ui-rank {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: #f7f3ec;
+      padding: 2px 8px;
+      border-radius: 8px;
+    }
+
+    .cat-bars-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .cat-bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .custom-progress {
+      width: 100%;
+      height: 8px;
+      background: #eee8de;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .custom-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .fill-hunger { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+    .fill-courage { background: linear-gradient(90deg, #a55eea, #8854d0); }
+
+    .anim-chips-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .anim-chip {
+      flex: 1;
+      background: #fbf8f2;
+      border: 1px solid #ebd9c8;
+      border-radius: 8px;
+      padding: 5px 2px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+      color: var(--text-dark);
+    }
+
+    .anim-chip:active, .anim-chip.active {
+      background: var(--text-dark);
+      color: #fff;
+      border-color: var(--text-dark);
+    }
+
+    .room-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .room-stage {
+      position: relative;
+      height: 240px;
+      background: linear-gradient(180deg, #fdf6ec 0%, #faecd8 70%, #ebd7be 70%, #ebd7be 100%);
+      border: 2px solid #e2ceb5;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .window-decor {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      width: 70px;
+      height: 60px;
+      background: #d4eaf7;
+      border: 3px solid #b3cde0;
+      border-radius: 4px;
+    }
+
+    .cat-canvas-container {
+      position: relative;
+      width: 128px;
+      height: 128px;
+      z-index: 2;
+    }
+
+    canvas#cat-canvas {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      cursor: pointer;
+    }
+
+    .cat-bubble {
+      position: absolute;
+      top: 14px;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      font-size: 13px;
+      color: var(--text-dark);
+      text-align: center;
+      max-width: 85%;
+      border: 1px solid #ebd9c8;
+      z-index: 3;
+    }
+
+    .cat-bubble:after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 6px 0;
+      border-style: solid;
+      border-color: #fff transparent;
+      display: block;
+      width: 0;
+    }
+
+    .care-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .care-btn {
+      background: #fffdf9;
+      border: 2px solid var(--cat-ui-border);
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 3px 0 var(--cat-ui-border);
+      transition: all 0.1s ease;
+    }
+
+    .care-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--cat-ui-border);
+      background: #fbf5eb;
+    }
+
+    .care-btn-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .care-btn-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .btn-study-large {
+      margin-top: 14px;
+      background: linear-gradient(135deg, #e67e22, #d35400);
+      color: #fff;
+      border: 2.5px solid var(--cat-ui-border);
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 0 var(--cat-ui-border);
+      transition: all 0.1s ease;
+    }
+
+    .btn-study-large:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--cat-ui-border);
+    }
+
+    /* VIEW 2: BẢN ĐỒ KỸ NĂNG (SKILL TREE) */
+    .view-skills {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .branch-filters {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .filter-chip {
+      background: #fffdf9;
+      border: 2px solid var(--cat-ui-border);
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 2px 0 var(--cat-ui-border);
+      transition: all 0.1s ease;
+      color: var(--text-dark);
+    }
+
+    .filter-chip.active {
+      background: var(--cat-ui-border);
+      color: #fff;
+      border-color: var(--cat-ui-border);
+    }
+
+    .lesson-card {
+      background: #fffdf9;
+      border: 2px solid var(--cat-ui-border);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 var(--cat-ui-border);
+      transition: all 0.1s ease;
+    }
+
+    .lesson-card:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--cat-ui-border);
+    }
+
+    .lesson-card.locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: #f7f5f0;
+      box-shadow: none;
+    }
+
+    .lesson-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--cat-ui-wood);
+      border: 1.5px solid var(--cat-ui-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .lesson-info {
+      flex: 1;
+    }
+
+    .lesson-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .lesson-context {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .lesson-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+
+    .status-done {
+      background: #e8f8f5;
+      color: #27ae60;
+    }
+
+    .status-ready {
+      background: #fef5e7;
+      color: #e67e22;
+    }
+
+    /* VIEW 3: DẠY HỌC LOGIC (SEQUENCE PUZZLE) */
+    .view-puzzle {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .puzzle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .btn-guide-sos {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(231,76,60,0.3);
+    }
+
+    .sequence-slots-area {
+      background: #fff;
+      border: 1.5px dashed #d1c7b7;
+      border-radius: 14px;
+      padding: 12px;
+      margin: 10px 0;
+    }
+
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .slot-box {
+      background: #faf7f2;
+      border: 1.5px solid #e5dac9;
+      border-radius: 10px;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 4px;
+      text-align: center;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .slot-box.filled {
+      background: #e8f4f8;
+      border-color: #3498db;
+    }
+
+    .cards-pool {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .puzzle-card-item {
+      background: #fff;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.12s ease;
+    }
+
+    .puzzle-card-item:active {
+      transform: scale(0.98);
+      background: #fdfaf5;
+    }
+
+    .puzzle-card-item.used {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .puzzle-card-icon {
+      font-size: 20px;
+      width: 32px;
+      text-align: center;
+    }
+
+    .puzzle-card-sound {
+      background: #f0e6d6;
+      padding: 3px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      color: #8e44ad;
+      font-size: 11px;
+    }
+
+    .puzzle-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    /* VIEW 4: MÔ PHỎNG (SIMULATION VIEW) */
+    .view-simulation {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      text-align: center;
+    }
+
+    .sim-stage {
+      height: 200px;
+      background: #eef5f9;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 16px 0;
+      border: 2px solid #d8e5ee;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sim-result-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1.5px solid var(--border-color);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .loot-box {
+      background: #fdf8e2;
+      border: 1.5px solid #f39c12;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    .cheat-sheet-box {
+      background: #eafaf1;
+      border: 1.5px solid #2ecc71;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 12px;
+      color: #27ae60;
+    }
+
+    /* VIEW 5: THƯ VIỆN 24/7 (HANDBOOK) */
+    .view-handbook {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 13px;
+      outline: none;
+      background: #fff;
+    }
+
+    /* VIEW 6: BẢO TÀNG & BẠN BÈ */
+    .view-museum {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .loot-grid-display {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .museum-item-card {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 11px;
+    }
+
+    /* BOTTOM NAV BAR */
+    #bottom-nav {
+      background: #fff;
+      border-top: 2px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      z-index: 10;
+    }
+
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px 10px;
+    }
+
+    .nav-tab.active {
+      color: var(--accent-coral);
+    }
+
+    .nav-icon {
+      font-size: 18px;
+    }
+
+    /* MODAL POPUP */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 99;
+    }
+
+    .modal-content {
+      background: #fff;
+      width: 100%;
+      max-height: 85%;
+      border-radius: 16px;
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .btn-block {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-coral {
+      background: var(--accent-coral);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 1.5px solid var(--border-color);
+      color: var(--text-dark);
+    }
+
+    /* TOAST */
+    #toast-msg {
+      position: absolute;
+      top: 70px;
+      left: 20px;
+      right: 20px;
+      background: rgba(45, 52, 54, 0.95);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      text-align: center;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    #toast-msg.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-frame">
+    <!-- TOP BAR CHỈ SỐ SINH TỒN -->
+    <header id="top-bar">
+      <div class="stat-badge stat-fish" id="badge-fish">
+        <span>🐟</span><span id="val-fish">90</span> Cá
+      </div>
+      <div class="stat-badge stat-hunger" id="badge-hunger">
+        <span>🍗</span><span id="val-hunger">70</span>/100
+      </div>
+      <div class="stat-badge stat-courage" id="badge-courage">
+        <span>💖</span><span id="val-courage">80</span>/100
+      </div>
+    </header>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-msg">Thông báo hệ thống</div>
+
+    <!-- MAIN VIEW CONTAINER -->
+    <main id="main-content">
+      <!-- Sẽ được render động bằng JavaScript -->
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav id="bottom-nav">
+      <button class="nav-tab active" onclick="app.switchTab('room')">
+        <span class="nav-icon">🏠</span>
+        <span>Phòng Trọ</span>
+      </button>
+      <button class="nav-tab" onclick="app.switchTab('skills')">
+        <span class="nav-icon">🗺️</span>
+        <span>16 Bài Học</span>
+      </button>
+      <button class="nav-tab" onclick="app.switchTab('handbook')">
+        <span class="nav-icon">📖</span>
+        <span>Cẩm Nang 24/7</span>
+      </button>
+      <button class="nav-tab" onclick="app.switchTab('museum')">
+        <span class="nav-icon">🏆</span>
+        <span>Bảo Tàng</span>
+      </button>
+    </nav>
+
+    <!-- MODAL CẨM NANG CỨU SEN -->
+    <div id="guide-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-content">
+        <h3 id="modal-title" style="color:var(--alert-red); text-align:center;">🆘 CẨM NANG CỨU SEN (ĐỌC 20S)</h3>
+        <div id="modal-body" style="font-size:13px; line-height:1.5; color:#333;"></div>
+        <button class="btn-block btn-coral" onclick="app.closeGuideModal()">✅ Đã Hiểu, Tiếp Tục Dạy Boss!</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       WEB AUDIO PROCEDURAL SOUND SYSTEM (Meow, Purr, Chimes, Fail)
+       ========================================================================= */
+    const AudioSys = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+      playTone(freq, duration, type = 'sine', vol = 0.25) {
+        try {
+          this.init();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+      },
+      meow(pitch = 1.0) {
+        try {
+          this.init();
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(450 * pitch, now);
+          osc.frequency.exponentialRampToValueAtTime(680 * pitch, now + 0.12);
+          osc.frequency.exponentialRampToValueAtTime(400 * pitch, now + 0.35);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } catch(e) {}
+      },
+      purr() {
+        this.playTone(160, 0.35, 'triangle', 0.15);
+      },
+      success() {
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+          setTimeout(() => this.playTone(f, 0.15, 'sine', 0.2), i * 110);
+        });
+      },
+      fail() {
+        [340, 280, 210].forEach((f, i) => {
+          setTimeout(() => this.playTone(f, 0.18, 'sawtooth', 0.15), i * 140);
+        });
+      },
+      click() {
+        this.playTone(700, 0.04, 'sine', 0.1);
+      },
+      chomp() {
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => this.playTone(220 + (i % 2) * 60, 0.08, 'triangle', 0.3), i * 110);
+        }
+      },
+      giggle() {
+        for (let i = 0; i < 4; i++) {
+          setTimeout(() => this.playTone(720 + (i % 2) * 140, 0.06, 'sine', 0.2), i * 80);
+        }
+      },
+      bounce() {
+        this.playTone(320, 0.09, 'sine', 0.25);
+        setTimeout(() => this.playTone(560, 0.14, 'sine', 0.3), 80);
+      },
+      talkingMimic() {
+        const notes = [659, 783, 880, 783, 1046, 987];
+        notes.forEach((n, i) => {
+          setTimeout(() => this.playTone(n, 0.08, 'triangle', 0.25), i * 90);
+        });
+      }
+    };
+
+    /* =========================================================================
+       GAME STATE & DATA (16 BÀI HỌC THEO GDD)
+       ========================================================================= */
+    const GameData = {
+      fish: 90,
+      hunger: 70,
+      courage: 80,
+      currentDay: 1,
+      unlockedLessons: [1],
+      completedLessons: [],
+      lootCollection: [],
+      debtAmount: 0,
+      debtDueDay: 0,
+      
+      lessons: {
+        1: {
+          id: 1, branch: 1, branchName: "Đường Phố Thổ Địa (Di chuyển)",
+          title: "Bắt Xe Buýt Liên Quận",
+          context: "Lần đầu đón xe buýt số 08 về làng đại học, ngơ ngác sợ lỡ trạm.",
+          guide: [
+            "Đứng tại trạm, thấy xe buýt tới cách 50m thì vẫy tay dứt khoát.",
+            "Bước lên cửa trước, cầm sẵn 5.000đ tiền lẻ trên tay đưa phụ xe.",
+            "Ngồi ghế nhường người già/phụ nữ, giữ chặt ba lô trước ngực tránh móc túi.",
+            "Trước khi tới trạm 100m, đứng dậy bấm nút chuông đỏ trên cột báo tài xế."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-o?", icon: "✋", text: "Vẫy tay khi xe cách trạm 50m", step: 1 },
+            { code: "B", meow: "Méo meo!", icon: "💵", text: "Lên cửa trước, đưa 5k tiền lẻ", step: 2 },
+            { code: "C", meow: "Meo-wrr", icon: "🎒", text: "Ôm ba lô trước ngực giữ cẩn thận", step: 3 },
+            { code: "D", meow: "Meoo!!", icon: "🔔", text: "Bấm chuông đỏ trước trạm 100m", step: 4 }
+          ],
+          failMsg: "Quê xệ! Mèo bấm chuông khi chưa lên xe buýt! Người xung quanh ngơ ngác nhìn Mèo, xe chạy vụt mất!",
+          successMsg: "Mèo bắt xe buýt số 08 cực chuẩn! Bác phụ xe mỉm cười xoa đầu khen Mèo tháo vát!",
+          lootName: "Cuống vé xe buýt số 08 bấm lỗ",
+          lootDesc: "Kỷ niệm lần đầu đi xe buýt liên quận không bị lạc hay móc túi.",
+          rewardFish: 30,
+          cheatSheet: "Vẫy xe 50m -> Tiền lẻ cửa trước -> Giữ ba lô -> Bấm chuông 100m."
+        },
+        2: {
+          id: 2, branch: 1, branchName: "Đường Phố Thổ Địa (Di chuyển)",
+          title: "Đọc BusMap & Đổi Tuyến",
+          context: "Tìm đường chuyển từ xe 19 sang xe 53 khi đi học cơ sở 2.",
+          guide: [
+            "Mở app BusMap tra cứu tuyến có ít điểm dừng và ít chuyển tuyến nhất.",
+            "Kiểm tra mã số trạm dừng và thời gian thực xe sắp đến (ETA).",
+            "Xuống đúng trạm trung chuyển, quan sát biển hướng dẫn đón xe kế tiếp.",
+            "Lên xe thứ 2, quẹt thẻ sinh viên hoặc xuất trình vé tháng hợp lệ."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-map?", icon: "📱", text: "Tra lộ trình BusMap ít chuyển tuyến", step: 1 },
+            { code: "B", meow: "Meo-time!", icon: "⏱️", text: "Kiểm tra mã trạm & giờ xe cập bến", step: 2 },
+            { code: "C", meow: "Meo-hub!", icon: "🚏", text: "Đến đúng cột đón tuyến xe số 2", step: 3 },
+            { code: "D", meow: "Purr-pass!", icon: "🎫", text: "Lên xe trình thẻ tháng sinh viên", step: 4 }
+          ],
+          failMsg: "Mèo nhảy nhầm sang cột ngược chiều, xe chở một mạch đi xa tít mù khơi!",
+          successMsg: "Đổi tuyến mượt mà như dân thổ địa! Mèo tiết kiệm được 45 phút!",
+          lootName: "Thẻ xe buýt sinh viên ép nhựa",
+          lootDesc: "Thẻ đi bạt mạng khắp thành phố với giá sinh viên 100k/tháng.",
+          rewardFish: 25,
+          cheatSheet: "Tra lộ trình -> Check mã trạm & ETA -> Đón đúng cột trung chuyển -> Trình thẻ."
+        },
+        3: {
+          id: 3, branch: 1, branchName: "Đường Phố Thổ Địa (Di chuyển)",
+          title: "Định Vị Google Maps & Bùng Binh",
+          context: "Mắc kẹt giữa vòng xoay 6 ngả đường mù mịt giờ tan tầm.",
+          guide: [
+            "Tấp xe vào lề an toàn trước khi rút điện thoại mở bản đồ.",
+            "Bấm biểu tượng la bàn để bản đồ xoay theo đúng hướng mặt mình.",
+            "Đếm số thứ tự lối ra (Ví dụ: Lối ra thứ 3 đường CMT8).",
+            "Bật xi-nhan chuyển làn dứt khoát thoát khỏi bùng binh."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-stop!", icon: "🛑", text: "Tấp lề an toàn, không vừa lái vừa soi máy", step: 1 },
+            { code: "B", meow: "Meo-compass!", icon: "🧭", text: "Bật định vị & xoay theo la bàn", step: 2 },
+            { code: "C", meow: "Meo-count!", icon: "🔢", text: "Đếm chính xác lối ra thứ mấy", step: 3 },
+            { code: "D", meow: "Meo-exit!", icon: "🏍️", text: "Bật xi-nhan thoát bùng binh dứt khoát", step: 4 }
+          ],
+          failMsg: "Vừa chạy vừa nhìn điện thoại, Mèo quay mòng mòng 4 vòng bùng binh suýt va quẹt!",
+          successMsg: "Mèo thoát khỏi mê cung vòng xoay xuất sắc chỉ sau 1 phút!",
+          lootName: "La bàn đồ chơi đeo cổ",
+          lootDesc: "Vật bất ly thân giúp Mèo luôn giữ vững phương hướng giữa phố phường.",
+          rewardFish: 30,
+          cheatSheet: "Tấp lề an toàn -> Căn la bàn -> Đếm lối ra -> Bật xi-nhan dứt khoát."
+        },
+        4: {
+          id: 4, branch: 1, branchName: "Đường Phố Thổ Địa (Di chuyển)",
+          title: "Cứu Hộ Xe Máy Cơ Bản",
+          context: "Sên xe kêu lạch cạch, tay lái rung khi chở bạn học chung.",
+          guide: [
+            "Dựng chống giữa kiểm tra độ võng của sên và áp suất lốp xe.",
+            "Ghé tiệm sửa xe uy tín, hỏi rõ giá tiền tăng sên trước khi làm.",
+            "Rút que thăm nhớt: nếu nhớt đen sẫm thì thay chai nhớt mới.",
+            "Yêu cầu thợ khui nắp chai nhớt trước mặt để đảm bảo nhớt xịn."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-check!", icon: "🔍", text: "Dựng chống đứng soi độ chùng sên xe", step: 1 },
+            { code: "B", meow: "Meo-ask!", icon: "💬", text: "Hỏi giá tăng sên / sửa xe trước khi làm", step: 2 },
+            { code: "C", meow: "Meo-oil?", icon: "🛢️", text: "Rút que thăm nhớt kiểm tra màu sắc", step: 3 },
+            { code: "D", meow: "Meo-seal!", icon: "🛡️", text: "Xem thợ bóc tem nắp chai nhớt chính hãng", step: 4 }
+          ],
+          failMsg: "Mèo không hỏi giá trước, bị tiệm ven đường đòi 450k thay đồ bậy bạ!",
+          successMsg: "Mèo bảo dưỡng xe chuẩn giá sinh viên chỉ 80k! Xe chạy êm ru!",
+          lootName: "Ốc xả nhớt bằng đồng",
+          lootDesc: "Minh chứng cho tay lái am hiểu xe máy, không bao giờ bị vẽ bệnh.",
+          rewardFish: 30,
+          cheatSheet: "Tự soi sên/nhớt -> Luôn hỏi giá trước -> Xem tem nhớt chính hãng."
+        },
+        5: {
+          id: 5, branch: 2, branchName: "Bình Yên Xóm Trọ (Pháp lý & Nơi ở)",
+          title: "Soi Hợp Đồng Thuê Trọ",
+          context: "Chủ trọ giục ký gấp hợp đồng để giữ phòng, nhiều điều khoản mập mờ.",
+          guide: [
+            "Đọc kỹ điều khoản hoàn tiền cọc và thời hạn báo trước khi trả phòng.",
+            "Chốt số điện/nước ban đầu và đơn giá cố định theo kWh/khối.",
+            "Chụp ảnh hiện trạng vết nứt, thiết bị cũ đính kèm phụ lục bàn giao.",
+            "Ký tên và giữ chặt 01 bản hợp đồng gốc có chữ ký sống của chủ nhà."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-deposit?", icon: "📑", text: "Đọc kỹ điều khoản hoàn tiền cọc", step: 1 },
+            { code: "B", meow: "Meo-electric!", icon: "⚡", text: "Chốt số công tơ điện nước ban đầu", step: 2 },
+            { code: "C", meow: "Meo-photo!", icon: "📸", text: "Chụp ảnh hiện trạng phòng làm bằng chứng", step: 3 },
+            { code: "D", meow: "Meo-contract!", icon: "✍️", text: "Ký và giữ 01 bản hợp đồng gốc có chữ ký", step: 4 }
+          ],
+          failMsg: "Ký vội không chụp ảnh hiện trạng, lúc trả phòng bị trừ sạch cọc vì 'làm cũ tường'!",
+          successMsg: "Mèo soi ra 3 điều khoản phụ phí bẫy! Chủ nhà nể phục ký hợp đồng chuẩn mực!",
+          lootName: "Bút bi xanh ký hợp đồng an toàn",
+          lootDesc: "Chiếc bút bảo hộ toàn vẹn tiền cọc 3 triệu đồng suốt 4 năm đại học.",
+          rewardFish: 35,
+          cheatSheet: "Soi bẫy cọc -> Chốt giá điện nước -> Chụp hiện trạng -> Giữ 1 bản gốc."
+        },
+        6: {
+          id: 6, branch: 2, branchName: "Bình Yên Xóm Trọ (Pháp lý & Nơi ở)",
+          title: "Khảo Sát PCCC Phòng Trọ",
+          context: "Thuê phòng có chuồng cọp sắt ban công, kiểm tra an toàn cháy nổ.",
+          guide: [
+            "Kiểm tra cửa thoát hiểm trên chuồng cọp có mở được và có chìa sẵn không.",
+            "Soi kim đồng hồ bình chữa cháy hành lang đang ở vạch xanh an toàn.",
+            "Khảo sát lối thoát phụ lên sân thượng thông gió khi cầu thang chính nghẽn.",
+            "Trang bị khăn mặt và đèn pin mini ngay đầu giường phòng ngủ."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-cage?", icon: "🚪", text: "Thử mở cửa thoát hiểm chuồng cọp", step: 1 },
+            { code: "B", meow: "Meo-gauge!", icon: "🧯", text: "Kiểm tra kim bình cứu hỏa ở vạch xanh", step: 2 },
+            { code: "C", meow: "Meo-roof!", icon: "🪜", text: "Khảo sát đường thoát lên sân thượng", step: 3 },
+            { code: "D", meow: "Meo-torch!", icon: "🔦", text: "Để sẵn khăn bông và đèn pin đầu giường", step: 4 }
+          ],
+          failMsg: "Chuồng cọp bị hàn chết khóa gỉ sét, bình cứu hỏa hành lang kim chỉ vạch đỏ rỗng tuếch!",
+          successMsg: "Mèo yêu cầu chủ nhà gắn khóa thoát hiểm thành công! An tâm ngủ ngon mỗi đêm!",
+          lootName: "Móc khóa dạ quang thoát hiểm",
+          lootDesc: "Phát sáng trong bóng tối, giúp mở cửa ban công chỉ trong 3 giây.",
+          rewardFish: 30,
+          cheatSheet: "Cửa chuồng cọp mở được -> Bình cứu hỏa vạch xanh -> Lối thoát thượng -> Khăn sẵn."
+        },
+        7: {
+          id: 7, branch: 2, branchName: "Bình Yên Xóm Trọ (Pháp lý & Nơi ở)",
+          title: "Đăng Ký Tạm Trú Trực Tuyến",
+          context: "Chủ nhà bận không làm tạm trú, Mèo tự đăng ký trên Dịch vụ công.",
+          guide: [
+            "Xin CCCD chủ nhà và thông tin thửa đất căn nhà trọ.",
+            "Đăng nhập Cổng Dịch vụ công Quốc gia bằng tài khoản VNeID mức 2.",
+            "Điền tờ khai tạm trú mẫu CT01 và đính kèm ảnh chụp hợp đồng thuê nhà.",
+            "Lưu mã hồ sơ theo dõi đến khi nhận thông báo 'Đã phê duyệt'."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-id?", icon: "🪪", text: "Lấy CCCD chủ trọ & địa chỉ thửa đất", step: 1 },
+            { code: "B", meow: "Meo-vneid!", icon: "📲", text: "Đăng nhập VNeID trên Cổng DVC Quốc gia", step: 2 },
+            { code: "C", meow: "Meo-form!", icon: "📤", text: "Điền mẫu CT01 & đính kèm hợp đồng trọ", step: 3 },
+            { code: "D", meow: "Meo-approved!", icon: "✅", text: "Nhận kết quả tạm trú hợp pháp, không sợ phạt", step: 4 }
+          ],
+          failMsg: "Ở chui không khai báo tạm trú, công an kiểm tra phạt hành chính 500k!",
+          successMsg: "Mèo nhận giấy xác nhận tạm trú sau 2 ngày trực tuyến! Tự tin làm mọi thủ tục!",
+          lootName: "Xác nhận tạm trú điện tử CT07",
+          lootDesc: "Tờ giấy bảo chứng cư trú hợp pháp, tha hồ thi bằng lái xe.",
+          rewardFish: 30,
+          cheatSheet: "Lấy CCCD chủ -> Đăng nhập VNeID/DVC -> Đính kèm hợp đồng -> Lưu mã hồ sơ."
+        },
+        8: {
+          id: 8, branch: 2, branchName: "Bình Yên Xóm Trọ (Pháp lý & Nơi ở)",
+          title: "Hiệp Ước Bạn Cùng Phòng",
+          context: "Ở ghép 3 người, sau tuần đầu chén bát bẩn chất đống, tiền điện cãi cọ.",
+          guide: [
+            "Họp phòng trọ lúc mọi người vui vẻ thưởng thức trà sữa.",
+            "Dán bảng phân công trực nhật dọn toilet và đổ rác luân phiên.",
+            "Dùng app chia tiền nhóm (Splitwise) minh bạch tiền gia vị, điện nước.",
+            "Thống nhất giờ tắt đèn yên tĩnh và nguyên tắc dẫn bạn ngoài về phòng."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-tea!", icon: "🍵", text: "Họp mặt trà sữa thảo luận nhẹ nhàng", step: 1 },
+            { code: "B", meow: "Meo-duty!", icon: "🧹", text: "Dán lịch dọn toilet & đổ rác luân phiên", step: 2 },
+            { code: "C", meow: "Meo-split!", icon: "📊", text: "Lập nhóm chia tiền quỹ dùng chung qua app", step: 3 },
+            { code: "D", meow: "Meo-sleep!", icon: "🌙", text: "Quy ước giờ tắt đèn & dẫn khách đến phòng", step: 4 }
+          ],
+          failMsg: "Im lặng ấm ức, cuối cùng cãi nhau to rồi bạn cùng phòng đùng đùng bỏ đi để lại nợ tiền!",
+          successMsg: "Phòng trọ hòa thuận nhất xóm! Đồ ăn đầy tủ, phòng ốc thơm tho tinh tươm!",
+          lootName: "Bảng nội quy phòng vẽ tay hài hước",
+          lootDesc: "Bản cam kết tình đồng chí bền chặt suốt những năm tháng sinh viên.",
+          rewardFish: 30,
+          cheatSheet: "Họp mặt thẳng thắn -> Lịch dọn luân phiên -> App chia tiền -> Giới nghiêm tắt đèn."
+        },
+        9: {
+          id: 9, branch: 3, branchName: "Thân Thể Kim Cương (Y tế & Sức khỏe)",
+          title: "Hạ Sốt 39 Độ Giữa Đêm",
+          context: "2 giờ sáng trúng mưa về sốt cao, trùm chăn run cầm cập.",
+          guide: [
+            "Kẹp nhiệt kế nách 5 phút xác định thân nhiệt thực tế.",
+            "Uống Paracetamol đúng liều 10-15mg/kg cân nặng (cách 4-6 tiếng/lần).",
+            "Nhúng khăn vào nước ẤM lau mát nách, bẹn và trán (tuyệt đối không dùng đá lạnh).",
+            "Uống từng ngụm Oresol bù nước và mặc đồ mỏng thoáng khí."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-temp!", icon: "🌡️", text: "Kẹp nhiệt kế nách 5 phút đo nhiệt độ", step: 1 },
+            { code: "B", meow: "Meo-para!", icon: "💊", text: "Uống Paracetamol đúng liều kg cân nặng", step: 2 },
+            { code: "C", meow: "Meo-warm!", icon: "💧", text: "Lau nước ẤM tại vùng nách và hai bên bẹn", step: 3 },
+            { code: "D", meow: "Meo-oresol!", icon: "🥤", text: "Uống bù nước Oresol, mặc áo thoáng mát", step: 4 }
+          ],
+          failMsg: "Lấy đá lạnh chườm trán và trùm chăn bông làm sốt co giật cực kỳ nguy hiểm!",
+          successMsg: "Mèo hạ sốt xuống 37.2 độ an toàn! Ngủ một giấc thật ngon hồi phục!",
+          lootName: "Nhiệt kế điện tử đầu mềm",
+          lootDesc: "Vật cứu mạng trong đêm lạnh, đo nhiệt độ chính xác từng 0.1 độ C.",
+          rewardFish: 35,
+          cheatSheet: "Kẹp nhiệt kế -> Uống Paracetamol chuẩn liều -> Lau nước ẤM nách bẹn -> Bù Oresol."
+        },
+        10: {
+          id: 10, branch: 3, branchName: "Thân Thể Kim Cương (Y tế & Sức khỏe)",
+          title: "6 Bước Khám BHYT Đúng Tuyến",
+          context: "Đi khám BHYT tại Bệnh viện Quận một mình, sợ bị y tá quát mắng.",
+          guide: [
+            "Đến sớm lúc 7h sáng, lại máy bốc số thứ tự khu vực Khám BHYT.",
+            "Đưa CCCD gắn chip tích hợp BHYT tại quầy Tiếp nhận lấy số phòng khám.",
+            "Ngồi chờ trước đúng cửa phòng ghi trên phiếu, vào gặp bác sĩ.",
+            "Sang quầy Dược bệnh viện ký xác nhận và nhận thuốc đúng tuyến miễn phí."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-ticket!", icon: "🎟️", text: "Bốc số thứ tự khu vực Khám BHYT sáng sớm", step: 1 },
+            { code: "B", meow: "Meo-cccd!", icon: "🪪", text: "Xuất trình CCCD gắn chip tại quầy Tiếp nhận", step: 2 },
+            { code: "C", meow: "Meo-doctor!", icon: "🩺", text: "Ngồi chờ đúng cửa phòng khám chuyên khoa", step: 3 },
+            { code: "D", meow: "Meo-drug!", icon: "💊", text: "Ký nhận thuốc BHYT miễn phí tại kho Dược", step: 4 }
+          ],
+          failMsg: "Đi lạc sang khu khám dịch vụ quốc tế VIP, khám xong nhận hóa đơn 1 triệu rưỡi khóc thét!",
+          successMsg: "Khám đúng tuyến BHYT thành công tốn 0 đồng tiền thuốc! Bác sĩ khen Mèo ngoan!",
+          lootName: "Vỉ kẹo ngậm C bệnh viện",
+          lootDesc: "Chiến lợi phẩm sau khi khám đúng tuyến BHYT thành công không tốn một xu oan uổng.",
+          rewardFish: 35,
+          cheatSheet: "Bốc số BHYT -> Quầy tiếp nhận CCCD -> Phòng khám chuyên khoa -> Quầy Dược nhận thuốc."
+        },
+        11: {
+          id: 11, branch: 3, branchName: "Thân Thể Kim Cương (Y tế & Sức khỏe)",
+          title: "Túi Sơ Cứu Phòng Trọ",
+          context: "Chuẩn bị tủ thuốc cá nhân để không phải chạy mua thuốc lúc nửa đêm mưa bão.",
+          guide: [
+            "Xếp nhóm hạ sốt giảm đau: Paracetamol 500mg và nhiệt kế vào ngăn 1.",
+            "Bổ sung nhóm tiêu hóa: Men vi sinh, Berberin trị tiêu chảy, gói Oresol vào ngăn 2.",
+            "Chuẩn bị Povidine sát trùng, gạc vô trùng, băng cá nhân vào ngăn 3.",
+            "Viết rõ liều lượng và hạn sử dụng dán lên nắp hộp y tế."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-fever!", icon: "🩹", text: "Xếp Paracetamol 500mg & nhiệt kế ngăn 1", step: 1 },
+            { code: "B", meow: "Meo-stomach!", icon: "🧪", text: "Bổ sung Berberin & Oresol vào ngăn 2", step: 2 },
+            { code: "C", meow: "Meo-wound!", icon: "🩸", text: "Chuẩn bị Povidine, gạc & băng dán vết thương", step: 3 },
+            { code: "D", meow: "Meo-label!", icon: "🏷️", text: "Dán nhãn ghi rõ liều dùng lên nắp hộp", step: 4 }
+          ],
+          failMsg: "Uống nhầm viên thuốc mốc không nhãn mác trong góc tủ, bị dị ứng mẩn ngứa khắp người!",
+          successMsg: "Tủ thuốc sinh tồn hoàn chỉnh! Cả phòng trọ an tâm sống khỏe quanh năm!",
+          lootName: "Hộp cứu thương mini bằng thiếc",
+          lootDesc: "Bảo bối phòng thân chứa đầy đủ các loại dược phẩm sinh tồn thiết yếu.",
+          rewardFish: 25,
+          cheatSheet: "Hạ sốt + Nhiệt kế -> Tiêu hóa + Oresol -> Sát trùng + Gạc -> Dán nhãn liều."
+        },
+        12: {
+          id: 12, branch: 3, branchName: "Thân Thể Kim Cương (Y tế & Sức khỏe)",
+          title: "Cứu Cái Dạ Dày Sinh Viên",
+          context: "Ăn mì tôm sống bóp vụn và cày deadline thâu đêm làm Mèo đau quặn bụng trên.",
+          guide: [
+            "Xác định cơn đau âm ỉ vùng thượng vị (trên rốn), ợ chua khi đói hoặc sau ăn.",
+            "Dừng ngay thói quen ăn mì tôm sống và uống nước ngọt có ga lúc bụng rỗng.",
+            "Ăn cháo ấm, uống một cốc nước ấm buổi sáng để bảo vệ niêm mạc dạ dày.",
+            "Nếu đau dữ dội kéo dài quá 3 ngày phải đi khám chuyên khoa tiêu hóa ngay."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-pain?", icon: "😣", text: "Nhận diện cơn đau âm ỉ thượng vị & ợ chua", step: 1 },
+            { code: "B", meow: "Meo-stop!", icon: "🍜", text: "Dừng ngay mì tôm sống & nước có ga khi đói", step: 2 },
+            { code: "C", meow: "Meo-porridge!", icon: "🥣", text: "Ăn cháo ấm, uống nước ấm bảo vệ dạ dày", step: 3 },
+            { code: "D", meow: "Meo-doc!", icon: "🏥", text: "Khám chuyên khoa nếu cơn đau kéo dài 3 ngày", step: 4 }
+          ],
+          failMsg: "Tiếp tục cày đêm ăn gói mì tôm tẩm ớt thứ 3, cơn đau quặn cấp làm Mèo ngất xỉu!",
+          successMsg: "Dạ dày êm ru khỏe khoắn! Mèo tràn đầy năng lượng thi đạt điểm cao!",
+          lootName: "Bình giữ nhiệt nước ấm 24h",
+          lootDesc: "Người bạn đồng hành bảo vệ dạ dày khỏi những cơn cồn cào mùa thi cử.",
+          rewardFish: 30,
+          cheatSheet: "Nhận biết đau thượng vị -> Bỏ mì tôm sống -> Cháo ấm đúng giờ -> Đi khám nếu kéo dài."
+        },
+        13: {
+          id: 13, branch: 4, branchName: "Túi Tiền Thông Thái (Tài chính & Việc làm)",
+          title: "Phương Pháp 3 Hũ Cá",
+          context: "Đầu tháng mẹ gửi trợ cấp, ngày 10 đã rỗng túi vì mua sắm bốc đồng.",
+          guide: [
+            "Nhận trợ cấp lập tức chia ra 3 tài khoản riêng biệt, không để chung một ví.",
+            "Hũ 1 (50% = 45 Cá): Khóa cứng tiền nhà trọ, tiền ăn hạt cơ bản, tiền xe buýt.",
+            "Hũ 2 (30% = 27 Cá): Phân bổ cho sách vở, học tập và giao lưu bạn bè.",
+            "Hũ 3 (20% = 18 Cá): Cất riêng khẩn cấp, tuyệt đối không chạm vào trừ khi ốm đau."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-split!", icon: "🪙", text: "Nhận tiền lập tức chia ra 3 phần riêng", step: 1 },
+            { code: "B", meow: "Meo-live!", icon: "🏠", text: "Khóa 50% tiền ăn cơ bản & tiền trọ (Hũ 1)", step: 2 },
+            { code: "C", meow: "Meo-learn!", icon: "📚", text: "Dành 30% cho tài liệu học tập (Hũ 2)", step: 3 },
+            { code: "D", meow: "Meo-lock!", icon: "🔒", text: "Cất 20% khẩn cấp phòng khi xe hư ốm đau (Hũ 3)", step: 4 }
+          ],
+          failMsg: "Để chung tiền một chỗ, quẹt thẻ mua giày hiệu rồi cuối tháng nhịn ăn mì gói cầm hơi!",
+          successMsg: "Làm chủ dòng tiền đỉnh cao! Cả tháng ăn no mà ví khẩn cấp vẫn nguyên vẹn 18 Cá!",
+          lootName: "3 Hũ thủy tinh đựng cá khô",
+          lootDesc: "Bí kíp tài chính giúp sinh viên không bao giờ rơi vào cảnh rỗng túi cuối tháng.",
+          rewardFish: 35,
+          cheatSheet: "Chia ngày 1 -> 50% Sống còn -> 30% Phát triển -> 20% Khẩn cấp bất khả xâm phạm."
+        },
+        14: {
+          id: 14, branch: 4, branchName: "Túi Tiền Thông Thái (Tài chính & Việc làm)",
+          title: "Bộ Lọc Bóc Trần Ponzi Đa Cấp",
+          context: "Bạn cũ rủ đi hội thảo làm giàu 4.0, cam kết lãi 1.5%/ngày không cần làm gì.",
+          guide: [
+            "Quy tắc vàng: Lãi suất trên 15%/năm chắc chắn là bẫy tài chính hoặc lừa đảo.",
+            "Kiểm tra dòng tiền: Chỉ tập trung tuyển người mới nộp tiền vào -> 100% Ponzi.",
+            "Tuyệt đối không mang theo thẻ ngân hàng, tiền mặt hay giao CCCD bản gốc.",
+            "Dứt khoát từ chối: 'Em cần hỏi gia đình' và bước nhanh ra khỏi hội trường."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-rate?", icon: "📉", text: "Soi lãi suất: Hứa hẹn >15%/năm là lừa đảo", step: 1 },
+            { code: "B", meow: "Meo-ponzi!", icon: "📦", text: "Kiểm tra: Không sản phẩm thật, chỉ tuyển người", step: 2 },
+            { code: "C", meow: "Meo-protect!", icon: "🚫", text: "Tuyệt đối không nộp cọc, cất chặt CCCD", step: 3 },
+            { code: "D", meow: "Meo-run!", icon: "🏃", text: "Dứt khoát từ chối và rời khỏi hội trường ngay", step: 4 }
+          ],
+          failMsg: "Bị thao túng tâm lý nộp sạch 90 Cá Khô tiền ăn mua gói hội viên kim cương ảo!",
+          successMsg: "Mèo bóc trần sàn đa cấp và thoát hiểm an toàn! Bảo toàn 100% tài sản!",
+          lootName: "Kính lúp soi sàn ảo Ponzi",
+          lootDesc: "Soi thấu mọi lời đường mật làm giàu nhanh trên mạng xã hội.",
+          rewardFish: 35,
+          cheatSheet: "Lãi > 15%/năm là lừa -> Không sản phẩm thật -> Cấm nộp cọc -> Rút lui dứt khoát."
+        },
+        15: {
+          id: 15, branch: 4, branchName: "Túi Tiền Thông Thái (Tài chính & Việc làm)",
+          title: "Phỏng Vấn Việc Làm Part-Time Chuẩn",
+          context: "Xin phụ việc quán cà phê kiếm thêm tiền, gặp quản lý quán phỏng vấn.",
+          guide: [
+            "Trình bày CV trung thực về lịch học để không bị trùng ca học và thi cử.",
+            "Hỏi rõ mức lương theo giờ (Gross hay Net) và ngày thanh toán hàng tháng.",
+            "Tuyệt đối TỪ CHỐI bất kỳ nơi nào đòi 'cọc đồng phục' hay giữ CCCD bản gốc.",
+            "Yêu cầu thỏa thuận hoặc tin nhắn xác nhận mức lương trước khi bắt đầu ca làm."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-cv!", icon: "📄", text: "Trình CV trung thực, chốt lịch không trùng giờ học", step: 1 },
+            { code: "B", meow: "Meo-wage!", icon: "💵", text: "Hỏi rõ lương theo giờ & ngày trả hàng tháng", step: 2 },
+            { code: "C", meow: "Meo-refuse!", icon: "🛡️", text: "Từ chối đóng cọc đồng phục & cấm giao CCCD gốc", step: 3 },
+            { code: "D", meow: "Meo-agree!", icon: "🤝", text: "Yêu cầu thỏa thuận văn bản trước khi vào làm", step: 4 }
+          ],
+          failMsg: "Nộp bản gốc CCCD và cọc 300k tiền tạp dề, hôm sau quán đóng cửa biến mất!",
+          successMsg: "Nhận việc phụ quán cà phê uy tín lương 25k/h sòng phẳng! Cuối tuần có thêm cá!",
+          lootName: "Thẻ nhân viên pha chế xịn sò",
+          lootDesc: "Huy hiệu làm thêm chân chính đầu đời, tự lập tài chính đàng hoàng.",
+          rewardFish: 30,
+          cheatSheet: "Lịch theo giờ học -> Lương rõ ràng -> Cấm giao CCCD & cọc -> Ký thỏa thuận."
+        },
+        16: {
+          id: 16, branch: 4, branchName: "Túi Tiền Thông Thái (Tài chính & Việc làm)",
+          title: "Thoát Bẫy Ví Trả Sau & Thấu Chi",
+          context: "App mua sắm mời chào ví trả sau 3 triệu, thấy áo đẹp muốn quẹt ngay.",
+          guide: [
+            "Kích hoạt quy tắc 'Phanh Tiêu Dùng 48h': Chờ 2 ngày trước khi quyết định mua đồ.",
+            "Soi kỹ phí trễ hạn và lãi suất phạt ngầm ẩn giấu sau chữ 0%.",
+            "Chỉ mua khi có đủ tiền mặt thanh toán ngay lập tức.",
+            "Tắt hoặc hủy liên kết ví trả sau nếu không thực sự cần thiết."
+          ],
+          cards: [
+            { code: "A", meow: "Meo-wait!", icon: "⏳", text: "Phanh 48h: Chờ 2 ngày suy nghĩ trước khi mua", step: 1 },
+            { code: "B", meow: "Meo-penalty!", icon: "🔍", text: "Soi kỹ phí phạt trễ hạn ẩn sau mác 0%", step: 2 },
+            { code: "C", meow: "Meo-cash?", icon: "🤔", text: "Chỉ mua khi có sẵn tiền mặt trả ngay", step: 3 },
+            { code: "D", meow: "Meo-disable!", icon: "🔒", text: "Khóa hạn mức ví trả sau, không tiêu xài trước", step: 4 }
+          ],
+          failMsg: "Bấm quẹt trả sau mua sắm vô tội vạ, tháng sau tiền phạt lãi nhảy lên 35 Cá Khô ngập đầu!",
+          successMsg: "Kiềm chế thành công cơn nghiện mua sắm! Tiết kiệm được một khoản tiền lớn đầu tư học tập!",
+          lootName: "Chiếc kéo vàng cắt thẻ nợ",
+          lootDesc: "Biểu tượng của sự tự do tài chính, không làm nô lệ cho thấu chi.",
+          rewardFish: 35,
+          cheatSheet: "Phanh 48h -> Đọc phí phạt chậm trả -> Không tiền mặt thì không mua -> Tắt ví."
+        }
+      }
+    };
+
+    /* =========================================================================
+       CANVAS SPRITE ANIMATION (Cat Pixel Animation)
+       ========================================================================= */
+    const CatAnim = {
+      canvas: null,
+      ctx: null,
+      idleImg: new Image(),
+      boxImg: new Image(),
+      draculaImg: new Image(),
+      frame: 0,
+      timer: null,
+      mode: 'idle', // 'idle', 'box', 'dracula'
+      
+      init() {
+        this.canvas = document.getElementById('cat-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.idleImg.src = 'assets/sprites/cat_idle.png';
+        this.boxImg.src = 'assets/sprites/cat_box.png';
+        this.draculaImg.src = 'assets/sprites/cat_dracula.png';
+        
+        if (this.timer) clearInterval(this.timer);
+        this.timer = setInterval(() => this.draw(), 180);
+      },
+      draw() {
+        if (!this.ctx || !this.canvas) return;
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        if (this.mode === 'box' && this.boxImg.complete) {
+          this.frame = (this.frame + 1) % 4;
+          this.ctx.drawImage(this.boxImg, this.frame * 32, 0, 32, 32, 0, 0, this.canvas.width, this.canvas.height);
+        } else if (this.mode === 'dracula' && this.draculaImg.complete) {
+          this.frame = (this.frame + 1) % 6;
+          this.ctx.drawImage(this.draculaImg, this.frame * 32, 0, 32, 32, 0, 0, this.canvas.width, this.canvas.height);
+        } else if (this.idleImg.complete) {
+          this.frame = (this.frame + 1) % 10;
+          this.ctx.drawImage(this.idleImg, this.frame * 32, 0, 32, 32, 0, 0, this.canvas.width, this.canvas.height);
+        }
+      },
+      setMode(m) {
+        this.mode = m;
+        this.frame = 0;
+      }
+    };
+
+    /* =========================================================================
+       APP CONTROLLER & UI ROUTER
+       ========================================================================= */
+    const app = {
+      currentTab: 'room',
+      currentLessonId: 1,
+      selectedSequence: [],
+      filterBranch: 0,
+      currentAnimMode: 'idle',
+
+      init() {
+        this.updateTopBar();
+        this.switchTab('room');
+        this.initTalkingTomTouch();
+      },
+
+      initTalkingTomTouch() {
+        let isTouching = false;
+        let rubCount = 0;
+
+        document.addEventListener('pointerdown', (e) => {
+          if (e.target && e.target.id === 'cat-canvas') {
+            isTouching = true;
+            this.handleCatPoke(e);
+          }
+        });
+
+        document.addEventListener('pointerup', () => {
+          isTouching = false;
+          rubCount = 0;
+        });
+
+        document.addEventListener('pointermove', (e) => {
+          if (isTouching && e.target && e.target.id === 'cat-canvas') {
+            rubCount++;
+            if (rubCount % 6 === 0) {
+              AudioSys.purr();
+              const rect = e.target.getBoundingClientRect();
+              this.spawnFloating("💖 Purr~", "#e84393", e.clientX, e.clientY);
+              GameData.courage = Math.min(100, GameData.courage + 1);
+              this.updateTopBar();
+              this.updateCatBoard();
+              const b = document.getElementById('room-cat-bubble');
+              if (b) b.innerText = "Purr purr... Sen gãi cằm sướng rơn cả người!";
+            }
+          }
+        });
+      },
+
+      handleCatPoke(e) {
+        const canvas = e.target;
+        const rect = canvas.getBoundingClientRect();
+        const relY = (e.clientY - rect.top) / rect.height;
+        const container = canvas.parentElement;
+
+        const b = document.getElementById('room-cat-bubble');
+
+        if (relY < 0.35) {
+          // Gõ đầu / Vuốt tai (Talking Tom head pet)
+          AudioSys.purr();
+          this.triggerAnim(container, 'squish-anim');
+          GameData.courage = Math.min(100, GameData.courage + 2);
+          this.updateTopBar();
+          this.updateCatBoard();
+          this.spawnFloating("💖 +2", "#e84393", e.clientX, e.clientY);
+          if (b) b.innerText = "Gừ gừ... Sen vuốt đầu Boss thích mê! (+2 Dũng Cảm)";
+        } else if (relY >= 0.35 && relY < 0.75) {
+          // Chọc bụng / Cù lét (Talking Tom belly poke)
+          AudioSys.giggle();
+          this.triggerAnim(container, 'squish-anim');
+          this.spawnFloating("😹 Hi hi!", "#f39c12", e.clientX, e.clientY);
+          if (b) b.innerText = "Hi hi! Nhột quá Sen ơi! Đừng chọc bụng mỡ Boss chứ!";
+        } else {
+          // Chọc chân / Kéo đuôi (Talking Tom feet tap)
+          AudioSys.bounce();
+          this.triggerAnim(container, 'hop-anim');
+          this.spawnFloating("✨ Boing!", "#0984e3", e.clientX, e.clientY);
+          if (b) b.innerText = "Oái! Chọc chân Boss nhảy tưng tưng nè! ✨";
+        }
+      },
+
+      triggerAnim(el, animClass) {
+        if (!el) return;
+        el.classList.remove('squish-anim', 'hop-anim');
+        void el.offsetWidth;
+        el.classList.add(animClass);
+      },
+
+      spawnFloating(txt, color, clientX, clientY) {
+        const frame = document.getElementById('app-frame');
+        if (!frame) return;
+        const fRect = frame.getBoundingClientRect();
+        const f = document.createElement('div');
+        f.className = 'floating-text';
+        f.innerText = txt;
+        f.style.color = color;
+        f.style.left = (clientX - fRect.left) + 'px';
+        f.style.top = (clientY - fRect.top) + 'px';
+        frame.appendChild(f);
+        setTimeout(() => f.remove(), 850);
+      },
+
+      talkTomMimic() {
+        AudioSys.talkingMimic();
+        const container = document.querySelector('.cat-canvas-container');
+        this.triggerAnim(container, 'hop-anim');
+        
+        const phrases = [
+          "Meo-o! Sen xinh đẹp / đẹp trai nhất trần đời! 💖",
+          "Nhớ tiết kiệm Cá Khô, đừng quẹt ví bừa bãi nha Sen! 🐟",
+          "Có Boss ở đây rồi, ra đường không sợ lạc xe buýt nữa! 🚌",
+          "Học chăm chỉ rồi cuối tuần thưởng lon Pate nha Sen! 🥫",
+          "Purr-purr! Sen là người bảo hộ số 1 của Boss! 🐾"
+        ];
+        const phrase = phrases[Math.floor(Math.random() * phrases.length)];
+        const b = document.getElementById('room-cat-bubble');
+        if (b) b.innerText = `🗣️ Boss nhại tiếng: "${phrase}"`;
+        
+        const rect = container ? container.getBoundingClientRect() : { left: 240, top: 300, width: 0, height: 0 };
+        this.spawnFloating("🎤 Meow-talk!", "#00cec9", rect.left + 64, rect.top);
+      },
+
+      showToast(msg) {
+        const t = document.getElementById('toast-msg');
+        t.innerText = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+      },
+
+      updateTopBar() {
+        document.getElementById('val-fish').innerText = GameData.fish;
+        document.getElementById('val-hunger').innerText = GameData.hunger;
+        document.getElementById('val-courage').innerText = GameData.courage;
+
+        const bFish = document.getElementById('badge-fish');
+        const bHunger = document.getElementById('badge-hunger');
+        const bCourage = document.getElementById('badge-courage');
+
+        bHunger.classList.toggle('stat-warning', GameData.hunger < 20);
+        bCourage.classList.toggle('stat-warning', GameData.courage < 20);
+        bFish.classList.toggle('stat-warning', GameData.fish < 10);
+      },
+
+      updateCatBoard() {
+        const hFill = document.getElementById('cat-hunger-fill');
+        const cFill = document.getElementById('cat-courage-fill');
+        const hVal = document.getElementById('cat-hunger-val');
+        const cVal = document.getElementById('cat-courage-val');
+        if (hFill) hFill.style.width = GameData.hunger + '%';
+        if (cFill) cFill.style.width = GameData.courage + '%';
+        if (hVal) hVal.innerText = GameData.hunger + '/100';
+        if (cVal) cVal.innerText = GameData.courage + '/100';
+      },
+
+      switchTab(tab) {
+        AudioSys.click();
+        this.currentTab = tab;
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+        
+        const tabsMap = { room: 0, skills: 1, handbook: 2, museum: 3 };
+        const activeNav = document.querySelectorAll('.nav-tab')[tabsMap[tab]];
+        if (activeNav) activeNav.classList.add('active');
+
+        const main = document.getElementById('main-content');
+        if (tab === 'room') this.renderRoom(main);
+        else if (tab === 'skills') this.renderSkills(main);
+        else if (tab === 'handbook') this.renderHandbook(main);
+        else if (tab === 'museum') this.renderMuseum(main);
+      },
+
+      /* VIEW: PHÒNG TRỌ */
+      renderRoom(container) {
+        let quote = "Meo meo~ Sen ơi, hôm nay Boss được học kỹ năng gì thế?";
+        if (GameData.hunger < 20) {
+          quote = "Meooo đói quá Sen ơi... Bụng Boss réo rồi, cho Boss ăn hạt hoặc pate đi!";
+        } else if (GameData.courage < 20) {
+          quote = "Huhu ngoài kia đông đúc ghê quá... Vuốt ve Boss trấn an đi Sen ơi!";
+        } else if (GameData.courage >= 85) {
+          quote = "Boss đã thuộc nằm lòng kỹ năng rồi, sẵn sàng ra đường tự lập!";
+        }
+
+        const doneCount = GameData.completedLessons.length;
+        let rankName = "Tân Binh Ngơ Ngác 🐾";
+        if (doneCount >= 16) rankName = "Bậc Thầy Tự Lập Vững Vàng 👑";
+        else if (doneCount >= 12) rankName = "Chuyên Gia Tài Chính 💰";
+        else if (doneCount >= 8) rankName = "Dũng Sĩ Kim Cương 🏥";
+        else if (doneCount >= 4) rankName = "Thám Tử Xóm Trọ 🏠";
+        else if (doneCount >= 1) rankName = "Thổ Địa Đường Phố 🚗";
+
+        container.innerHTML = `
+          <div class="view-room">
+            <!-- BẢNG UI CHO MÈO (CAT DASHBOARD) -->
+            <div class="cat-ui-board">
+              <div class="cat-ui-header">
+                <span class="cat-ui-name">🐾 BOSS MÈO TỰ LẬP</span>
+                <span class="cat-ui-rank">${rankName} (${doneCount}/16)</span>
+              </div>
+              <div class="cat-bars-row">
+                <div class="cat-bar-item">
+                  <div style="display:flex; justify-content:space-between; color:#27ae60;">
+                    <span>🍗 Độ No</span><span id="cat-hunger-val">${GameData.hunger}/100</span>
+                  </div>
+                  <div class="custom-progress">
+                    <div class="custom-progress-fill fill-hunger" id="cat-hunger-fill" style="width:${GameData.hunger}%;"></div>
+                  </div>
+                </div>
+                <div class="cat-bar-item">
+                  <div style="display:flex; justify-content:space-between; color:#8e44ad;">
+                    <span>💖 Dũng Cảm</span><span id="cat-courage-val">${GameData.courage}/100</span>
+                  </div>
+                  <div class="custom-progress">
+                    <div class="custom-progress-fill fill-courage" id="cat-courage-fill" style="width:${GameData.courage}%;"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="anim-chips-row">
+                <button class="anim-chip ${this.currentAnimMode === 'idle' ? 'active' : ''}" onclick="app.setCatAnim('idle')">😸 Thư Giãn</button>
+                <button class="anim-chip ${this.currentAnimMode === 'box' ? 'active' : ''}" onclick="app.setCatAnim('box')">📦 Hộp Giấy</button>
+                <button class="anim-chip ${this.currentAnimMode === 'dracula' ? 'active' : ''}" onclick="app.setCatAnim('dracula')">🧛‍♂️ Áo Choàng</button>
+                <button class="anim-chip" onclick="app.actionPet()">✨ Vuốt Ve</button>
+                <button class="anim-chip" onclick="app.talkTomMimic()">🎤 Nhại Tiếng</button>
+              </div>
+            </div>
+
+            <!-- KHUNG SÂN KHẤU MÈO -->
+            <div class="room-stage">
+              <div class="window-decor"></div>
+              <div class="cat-bubble" id="room-cat-bubble">${quote}</div>
+              <div class="cat-canvas-container">
+                <canvas id="cat-canvas" width="128" height="128"></canvas>
+              </div>
+            </div>
+
+            <!-- GÓC CHĂM SÓC -->
+            <div class="care-grid">
+              <button class="care-btn" onclick="app.actionFeedBasic()">
+                <div class="care-btn-title">🍚 Hạt Sinh Viên (-3 Cá)</div>
+                <div class="care-btn-desc">+15 No | Tiết kiệm ngân sách</div>
+              </button>
+              <button class="care-btn" onclick="app.actionFeedPate()">
+                <div class="care-btn-title">🥫 Pate Xịn (-18 Cá)</div>
+                <div class="care-btn-desc">+35 No, +25 Dũng Cảm</div>
+              </button>
+              <button class="care-btn" onclick="app.actionPlayBox()">
+                <div class="care-btn-title">📦 Thùng Carton (0 Cá)</div>
+                <div class="care-btn-desc">+15 Dũng Cảm | Tháo vát</div>
+              </button>
+              <button class="care-btn" onclick="app.actionPlayFeather()">
+                <div class="care-btn-title">🪶 Cần Câu Lông (-20 Cá)</div>
+                <div class="care-btn-desc">+40 Dũng Cảm | Hưng phấn</div>
+              </button>
+              <button class="care-btn" onclick="app.actionBNPL()">
+                <div class="care-btn-title">💳 Ví Trả Sau (+30 DC)</div>
+                <div class="care-btn-desc">Bẫy nợ 35 Cá sau 5 ngày!</div>
+              </button>
+              <button class="care-btn" onclick="app.actionPet()">
+                <div class="care-btn-title">✨ Gãi Cằm Boss (0 Cá)</div>
+                <div class="care-btn-desc">+5 Dũng Cảm | Gừ gừ...</div>
+              </button>
+            </div>
+
+            <button class="btn-study-large" onclick="app.quickStartStudy()">
+              🎓 DẠY HỌC KỸ NĂNG CHO MÈO NGAY
+            </button>
+          </div>
+        `;
+
+        setTimeout(() => {
+          CatAnim.init();
+          CatAnim.setMode(this.currentAnimMode);
+        }, 50);
+      },
+
+      setCatAnim(mode) {
+        AudioSys.click();
+        this.currentAnimMode = mode;
+        CatAnim.setMode(mode);
+        document.querySelectorAll('.anim-chip').forEach(b => b.classList.remove('active'));
+        
+        const bubble = document.getElementById('room-cat-bubble');
+        if (mode === 'idle') {
+          AudioSys.meow(1.0);
+          if (bubble) bubble.innerText = "Meo meo~ Sen ơi, hôm nay Boss được học kỹ năng gì thế?";
+        } else if (mode === 'box') {
+          AudioSys.purr();
+          GameData.courage = Math.min(100, GameData.courage + 5);
+          this.updateTopBar();
+          this.updateCatBoard();
+          if (bubble) bubble.innerText = "Ú òa! Boss ở trong hộp carton nè Sen ơi! 0 đồng mà mê ly!";
+        } else if (mode === 'dracula') {
+          AudioSys.meow(1.3);
+          GameData.courage = Math.min(100, GameData.courage + 10);
+          this.updateTopBar();
+          this.updateCatBoard();
+          if (bubble) bubble.innerText = "Mwahaha! Boss là Quý tộc bóng đêm của phòng trọ 12m²!";
+        }
+        
+        // Highlight active chip
+        const idx = { idle: 0, box: 1, dracula: 2 }[mode];
+        const chips = document.querySelectorAll('.anim-chip');
+        if (chips[idx]) chips[idx].classList.add('active');
+      },
+
+      actionFeedBasic() {
+        AudioSys.click();
+        if (GameData.fish < 3) {
+          this.showToast("Không đủ Cá Khô! Cần 3 Cá để mua hạt.");
+          return;
+        }
+        GameData.fish -= 3;
+        GameData.hunger = Math.min(100, GameData.hunger + 15);
+        this.updateTopBar();
+        this.updateCatBoard();
+        AudioSys.chomp();
+        const c = document.querySelector('.cat-canvas-container');
+        this.triggerAnim(c, 'squish-anim');
+        const rect = c ? c.getBoundingClientRect() : { left: 240, top: 300 };
+        this.spawnFloating("+15 🍗", "#27ae60", rect.left + 64, rect.top);
+        const b = document.getElementById('room-cat-bubble');
+        if (b) b.innerText = "Nhai hạt rào rạo... Nom nom! Đã no bụng rồi Sen ơi!";
+      },
+
+      actionFeedPate() {
+        AudioSys.click();
+        if (GameData.fish < 18) {
+          this.showToast("Không đủ Cá Khô! Cần 18 Cá để mua Pate.");
+          return;
+        }
+        GameData.fish -= 18;
+        GameData.hunger = Math.min(100, GameData.hunger + 35);
+        GameData.courage = Math.min(100, GameData.courage + 25);
+        this.updateTopBar();
+        this.updateCatBoard();
+        AudioSys.chomp();
+        const c = document.querySelector('.cat-canvas-container');
+        this.triggerAnim(c, 'hop-anim');
+        const rect = c ? c.getBoundingClientRect() : { left: 240, top: 300 };
+        this.spawnFloating("+35 🍗 (+25 💖)", "#27ae60", rect.left + 64, rect.top);
+        const b = document.getElementById('room-cat-bubble');
+        if (b) b.innerText = "Pate thượng hạng thơm nức mũi! Boss nhảy cẫng lên ăn mừng! Tự tin 100%!";
+      },
+
+      actionPlayBox() {
+        AudioSys.click();
+        GameData.courage = Math.min(100, GameData.courage + 15);
+        this.updateTopBar();
+        AudioSys.purr();
+        CatAnim.setMode('box');
+        this.showToast("Mèo chui vào Thùng Carton tự chế (+15 Dũng cảm)! 0 đồng mà vui hết sẩy!");
+        setTimeout(() => CatAnim.setMode('idle'), 4000);
+      },
+
+      actionPlayFeather() {
+        AudioSys.click();
+        if (GameData.fish < 20) {
+          this.showToast("Không đủ Cá Khô! Cần 20 Cá mua cần câu.");
+          return;
+        }
+        GameData.fish -= 20;
+        GameData.courage = Math.min(100, GameData.courage + 40);
+        this.updateTopBar();
+        AudioSys.meow(1.4);
+        this.showToast("Vờn lông vũ tung nóc (+40 Dũng cảm, -20 Cá)! Cẩn thận ví cá!");
+      },
+
+      actionBNPL() {
+        AudioSys.click();
+        GameData.debtAmount += 35;
+        GameData.debtDueDay = GameData.currentDay + 5;
+        GameData.courage = Math.min(100, GameData.courage + 30);
+        this.updateTopBar();
+        AudioSys.meow(0.85);
+        this.showToast("Quẹt 'Ví Trả Sau' mua đệm (+30 DC)! CẢNH BÁO: Bị trừ 35 Cá sau 5 ngày!");
+      },
+
+      actionPet() {
+        AudioSys.purr();
+        GameData.courage = Math.min(100, GameData.courage + 5);
+        this.updateTopBar();
+        this.showToast("Gãi cằm Boss, Mèo kêu gừ gừ sung sướng (+5 Dũng cảm)!");
+      },
+
+      quickStartStudy() {
+        if (GameData.hunger < 20) {
+          this.showToast("Mèo đang đói lả (No < 20)! Cho ăn trước khi học nhé!");
+          AudioSys.fail();
+          return;
+        }
+        if (GameData.courage < 20) {
+          this.showToast("Mèo đang hoảng sợ (Dũng cảm < 20)! Trấn an Boss trước nhé!");
+          AudioSys.fail();
+          return;
+        }
+        let nextId = 1;
+        for (let i = 1; i <= 16; i++) {
+          if (!GameData.completedLessons.includes(i) && GameData.unlockedLessons.includes(i)) {
+            nextId = i;
+            break;
+          }
+        }
+        this.startLesson(nextId);
+      },
+
+      /* VIEW: BẢN ĐỒ KỸ NĂNG */
+      renderSkills(container) {
+        const branches = [
+          { id: 0, name: "Tất Cả (16)" },
+          { id: 1, name: "🚗 Đi Lại" },
+          { id: 2, name: "🏠 Nơi Ở" },
+          { id: 3, name: "🏥 Y Tế" },
+          { id: 4, name: "💰 Tiền Tài" }
+        ];
+
+        let filterHtml = `<div class="branch-filters">`;
+        branches.forEach(b => {
+          filterHtml += `<button class="filter-chip ${this.filterBranch === b.id ? 'active' : ''}" onclick="app.setFilter(${b.id})">${b.name}</button>`;
+        });
+        filterHtml += `</div>`;
+
+        let listHtml = `<div style="display:flex; flex-direction:column; gap:10px;">`;
+        for (let i = 1; i <= 16; i++) {
+          const l = GameData.lessons[i];
+          if (this.filterBranch !== 0 && l.branch !== this.filterBranch) continue;
+
+          const isUnlocked = GameData.unlockedLessons.includes(i);
+          const isDone = GameData.completedLessons.includes(i);
+
+          let statusBadge = `<span class="lesson-status" style="background:#eee;color:#888;">Khóa</span>`;
+          if (isDone) statusBadge = `<span class="lesson-status status-done">⭐ Đã Học</span>`;
+          else if (isUnlocked) statusBadge = `<span class="lesson-status status-ready">🐾 Dạy Ngay</span>`;
+
+          listHtml += `
+            <div class="lesson-card ${!isUnlocked ? 'locked' : ''}" onclick="${isUnlocked ? `app.startLesson(${i})` : ''}">
+              <div class="lesson-icon">${isDone ? '⭐' : isUnlocked ? '🐾' : '🔒'}</div>
+              <div class="lesson-info">
+                <div class="lesson-title">Bài ${i}: ${l.title}</div>
+                <div class="lesson-context">${l.context}</div>
+              </div>
+              ${statusBadge}
+            </div>
+          `;
+        }
+        listHtml += `</div>`;
+
+        container.innerHTML = `
+          <div class="view-skills">
+            <h3 style="text-align:center;">🗺️ BẢN ĐỒ 16 KỸ NĂNG SINH TỒN</h3>
+            ${filterHtml}
+            ${listHtml}
+          </div>
+        `;
+      },
+
+      setFilter(branchId) {
+        AudioSys.click();
+        this.filterBranch = branchId;
+        this.renderSkills(document.getElementById('main-content'));
+      },
+
+      /* VIEW: DẠY HỌC LOGIC (SEQUENCE PUZZLE) */
+      startLesson(lessonId) {
+        AudioSys.click();
+        this.currentLessonId = lessonId;
+        this.selectedSequence = [];
+        const lesson = GameData.lessons[lessonId];
+
+        // Shuffle cards
+        const shuffled = [...lesson.cards].sort(() => Math.random() - 0.5);
+
+        const container = document.getElementById('main-content');
+        container.innerHTML = `
+          <div class="view-puzzle">
+            <div class="puzzle-header">
+              <button class="filter-chip" onclick="app.switchTab('skills')">⬅ Thoát</button>
+              <button class="btn-guide-sos" onclick="app.openGuideModal(${lessonId})">🆘 CẨM NANG CỨU SEN</button>
+            </div>
+
+            <div>
+              <h4>Bài ${lessonId}: ${lesson.title}</h4>
+              <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">${lesson.context}</p>
+            </div>
+
+            <div class="sequence-slots-area">
+              <div style="font-size:12px; font-weight:700;">📍 CHUỖI BƯỚC HÀNH ĐỘNG (Bấm để gỡ ra):</div>
+              <div class="slots-grid" id="puzzle-slots"></div>
+            </div>
+
+            <div style="font-size:12px; font-weight:700; margin-top:6px;">🃏 THẺ TIẾNG MÈO (Bấm thẻ để xếp):</div>
+            <div class="cards-pool" id="puzzle-cards-pool"></div>
+
+            <div class="puzzle-actions">
+              <button class="btn-block btn-outline" style="flex:1;" onclick="app.resetSequence()">🔄 Xếp Lại</button>
+              <button class="btn-block btn-coral" id="btn-submit-puzzle" style="flex:2;" disabled onclick="app.submitSequence()">🚀 Xong rồi, đi đi Boss!</button>
+            </div>
+          </div>
+        `;
+
+        this.renderPuzzleSlots();
+        this.renderPuzzleCardsPool(shuffled);
+      },
+
+      renderPuzzleSlots() {
+        const slotsContainer = document.getElementById('puzzle-slots');
+        if (!slotsContainer) return;
+        slotsContainer.innerHTML = '';
+
+        for (let i = 0; i < 4; i++) {
+          const card = this.selectedSequence[i];
+          if (card) {
+            slotsContainer.innerHTML += `
+              <div class="slot-box filled" onclick="app.removeCardFromSlot(${i})">
+                <span style="font-size:16px;">${card.icon}</span>
+                <span style="font-weight:700; color:#8e44ad; font-size:10px;">${card.meow}</span>
+                <span style="font-size:9px;">Bước ${i + 1}</span>
+              </div>
+            `;
+          } else {
+            slotsContainer.innerHTML += `
+              <div class="slot-box">
+                <span style="color:#aaa; font-size:11px;">Ô ${i + 1}<br>(Trống)</span>
+              </div>
+            `;
+          }
+        }
+
+        const btnSubmit = document.getElementById('btn-submit-puzzle');
+        if (btnSubmit) {
+          btnSubmit.disabled = (this.selectedSequence.length < 4);
+        }
+      },
+
+      renderPuzzleCardsPool(cards) {
+        const pool = document.getElementById('puzzle-cards-pool');
+        if (!pool) return;
+        pool.innerHTML = '';
+
+        cards.forEach((c) => {
+          const isUsed = this.selectedSequence.some(item => item.code === c.code);
+          pool.innerHTML += `
+            <div class="puzzle-card-item ${isUsed ? 'used' : ''}" onclick='app.pickCard(${JSON.stringify(c)})'>
+              <div class="puzzle-card-icon">${c.icon}</div>
+              <div style="flex:1;">
+                <span class="puzzle-card-sound">${c.meow}</span>
+                <span style="margin-left:6px; color:#333;">${c.text}</span>
+              </div>
+            </div>
+          `;
+        });
+      },
+
+      pickCard(card) {
+        if (this.selectedSequence.length >= 4) return;
+        AudioSys.meow(1.0 + this.selectedSequence.length * 0.15);
+        this.selectedSequence.push(card);
+        this.renderPuzzleSlots();
+        
+        // Re-render pool to mark used
+        const lesson = GameData.lessons[this.currentLessonId];
+        this.renderPuzzleCardsPool(lesson.cards);
+      },
+
+      removeCardFromSlot(index) {
+        AudioSys.click();
+        this.selectedSequence.splice(index, 1);
+        this.renderPuzzleSlots();
+        const lesson = GameData.lessons[this.currentLessonId];
+        this.renderPuzzleCardsPool(lesson.cards);
+      },
+
+      resetSequence() {
+        AudioSys.click();
+        this.selectedSequence = [];
+        this.renderPuzzleSlots();
+        const lesson = GameData.lessons[this.currentLessonId];
+        this.renderPuzzleCardsPool(lesson.cards);
+      },
+
+      openGuideModal(lessonId) {
+        AudioSys.click();
+        const lesson = GameData.lessons[lessonId];
+        document.getElementById('modal-title').innerText = `🆘 CẨM NANG CỨU SEN: ${lesson.title}`;
+        let bodyHtml = `<p style="margin-bottom:8px; font-weight:600;">Quy trình đời thực chuẩn (Đọc trong 20s):</p><ul style="padding-left:18px; margin-bottom:12px;">`;
+        lesson.guide.forEach(step => {
+          bodyHtml += `<li style="margin-bottom:6px;">${step}</li>`;
+        });
+        bodyHtml += `</ul><p style="background:#fdf8e2; padding:8px; border-radius:8px; font-size:12px; color:#d35400;">💡 Mẹo cho Sen: Đọc kỹ thứ tự các gạch đầu dòng trên để ghép đúng các thẻ tiếng mèo nhé!</p>`;
+        document.getElementById('modal-body').innerHTML = bodyHtml;
+        document.getElementById('guide-modal').style.display = 'flex';
+      },
+
+      closeGuideModal() {
+        AudioSys.click();
+        document.getElementById('guide-modal').style.display = 'none';
+      },
+
+      submitSequence() {
+        AudioSys.click();
+        const lesson = GameData.lessons[this.currentLessonId];
+        let isCorrect = true;
+        for (let i = 0; i < this.selectedSequence.length; i++) {
+          if (this.selectedSequence[i].step !== (i + 1)) {
+            isCorrect = false;
+            break;
+          }
+        }
+        this.runSimulation(isCorrect);
+      },
+
+      /* VIEW: MÔ PHỎNG NGOÀI ĐỜI & SAFE FAILURE */
+      runSimulation(isCorrect) {
+        const lesson = GameData.lessons[this.currentLessonId];
+        const container = document.getElementById('main-content');
+
+        container.innerHTML = `
+          <div class="view-simulation">
+            <h3>🎬 ĐANG MÔ PHỎNG NGOÀI PHỐ</h3>
+            <p style="font-size:12px; color:var(--text-muted);">${lesson.title}</p>
+
+            <div class="sim-stage">
+              <div style="font-size:48px;" id="sim-cat-emoji">🐾</div>
+              <div id="sim-step-text" style="font-size:13px; font-weight:600; margin-top:8px;">Mèo đang bước ra khỏi phòng trọ...</div>
+            </div>
+
+            <div id="sim-result-box" style="display:none;" class="sim-result-card"></div>
+          </div>
+        `;
+
+        // Chạy animation mô phỏng từng bước
+        let stepIdx = 0;
+        const emojis = ['✋', '💵', '🎒', '🔔', '✨'];
+        const interval = setInterval(() => {
+          if (stepIdx < this.selectedSequence.length) {
+            const card = this.selectedSequence[stepIdx];
+            document.getElementById('sim-cat-emoji').innerText = card.icon;
+            document.getElementById('sim-step-text').innerText = `Mèo đang làm: ${card.text}...`;
+            AudioSys.meow(0.9 + stepIdx * 0.1);
+            stepIdx++;
+          } else {
+            clearInterval(interval);
+            this.finishSimulation(isCorrect);
+          }
+        }, 1100);
+      },
+
+      finishSimulation(isCorrect) {
+        const lesson = GameData.lessons[this.currentLessonId];
+        const resBox = document.getElementById('sim-result-box');
+        resBox.style.display = 'flex';
+
+        if (isCorrect) {
+          AudioSys.success();
+          document.getElementById('sim-cat-emoji').innerText = '🎉';
+          document.getElementById('sim-step-text').innerText = '✨ Hoàn thành xuất sắc!';
+
+          if (!GameData.completedLessons.includes(this.currentLessonId)) {
+            GameData.completedLessons.push(this.currentLessonId);
+            if (this.currentLessonId + 1 <= 16 && !GameData.unlockedLessons.includes(this.currentLessonId + 1)) {
+              GameData.unlockedLessons.push(this.currentLessonId + 1);
+            }
+            GameData.lootCollection.push({
+              name: lesson.lootName,
+              desc: lesson.lootDesc
+            });
+            GameData.fish += lesson.rewardFish;
+            GameData.courage = Math.min(100, GameData.courage + 15);
+            GameData.hunger = Math.max(0, GameData.hunger - 5);
+          }
+          this.updateTopBar();
+
+          resBox.innerHTML = `
+            <h4 style="color:#27ae60;">🎉 THÀNH CÔNG RỰC RỠ!</h4>
+            <p style="font-size:13px;">${lesson.successMsg}</p>
+            <div class="loot-box">
+              <b>🎁 Chiến Lợi Phẩm Ba Lô:</b> ${lesson.lootName}<br>
+              <span style="font-size:11px; color:#555;">${lesson.lootDesc}</span><br>
+              <b style="color:#d35400;">Thưởng nóng: +${lesson.rewardFish} Cá Khô</b>
+            </div>
+            <div class="cheat-sheet-box">
+              <b>📜 Thẻ Bảo Bối Bỏ Túi:</b><br>${lesson.cheatSheet}
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-block btn-coral" onclick="app.switchTab('room')">🏠 Về Phòng Thưởng Boss</button>
+              <button class="btn-block btn-outline" onclick="app.switchTab('skills')">🗺️ Học Tiếp</button>
+            </div>
+          `;
+        } else {
+          AudioSys.fail();
+          document.getElementById('sim-cat-emoji').innerText = '😅';
+          document.getElementById('sim-step-text').innerText = '😿 Quê xệ! Làm sai bước rồi...';
+
+          GameData.courage = Math.max(0, GameData.courage - 10);
+          this.updateTopBar();
+
+          resBox.innerHTML = `
+            <h4 style="color:#e67e22;">😅 THỬ SAI AN TOÀN - QUÊ ĐỘ!</h4>
+            <p style="font-size:13px;">${lesson.failMsg}</p>
+            <p style="font-size:12px; color:#666; background:#f9f9f9; padding:8px; border-radius:8px;">
+              💡 <b>Không sao cả!</b> Ở ngoài đời có thể mất tiền hay hoảng sợ, nhưng ở đây bạn và Mèo được thử sai an toàn không giới hạn. Mở cẩm nang coi lại rồi thử lại nhé!
+            </p>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-block btn-coral" onclick="app.startLesson(${this.currentLessonId})">🔄 Thử Lại Ngay</button>
+              <button class="btn-block btn-outline" onclick="app.switchTab('room')">🏠 Về Phòng Trọ</button>
+            </div>
+          `;
+        }
+      },
+
+      /* VIEW: THƯ VIỆN CỨU NGUY 24/7 (EMERGENCY SANDBOX) */
+      renderHandbook(container) {
+        let cardsHtml = '';
+        for (let i = 1; i <= 16; i++) {
+          const l = GameData.lessons[i];
+          cardsHtml += `
+            <div class="lesson-card" onclick="app.openHandbookDetail(${i})">
+              <div class="lesson-icon">📖</div>
+              <div class="lesson-info">
+                <div class="lesson-title">Bài ${i}: ${l.title}</div>
+                <div class="lesson-context">${l.branchName}</div>
+              </div>
+              <span class="lesson-status" style="background:#e8f4f8; color:#2980b9;">Xem Ngay</span>
+            </div>
+          `;
+        }
+
+        container.innerHTML = `
+          <div class="view-handbook">
+            <h3 style="text-align:center;">📖 THƯ VIỆN CỨU NGUY MỞ 24/7</h3>
+            <p style="text-align:center; font-size:12px; color:var(--text-muted);">
+              Tra cứu khẩn cấp 100% không giới hạn level khi cần gấp ngoài đời!
+            </p>
+            <input type="text" class="search-input" placeholder="🔍 Tìm kiếm (ví dụ: xe buýt, BHYT, hợp đồng, đa cấp)..." oninput="app.filterHandbook(this.value)">
+            <div id="handbook-list" style="display:flex; flex-direction:column; gap:10px;">
+              ${cardsHtml}
+            </div>
+          </div>
+        `;
+      },
+
+      filterHandbook(query) {
+        const q = query.toLowerCase().trim();
+        const list = document.getElementById('handbook-list');
+        let html = '';
+        for (let i = 1; i <= 16; i++) {
+          const l = GameData.lessons[i];
+          if (q && !l.title.toLowerCase().includes(q) && !l.context.toLowerCase().includes(q) && !l.branchName.toLowerCase().includes(q)) {
+            continue;
+          }
+          html += `
+            <div class="lesson-card" onclick="app.openHandbookDetail(${i})">
+              <div class="lesson-icon">📖</div>
+              <div class="lesson-info">
+                <div class="lesson-title">Bài ${i}: ${l.title}</div>
+                <div class="lesson-context">${l.branchName}</div>
+              </div>
+              <span class="lesson-status" style="background:#e8f4f8; color:#2980b9;">Xem Ngay</span>
+            </div>
+          `;
+        }
+        list.innerHTML = html;
+      },
+
+      openHandbookDetail(lessonId) {
+        AudioSys.click();
+        const l = GameData.lessons[lessonId];
+        document.getElementById('modal-title').innerText = `📖 ${l.title}`;
+        let bodyHtml = `
+          <p style="font-size:12px; color:#666; margin-bottom:10px;"><b>Bối cảnh:</b> ${l.context}</p>
+          <div style="background:#fdf6ec; border-left:3px solid #f39c12; padding:10px; margin-bottom:12px; font-size:13px;">
+            <b>Quy trình chuẩn đời thực (Đọc 30s):</b><br>
+            ${l.guide.map(s => `• ${s}`).join('<br>')}
+          </div>
+          <div style="background:#e8f8f5; border:1px solid #27ae60; padding:10px; border-radius:8px; font-size:12px; color:#27ae60;">
+            <b>📜 Bảo Bối Bỏ Túi:</b><br>${l.cheatSheet}
+          </div>
+        `;
+        document.getElementById('modal-body').innerHTML = bodyHtml;
+        document.getElementById('guide-modal').style.display = 'flex';
+      },
+
+      /* VIEW: BẢO TÀNG & BẠN BÈ */
+      renderMuseum(container) {
+        let lootHtml = '';
+        if (GameData.lootCollection.length === 0) {
+          lootHtml = `<p style="grid-column: span 2; font-size:12px; color:#888; text-align:center; padding:16px;">Chưa có chiến lợi phẩm nào. Hãy cùng Boss hoàn thành các bài học nhé!</p>`;
+        } else {
+          GameData.lootCollection.forEach(item => {
+            lootHtml += `
+              <div class="museum-item-card">
+                <div style="font-weight:700; color:#d35400;">🏆 ${item.name}</div>
+                <div style="color:#666; margin-top:2px;">${item.desc}</div>
+              </div>
+            `;
+          });
+        }
+
+        container.innerHTML = `
+          <div class="view-museum">
+            <h3 style="text-align:center;">🏆 BẢO TÀNG SINH TỒN CỦA MÈO</h3>
+            <div style="font-size:12px; color:var(--text-muted); text-align:center;">Đã thu thập: ${GameData.lootCollection.length}/16 Chiến Lợi Phẩm</div>
+
+            <div style="font-size:13px; font-weight:700; margin-top:6px;">🎒 KHO CHIẾN LỢI PHẨM BA LÔ:</div>
+            <div class="loot-grid-display">
+              ${lootHtml}
+            </div>
+
+            <div style="font-size:13px; font-weight:700; margin-top:10px;">😂 BỘ SƯU TẬP HUY HIỆU QUÊ ĐỘ:</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div class="museum-item-card">
+                <b>🎖️ Từng Vẫy Xe Buýt Như Vẫy Taxi</b>
+                <div style="color:#666; font-size:11px;">Đã có 9.420 Sen khác cũng từng đứng nhảy tưng tưng giữa ngã tư gọi xe buýt giống bạn!</div>
+              </div>
+              <div class="museum-item-card">
+                <b>🎖️ Từng Nộp Nhầm Sổ Sang Bàn Cấp Cứu</b>
+                <div style="color:#666; font-size:11px;">Đi khám ho nhẹ mà nộp sổ sang phòng hồi sức cấp cứu làm y tá hốt hoảng!</div>
+              </div>
+              <div class="museum-item-card">
+                <b>🎖️ Từng Quẹt Thẻ Trả Sau, Ăn Mì 7 Ngày</b>
+                <div style="color:#666; font-size:11px;">Bài học xương máu biến bạn thành chuyên gia kiềm chế mua sắm online!</div>
+              </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:700; margin-top:10px;">🤝 TÍNH NĂNG BẠN BÈ: BẢO VỆ NHAU:</div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-block btn-outline" style="font-size:12px;" onclick="app.giftCard()">💌 Tặng Thẻ Cứu Nguy<br>(Xem không cần cài app)</button>
+              <button class="btn-block btn-coral" style="font-size:12px;" onclick="app.sendPateRescue()">🥫 Pate Cứu Đói Mèo Bạn<br>(-5 Cá Khô)</button>
+            </div>
+          </div>
+        `;
+      },
+
+      giftCard() {
+        AudioSys.click();
+        this.showToast("Đã sao chép Link Thẻ Cứu Nguy BHYT! Bạn bè có thể xem ngay trên Zalo/Messenger!");
+      },
+
+      sendPateRescue() {
+        AudioSys.click();
+        if (GameData.fish < 5) {
+          this.showToast("Không đủ Cá Khô để tặng bạn lúc này!");
+          return;
+        }
+        GameData.fish -= 5;
+        GameData.courage = Math.min(100, GameData.courage + 10);
+        this.updateTopBar();
+        AudioSys.purr();
+        this.showToast("Đã gửi Lon Pate Cứu Đói sang phòng trọ bạn bè! Nhận danh hiệu Tình Làng Nghĩa Xóm!");
+      }
+    };
+
+    // Khởi chạy khi load trang
+    window.addEventListener('DOMContentLoaded', () => {
+      app.init();
+    });
+  </script>
+</body>
+</html>

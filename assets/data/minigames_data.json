@@ -1,0 +1,1283 @@
+{
+  "minigames": {
+    "1": {
+      "type": "preparation_vali",
+      "lesson_id": 1,
+      "title": "Lời dặn dò của mẹ khi chuẩn bị lên đại học",
+      "subtitle": "Kỹ năng: Đặt các đồ vật vào đúng vị trí trong Vali & Điền khuyết dán nhãn thuốc",
+      "instruction": "Kéo thả hoặc chạm xếp đồ vào 4 ngăn Vali, sau đó điền khuyết dán đúng nhãn công dụng và đọc kỹ lưu ý của Mẹ!",
+      "cat_prompt": "Mẹ ân cần dặn dò: 'Con sắp xa nhà học Đại học, nhớ xếp vali ngăn nắp và ghi nhớ công dụng từng loại thuốc nhé!'",
+      "success_msg": "🎉 Mẹ ôm chặt xoa đầu: 'Hành trang tươm tất rồi! Con ngoan của Mẹ tự tin bước vào giảng đường Đại học nhé!' ✨",
+      "sim_steps": [
+        {
+          "icon": "📦",
+          "text": "Xếp đồ vào đúng 4 ngăn Vali"
+        },
+        {
+          "icon": "🏷️",
+          "text": "Dán nhãn công dụng thuốc thiết yếu"
+        },
+        {
+          "icon": "📜",
+          "text": "Điền khuyết ghi nhớ lưu ý của mẹ"
+        },
+        {
+          "icon": "🎒",
+          "text": "Khóa vali hành trang tự lập lên đường"
+        }
+      ],
+      "suitcase_slots": [
+        {
+          "slot_id": "slot_med",
+          "name": "Ngăn Thuốc & Y Tế",
+          "icon": "💊",
+          "color": "#FFF0F0",
+          "border_color": "#E57373",
+          "target_item_id": "item_med_kit",
+          "hint": "Cần để ở vị trí dễ lấy nhất khi đau ốm bất ngờ"
+        },
+        {
+          "slot_id": "slot_docs",
+          "name": "Ngăn Hồ Sơ & Giấy Tờ",
+          "icon": "📁",
+          "color": "#FFF8E1",
+          "border_color": "#FFB74D",
+          "target_item_id": "item_admissions_docs",
+          "hint": "Cần giữ phẳng phiu, không gấp nát giấy báo và CCCD"
+        },
+        {
+          "slot_id": "slot_clothes",
+          "name": "Ngăn Trang Phục Cá Nhân",
+          "icon": "👕",
+          "color": "#E8F5E9",
+          "border_color": "#81C784",
+          "target_item_id": "item_wardrobe",
+          "hint": "Khoang chính rộng rãi để cuộn gọn quần áo và khăn"
+        },
+        {
+          "slot_id": "slot_tech",
+          "name": "Ngăn Thiết Bị Học Tập",
+          "icon": "💻",
+          "color": "#E1F5FE",
+          "border_color": "#4FC3F7",
+          "target_item_id": "item_electronics",
+          "hint": "Ngăn có đệm chống sốc cho laptop và củ sạc"
+        }
+      ],
+      "available_items": [
+        {
+          "id": "item_med_kit",
+          "name": "Hộp Thuốc Của Mẹ",
+          "desc": "Paracetamol, Berberin, Oresol, Urgo... đầy đủ",
+          "icon": "💊",
+          "is_required": true,
+          "target_slot": "slot_med"
+        },
+        {
+          "id": "item_admissions_docs",
+          "name": "Bìa Hồ Sơ & CCCD, BHYT",
+          "desc": "Giấy báo trúng tuyển, CCCD gắn chip, thẻ BHYT",
+          "icon": "📁",
+          "is_required": true,
+          "target_slot": "slot_docs"
+        },
+        {
+          "id": "item_wardrobe",
+          "name": "Quần Áo & Khăn Mặt Bông",
+          "desc": "Trang phục đi học, khăn tắm, bàn chải đánh răng",
+          "icon": "👕",
+          "is_required": true,
+          "target_slot": "slot_clothes"
+        },
+        {
+          "id": "item_electronics",
+          "name": "Laptop & Ổ Cắm Đa Năng",
+          "desc": "Máy tính học tập, dây sạc nhanh, ổ chia điện trọ",
+          "icon": "💻",
+          "is_required": true,
+          "target_slot": "slot_tech"
+        },
+        {
+          "id": "junk_bear",
+          "name": "Gấu Bông To Đùng 2 Mét",
+          "desc": "Gấu bông to gấp ba lần Mèo con",
+          "icon": "🧸",
+          "is_required": false,
+          "humor": "Mẹ la: Gấu bông to chật cả phòng trọ, để ở nhà mẹ ôm đỡ nhớ con!"
+        },
+        {
+          "id": "junk_hotpot",
+          "name": "Nồi Lẩu Điện Công Nghiệp 10L",
+          "desc": "Nồi lẩu siêu to khổng lồ",
+          "icon": "🍲",
+          "is_required": false,
+          "humor": "Mẹ can: Ký túc xá cấm nấu lẩu to thế này coi chừng bị phạt đó con!"
+        },
+        {
+          "id": "junk_speaker",
+          "name": "Loa Thùng Karaoke Kẹo Kéo",
+          "desc": "Loa công suất lớn hát đám cưới",
+          "icon": "🔊",
+          "is_required": false,
+          "humor": "Mẹ nhắc: Lên đại học cần yên tĩnh học bài, mang loa kẹo kéo làm phiền cả xóm trọ!"
+        }
+      ],
+      "medicine_puzzles": [
+        {
+          "id": "med_para",
+          "med_name": "Paracetamol 500mg",
+          "med_type": "Vỉ 10 viên nén",
+          "icon": "💊",
+          "correct_label": "Hạ sốt, giảm đau",
+          "mother_advice": "Chỉ uống khi sốt cao trên 38.5°C hoặc đau đầu dữ dội. Mỗi lần uống 1 viên cách nhau 4-6 tiếng, tuyệt đối không uống quá 4 viên/ngày và không uống khi bụng đói hại gan con nhé!",
+          "warning_tag": "⚠️ Không quá liều - Uống cách 4-6h"
+        },
+        {
+          "id": "med_berberin",
+          "med_name": "Berberin Vàng",
+          "med_type": "Lọ thảo dược tiêu hóa",
+          "icon": "🌿",
+          "correct_label": "Đau bụng, tiêu hóa",
+          "mother_advice": "Mới lên thành phố ăn quán xá lạ bụng rất dễ đau bụng đi ngoài. Uống 2-3 viên với nước ấm là êm bụng ngay. Nhớ luôn ăn chín uống sôi nhé con!",
+          "warning_tag": "⚠️ Dùng khi rối loạn tiêu hóa - Uống nước ấm"
+        },
+        {
+          "id": "med_oresol",
+          "med_name": "Gói Bột Bù Nước Oresol",
+          "med_type": "Gói bột hòa tan",
+          "icon": "🥤",
+          "correct_label": "Bù nước, điện giải",
+          "mother_advice": "Khi sốt cao đổ mồ hôi hoặc tiêu chảy mất nước, phải pha đúng 1 gói với đúng 200ml nước đun sôi để nguội. Uống từng ngụm nhỏ, tuyệt đối không pha quá đặc hại thận con nhé!",
+          "warning_tag": "⚠️ Pha đúng tỷ lệ 200ml - Uống từng ngụm"
+        },
+        {
+          "id": "med_bandage",
+          "med_name": "Băng Urgo & Cồn Đỏ Povidine",
+          "med_type": "Bộ sát trùng sơ cứu",
+          "icon": "🩹",
+          "correct_label": "Sát trùng, vết thương hở",
+          "mother_advice": "Đi đứng va quẹt trầy xước ngã xe, phải dùng cồn đỏ rửa sạch sát trùng trước, để khô rồi mới dán băng Urgo kẻo vết thương bị mưng mủ nhiễm trùng!",
+          "warning_tag": "⚠️ Sát trùng trước khi dán - Giữ vết thương khô"
+        },
+        {
+          "id": "med_allergy",
+          "med_name": "Clorpheniramin 4mg",
+          "med_type": "Thuốc chống dị ứng",
+          "icon": "🤧",
+          "correct_label": "Chống dị ứng, sổ mũi",
+          "mother_advice": "Thời tiết thay đổi hắt hơi sổ mũi hoặc nổi mề đay ngứa ngáy thì uống. Thuốc gây buồn ngủ nhiều nên tuyệt đối không uống trước giờ đi học hay khi đang lái xe!",
+          "warning_tag": "⚠️ Gây buồn ngủ - Tránh uống trước khi lái xe"
+        }
+      ],
+      "puzzle_options": [
+        "Hạ sốt, giảm đau",
+        "Đau bụng, tiêu hóa",
+        "Bù nước, điện giải",
+        "Sát trùng, vết thương hở",
+        "Chống dị ứng, sổ mũi",
+        "Trị đau răng cấp tốc",
+        "Chống buồn ngủ thức khuya",
+        "Tăng chiều cao siêu tốc"
+      ]
+    },
+    "2": {
+      "type": "hospital_choice",
+      "lesson_id": 2,
+      "title": "Lựa chọn bệnh viện đúng bệnh",
+      "subtitle": "Kỹ năng: Đánh giá tình hình bạn cùng phòng & Chọn đúng chuyên khoa và bệnh viện",
+      "instruction": "Quan sát triệu chứng của Bạn Cùng Phòng, chọn đúng Chuyên Khoa điều trị và Bệnh Viện chuyên sâu tuyến đầu!",
+      "cat_prompt": "Sen ơi! Bạn cùng phòng đang đau đớn kêu cứu kìa! Hãy chọn đúng chuyên khoa và bệnh viện để đưa bạn đi cấp cứu ngay nhé!",
+      "warning_rule": "⚠️ LƯU Ý SỐNG CÒN: Chọn sai bất kỳ câu nào sẽ phải QUAY LẠI TỪ ĐẦU vì nguy cơ bỏ lỡ thời gian vàng cấp cứu!",
+      "success_msg": "🎉 CẤP CỨU THÀNH CÔNG! Bác sĩ đã kịp thời điều trị, bạn cùng phòng đã an toàn và hồi phục ngoạn mục! 🌟",
+      "sim_steps": [
+        {
+          "icon": "🤕",
+          "text": "Khám triệu chứng bạn cùng phòng"
+        },
+        {
+          "icon": "🩺",
+          "text": "Xác định chuyên khoa điều trị"
+        },
+        {
+          "icon": "🏥",
+          "text": "Chọn đúng bệnh viện chuyên sâu"
+        },
+        {
+          "icon": "🚑",
+          "text": "Cấp cứu kịp thời đúng nơi"
+        }
+      ],
+      "cases": [
+        {
+          "case_id": "case_fracture",
+          "patient_name": "Mèo Mướp Cùng Phòng",
+          "patient_avatar": "res://assets/sprites/skills/lesson_02_step_1.png",
+          "situation_desc": "Mèo Mướp vừa trượt chân ngã từ cầu thang gác xép trọ xuống, ôm cổ chân khóc thét: 'Aaaaa! Chân tớ sưng vù biến dạng lệch hẳn sang một bên, đau buốt không cử động được nữa rồi! Cứu tớ với!'",
+          "vital_status": "Chấn thương cơ xương khớp cấp - Nghi gãy kín xương cẳng chân",
+          "phase_1_question": "Với tình trạng cổ chân biến dạng đau dữ dội nghi gãy xương, cần đưa bạn vào Chuyên Khoa nào?",
+          "phase_1_options": [
+            {
+              "id": "p1_opt_bone",
+              "icon": "🦴",
+              "title": "Chuyên Khoa Chấn Thương Chỉnh Hình & X-Quang",
+              "desc": "Chuyên chụp phim chẩn đoán nứt gãy xương, bó bột và phẫu thuật chỉnh hình khớp.",
+              "is_correct": true
+            },
+            {
+              "id": "p1_opt_skin",
+              "icon": "💅",
+              "title": "Chuyên Khoa Da Liễu & Thẩm Mỹ",
+              "desc": "Chuyên điều trị mụn nhọt, viêm da cơ địa và chăm sóc sắc đẹp.",
+              "is_correct": false,
+              "fail_reason": "Gãy xương sưng vù mà đưa sang Da Liễu thì bác sĩ cũng bó tay! Mất thời gian vàng cấp cứu!"
+            },
+            {
+              "id": "p1_opt_dental",
+              "icon": "🦷",
+              "title": "Chuyên Khoa Răng Hàm Mặt",
+              "desc": "Chuyên nhổ răng khôn, trám răng sâu và niềng răng thẩm mỹ.",
+              "is_correct": false,
+              "fail_reason": "Bạn đau chân gãy xương chứ có đau răng đâu! Đưa nhầm khoa làm bạn đau đớn thêm!"
+            }
+          ],
+          "phase_2_question": "Xác định được Chuyên Khoa Chấn Thương Chỉnh Hình, bạn nên chọn Bệnh Viện chuyên sâu nào?",
+          "phase_2_options": [
+            {
+              "id": "p2_opt_ortho",
+              "icon": "🏥",
+              "title": "Bệnh Viện Chấn Thương Chỉnh Hình TP",
+              "desc": "Bệnh viện tuyến cuối chuyên khoa sâu về xương khớp, vi phẫu và cấp cứu chấn thương.",
+              "is_correct": true
+            },
+            {
+              "id": "p2_opt_derma",
+              "icon": "🏥",
+              "title": "Bệnh Viện Da Liễu TP",
+              "desc": "Cơ sở điều trị các bệnh lý ngoài da và dị ứng tiếp xúc.",
+              "is_correct": false,
+              "fail_reason": "Bệnh viện Da Liễu không có phòng mổ chấn thương xương! Phải làm thủ tục chuyển viện rất lâu!"
+            },
+            {
+              "id": "p2_opt_clinic",
+              "icon": "🦷",
+              "title": "Phòng Khám Nha Khoa Tư Nhân Ven Đường",
+              "desc": "Cơ sở nha khoa tư nhân không có máy chụp X-quang toàn thân.",
+              "is_correct": false,
+              "fail_reason": "Phòng khám nha khoa tư nhân hoàn toàn không có chức năng cấp cứu gãy xương!"
+            }
+          ]
+        },
+        {
+          "case_id": "case_dengue",
+          "patient_name": "Mèo Vàng Cùng Phòng",
+          "patient_avatar": "res://assets/sprites/skills/lesson_02_step_2.png",
+          "situation_desc": "Mèo Vàng nằm li bì trên giường ngày thứ 3, sốt cao 39.5°C không hạ, hai mắt đỏ ngầu, người run rẩy: 'Người tớ nóng rực như lửa đốt, nhức buốt hai hốc mắt, dưới da tay bắt đầu nổi nhiều nốt chấm đỏ li ti không lặn...'",
+          "vital_status": "Dấu hiệu cảnh báo Sốt Xuất Huyết Dengue ngày thứ 3 - Nguy cơ sốc giảm tiểu cầu",
+          "phase_1_question": "Sốt cao li bì kèm xuất huyết dưới da và đau nhức hốc mắt cần cấp cứu tại Chuyên Khoa nào?",
+          "phase_1_options": [
+            {
+              "id": "p1_opt_tropical",
+              "icon": "🦟",
+              "title": "Chuyên Khoa Truyền Nhiễm & Bệnh Nhiệt Đới",
+              "desc": "Chuyên xét nghiệm máu đếm tiểu cầu, điều trị sốt xuất huyết, cúm và nhiễm virus cấp.",
+              "is_correct": true
+            },
+            {
+              "id": "p1_opt_rehab",
+              "icon": "🏋️",
+              "title": "Chuyên Khoa Phục Hồi Chức Năng",
+              "desc": "Chuyên tập vật lý trị liệu sau tai biến, thoái hóa khớp.",
+              "is_correct": false,
+              "fail_reason": "Đang sốt cao xuất huyết cấp tính mà đưa đi tập vật lý trị liệu là nguy hiểm tính mạng!"
+            },
+            {
+              "id": "p1_opt_ent",
+              "icon": "👂",
+              "title": "Chuyên Khoa Tai Mũi Họng",
+              "desc": "Chuyên nội soi tai, hút mũi xoang và cắt amidan.",
+              "is_correct": false,
+              "fail_reason": "Nốt xuất huyết dưới da là bệnh toàn thân do virus, không phải viêm amidan thông thường!"
+            }
+          ],
+          "phase_2_question": "Cần đưa ngay Mèo Vàng tới Bệnh Viện chuyên sâu nào để xét nghiệm tiểu cầu và truyền dịch cấp cứu?",
+          "phase_2_options": [
+            {
+              "id": "p2_opt_trop_hosp",
+              "icon": "🏥",
+              "title": "Bệnh Viện Bệnh Nhiệt Đới TP",
+              "desc": "Bệnh viện tuyến đầu chuyên sâu về bệnh truyền nhiễm, dịch tễ và hồi sức sốt xuất huyết.",
+              "is_correct": true
+            },
+            {
+              "id": "p2_opt_tcm",
+              "icon": "🌿",
+              "title": "Viện Y Học Cổ Truyền",
+              "desc": "Chuyên châm cứu, bấm huyệt và sắc thuốc bắc bồi bổ cơ thể.",
+              "is_correct": false,
+              "fail_reason": "Sốt xuất huyết tiểu cầu tụt dốc rất nhanh, châm cứu hay sắc thuốc bắc sẽ gây trễ cấp cứu!"
+            },
+            {
+              "id": "p2_opt_spa",
+              "icon": "✨",
+              "title": "Viện Thẩm Mỹ Trẻ Hóa Da Quốc Tế",
+              "desc": "Cơ sở làm đẹp, triệt lông và massage thư giãn.",
+              "is_correct": false,
+              "fail_reason": "Bạn đang nguy kịch vì sốt virus mà đưa vào thẩm mỹ viện là trò đùa nguy hiểm!"
+            }
+          ]
+        },
+        {
+          "case_id": "case_chemical_eye",
+          "patient_name": "Mèo Mun Cùng Phòng",
+          "patient_avatar": "res://assets/sprites/skills/lesson_02_step_3.png",
+          "situation_desc": "Mèo Mun vừa dọn bồn cầu phòng trọ thì chai nước tẩy cực mạnh bị bung nắp bắn thẳng vào mắt, Mèo ôm mặt quằn quại: 'Á á á! Nước tẩy bắn vào mắt tớ rát bỏng như lửa thiêu, mắt nhắm nghiền không mở ra được, chảy nước mắt xối xả!'",
+          "vital_status": "Bỏng hóa chất kiềm/axit ở mắt cấp tính - Nguy cơ tổn thương giác mạc vĩnh viễn",
+          "phase_1_question": "Hóa chất tẩy rửa bắn trực tiếp vào mắt cần sơ cứu xả nước sạch và đưa ngay tới Chuyên Khoa nào?",
+          "phase_1_options": [
+            {
+              "id": "p1_opt_eye",
+              "icon": "👁️",
+              "title": "Chuyên Khoa Nhãn Khoa (Mắt) Cấp Cứu",
+              "desc": "Chuyên rửa mắt khử trùng hóa chất, soi đáy mắt và cấp cứu giác mạc 24/7.",
+              "is_correct": true
+            },
+            {
+              "id": "p1_opt_cardio",
+              "icon": "❤️",
+              "title": "Chuyên Khoa Tim Mạch Can Thiệp",
+              "desc": "Chuyên đo điện tim, nong mạch vành và đặt stent tim.",
+              "is_correct": false,
+              "fail_reason": "Bị bỏng mắt do hóa chất lại đưa vào khoa Tim mạch là nhầm lẫn tai hại!"
+            },
+            {
+              "id": "p1_opt_gastro",
+              "icon": "🍔",
+              "title": "Chuyên Khoa Tiêu Hóa Gan Mật",
+              "desc": "Chuyên nội soi dạ dày, đại tràng và men gan.",
+              "is_correct": false,
+              "fail_reason": "Khoa Tiêu Hóa không có dụng cụ đo thị lực và rửa trung hòa hóa chất giác mạc!"
+            }
+          ],
+          "phase_2_question": "Bệnh viện chuyên khoa mắt đầu ngành nào có đội ngũ bác sĩ cấp cứu giác mạc 24/24 tốt nhất?",
+          "phase_2_options": [
+            {
+              "id": "p2_opt_eye_hosp",
+              "icon": "🏥",
+              "title": "Bệnh Viện Mắt TP",
+              "desc": "Bệnh viện chuyên khoa mắt tuyến đầu, đầy đủ phòng cấp cứu giác mạc và máy rửa hóa chất chuyên dụng.",
+              "is_correct": true
+            },
+            {
+              "id": "p2_opt_dent_center",
+              "icon": "🦷",
+              "title": "Bệnh Viện Răng Hàm Mặt Trung Ương",
+              "desc": "Cơ sở chuyên phẫu thuật hàm mặt và nha khoa tổng quát.",
+              "is_correct": false,
+              "fail_reason": "Bệnh viện Răng Hàm Mặt không có chuyên khoa sâu về giác mạc và rửa hóa chất mắt!"
+            },
+            {
+              "id": "p2_opt_vax_center",
+              "icon": "💉",
+              "title": "Trung Tâm Tiêm Chủng Vắc-xin",
+              "desc": "Cơ sở chỉ tiếp nhận tiêm ngừa theo lịch hẹn.",
+              "is_correct": false,
+              "fail_reason": "Trung tâm tiêm chủng không nhận cấp cứu chấn thương hay bỏng hóa chất!"
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "type": "medicine_diagnosis",
+      "lesson_id": 3,
+      "title": "Xác định đúng bệnh của bản thân trước khi uống thuốc",
+      "subtitle": "Kỹ năng: Chọn vật phẩm chẩn đoán trong hộp cứu thương & Tìm đúng thuốc đặc trị",
+      "instruction": "Lượt 1: Chọn vật phẩm chẩn đoán chính xác ➔ Xem bảng thống kê thông tin. Lượt 2: Tìm đúng thuốc đặc trị tương ứng!",
+      "cat_prompt": "Meo meo! Tuyệt đối không đoán mò uống thuốc bừa bãi! Hãy dùng dụng cụ y tế kiểm tra rồi chọn đúng thuốc chữa bệnh nhé Sen!",
+      "warning_rule": "🚨 CẢNH BÁO Y TẾ: Sai ở bất kỳ lượt nào = GAME OVER ngay lập tức vì uống sai thuốc cực kỳ nguy hiểm!",
+      "success_msg": "🎉 CHẨN ĐOÁN & UỐNG THUỐC CHUẨN XÁC! Chỉ số sức khỏe đã ổn định, Mèo hồi phục an toàn tuyệt đối! 🌟",
+      "sim_steps": [
+        {
+          "icon": "🌡️",
+          "text": "Dùng dụng cụ đo chỉ số cơ thể"
+        },
+        {
+          "icon": "📋",
+          "text": "Lập bảng thống kê triệu chứng"
+        },
+        {
+          "icon": "💊",
+          "text": "Chọn đúng thuốc đặc trị"
+        },
+        {
+          "icon": "✨",
+          "text": "Hồi phục sức khỏe an toàn"
+        }
+      ],
+      "cases": [
+        {
+          "case_id": "case_fever",
+          "case_title": "Ca 1: Cơ thể nóng rực, nhức đầu lúc nửa đêm",
+          "situation_desc": "Đồng hồ điểm 23:30, Mèo con thấy người nóng bừng bừng, hai má đỏ ửng, đầu đau như búa bổ và rét run trong chăn. Mèo cần kiểm tra chính xác nhiệt độ trước khi quyết định uống thuốc.",
+          "turn_1_prompt": "LƯỢT 1: Chọn vật phẩm chẩn đoán phù hợp trong Hộp Cứu Thương:",
+          "turn_1_items": [
+            {
+              "id": "tool_thermometer",
+              "name": "Nhiệt kế điện tử kẹp nách",
+              "icon": "🌡️",
+              "desc": "Đo chính xác thân nhiệt cơ thể sau tiếng bíp",
+              "is_correct": true
+            },
+            {
+              "id": "tool_bandaid",
+              "name": "Băng keo cá nhân Urgo",
+              "icon": "🩹",
+              "desc": "Bảo vệ vết trầy xước nông ngoài da",
+              "is_correct": false,
+              "fail_msg": "Đang nóng bừng sốt cao mà dán băng Urgo thì làm sao biết sốt bao nhiêu độ! GAME OVER!"
+            },
+            {
+              "id": "tool_scissor",
+              "name": "Kéo y tế đầu tù",
+              "icon": "✂️",
+              "desc": "Dùng cắt băng gạc và quần áo cấp cứu",
+              "is_correct": false,
+              "fail_msg": "Lấy kéo y tế làm gì khi đang nóng đầu sốt cao? Chẩn đoán sai lầm! GAME OVER!"
+            },
+            {
+              "id": "tool_magnifier",
+              "name": "Kính lúp soi da cầm tay",
+              "icon": "🔍",
+              "desc": "Quan sát dị vật hoặc nốt côn trùng cắn",
+              "is_correct": false,
+              "fail_msg": "Kính lúp không đo được thân nhiệt! Không biết nhiệt độ mà uống thuốc là ngộ độc! GAME OVER!"
+            }
+          ],
+          "diagnosis_stat_sheet": {
+            "title": "📋 BẢNG THỐNG KÊ CHỈ SỐ Y TẾ (CA 1)",
+            "tool_used": "Nhiệt kế điện tử kẹp nách (bíp báo hiệu)",
+            "measured_value": "38.9°C (Báo động sốt cao cấp tính)",
+            "vital_signs": "Nhịp tim: 98 bpm • Huyết áp: 115/75 mmHg • Môi khô khát nước",
+            "clinical_notes": "Sốt trên 38.5°C gây nguy cơ co giật và mất nước nhanh.",
+            "conclusion": "KẾT LUẬN: SỐT CAO CẤP TÍNH & MẤT NƯỚC ĐIỆN GIẢI",
+            "treatment_goal": "Cần thuốc hạ sốt giảm đau Paracetamol (10-15mg/kg) + Bù nước Oresol."
+          },
+          "turn_2_prompt": "LƯỢT 2: Dựa trên Bảng Thống Kê, hãy chọn đúng lọ thuốc đặc trị cần dùng:",
+          "turn_2_items": [
+            {
+              "id": "med_para_oresol",
+              "name": "Paracetamol 500mg + Gói Oresol bù nước",
+              "icon": "💊",
+              "desc": "Hạ nhiệt độ an toàn, xoa dịu đau đầu và bù lượng nước mất do mồ hôi.",
+              "is_correct": true
+            },
+            {
+              "id": "med_antibiotic",
+              "name": "Kháng sinh Amoxicillin 500mg",
+              "icon": "💊",
+              "desc": "Thuốc tiêu diệt vi khuẩn theo đơn bác sĩ",
+              "is_correct": false,
+              "fail_msg": "NGUY HIỂM TỘT ĐỘ! Mới chớm sốt đã tự ý uống kháng sinh bừa bãi sẽ hủy hoại đường ruột và gây siêu vi khuẩn kháng thuốc! GAME OVER!"
+            },
+            {
+              "id": "med_berberin",
+              "name": "Berberin Vàng trị đau bụng",
+              "icon": "💊",
+              "desc": "Chữa tiêu chảy và nhiễm khuẩn ruột",
+              "is_correct": false,
+              "fail_msg": "Bạn đang sốt 38.9°C chứ không hề bị tiêu chảy! Uống sai thuốc không hạ sốt được! GAME OVER!"
+            },
+            {
+              "id": "med_cooling_oil",
+              "name": "Dầu gió cay nóng bôi trán",
+              "icon": "🧴",
+              "desc": "Dầu xoa bóp sinh nhiệt",
+              "is_correct": false,
+              "fail_msg": "SAI LẦM! Đang sốt cao mà bôi dầu nóng vào trán sẽ làm cơ thể tích nhiệt không thoát được mồ hôi! GAME OVER!"
+            }
+          ]
+        },
+        {
+          "case_id": "case_stomach",
+          "case_title": "Ca 2: Đau quặn bụng và tiêu chảy sau bữa ốc vỉa hè",
+          "situation_desc": "Sau khi ăn đĩa ốc luộc và nghêu hấp vỉa hè lúc chập tối, đến 2 giờ sáng Mèo con ôm bụng quằn quại, bụng sôi ùng ục, chạy vào toilet 4 lần liên tiếp, người lả đi vì mất nước.",
+          "turn_1_prompt": "LƯỢT 1: Chọn vật phẩm chẩn đoán phù hợp trong Hộp Cứu Thương:",
+          "turn_1_items": [
+            {
+              "id": "tool_digestive_chart",
+              "name": "Bảng theo dõi triệu chứng tiêu hóa & mất nước",
+              "icon": "📋",
+              "desc": "Đánh giá số lần đi ngoài, tính chất phân và mức độ mất nước",
+              "is_correct": true
+            },
+            {
+              "id": "tool_stethoscope",
+              "name": "Ống nghe tim phổi y tế",
+              "icon": "🩺",
+              "desc": "Nghe tiếng tim đập và phế âm phổi",
+              "is_correct": false,
+              "fail_msg": "Ống nghe tim phổi không giúp định lượng mức độ mất nước hay vi khuẩn đường ruột! GAME OVER!"
+            },
+            {
+              "id": "tool_flashlight",
+              "name": "Đèn pin y tế soi họng",
+              "icon": "🔦",
+              "desc": "Soi niêm mạc vòm họng và đáy mắt",
+              "is_correct": false,
+              "fail_msg": "Đau bụng đi ngoài mà đi soi họng là khám nhầm vị trí hoàn toàn! GAME OVER!"
+            },
+            {
+              "id": "tool_pain_patch",
+              "name": "Miếng dán giảm đau Salonpas",
+              "icon": "🩹",
+              "desc": "Dán giảm đau nhức cơ bắp",
+              "is_correct": false,
+              "fail_msg": "Đau bụng nhiễm trùng mà dán salonpas nóng rát bụng là sai phác đồ! GAME OVER!"
+            }
+          ],
+          "diagnosis_stat_sheet": {
+            "title": "📋 BẢNG THỐNG KÊ CHỈ SỐ Y TẾ (CA 2)",
+            "tool_used": "Bảng nhật ký tiêu hóa & Thước đo mất nước",
+            "measured_value": "Đi ngoài phân lỏng: 4 lần / 2 giờ • Đau quặn quắt rốn",
+            "vital_signs": "Nhiệt độ: 37.1°C • Mạch: 92 bpm • Dấu hiệu khát nước rõ",
+            "clinical_notes": "Ngộ độc thực phẩm đường ruột nhẹ do vi khuẩn thức ăn vỉa hè.",
+            "conclusion": "KẾT LUẬN: NHIỄM KHUẨN TIÊU HÓA CẤP TÍNH & MẤT NƯỚC",
+            "treatment_goal": "Dùng thảo dược kháng khuẩn ruột Berberin + Pha Oresol bù nước chuẩn 200ml."
+          },
+          "turn_2_prompt": "LƯỢT 2: Dựa trên Bảng Thống Kê, hãy chọn đúng lọ thuốc đặc trị cần dùng:",
+          "turn_2_items": [
+            {
+              "id": "med_berberin_oresol",
+              "name": "Berberin Vàng (Vàng Đắng) + Gói Oresol",
+              "icon": "💊",
+              "desc": "Kháng khuẩn thực vật lành tính ức chế vi khuẩn đường ruột, kết hợp bù nước điện giải.",
+              "is_correct": true
+            },
+            {
+              "id": "med_sedative",
+              "name": "Thuốc ngủ / Thuốc an thần",
+              "icon": "💊",
+              "desc": "Gây ngủ sâu ức chế thần kinh",
+              "is_correct": false,
+              "fail_msg": "CỰC KỲ NGUY HIỂM! Uống thuốc ngủ khi đang tiêu chảy sẽ làm liệt ruột ứ độc tố vi khuẩn nguy kịch! GAME OVER!"
+            },
+            {
+              "id": "med_paracetamol",
+              "name": "Viên sủi Paracetamol 500mg",
+              "icon": "💊",
+              "desc": "Thuốc hạ nhiệt giảm đau",
+              "is_correct": false,
+              "fail_msg": "Bụng đang loét kích ứng mà uống viên sủi giảm đau sẽ làm hại dạ dày thêm! GAME OVER!"
+            },
+            {
+              "id": "med_throat_spray",
+              "name": "Chai xịt sát trùng vòm họng",
+              "icon": "🧴",
+              "desc": "Xịt thơm và kháng khuẩn hầu họng",
+              "is_correct": false,
+              "fail_msg": "Nhiễm khuẩn ở ruột non ruột già chứ không phải ở họng! Chọn sai thuốc! GAME OVER!"
+            }
+          ]
+        },
+        {
+          "case_id": "case_allergy",
+          "case_title": "Ca 3: Nổi mề đay mẩn ngứa và hắt hơi sau dọn bụi trọ",
+          "situation_desc": "Dọn dẹp căn gác trọ bụi bặm nhiều năm, Mèo con liên tục hắt hơi đỏ mũi. Vừa ngồi xuống thì khắp hai cánh tay và đùi nổi cộm các mảng sẩn đỏ ngứa rát, càng gãi càng lan rộng.",
+          "turn_1_prompt": "LƯỢT 1: Chọn vật phẩm chẩn đoán phù hợp trong Hộp Cứu Thương:",
+          "turn_1_items": [
+            {
+              "id": "tool_allergy_ruler",
+              "name": "Thước đo sẩn phù & Bảng nhận diện dị ứng da",
+              "icon": "🔍",
+              "desc": "Soi hình thái nốt sẩn phù gồ mặt da, phân biệt với nốt côn trùng đốt",
+              "is_correct": true
+            },
+            {
+              "id": "tool_thermometer_axilla",
+              "name": "Nhiệt kế thủy ngân",
+              "icon": "🌡️",
+              "desc": "Đo thân nhiệt cơ thể",
+              "is_correct": false,
+              "fail_msg": "Dị ứng mề đay không gây sốt, đo nhiệt kế không giải quyết được nguồn gốc mẩn ngứa! GAME OVER!"
+            },
+            {
+              "id": "tool_povidine",
+              "name": "Lọ cồn đỏ sát trùng Povidine",
+              "icon": "🧪",
+              "desc": "Sát khuẩn vết thương rách da chảy máu",
+              "is_correct": false,
+              "fail_msg": "Bôi cồn đỏ lên khắp vùng mề đay sẽ gây kích ứng bỏng rát da nặng hơn! GAME OVER!"
+            },
+            {
+              "id": "tool_weight_scale",
+              "name": "Cân sức khỏe điện tử",
+              "icon": "⚖️",
+              "desc": "Cân trọng lượng cơ thể",
+              "is_correct": false,
+              "fail_msg": "Đang ngứa điên cuồng vì mề đay mà đi leo lên cân sức khỏe? Chẩn đoán vô lý! GAME OVER!"
+            }
+          ],
+          "diagnosis_stat_sheet": {
+            "title": "📋 BẢNG THỐNG KÊ CHỈ SỐ Y TẾ (CA 3)",
+            "tool_used": "Thước đo sẩn phù & Bảng phân loại mề đay",
+            "measured_value": "Mảng sẩn gồ đỏ: 2 - 5 cm • Phân bố rải rác tay chân",
+            "vital_signs": "Thân nhiệt: 36.8°C (Bình thường) • Hắt xì sổ mũi nước trong",
+            "clinical_notes": "Phản ứng giải phóng Histamin dưới da do tiếp xúc mạt bụi và nấm mốc.",
+            "conclusion": "KẾT LUẬN: VIÊM MŨI DỊ ỨNG & MỀ ĐAY CẤP TÍNH (DO HISTAMIN)",
+            "treatment_goal": "Dùng thuốc kháng Histamin H1 (Clorpheniramin 4mg) + Rửa da bằng nước mát."
+          },
+          "turn_2_prompt": "LƯỢT 2: Dựa trên Bảng Thống Kê, hãy chọn đúng lọ thuốc đặc trị cần dùng:",
+          "turn_2_items": [
+            {
+              "id": "med_clorpheniramin",
+              "name": "Clorpheniramin 4mg (Kháng Histamin H1)",
+              "icon": "💊",
+              "desc": "Ngăn chặn Histamin, dập tắt nhanh cơn ngứa sẩn phù mề đay và ngưng hắt hơi sổ mũi.",
+              "is_correct": true
+            },
+            {
+              "id": "med_antibiotic_cephalexin",
+              "name": "Kháng sinh Cephalexin 500mg",
+              "icon": "💊",
+              "desc": "Diệt khuẩn đường hô hấp",
+              "is_correct": false,
+              "fail_msg": "Dị ứng mạt bụi không phải do vi khuẩn! Uống kháng sinh lúc này cực kỳ dễ gây sốc phản vệ! GAME OVER!"
+            },
+            {
+              "id": "med_mouthwash",
+              "name": "Chai nước súc miệng diệt khuẩn",
+              "icon": "🧴",
+              "desc": "Súc sạch khoang miệng",
+              "is_correct": false,
+              "fail_msg": "Mề đay ngứa toàn thân mà súc miệng thì làm sao lặn nốt sẩn được! GAME OVER!"
+            },
+            {
+              "id": "med_weight_pill",
+              "name": "Viên uống tăng cân dinh dưỡng",
+              "icon": "💊",
+              "desc": "Bổ sung calo",
+              "is_correct": false,
+              "fail_msg": "Uống thuốc tăng cân khi dị ứng cấp tính là sai sót y khoa nghiêm trọng! GAME OVER!"
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "type": "traffic_safety",
+      "lesson_id": 4,
+      "title": "An toàn giao thông & Xử lý vi phạm hành chính",
+      "subtitle": "Kỹ năng: Mức xử phạt vi phạm giao thông & Quy trình 4 bước ứng phó va chạm văn minh",
+      "instruction": "Game 1: Nối lỗi vi phạm giao thông với mức xử phạt. Game 2: Sắp xếp 4 bước xử lý khi xảy ra va chạm nhẹ!",
+      "cat_prompt": "Meo meo! Tham gia giao thông an toàn, thuộc lòng mức phạt và cách ứng phó va chạm văn minh trên đường nhé!",
+      "success_msg": "🎉 Tuyệt vời! Bạn đã trở thành 'Hiệp Sĩ Giao Thông', nắm rõ luật đi đường và xử lý va chạm chuẩn mực!",
+      "sim_steps": [
+        {
+          "icon": "🛑",
+          "text": "Dừng xe giữ hiện trường & bật đèn"
+        },
+        {
+          "icon": "🩺",
+          "text": "Hỏi thăm sức khỏe & sơ cứu"
+        },
+        {
+          "icon": "📸",
+          "text": "Chụp ảnh quay video bằng chứng"
+        },
+        {
+          "icon": "🤝",
+          "text": "Hòa giải văn minh hoặc gọi CSGT 113"
+        }
+      ]
+    },
+    "5": {
+      "type": "rental_contract",
+      "lesson_id": 5,
+      "title": "Hiểu biết pháp luật cơ bản về Hợp đồng thuê nhà",
+      "subtitle": "Kỹ năng: Nhận diện vi phạm hợp đồng thuê nhà & Quy trình 4 bước ký kết an toàn",
+      "instruction": "Game 1: Nối tình huống vi phạm với giải pháp đúng. Game 2: Sắp xếp thứ tự 4 bước ký hợp đồng thuê trọ an toàn!",
+      "cat_prompt": "Meo meo! Hãy nối các tình huống vi phạm với giải pháp pháp lý đúng, sau đó sắp xếp quy trình ký kết hợp đồng an toàn nhé Sen!",
+      "success_msg": "🎉 Chúc mừng Thám Tử Soi Hợp Đồng! Nắm chắc giải pháp pháp lý và quy trình ký kết an toàn không lo bị lừa cọc!",
+      "sim_steps": [
+        {
+          "icon": "🔍",
+          "text": "Xác minh giấy tờ chủ sở hữu nhà"
+        },
+        {
+          "icon": "📑",
+          "text": "Đọc thỏa thuận cọc, điện nước"
+        },
+        {
+          "icon": "✍️",
+          "text": "Ký hợp đồng & lập biên bản bàn giao"
+        },
+        {
+          "icon": "🪪",
+          "text": "Đăng ký tạm trú đúng luật"
+        }
+      ]
+    },
+    "6": {
+      "type": "audit",
+      "lesson_id": 6,
+      "title": "Thám tử PCCC: Khảo sát an toàn phòng cháy",
+      "subtitle": "Kỹ năng: Kiểm tra cửa chuồng cọp thoát hiểm và bình bọt chữa cháy",
+      "instruction": "Soi kính lúp kiểm tra hiện trạng căn phòng. Cào móng phát hiện 3 điểm vi phạm an toàn PCCC nghiêm trọng!",
+      "document_title": "BIÊN BẢN KIỂM TRA HIỆN TRẠNG AN TOÀN PCCC",
+      "required_flags": 3,
+      "cat_prompt": "Mùi khói lửa không đùa được đâu Sen! Tìm xem khu trọ có điểm nguy hiểm nào nhé!",
+      "clauses": [
+        {
+          "id": "p1",
+          "text": "Vị trí 1 [CHUỒNG CỌP]: Lồng sắt ban công bị HÀN CHẾT KÍN MÍT toàn bộ các mặt, không có cửa mở thoát hiểm phụ.",
+          "is_red_flag": true,
+          "flag_name": "Lồng chuồng cọp hàn kín",
+          "explanation": "Chuồng cọp hàn kín là cái bẫy chết người khi xảy ra hỏa hoạn! Phải có cửa thoát hiểm phụ có chìa treo cạnh!"
+        },
+        {
+          "id": "p2",
+          "text": "Vị trí 2: Lối hành lang thang bộ thông thoáng, không để xe máy hay vật cản chắn lối đi.",
+          "is_red_flag": false,
+          "safe_hint": "Hành lang thông thoáng đạt tiêu chuẩn an toàn PCCC!"
+        },
+        {
+          "id": "p3",
+          "text": "Vị trí 3 [BÌNH CỨU HỎA]: Đồng hồ đo áp suất của bình bột chữa cháy hành lang có kim tụt sâu về VẠCH ĐỎ.",
+          "is_red_flag": true,
+          "flag_name": "Bình cứu hỏa hết áp suất",
+          "explanation": "Kim chỉ vạch đỏ nghĩa là bình bị mất áp suất, lúc cháy bóp cò bọt không phun ra được!"
+        },
+        {
+          "id": "p4",
+          "text": "Vị trí 4: Có trang bị đèn pin chiếu sáng khẩn cấp và khăn mặt ở đầu giường ngủ.",
+          "is_red_flag": false,
+          "safe_hint": "Chuẩn bị sẵn khăn mặt và đèn pin đầu giường là phản xạ tự bảo vệ cực tốt!"
+        },
+        {
+          "id": "p5",
+          "text": "Vị trí 5 [QUÁ TẢI ĐIỆN]: Một ổ cắm nối dây chia 6 cắm cùng lúc bếp từ, tủ lạnh mini, ấm siêu tốc và máy sấy tóc.",
+          "is_red_flag": true,
+          "flag_name": "Cắm dồn thiết bị quá tải",
+          "explanation": "Cắm cùng lúc nhiều thiết bị công suất cao vào ổ cắm lỏng lẻo dễ làm nóng chảy dây gây chập cháy nổ!"
+        }
+      ],
+      "success_msg": "🚨 CẢNH BÁO PCCC KỊP THỜI! Chủ trọ đã cắt mở cửa chuồng cọp và thay bình cứu hỏa mới tinh! 🧯",
+      "sim_steps": [
+        {
+          "icon": "🚪",
+          "text": "Kiểm tra chuồng cọp có cửa thoát hiểm"
+        },
+        {
+          "icon": "🧯",
+          "text": "Soi kim bình cứu hỏa chỉ vạch xanh"
+        },
+        {
+          "icon": "🪜",
+          "text": "Định vị lối phụ lên sân thượng"
+        },
+        {
+          "icon": "🔦",
+          "text": "Chuẩn bị sẵn khăn mặt & đèn pin"
+        }
+      ]
+    },
+    "7": {
+      "type": "public_admin",
+      "lesson_id": 7,
+      "title": "Nhận biết thủ tục Hành chính công cơ bản",
+      "subtitle": "Kỹ năng: Phân định thẩm quyền cơ quan hành chính & Quy trình 4 bước nộp hồ sơ qua VNeID",
+      "instruction": "Game 1: Nối thủ tục giấy tờ với cơ quan thẩm quyền. Game 2: Sắp xếp 4 bước nộp hồ sơ DVC trực tuyến!",
+      "cat_prompt": "Meo meo! Cùng Mèo khám phá cách giải quyết thủ tục hành chính công trực tuyến nhanh gọn qua VNeID nhé!",
+      "success_msg": "🎉 Chúc mừng Công Dân Số 4.0! Thành thạo nộp hồ sơ trực tuyến, làm thủ tục tạm trú và giấy tờ cá nhân chuẩn xác!",
+      "sim_steps": [
+        {
+          "icon": "🪪",
+          "text": "Đăng nhập VNeID Mức 2"
+        },
+        {
+          "icon": "🔍",
+          "text": "Chọn thủ tục & điền biểu mẫu"
+        },
+        {
+          "icon": "📎",
+          "text": "Đính kèm giấy tờ thuê nhà hợp lệ"
+        },
+        {
+          "icon": "📑",
+          "text": "Nộp hồ sơ & nhận kết quả online"
+        }
+      ]
+    },
+    "8": {
+      "type": "dialogue",
+      "lesson_id": 8,
+      "title": "Họp phòng trà sữa: Hiệp ước bạn cùng phòng",
+      "subtitle": "Kỹ năng: Thảo luận việc nhà và giờ giấc văn minh không xích mích",
+      "npc_name": "Bạn Cùng Phòng (Mèo Mướp)",
+      "npc_icon": "🧋",
+      "situation": "Sau 2 tuần ở chung, bạn cùng phòng hay thức khuya bật loa ngoài chơi game và quên đổ rác bốc mùi. Tối nay hai đứa ngồi uống trà sữa, bạn nên mở lời thế nào để giải quyết vui vẻ?",
+      "cat_prompt": "Khéo ăn khéo nói thì xóm trọ yên vui! Chọn cách nói chuyện thông minh nhé Sen!",
+      "options": [
+        {
+          "id": "opt_constructive",
+          "meow": "Thẳng thắn, Nhẹ nhàng & Đưa giải pháp",
+          "text": "Phòng mình tụi mình lập chung một lịch trực nhật dán lên tủ lạnh nha, với sau 23h tụi mình đeo tai nghe để cả hai cùng ngủ ngon nhé!",
+          "is_correct": true,
+          "feedback": "Bạn cùng phòng gãi đầu cười: 'Ukie bồ nha, dạo này tớ cày deadline nên hơi vô ý, để lát tớ ra đổ rác rồi tụi mình cùng vẽ lịch!' 💖",
+          "tag": "Thấu hiểu & Gắn kết"
+        },
+        {
+          "id": "opt_passive_aggressive",
+          "meow": "Chịu đựng rồi đăng mạng bóc phốt",
+          "text": "Không nói gì nhưng ấm ức lên mạng đăng bài ẩn danh bóc phốt bạn cùng phòng ở bẩn.",
+          "is_correct": false,
+          "feedback": "Bạn cùng phòng đọc được tức giận cãi nhau to tiếng, đòi chuyển trọ mất tiền cọc! 💥",
+          "tag": "Phá vỡ mối quan hệ"
+        },
+        {
+          "id": "opt_aggressive",
+          "meow": "Gắt gỏng đổ lỗi",
+          "text": "Ăn ở kiểu gì mà vô ý tứ thế, dọn ngay đống rác đi không thì tôi tống cổ ra khỏi phòng!",
+          "is_correct": false,
+          "feedback": "Căng thẳng leo thang dữ dội, không khí phòng trọ ngột ngạt như chiến trường! ⚡",
+          "tag": "Cãi vã gay gắt"
+        }
+      ],
+      "sim_steps": [
+        {
+          "icon": "🍵",
+          "text": "Họp phòng trà sữa thảo luận nhẹ nhàng"
+        },
+        {
+          "icon": "🧹",
+          "text": "Dán lịch trực nhật toilet & đổ rác"
+        },
+        {
+          "icon": "📊",
+          "text": "Dùng app chia quỹ sinh hoạt chung"
+        },
+        {
+          "icon": "🌙",
+          "text": "Thống nhất 23h đeo tai nghe ngủ ngon"
+        }
+      ]
+    },
+    "10": {
+      "type": "bhyt_process",
+      "lesson_id": 10,
+      "title": "Khám BHYT đúng tuyến từng bước & Chuẩn bị hồ sơ",
+      "subtitle": "Kỹ năng: Chuẩn bị 4 giấy tờ BHYT cốt lõi & Quy trình 6 bước tại bệnh viện",
+      "instruction": "Giai đoạn 1: Chuẩn bị đủ 4 giấy tờ BHYT vào Túi hồ sơ. Giai đoạn 2: Kéo thả đi khám 6 chặng đúng quy trình!",
+      "cat_prompt": "Đi khám BHYT lúc 7h sáng cần mang đúng 4 giấy tờ cốt lõi và tuân thủ quy trình 6 chặng để hưởng 80-100% viện phí nhé Sen!",
+      "success_msg": "🎉 Xuất sắc! Mèo con đã hoàn tất thủ tục khám BHYT đúng tuyến, được thanh toán viện phí đầy đủ và nhận thuốc an toàn!",
+      "sim_steps": [
+        {
+          "icon": "🪪",
+          "text": "Chuẩn bị 4 giấy tờ cốt lõi BHYT"
+        },
+        {
+          "icon": "🎟️",
+          "text": "Bốc số thứ tự & Đăng ký phòng khám"
+        },
+        {
+          "icon": "🩺",
+          "text": "Bác sĩ khám lâm sàng & Xét nghiệm"
+        },
+        {
+          "icon": "💊",
+          "text": "Đọc kết quả & Lấy thuốc quầy BHYT"
+        }
+      ]
+    },
+    "11": {
+      "type": "packing",
+      "lesson_id": 11,
+      "title": "Xếp hộp thuốc cứu thương sinh viên",
+      "subtitle": "Kỹ năng: Dự phòng thuốc thiết yếu và loại bỏ thuốc hết hạn nguy hại",
+      "instruction": "Chọn đúng 4 loại thuốc và vật tư thiết yếu xếp vào hộp thiếc sơ cứu phòng trọ!",
+      "max_slots": 4,
+      "cat_prompt": "Phòng trọ nửa đêm ốm đau biết lấy gì uống? Chọn đúng thuốc cứu sinh nhé Sen!",
+      "items": [
+        {
+          "id": "item_para",
+          "name": "Paracetamol 500mg",
+          "icon": "💊",
+          "is_required": true,
+          "desc": "Hạ sốt & giảm đau nhanh khi cảm cúm nhức đầu"
+        },
+        {
+          "id": "item_oresol",
+          "name": "Gói Oresol bù nước",
+          "icon": "🥤",
+          "is_required": true,
+          "desc": "Bù điện giải khi sốt cao hoặc tiêu chảy mất nước"
+        },
+        {
+          "id": "item_berberin",
+          "name": "Lọ Berberin tiêu hóa",
+          "icon": "🧪",
+          "is_required": true,
+          "desc": "Dược liệu vàng trị đau bụng do ăn trúng thức ăn lạ"
+        },
+        {
+          "id": "item_bandage",
+          "name": "Cồn đỏ & Băng gạc",
+          "icon": "🩹",
+          "is_required": true,
+          "desc": "Sát trùng và băng bó vết thương trầy xước"
+        },
+        {
+          "id": "item_expired_med",
+          "name": "Kháng sinh hết hạn 2 năm",
+          "icon": "⚠️",
+          "is_required": false,
+          "desc": "Thuốc biến chất cực kỳ độc hại cho gan thận",
+          "humor": "Thuốc hết hạn 2 năm uống vào là đi viện rửa ruột luôn đó Sen ơi! Vứt ngay!"
+        },
+        {
+          "id": "item_candies",
+          "name": "Hũ kẹo socola ngọt",
+          "icon": "🍬",
+          "is_required": false,
+          "desc": "Đồ ăn vặt không có tác dụng chữa bệnh",
+          "humor": "Đang đau bụng mà ăn kẹo ngọt sâu răng thêm chứ chữa được gì đâu Sen!"
+        },
+        {
+          "id": "item_syringe",
+          "name": "Ống tiêm lạ không nhãn",
+          "icon": "💉",
+          "is_required": false,
+          "desc": "Dụng cụ y tế nguy hiểm không rõ nguồn gốc",
+          "humor": "Sinh viên không tự ý dùng ống tiêm tại nhà nhé, nguy hiểm chết người!"
+        },
+        {
+          "id": "item_party_mask",
+          "name": "Mặt nạ dạ hội",
+          "icon": "🎭",
+          "is_required": false,
+          "desc": "Đồ chơi hóa trang dạ tiệc",
+          "humor": "Hộp thuốc cứu thương tự nhiên nhét mặt nạ dạ hội vào làm chi vậy Sen!"
+        }
+      ],
+      "success_msg": "🩹 Hộp thuốc sinh tồn đầy đủ! An tâm vượt qua mọi trận ốm vặt xóm trọ! 💊",
+      "sim_steps": [
+        {
+          "icon": "🩹",
+          "text": "Xếp hạ sốt & nhiệt kế điện tử"
+        },
+        {
+          "icon": "🧪",
+          "text": "Bổ sung Berberin & Oresol tiêu hóa"
+        },
+        {
+          "icon": "🩸",
+          "text": "Chuẩn bị cồn đỏ Povidine & băng gạc"
+        },
+        {
+          "icon": "🏷️",
+          "text": "Dán nhãn hạn dùng lên nắp từng vỉ"
+        }
+      ]
+    },
+    "12": {
+      "type": "qte",
+      "lesson_id": 12,
+      "title": "Bật xi-nhan thoát bùng binh an toàn",
+      "subtitle": "Kỹ năng: Định vị lối ra vòng xoay, không bị tông đuôi xe",
+      "instruction": "Xe máy đang quay trong bùng binh. Canh đúng vạch LỐI RA THỨ 3 (Vùng Xanh) để nhấn nút BẬT XI-NHAN RẼ!",
+      "target_speed": 1.1,
+      "zone_start": 0.6,
+      "zone_end": 0.85,
+      "stop_name": "Lối Ra Thứ 3 (Đại lộ Nguyễn Văn Cừ)",
+      "cat_prompt": "Đang quay trong bùng binh: Lối 1... Lối 2... Chuẩn bị lối 3 nè Sen!",
+      "early_msg": "Rẽ nhầm vào lối ra số 1 rồi Sen ơi! Bị đi lạc vào ngõ cụt! 🧭",
+      "late_msg": "Quên xi-nhan bị xe sau bấm còi inh ỏi, phải quay thêm 1 vòng bùng binh! 🌀",
+      "success_msg": "🏍️ XI-NHAN TÁCH TÁCH! Boss vọt ra đúng đại lộ Nguyễn Văn Cừ an toàn cực ngầu! 🌟",
+      "sim_steps": [
+        {
+          "icon": "🛑",
+          "text": "Tấp lề đường an toàn"
+        },
+        {
+          "icon": "🧭",
+          "text": "Xoay la bàn bản đồ theo hướng mặt"
+        },
+        {
+          "icon": "🔢",
+          "text": "Đếm chính xác lối ra thứ 3"
+        },
+        {
+          "icon": "🏍️",
+          "text": "Xi-nhan chuyển làn thoát bùng binh"
+        }
+      ]
+    },
+    "13": {
+      "type": "budget",
+      "lesson_id": 13,
+      "title": "Quy tắc 3 hũ tiền: Giữ thăng bằng ngân sách",
+      "subtitle": "Kỹ năng: Phân bổ 90 Cá Khô chu cấp theo tỷ lệ an toàn 50% - 30% - 20%",
+      "instruction": "Đầu tháng có 90 Cá Khô. Vuốt thanh trượt phân bổ cá vào 3 hũ theo đúng tỷ lệ vàng để cán cân thăng bằng!",
+      "total_budget": 90,
+      "cat_prompt": "Cầm 90 con Cá Khô trong tay, chia làm sao để cuối tháng không nhịn đói hả Sen?",
+      "target_jars": {
+        "survive": {
+          "target": 45,
+          "min": 43,
+          "max": 47,
+          "ratio": "50%",
+          "name": "Hũ Sống Còn (Trọ & Ăn uống)",
+          "icon": "🏠"
+        },
+        "growth": {
+          "target": 27,
+          "min": 25,
+          "max": 29,
+          "ratio": "30%",
+          "name": "Hũ Phát Triển (Sách vở & Bạn bè)",
+          "icon": "📚"
+        },
+        "emergency": {
+          "target": 18,
+          "min": 16,
+          "max": 20,
+          "ratio": "20%",
+          "name": "Hũ Khẩn Cấp (Thuốc men & Xe cộ)",
+          "icon": "🔒"
+        }
+      },
+      "tips": "50% (45 cá) cho tiền trọ ăn uống • 30% (27 cá) cho học tập giao lưu • 20% (18 cá) quỹ khẩn cấp",
+      "danger_low_survive": "Hũ Sống Còn quá ít! Mèo sẽ bị chủ đòi phòng và nhịn đói giữa tháng!",
+      "danger_low_emergency": "Không có quỹ khẩn cấp! Lúc ốm đau ngập nước xe hỏng là bế tắc hoàn toàn!",
+      "danger_over_growth": "Dồn hết tiền đi ăn chơi mua sắm! Cán cân sụp đổ, cuối tháng ôm bụng đói meo!",
+      "success_msg": "⚖️ CÁN CÂN THĂNG BẰNG HOÀN HẢO! 90 Cá Khô phân bổ khoa học, Boss ung dung cả tháng! ✨",
+      "sim_steps": [
+        {
+          "icon": "🪙",
+          "text": "Nhận 90 Cá chia ngay 3 hũ"
+        },
+        {
+          "icon": "🏠",
+          "text": "Khóa cứng 50% tiền trọ ăn uống"
+        },
+        {
+          "icon": "📚",
+          "text": "Dành 30% đầu tư sách vở bạn bè"
+        },
+        {
+          "icon": "🔒",
+          "text": "Niêm phong 20% quỹ phòng ngừa"
+        }
+      ]
+    },
+    "14": {
+      "type": "cyber_security",
+      "lesson_id": 14,
+      "title": "Luật An ninh mạng & Bảo vệ dữ liệu cá nhân",
+      "subtitle": "Kỹ năng: Nhận diện chế tài xử lý vi phạm mạng & Trắc nghiệm Đúng/Sai bảo mật thông tin",
+      "instruction": "Game 1: Nối hành vi vi phạm với hình thức xử lý. Game 2: Trả lời 4 câu trắc nghiệm Đúng/Sai an toàn số!",
+      "cat_prompt": "Meo meo! Cùng Mèo tìm hiểu các chế tài An ninh mạng và rèn luyện kỹ năng nhận diện lừa đảo trên mạng xã hội nhé!",
+      "success_msg": "🎉 Xuất sắc! Bạn đã sở hữu 'Lá Chắn An Ninh Mạng', làm chủ không gian mạng an toàn và đúng pháp luật!",
+      "sim_steps": [
+        {
+          "icon": "🛡️",
+          "text": "Bảo vệ thông tin CCCD & dữ liệu số"
+        },
+        {
+          "icon": "🔑",
+          "text": "Bật xác thực 2FA & giữ bí mật OTP"
+        },
+        {
+          "icon": "🌐",
+          "text": "Soi kỹ tên miền web ngân hàng chính thức"
+        },
+        {
+          "icon": "⚖️",
+          "text": "Tuân thủ nghiêm Luật An ninh mạng"
+        }
+      ]
+    },
+    "15": {
+      "type": "labor_rights",
+      "lesson_id": 15,
+      "title": "Quyền lao động và Hợp đồng lao động cho người trẻ",
+      "subtitle": "Kỹ năng: Nắm chắc thời hạn thử việc, mức lương & Phân loại hành vi đúng luật vs vi phạm",
+      "instruction": "Game 1: Nối chế định pháp lý với con số / thời hạn. Game 2: Phân loại tình huống vào 2 nhóm Đúng luật vs Vi phạm!",
+      "cat_prompt": "Meo meo! Hãy ghi nhớ các mốc thời gian luật định và phân loại các chiêu trò bóc lột của chủ việc làm nhé!",
+      "success_msg": "🎉 Chúc mừng Người Lao Động Thông Thái! Nắm vững Bộ luật Lao động, tự tin đi làm thêm part-time không sợ bị ép lương!",
+      "sim_steps": [
+        {
+          "icon": "⏳",
+          "text": "Thử việc đúng thời hạn & 85% lương"
+        },
+        {
+          "icon": "🪪",
+          "text": "Không để NSDLĐ giữ bản gốc CCCD/Bằng"
+        },
+        {
+          "icon": "📈",
+          "text": "Hưởng đúng lương thêm giờ Lễ Tết 300%"
+        },
+        {
+          "icon": "🛡️",
+          "text": "Đóng BHXH, BHYT từ 1 tháng hợp đồng"
+        }
+      ]
+    },
+    "16": {
+      "type": "budget",
+      "lesson_id": 16,
+      "title": "Thoát bẫy nợ 'Ví trả sau' & Thấu chi",
+      "subtitle": "Kỹ năng: Quy tắc Phanh 48h và phân bổ dòng tiền lương tháng",
+      "instruction": "Mèo nhận lương part-time 100 Cá Khô nhưng đang mê mẩn tai nghe xịn 50 Cá. Phân bổ dòng tiền theo nguyên tắc Phanh 48h để không rơi vào cảnh nợ nần!",
+      "total_budget": 100,
+      "cat_prompt": "Nhận lương đừng vội quẹt sạch Sen ơi! Kích hoạt phanh 48h chia tiền thông minh nào!",
+      "target_jars": {
+        "survive": {
+          "target": 50,
+          "min": 48,
+          "max": 52,
+          "ratio": "50%",
+          "name": "Chi Tiêu Bắt Buộc (Ăn ở, Xăng xe)",
+          "icon": "🏠"
+        },
+        "growth": {
+          "target": 30,
+          "min": 28,
+          "max": 32,
+          "ratio": "30%",
+          "name": "Tích Lũy Học Phí & Khẩn Cấp",
+          "icon": "💰"
+        },
+        "emergency": {
+          "target": 20,
+          "min": 18,
+          "max": 22,
+          "ratio": "20%",
+          "name": "Mua Sắm Có Kế Hoạch (Phanh 48h)",
+          "icon": "⏳"
+        }
+      },
+      "tips": "50 cá cho ăn ở xăng xe • 30 cá tích lũy học phí • Tối đa 20 cá mua sắm sau khi cân nhắc 48h",
+      "danger_low_survive": "Cắt xén tiền ăn để mua đồ chơi! Nửa tháng sau nhịn ăn dạ dày quằn quại!",
+      "danger_low_emergency": "Không tích lũy học phí! Đầu kỳ sau không có tiền đóng học phí rớt môn!",
+      "danger_over_growth": "Quẹt ví trả sau mua tai nghe vượt hạn mức! Lãi phạt cắt cổ nhân đôi tiền nợ!",
+      "success_msg": "💳 PHANH 48H THÀNH CÔNG RỰC RỠ! Mèo bảo toàn lương, hủy giỏ hàng bốc đồng và tự do tài chính! ✨",
+      "sim_steps": [
+        {
+          "icon": "⏳",
+          "text": "Kích hoạt quy tắc phanh 48 giờ"
+        },
+        {
+          "icon": "🔍",
+          "text": "Soi biểu phí phạt trễ hạn ví nợ"
+        },
+        {
+          "icon": "🤔",
+          "text": "Chỉ mua sắm khi có tiền mặt sẵn"
+        },
+        {
+          "icon": "🔒",
+          "text": "Khóa hạn mức tín dụng trả sau"
+        }
+      ]
+    },
+    "personal_finance": {
+      "type": "personal_finance",
+      "title": "Kỹ năng Quản lý tài chính cá nhân"
+    },
+    "time_management": {
+      "type": "time_management",
+      "title": "Kỹ năng Quản lý thời gian và công việc"
+    },
+    "communication_conflict": {
+      "type": "communication_conflict",
+      "title": "Kỹ năng Giao tiếp và giải quyết mâu thuẫn"
+    },
+    "self_care_living": {
+      "type": "self_care_living",
+      "title": "Kỹ năng Tự chăm sóc bản thân và sinh hoạt"
+    },
+    "motorbike_maintenance": {
+      "type": "motorbike_maintenance",
+      "title": "Kỹ năng Bảo dưỡng và xử lý sự cố xe máy"
+    },
+    "route_master": {
+      "type": "route_master",
+      "lesson_id": 4,
+      "title": "Thổ Địa Lập Route - Đi Học Không Lo Trễ Giờ",
+      "subtitle": "Kỹ năng: Lập lộ trình Metro Tuyến 1 & Xe Bus TP.HCM (Tuyến 08, 19, 53, 150)",
+      "instruction": "Kéo nối lộ trình từ KTX Khu B đến Cổng Trường Đại Học. Chú ý hướng đi, tránh ngập và kẹt xe bằng cách đổi sang Metro Tuyến 1!",
+      "cat_prompt": "Sen ơi, còn 45 phút vào lớp thôi! Nhớ để ý trạm đúng hướng Bến Thành và đổi sang Metro 1 ở Ga Thủ Đức nếu kẹt xe nhé!",
+      "success_msg": "🎉 Cập bến giảng đường thành công trước giờ điểm danh! Thổ Địa Tuyến 08 đã xuất hiện! ✨",
+      "sim_steps": [
+        {
+          "icon": "🗺️",
+          "text": "Lập Route KTX Khu B về Trường"
+        },
+        {
+          "icon": "🚇",
+          "text": "Chuyển tiếp Metro Ga Thủ Đức vượt ngập"
+        },
+        {
+          "icon": "🎓",
+          "text": "Cập bến giảng đường đúng giờ"
+        }
+      ]
+    },
+    "checkin_rush": {
+      "type": "checkin_rush",
+      "lesson_id": 4,
+      "title": "Check-in Thần Tốc - Cổng Soát Vé Metro & Xe Bus",
+      "subtitle": "Kỹ năng: Thao tác quét thẻ RFID, mã QR, thối tiền lẻ và vẫy đón xe buýt 08",
+      "instruction": "Xử lý nhanh chóng 8 hành khách trong 60 giây. Chọn đúng thiết bị: Thẻ cứng quẹt RFID, App số tăng sáng quét QR, tiền mặt tính nhanh tiền thối, và canh chuẩn vạch vàng vẫy xe buýt!",
+      "cat_prompt": "Hành khách đang xếp hàng đông nghẹt trước cổng soát vé rồi Sen ơi! Thao tác nhanh tay kẻo kẹt cổng nhé!",
+      "success_msg": "🎉 Cổng soát vé thông thoáng toàn tuyến! Soát vé siêu tốc đã hoàn thành! ✨",
+      "sim_steps": [
+        {
+          "icon": "💳",
+          "text": "Quẹt thẻ CCCD/Thẻ SV qua cổng RFID"
+        },
+        {
+          "icon": "📱",
+          "text": "Tăng sáng quét vé QR HURC Pass"
+        },
+        {
+          "icon": "💵",
+          "text": "Toán tiền thối vé xe buýt chuẩn xác"
+        },
+        {
+          "icon": "✋",
+          "text": "Vẫy xe buýt 08 đúng điểm dừng"
+        }
+      ]
+    },
+    "civilized_ride": {
+      "type": "civilized_ride",
+      "lesson_id": 4,
+      "title": "Chuyến Đi Văn Minh - Quy Tắc Đi Tàu Xe TP.HCM",
+      "subtitle": "Kỹ năng: Nhường ghế ưu tiên, quy tắc ba lô, phòng ngừa móc túi và căn nhịp bấm chuông",
+      "instruction": "Hành trình 75s di chuyển qua các trạm. Xử lý kịp thời 4 tình huống đời thực để duy trì Điểm Văn Minh >= 70/100, bảo vệ an toàn cho bản thân và mọi người xung quanh!",
+      "cat_prompt": "Khoang xe đông đúc lắm Sen ơi! Giữ vững Điểm Văn Minh trên 70 để trở thành Công Dân Mẫu Mực nhé!",
+      "success_msg": "🎉 Cập bến trạm đích thành công với Điểm Văn Minh xuất sắc! Danh hiệu Công Dân Giao Thông Mẫu Mực đã thuộc về Sen! ✨",
+      "sim_steps": [
+        {
+          "icon": "🧓",
+          "text": "Nhường ghế ưu tiên cho người cao tuổi"
+        },
+        {
+          "icon": "🎒",
+          "text": "Ôm ba lô trước ngực giữ lối đi thông thoáng"
+        },
+        {
+          "icon": "🛡️",
+          "text": "Cảnh giác tư trang phòng ngừa móc túi"
+        },
+        {
+          "icon": "🔔",
+          "text": "Bấm chuông dừng xe chuẩn xác cự ly 100m"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://check_img_sz"]
+
+[ext_resource type="Script" path="res://tests/CheckUserImageSize.gd" id="1_sz"]
+
+[node name="CheckUserImageSize" type="Node"]
+script = ExtResource("1_sz")

@@ -1,0 +1,753 @@
+[gd_scene load_steps=18 format=3 uid="uid://routemaster001"]
+
+[ext_resource type="Script" path="res://scripts/minigames/RouteMasterMiniGame.gd" id="1_route"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.965, 0.95, 0.92, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_panel"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.99, 0.97, 0.95)
+border_width_bottom = 2
+border_color = Color(0.88, 0.82, 0.74, 1)
+shadow_color = Color(0, 0, 0, 0.06)
+shadow_size = 6
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_btn"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.78, 0.7, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_timer_box"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.98, 0.94, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.9, 0.75, 0.55, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fish_box"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.9, 0.95, 1.0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.65, 0.8, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_time_bar_bg"]
+bg_color = Color(0.85, 0.82, 0.78, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_time_bar_fill"]
+bg_color = Color(0.95, 0.55, 0.12, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bottom_bar"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.99, 0.97, 0.95)
+border_width_top = 2
+border_color = Color(0.88, 0.82, 0.74, 1)
+shadow_color = Color(0, 0, 0, 0.08)
+shadow_size = 6
+shadow_offset = Vector2(0, -2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_toast"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.98, 0.92, 0.85, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.9, 0.45, 0.15, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.18)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_overlay"]
+bg_color = Color(0, 0, 0, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_panel"]
+content_margin_left = 18.0
+content_margin_top = 16.0
+content_margin_right = 18.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.99, 0.96, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.88, 0.72, 0.52, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_primary"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.55, 0.12, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.78, 0.38, 0.08, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_victory"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.2, 0.68, 0.38, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.12, 0.48, 0.25, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_info"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.15, 0.48, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.08, 0.32, 0.58, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.94, 0.92, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.75, 0.68, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="RouteMasterMiniGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_route")
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="MapArea" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="MapCanvas" type="Control" parent="MapArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Header" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 74.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_panel")
+
+[node name="HBox" type="HBoxContainer" parent="Header"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BtnBack" type="Button" parent="Header/HBox"]
+custom_minimum_size = Vector2(64, 38)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.22, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = " Thoát"
+
+[node name="TimerBox" type="PanelContainer" parent="Header/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_timer_box")
+
+[node name="VBox" type="VBoxContainer" parent="Header/HBox/TimerBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ClockLabel" type="Label" parent="Header/HBox/TimerBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+text = "⏱️ 60s"
+horizontal_alignment = 1
+
+[node name="ClassStatusLabel" type="Label" parent="Header/HBox/TimerBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.3, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "Còn 45 phút vào lớp"
+horizontal_alignment = 1
+
+[node name="TimeBar" type="ProgressBar" parent="Header/HBox/TimerBox/VBox"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_time_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_time_bar_fill")
+max_value = 60.0
+value = 60.0
+show_percentage = false
+
+[node name="FishWallet" type="PanelContainer" parent="Header/HBox"]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_fish_box")
+
+[node name="VBox" type="VBoxContainer" parent="Header/HBox/FishWallet"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="FishLabel" type="Label" parent="Header/HBox/FishWallet/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.45, 0.85, 1)
+theme_override_font_sizes/font_size = 11
+text = "🐟 25 Cá Khô"
+horizontal_alignment = 1
+
+[node name="CostLabel" type="Label" parent="Header/HBox/FishWallet/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.5, 1)
+theme_override_font_sizes/font_size = 9
+text = "-5 Cá / đổi tuyến"
+horizontal_alignment = 1
+
+[node name="BtnHandbook" type="Button" parent="Header/HBox"]
+custom_minimum_size = Vector2(86, 38)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.15, 0.45, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = "📖 Cẩm Nang"
+
+[node name="BottomBar" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -54.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bottom_bar")
+
+[node name="HBox" type="HBoxContainer" parent="BottomBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HintLabel" type="Label" parent="BottomBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "💡 Kéo trạm tiếp theo | Double-tap trạm để cắt dây đổi tuyến"
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="TransferBadge" type="Label" parent="BottomBar/HBox"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.85, 0.4, 0.05, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_badge")
+text = "Đổi tuyến: 0/1"
+
+[node name="SpeedBadge" type="Label" parent="BottomBar/HBox"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.2, 0.6, 0.3, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_badge")
+text = "Tốc độ: 100%"
+
+[node name="ToastPanel" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(340, 48)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -170.0
+offset_top = 84.0
+offset_right = 170.0
+offset_bottom = 132.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_toast")
+
+[node name="ToastLabel" type="Label" parent="ToastPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+text = "Thông báo cảnh báo"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ToastTimer" type="Timer" parent="."]
+wait_time = 2.5
+one_shot = true
+
+[node name="HandbookModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="HandbookModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="ModalPanel" type="PanelContainer" parent="HandbookModal"]
+custom_minimum_size = Vector2(360, 560)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -280.0
+offset_right = 180.0
+offset_bottom = 280.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="HandbookModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="HandbookModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.45, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "📖 CẨM NANG CỨU SEN: METRO & XE BUS"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="HandbookModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Content" type="VBoxContainer" parent="HandbookModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="MetroTitle" type="Label" parent="HandbookModal/ModalPanel/VBox/Scroll/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.05, 0.35, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "🚇 1. TUYẾN METRO SỐ 1 (Bến Thành - Suối Tiên):"
+
+[node name="MetroDesc" type="Label" parent="HandbookModal/ModalPanel/VBox/Scroll/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.25, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "• Chiều dài: 19.7 km (11 ga trên cao, 3 ga ngầm).
+• Chu kỳ Headway: 5 phút / chuyến.
+• Ưu điểm vàng: Chạy làn riêng trên cao, tốc độ nhanh gấp 2.5 lần xe bus, hoàn toàn KHÔNG BỊ ẢNH HƯỞNG bởi ngập lụt hay ùn tắc giao thông.
+• Các ga chuyển tiếp huyết mạch: Ga Thủ Đức, Ga Tân Cảng, Ga Ba Son, Ga Nhà Hát, Ga Bến Thành."
+autowrap_mode = 2
+
+[node name="BusTitle" type="Label" parent="HandbookModal/ModalPanel/VBox/Scroll/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.05, 1)
+theme_override_font_sizes/font_size = 12
+text = "🚌 2. CÁC TUYẾN XE BUS SINH VIÊN ĐHQG:"
+
+[node name="BusDesc" type="Label" parent="HandbookModal/ModalPanel/VBox/Scroll/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.25, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "• Tuyến 08: KTX ĐHQG - BX Quận 8 (trục đi học quốc dân của sinh viên làng đại học).
+• Tuyến 19: Bến Thành - ĐHQG (chạy dọc trục Xa lộ Hà Nội).
+• Tuyến 53: Lê Hồng Phong - ĐHQG.
+• Tuyến 150: Chợ Lớn - Ngã 3 Tân Vạn.
+• Điểm đen ngập nước: Chợ Thủ Đức / Kha Vạn Cân (mưa lớn nước dâng, xe bus giảm 70% tốc độ).
+• Điểm đen kẹt xe: Ngã 4 Hàng Xanh vào giờ cao điểm sáng (xe bus giảm 90% tốc độ)."
+autowrap_mode = 2
+
+[node name="TipTitle" type="Label" parent="HandbookModal/ModalPanel/VBox/Scroll/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.6, 0.3, 1)
+theme_override_font_sizes/font_size = 12
+text = "💡 3. BÍ KÍP THỔ ĐỊA VƯỢT TẮC ĐƯỜNG:"
+
+[node name="TipDesc" type="Label" parent="HandbookModal/ModalPanel/VBox/Scroll/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.25, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "• Luôn để ý biển báo chiều đi của trạm bus: Đi trạm [➔ Bến Thành] để vào trung tâm trường; tuyệt đối không đón trạm [⬅ BX Miền Tây] kẻo ngược hướng trễ thi.
+• Khi thấy điểm ngập nước (Chợ Thủ Đức) hoặc kẹt xe (Hàng Xanh), lập tức Double-tap vào trạm bus để CẮT DÂY và nối nhánh chuyển sang Ga Metro 1 trên cao!
+• Tiêu hao 5 Cá Khô đổi tuyến sẽ cứu Sen thoát khỏi nguy cơ trễ học và bị cấm thi!"
+autowrap_mode = 2
+
+[node name="BtnCloseHandbook" type="Button" parent="HandbookModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_primary")
+text = "Đã Hiểu, Quay Lại Bản Đồ"
+
+[node name="VictoryModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="VictoryModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="ModalPanel" type="PanelContainer" parent="VictoryModal"]
+custom_minimum_size = Vector2(360, 480)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -240.0
+offset_right = 180.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="VictoryModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.65, 0.35, 1)
+theme_override_font_sizes/font_size = 15
+text = "🎉 XUẤT SẮC! CẬP BẾN GIẢNG ĐƯỜNG!"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DialogueLabel" type="Label" parent="VictoryModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Mèo vui sướng đeo balo đứng trước cổng trường..."
+autowrap_mode = 2
+
+[node name="BtnViewInfographic" type="Button" parent="VictoryModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_info")
+text = "🗺️ Xem / Tải Infographic Tuyến Đường"
+
+[node name="BtnClaimReward" type="Button" parent="VictoryModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_victory")
+text = "Nhận Thưởng: +25 Cá Khô & Huy Hiệu 🏅"
+
+[node name="DefeatModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="DefeatModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="ModalPanel" type="PanelContainer" parent="DefeatModal"]
+custom_minimum_size = Vector2(360, 440)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -220.0
+offset_right = 180.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="DefeatModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="DefeatModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.25, 0.2, 1)
+theme_override_font_sizes/font_size = 15
+text = "😿 TRỄ GIỜ VÀO LỚP RỒI SEN ƠI!"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="DefeatModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DefeatLabel" type="Label" parent="DefeatModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Mèo ngồi ôm gối khóc bên vỉa hè vì trễ giờ..."
+autowrap_mode = 2
+
+[node name="BtnRetry" type="Button" parent="DefeatModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_primary")
+text = "🔄 Thử Lại Ngay (Safe Failure)"
+
+[node name="InfographicModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="InfographicModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="ModalPanel" type="PanelContainer" parent="InfographicModal"]
+custom_minimum_size = Vector2(360, 520)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -260.0
+offset_right = 180.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="InfographicModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="InfographicModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.45, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "🗺️ INFOGRAPHIC: BẢN ĐỒ CHUYỂN TIẾP METRO 1 & BUS"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="InfographicModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InfoVBox" type="VBoxContainer" parent="InfographicModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DiagramLabel" type="Label" parent="InfographicModal/ModalPanel/VBox/Scroll/InfoVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "┌────────────────────────────────────────┐
+│  BẢN ĐỒ CHUYỂN TIẾP TRỌNG YẾU TP.HCM   │
+└────────────────────────────────────────┘
+ [KTX KHU B]
+      │ (Bus 08 / 19)
+      ▼
+ [Trạm ĐHQG] (Chú ý đón đúng chiều ➔ Bến Thành)
+      │
+      ├──────────────────────┐ (Double-tap chuyển tiếp)
+      ▼                      ▼
+ [Chợ Thủ Đức] ⚠️ Ngập   [Ga Thủ Đức - Metro 1] ⚡ x2.5 tốc độ
+      │                      │
+      ▼                      ▼
+ [Ngã 4 Hàng Xanh] ⚠️ Kẹt [Ga Tân Cảng - Metro 1]
+      │                      │
+      ▼                      ▼
+ [Đinh Tiên Hoàng]       [Ga Ba Son / Nhà Hát TP]
+      │                      │
+      └──────────┬───────────┘
+                 ▼
+        [CỔNG TRƯỜNG ĐẠI HỌC] 🎓
+        (Cập bến an toàn trước 60s)"
+autowrap_mode = 2
+
+[node name="TipLabel" type="Label" parent="InfographicModal/ModalPanel/VBox/Scroll/InfoVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.4, 0.05, 1)
+theme_override_font_sizes/font_size = 10
+text = "💡 Lưu ý độc quyền từ Best Sen:
+• Thẻ Metro liên thông học sinh/sinh viên tiết kiệm 50% vé tháng.
+• Khi trời mưa bão: Chuyển sang Metro 1 ở Ga Thủ Đức hoặc Suối Tiên là giải pháp số 1 để tránh kẹt xe và ngập nước triều cường."
+autowrap_mode = 2
+
+[node name="BtnSaveInfo" type="Button" parent="InfographicModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_primary")
+text = "💾 Lưu Infographic Vào Máy"
+
+[node name="BtnCloseInfo" type="Button" parent="InfographicModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = "Đóng"

@@ -1,0 +1,227 @@
+[gd_scene load_steps=6 format=3 uid="uid://packingmg001"]
+
+[ext_resource type="Script" path="res://scripts/minigames/PackingMiniGame.gd" id="1_packing"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.96, 0.94, 0.90, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.99, 0.97, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.88, 0.78, 0.65, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.06)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.88, 0.78, 0.65, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_action"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(0.95, 0.55, 0.12, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.78, 0.38, 0.08, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.95, 0.55, 0.12, 0.25)
+shadow_size = 6
+shadow_offset = Vector2(0, 2)
+
+[node name="PackingMiniGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_packing")
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="Header" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="BtnBack" type="Button" parent="Header"]
+custom_minimum_size = Vector2(76, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+text = " Quay lại"
+
+[node name="HeaderTitle" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 13
+text = "🎒 XẾP BA LÔ SINH TỒN"
+horizontal_alignment = 1
+
+[node name="CatSection" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 64.0
+offset_right = -16.0
+offset_bottom = 124.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="HBox" type="HBoxContainer" parent="CatSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CatAnchor" type="Control" parent="CatSection/HBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+pivot_offset = Vector2(25, 45)
+
+[node name="CatSpeech" type="Label" parent="CatSection/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Chọn đúng đồ cần thiết xếp vào ba lô cho Boss nhé!"
+autowrap_mode = 2
+
+[node name="BackpackCard" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 132.0
+offset_right = -16.0
+offset_bottom = 252.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="BackpackCard"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HeaderRow" type="HBoxContainer" parent="BackpackCard/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="BackpackCard/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "🎒 CHIẾC BA LÔ MINI CỦA BOSS:"
+
+[node name="SlotCountLabel" type="Label" parent="BackpackCard/VBox/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "Ngăn chứa: 0/4 ô"
+horizontal_alignment = 2
+
+[node name="SlotsHBox" type="HBoxContainer" parent="BackpackCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="TableCard" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 260.0
+offset_right = -16.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="TableCard"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TableTitle" type="Label" parent="TableCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "🪑 ĐỒ ĐẠC TRÊN BÀN (Chạm để nhét vào ba lô):"
+
+[node name="Scroll" type="ScrollContainer" parent="TableCard/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ItemsGrid" type="GridContainer" parent="TableCard/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 1
+
+[node name="ActionFooter" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -68.0
+offset_right = -16.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="BtnPackDone" type="Button" parent="ActionFooter"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_action")
+text = "🎒 CẦN XẾP ĐỦ 4 MÓN VÀO BA LÔ (0/4)"

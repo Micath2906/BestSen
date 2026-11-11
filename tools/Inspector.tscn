@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://inspect001"]
+
+[sub_resource type="GDScript" id="GDScript_insp"]
+script/source = "extends Node
+
+func _ready():
+	var furn = load(\"res://assets/CatMegaFree/CatRoomFree/Furnitures.png\")
+	print(\"Furnitures.png size: \", furn.get_size() if furn else \"null\")
+	var pochi = load(\"res://assets/CatMegaFree/PochiFree/FreeSprites.png\")
+	print(\"Pochi FreeSprites.png size: \", pochi.get_size() if pochi else \"null\")
+	var retro = load(\"res://assets/RetroCatsFree.png\")
+	print(\"RetroCatsFree.png size: \", retro.get_size() if retro else \"null\")
+	get_tree().quit()
+"
+
+[node name="Inspector" type="Node"]
+script = SubResource("GDScript_insp")

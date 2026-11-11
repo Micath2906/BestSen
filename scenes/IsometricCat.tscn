@@ -1,0 +1,128 @@
+[gd_scene load_steps=7 format=3 uid="uid://isocat001m"]
+
+[ext_resource type="Script" path="res://scripts/IsometricCat.gd" id="1_cat"]
+[ext_resource type="Texture2D" path="res://assets/sprites/cats/shadow_pixel_ellipse.tres" id="2_shadow"]
+[ext_resource type="Texture2D" path="res://assets/sprites/cats/cat_sit_0.png" id="3_sit"]
+[ext_resource type="Texture2D" path="res://assets/sprites/room_items/cat_box_new.png" id="4_box"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/chat_bubble_9patch.tres" id="5_bubble_bg"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/chat_bubble_tail.tres" id="6_bubble_tail"]
+[ext_resource type="FontFile" path="res://assets/font/SVN-Retron 2000.ttf" id="7_font"]
+
+[node name="IsometricCat" type="Node2D"]
+script = ExtResource("1_cat")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, 4)
+texture = ExtResource("2_shadow")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="AnimSprite" type="AnimatedSprite2D" parent="Visual"]
+texture_filter = 1
+position = Vector2(0, -18)
+scale = Vector2(1.2, 1.2)
+
+[node name="CatIdleSprite" type="Sprite2D" parent="Visual"]
+visible = false
+texture_filter = 1
+position = Vector2(0, -18)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_sit")
+
+[node name="CatBoxSprite" type="Sprite2D" parent="Visual"]
+visible = false
+texture_filter = 1
+position = Vector2(0, -18)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("4_box")
+
+[node name="CatTouchZone" type="Control" parent="Visual"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -48.0
+offset_right = 26.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+
+[node name="Bubble" type="Control" parent="."]
+z_index = 20
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -95.0
+offset_top = -96.0
+offset_right = 95.0
+offset_bottom = -46.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="BubbleBg" type="NinePatchRect" parent="Bubble"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_bubble_bg")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="BubbleTail" type="TextureRect" parent="Bubble"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = -4.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("6_bubble_tail")
+
+[node name="Margin" type="MarginContainer" parent="Bubble"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="DialogueLabel" type="Label" parent="Bubble/Margin"]
+texture_filter = 1
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.15, 0.08, 1)
+theme_override_colors/font_shadow_color = Color(0.2, 0.1, 0.05, 0.3)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 10
+text = "Phòng trọ 2.5D ấm cúng quá Sen ơi! 🐾"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2

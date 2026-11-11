@@ -1,0 +1,368 @@
+{
+  "project": "Best Sen",
+  "version": "2.0.0",
+  "branches": [
+    {
+      "branch_id": "branch_1_commute",
+      "name": "Đường Phố Thổ Địa",
+      "icon": "🚗",
+      "description": "Làm chủ xe buýt, định vị bản đồ và an toàn giao thông đô thị"
+    },
+    {
+      "branch_id": "branch_2_housing",
+      "name": "Bình Yên Xóm Trọ",
+      "icon": "🏠",
+      "description": "Pháp lý thuê phòng, an toàn PCCC, tạm trú và văn hóa ở ghép"
+    },
+    {
+      "branch_id": "branch_3_health",
+      "name": "Thân Thể Kim Cương",
+      "icon": "🏥",
+      "description": "Tự sơ cứu ban đêm, sử dụng thẻ BHYT và bảo vệ tiêu hóa sinh viên"
+    },
+    {
+      "branch_id": "branch_4_finance",
+      "name": "Túi Tiền Thông Thái",
+      "icon": "💰",
+      "description": "Quản lý chi tiêu, nhận diện đa cấp/sàn ảo và thoát bẫy ví trả sau"
+    }
+  ],
+  "skills": [
+    {
+      "skill_id": 1,
+      "branch_id": "branch_1_commute",
+      "title": "Bắt xe buýt liên quận (Tuyến 08)",
+      "description": "Lần đầu đón xe buýt từ bến xe về ký túc xá đại học không bị lỡ trạm.",
+      "handbook_3_steps": [
+        "Đứng đúng vạch trạm dừng, thấy xe còn cách 50m thì vẫy tay dứt khoát ra hiệu đón xe.",
+        "Bước lên cửa trước, cầm sẵn 5.000đ tiền lẻ hoặc thẻ vé tháng trên tay và ôm ba lô trước ngực.",
+        "Quan sát bảng điện tử trạm dừng, bấm nút chuông đỏ trên cột trước trạm đến 100m."
+      ],
+      "required_cards": [101, 102, 103, 104],
+      "cutscene_dialogue": "Tài xế tấp xe đón Mèo! Mèo tự tin quẹt vé, ôm ba lô và xuống đúng trạm KTX an toàn!",
+      "reward_fish": 30,
+      "reward_exp": 25,
+      "achievement": "Thổ Địa Tuyến 08",
+      "loot_tier": "tier_1",
+      "infographic": {
+        "title": "Bí Kíp Đi Xe Buýt An Toàn 100%",
+        "tips": "Vẫy tay 50m -> Tiền lẻ 5k cửa trước -> Ba lô ôm ngực -> Bấm chuông 100m"
+      }
+    },
+    {
+      "skill_id": 2,
+      "branch_id": "branch_1_commute",
+      "title": "Đọc BusMap & Đổi tuyến liên quận",
+      "description": "Tìm lộ trình xe buýt tối ưu và đổi tuyến trung chuyển mượt mà.",
+      "handbook_3_steps": [
+        "Nhập điểm đi/đến trên BusMap, chọn lộ trình tối ưu ít lần chuyển tuyến nhất.",
+        "Kiểm tra mã số trạm dừng và thời gian thực tế xe kế tiếp cập bến (ETA).",
+        "Đến đúng cột biển báo trạm trung chuyển, chuẩn bị sẵn thẻ để lên chuyến xe thứ 2."
+      ],
+      "required_cards": [105, 106, 107, 108],
+      "cutscene_dialogue": "Mèo tra BusMap thành thạo, đổi tuyến chuẩn xác như người bản địa kỳ cựu!",
+      "reward_fish": 30,
+      "reward_exp": 25,
+      "achievement": "Bậc Thầy Chuyển Tuyến BusMap",
+      "loot_tier": "tier_1",
+      "infographic": {
+        "title": "Cẩm Nang Chuyển Tuyến Xe Buýt Không Lạc",
+        "tips": "Tra BusMap tối ưu -> Soi mã trạm & giờ xe -> Đúng cột trung chuyển -> Trình thẻ"
+      }
+    },
+    {
+      "skill_id": 3,
+      "branch_id": "branch_1_commute",
+      "title": "Định vị GPS & Thoát bùng binh ngột ngạt",
+      "description": "Không bị quay cuồng giữa vòng xuyến giờ cao điểm đông đúc.",
+      "handbook_3_steps": [
+        "Tấp xe vào sát lề đường an toàn trước khi rút điện thoại mở Google Maps.",
+        "Chạm vào biểu tượng la bàn để bản đồ tự động xoay theo hướng mặt mình nhìn.",
+        "Đếm chính xác số thứ tự lối ra tại vòng xoay và bật xi-nhan dứt khoát khi rời bùng binh."
+      ],
+      "required_cards": [109, 110, 111, 112],
+      "cutscene_dialogue": "Mèo xi-nhan dứt khoát, thoát khỏi bùng binh 6 ngã một cách đĩnh đạc và an toàn!",
+      "reward_fish": 30,
+      "reward_exp": 25,
+      "achievement": "La Bàn Sống Thị Thành",
+      "loot_tier": "tier_1",
+      "infographic": {
+        "title": "Quy Tắc Thoát Bùng Binh Giờ Cao Điểm",
+        "tips": "Tấp lề an toàn -> Căn la bàn -> Đếm lối ra -> Bật xi-nhan dứt khoát"
+      }
+    },
+    {
+      "skill_id": 4,
+      "branch_id": "branch_1_commute",
+      "title": "Cứu hộ xe máy cơ bản khi hỏng dọc đường",
+      "description": "Xử lý thủng lốp, chùng sên và tránh bị chặt chém sửa xe vỉa hè.",
+      "handbook_3_steps": [
+        "Dựng chân chống đứng, tự kiểm tra mắt sên xích và lốp xe bằng mắt thường.",
+        "Luôn hỏi giá và thỏa thuận chi phí sửa chữa cụ thể trước khi thợ chạm cờ-lê vào xe.",
+        "Kiểm tra tem nhãn niêm phong vỏ chai nhớt chính hãng trước khi đồng ý cho thợ châm nhớt."
+      ],
+      "required_cards": [113, 114, 115, 116],
+      "cutscene_dialogue": "Mèo tỉnh táo hỏi giá trước, tránh được cú chặt chém 500k của tiệm sửa xe gian manh!",
+      "reward_fish": 30,
+      "reward_exp": 25,
+      "achievement": "Bác Sĩ Xe Máy Sinh Viên",
+      "loot_tier": "tier_1",
+      "infographic": {
+        "title": "Cẩm Nang Cứu Hộ Xe Máy An Toàn",
+        "tips": "Tự soi lốp sên -> Luôn hỏi giá trước -> Xem tem niêm phong nhớt"
+      }
+    },
+    {
+      "skill_id": 5,
+      "branch_id": "branch_2_housing",
+      "title": "Soi hợp đồng thuê trọ tránh bẫy cọc",
+      "description": "Bảo vệ tiền cọc 2 tháng và không bị tính phụ phí điện nước trên trời.",
+      "handbook_3_steps": [
+        "Soi kỹ điều khoản hoàn tiền cọc và thời hạn bắt buộc phải báo trước khi chuyển đi.",
+        "Chốt đơn giá điện nước (theo kWh/khối nhà nước) và các phụ phí ngầm bằng văn bản rõ ràng.",
+        "Chụp ảnh toàn bộ hiện trạng phòng nứt vỡ trước khi dọn vào và giữ 01 bản hợp đồng gốc có chữ ký sống."
+      ],
+      "required_cards": [201, 202, 203, 204],
+      "cutscene_dialogue": "Chủ trọ gật đầu công nhận Mèo quá kỹ tính, hợp đồng ký minh bạch 100%!",
+      "reward_fish": 35,
+      "reward_exp": 30,
+      "achievement": "Thám Tử Hợp Đồng Trọ",
+      "loot_tier": "tier_2",
+      "infographic": {
+        "title": "3 Điều Khoản Tử Huyệt Khi Thuê Trọ",
+        "tips": "Đọc bẫy tiền cọc -> Chốt giá điện nước văn bản -> Chụp ảnh hiện trạng -> Giữ bản gốc"
+      }
+    },
+    {
+      "skill_id": 6,
+      "branch_id": "branch_2_housing",
+      "title": "Khảo sát an toàn PCCC & Lối thoát hiểm",
+      "description": "Trang bị kỹ năng sinh tồn hỏa hoạn trong nhà trọ nhiều tầng.",
+      "handbook_3_steps": [
+        "Kiểm tra lồng sắt chuồng cọp có cửa thoát hiểm mở được và chìa khóa phải treo sẵn cạnh cửa.",
+        "Xác định bình chữa cháy bột/khí ở hành lang còn kim ở vạch xanh (đủ áp suất).",
+        "Định vị lối thoát hiểm phụ lên sân thượng; luôn để sẵn khăn mặt và đèn pin đầu giường."
+      ],
+      "required_cards": [205, 206, 207, 208],
+      "cutscene_dialogue": "Mèo chuẩn bị sẵn chìa khóa chuồng cọp và khăn ướt, căn phòng trọ đạt chuẩn an toàn 10/10!",
+      "reward_fish": 35,
+      "reward_exp": 30,
+      "achievement": "Hiệp Sĩ PCCC Xóm Trọ",
+      "loot_tier": "tier_2",
+      "infographic": {
+        "title": "Checklist An Toàn PCCC Nhà Trọ",
+        "tips": "Cửa chuồng cọp mở được -> Bình cứu hỏa vạch xanh -> Lối thoát thượng -> Khăn mặt sẵn"
+      }
+    },
+    {
+      "skill_id": 7,
+      "branch_id": "branch_2_housing",
+      "title": "Đăng ký tạm trú trực tuyến qua VNeID",
+      "description": "Kê khai cư trú đúng luật, không sợ bị phạt hành chính 500k-1 triệu.",
+      "handbook_3_steps": [
+        "Xin số CCCD và thông tin định danh chủ nhà trọ để kê khai đúng mã địa bàn.",
+        "Đăng nhập cổng Dịch vụ công Quốc gia hoặc ứng dụng VNeID mức 2.",
+        "Đính kèm ảnh chụp hợp đồng thuê trọ hợp lệ và lưu lại mã hồ sơ để theo dõi kết quả."
+      ],
+      "required_cards": [209, 210, 211, 212],
+      "cutscene_dialogue": "Mã hồ sơ CT07 gửi về điện thoại Mèo! Cảnh sát khu vực kiểm tra khen Mèo chấp hành mẫu mực!",
+      "reward_fish": 35,
+      "reward_exp": 30,
+      "achievement": "Công Dân Số Chuẩn Chỉ",
+      "loot_tier": "tier_2",
+      "infographic": {
+        "title": "Đăng Ký Tạm Trú 5 Phút Trên Điện Thoại",
+        "tips": "Lấy CCCD chủ trọ -> Đăng nhập VNeID/DVC -> Đính kèm hợp đồng trọ -> Lưu mã hồ sơ"
+      }
+    },
+    {
+      "skill_id": 8,
+      "branch_id": "branch_2_housing",
+      "title": "Thiết lập hiệp ước bạn cùng phòng (Roommate)",
+      "description": "Tránh xích mích dọn dẹp, tiền bạc và giờ giấc sinh hoạt chung.",
+      "handbook_3_steps": [
+        "Họp mặt thẳng thắn ngày đầu tiên, thống nhất nguyên tắc tôn trọng không gian riêng tư.",
+        "Lập bảng phân công luân phiên trực nhật quét dọn nhà vệ sinh và đổ rác hàng ngày.",
+        "Sử dụng ứng dụng chia tiền minh bạch (Splitwise/Sổ Thu Chi) và chốt giờ giới nghiêm tắt đèn."
+      ],
+      "required_cards": [213, 214, 215, 216],
+      "cutscene_dialogue": "Mèo và bạn trọ cùng nâng ly trà sữa mừng hiệp ước hòa bình xóm trọ được ký kết!",
+      "reward_fish": 35,
+      "reward_exp": 30,
+      "achievement": "Bạn Cùng Phòng Đỉnh Chóp",
+      "loot_tier": "tier_2",
+      "infographic": {
+        "title": "Bí Quyết Sống Chung Phòng Không Cãi Vã",
+        "tips": "Họp mặt thẳng thắn -> Lịch dọn luân phiên -> App chia tiền minh bạch -> Giới nghiêm tắt đèn"
+      }
+    },
+    {
+      "skill_id": 9,
+      "branch_id": "branch_3_health",
+      "title": "Tự sơ cứu hạ sốt 39 độ giữa đêm vắng",
+      "description": "Xử lý khi ốm một mình ở phòng trọ mà không có người thân bên cạnh.",
+      "handbook_3_steps": [
+        "Kẹp nhiệt kế vào nách trong 5 phút để xác định chính xác nhiệt độ cơ thể.",
+        "Uống Paracetamol đúng liều 10-15mg/kg cân nặng (cách nhau tối thiểu 4-6 tiếng).",
+        "Lau khăn nước ẤM (tuyệt đối không lau nước đá) vào trán, nách, bẹn và uống bù gói Oresol."
+      ],
+      "required_cards": [301, 302, 303, 304],
+      "cutscene_dialogue": "Cơn sốt hạ xuống 37 độ, Mèo trùm chăn ấm ngủ một giấc ngon lành qua đêm!",
+      "reward_fish": 40,
+      "reward_exp": 35,
+      "achievement": "Ý Chí Thép Đêm Sốt",
+      "loot_tier": "tier_3",
+      "infographic": {
+        "title": "Quy Trình Hạ Sốt Ban Đêm Cho Người Sống Một Mình",
+        "tips": "Kẹp nhiệt kế -> Paracetamol đúng liều -> Lau nước ẤM nách bẹn -> Bù Oresol"
+      }
+    },
+    {
+      "skill_id": 10,
+      "branch_id": "branch_3_health",
+      "title": "Đi khám BHYT đúng tuyến tại Bệnh viện Quận",
+      "description": "Tận dụng bảo hiểm sinh viên chi trả 80% viện phí, không lo tốn tiền triệu.",
+      "handbook_3_steps": [
+        "Bốc số thứ tự tại khu tiếp nhận BHYT và xuất trình CCCD gắn chip (tích hợp VssID).",
+        "Khai báo triệu chứng rõ ràng với điều dưỡng viên để được phân vào đúng phòng khám chuyên khoa.",
+        "Sau khi bác sĩ khám xong, mang đơn thuốc ra quầy Dược BHYT nhận thuốc miễn phí."
+      ],
+      "required_cards": [305, 306, 307, 308],
+      "cutscene_dialogue": "Mèo nhận túi thuốc xịn sò mà chỉ tốn vỏn vẹn 3 con Cá Khô nhờ có BHYT!",
+      "reward_fish": 40,
+      "reward_exp": 35,
+      "achievement": "Chuyên Gia Thẻ BHYT",
+      "loot_tier": "tier_3",
+      "infographic": {
+        "title": "Quy Trình Khám BHYT Tiết Kiệm Tiền Triệu",
+        "tips": "Bốc số BHYT -> Quầy tiếp nhận CCCD -> Phòng khám chuyên khoa -> Quầy Dược nhận thuốc"
+      }
+    },
+    {
+      "skill_id": 11,
+      "branch_id": "branch_3_health",
+      "title": "Thiết lập tủ thuốc sinh tồn tại phòng trọ",
+      "description": "Chuẩn bị sẵn 4 nhóm thuốc cứu mạng cần thiết trong hộp y tế mini.",
+      "handbook_3_steps": [
+        "Nhóm 1: Hạ sốt giảm đau (Paracetamol 500mg) kèm kẹp nhiệt kế điện tử.",
+        "Nhóm 2: Tiêu hóa đường ruột (Men vi sinh, Berbérin, gói bù nước Oresol).",
+        "Nhóm 3: Sơ cứu vết thương (Cồn đỏ Povidine, băng gạc cá nhân, bông y tế sạch)."
+      ],
+      "required_cards": [309, 310, 311, 312],
+      "cutscene_dialogue": "Hộp thuốc sơ cấp cứu mini hoàn thành, Mèo yên tâm tự lập giữa chốn thị thành!",
+      "reward_fish": 40,
+      "reward_exp": 35,
+      "achievement": "Dược Sĩ Phòng Trọ",
+      "loot_tier": "tier_3",
+      "infographic": {
+        "title": "Tủ Thuốc Cứu Sinh Cần Có Trong Phòng Trọ",
+        "tips": "Hạ sốt + Nhiệt kế -> Tiêu hóa + Oresol -> Sát trùng + Băng gạc -> Dán nhãn liều"
+      }
+    },
+    {
+      "skill_id": 12,
+      "branch_id": "branch_3_health",
+      "title": "Bảo vệ dạ dày: Bỏ thói quen ăn mì gói sống",
+      "description": "Nói không với đau dạ dày cấp và suy nhược cơ thể khi ôn thi.",
+      "handbook_3_steps": [
+        "Nhận biết triệu chứng đau vùng thượng vị và ợ chua do thói quen ăn uống thất thường.",
+        "Loại bỏ thói quen ăn mì tôm sống bẻ vụn và uống trà sữa thay bữa cơm chính.",
+        "Tự nấu cháo yến mạch ấm, ăn đúng giờ và đi nội soi kiểm tra nếu đau quặn kéo dài."
+      ],
+      "required_cards": [313, 314, 315, 316],
+      "cutscene_dialogue": "Mèo húp bát cháo ấm nóng, bụng dạ êm ru, nói lời tạm biệt mì gói độc hại!",
+      "reward_fish": 40,
+      "reward_exp": 35,
+      "achievement": "Dạ Dày Kim Cương",
+      "loot_tier": "tier_3",
+      "infographic": {
+        "title": "Chăm Sóc Dạ Dày Sinh Viên Đúng Cách",
+        "tips": "Nhận biết đau thượng vị -> Bỏ mì tôm sống -> Cháo ấm đúng giờ -> Đi khám nếu đau kéo dài"
+      }
+    },
+    {
+      "skill_id": 13,
+      "branch_id": "branch_4_finance",
+      "title": "Phân bổ ngân sách tháng theo quy tắc 50/30/20",
+      "description": "Không còn cảnh đầu tháng ăn sang, cuối tháng ăn mì gói cầm hơi.",
+      "handbook_3_steps": [
+        "Dành 50% ngân sách cho Nhu cầu thiết yếu bắt buộc (Tiền trọ, điện nước, ăn uống cơ bản).",
+        "Dành 30% ngân sách cho Nhu cầu cá nhân (Giao lưu bạn bè, mua sách, gói cước 4G).",
+        "Dành 20% ngân sách vào Quỹ khẩn cấp bất khả xâm phạm phòng ngừa ốm đau hoặc sửa xe."
+      ],
+      "required_cards": [401, 402, 403, 404],
+      "cutscene_dialogue": "Mèo chia Cá vào 3 hũ thủy tinh ngăn nắp, cuối tháng vẫn dư dả tiền mua Pate thưởng!",
+      "reward_fish": 45,
+      "reward_exp": 40,
+      "achievement": "Bộ Trưởng Tài Chính Mèo",
+      "loot_tier": "tier_4",
+      "infographic": {
+        "title": "Công Thức 50/30/20 Cho Sinh Viên",
+        "tips": "50% Thiết yếu (Ăn/Trọ) -> 30% Cá nhân (Học/Bạn) -> 20% Quỹ khẩn cấp"
+      }
+    },
+    {
+      "skill_id": 14,
+      "branch_id": "branch_4_finance",
+      "title": "Nhận diện bẫy lừa đảo đa cấp & Sàn ảo việc nhẹ",
+      "description": "Tỉnh táo trước chiêu trò dụ dỗ làm giàu không cần kinh nghiệm.",
+      "handbook_3_steps": [
+        "Cảnh giác tối đa với mọi lời mời gọi cam kết lợi nhuận > 15%/năm hoặc 'việc nhẹ lương 500k/ngày'.",
+        "Kiểm tra xem mô hình có sản phẩm thật hay chỉ tập trung bắt đóng tiền cọc tuyển người mới.",
+        "Tuyệt đối KHÔNG nộp tiền cọc giữ chỗ và dứt khoát đứng dậy ra về khi bị ép ký cam kết."
+      ],
+      "required_cards": [405, 406, 407, 408],
+      "cutscene_dialogue": "Mèo dứt khoát từ chối nộp cọc 500k cho bọn lừa đảo, ôm chặt ví tiền an toàn!",
+      "reward_fish": 45,
+      "reward_exp": 40,
+      "achievement": "Khiên Chắn Chống Lừa Đảo",
+      "loot_tier": "tier_4",
+      "infographic": {
+        "title": "3 Dấu Hiệu Lừa Đảo Đa Cấp / Việc Nhẹ Lương Cao",
+        "tips": "Lãi > 15%/năm là lừa -> Không có sản phẩm thật -> Cấm nộp cọc -> Rút lui dứt khoát"
+      }
+    },
+    {
+      "skill_id": 15,
+      "branch_id": "branch_4_finance",
+      "title": "Tìm việc làm thêm part-time an toàn minh bạch",
+      "description": "Đi làm tích lũy kinh nghiệm mà không bị quỵt lương hay giữ CCCD.",
+      "handbook_3_steps": [
+        "Lựa chọn công việc phù hợp với lịch học, ưu tiên chuỗi cửa hàng tiện lợi hoặc quán ăn uy tín.",
+        "Hỏi rõ biểu mức lương tính theo giờ, phụ cấp ca đêm và ngày thanh toán lương định kỳ.",
+        "TUYỆT ĐỐI KHÔNG để nhà tuyển dụng giữ CCCD gốc và không đóng bất kỳ khoản tiền cọc đồng phục nào."
+      ],
+      "required_cards": [409, 410, 411, 412],
+      "cutscene_dialogue": "Mèo ký biên bản thỏa thuận làm thêm rõ ràng, cầm chắc bảng chấm công minh bạch!",
+      "reward_fish": 45,
+      "reward_exp": 40,
+      "achievement": "Người Lao Động Chân Chính",
+      "loot_tier": "tier_4",
+      "infographic": {
+        "title": "Checklist Nhận Việc Làm Thêm An Toàn",
+        "tips": "Lịch theo giờ học -> Lương rõ ràng -> Cấm giao CCCD gốc & tiền cọc -> Ký thỏa thuận"
+      }
+    },
+    {
+      "skill_id": 16,
+      "branch_id": "branch_4_finance",
+      "title": "Thoát bẫy nợ 'Ví trả sau' (Buy Now Pay Later)",
+      "description": "Không để thói quen mua trước trả sau biến thành gánh nặng nợ nần lãi phạt.",
+      "handbook_3_steps": [
+        "Áp dụng quy tắc 'Phanh 48 giờ' trước khi quyết định mua món đồ không thực sự thiết yếu.",
+        "Đọc kỹ điều khoản về phí duy trì ví và biểu phí phạt trễ hạn (thường cao gấp 3 lần lãi ngân hàng).",
+        "Nguyên tắc vàng: Không có sẵn tiền mặt trong tài khoản thì tuyệt đối không quẹt ví trả sau."
+      ],
+      "required_cards": [413, 414, 415, 416],
+      "cutscene_dialogue": "Mèo tắt thông báo mời gọi mở ví trả sau, nụ cười thanh thản vì không nợ ai một đồng!",
+      "reward_fish": 50,
+      "reward_exp": 50,
+      "achievement": "Bậc Thầy Tự Do Tài Chính",
+      "loot_tier": "tier_5",
+      "infographic": {
+        "title": "Bí Kíp Nói Không Với Bẫy Nợ Ví Trả Sau",
+        "tips": "Phanh 48h -> Đọc phí phạt chậm trả -> Không tiền mặt thì không mua -> Tắt ví"
+      }
+    }
+  ]
+}

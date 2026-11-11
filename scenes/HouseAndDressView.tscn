@@ -1,0 +1,748 @@
+[gd_scene load_steps=18 format=3 uid="uid://clgjyof7n1t17"]
+
+[ext_resource type="Script" path="res://scripts/HouseAndDressView.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://krc6k1wrfoma" path="res://assets/sprites/avatars/avatar_0.png" id="2_cat"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/icon_arrow_left.png" id="3_arrow_left"]
+[ext_resource type="FontFile" path="res://assets/font/SVN-Retron 2000.ttf" id="4_font"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/hud_wood_parchment_9patch.tres" id="5_wood_frame"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_dress/floor_wood_parquet.tres" id="6_floor_wood"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_dress/rug_woven_cozy_oval.tres" id="7_rug_woven"]
+[ext_resource type="Texture2D" path="res://assets/sprites/cats/shadow_pixel_ellipse.tres" id="8_shadow"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_dress/clipboard_wood_frame_9patch.tres" id="9_clipboard"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_dress/star_rating_track_5stars.tres" id="10_star_track"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_dress/star_rating_progress_5stars.tres" id="11_star_progress"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_dress/vintage_chest_shelf_9patch.tres" id="12_chest_shelf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.965, 0.945, 0.915, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.99, 0.97, 0.95)
+border_width_bottom = 2
+border_color = Color(0.85, 0.78, 0.7, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stage"]
+texture = ExtResource("5_wood_frame")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_room_corner"]
+bg_color = Color(0.96, 0.92, 0.86, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.8, 0.7, 0.6, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.99, 0.97, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.75, 0.65, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="HouseAndDressView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Bg" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="TopBar" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 126.0
+offset_bottom = 172.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bar")
+
+[node name="HBox" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnBack" type="Button" parent="TopBar/HBox"]
+custom_minimum_size = Vector2(88, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+icon = ExtResource("3_arrow_left")
+text = " Về Phòng"
+
+[node name="TitleLabel" type="Label" parent="TopBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "👗 TỦ ĐỒ NGÔI SAO SEN & BOSS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FishBalanceBtn" type="Button" parent="TopBar/HBox"]
+custom_minimum_size = Vector2(92, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.9, 0.5, 0.1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "💵 90.000đ"
+
+[node name="ModeTabs" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 174.0
+offset_bottom = 216.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bar")
+
+[node name="HBox" type="HBoxContainer" parent="ModeTabs"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="BtnTabDress" type="Button" parent="ModeTabs/HBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "👗 Tủ Đồ Thời Trang"
+
+[node name="BtnTabDecor" type="Button" parent="ModeTabs/HBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "🏡 Trang Trí Nhà Cửa"
+
+[node name="ContentContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 220.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DressModeContainer" type="Control" parent="ContentContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StageArea" type="PanelContainer" parent="ContentContainer/DressModeContainer"]
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 6.0
+offset_right = -12.0
+offset_bottom = 246.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_stage")
+
+[node name="HBox" type="HBoxContainer" parent="ContentContainer/DressModeContainer/StageArea"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StagePodium" type="PanelContainer" parent="ContentContainer/DressModeContainer/StageArea/HBox"]
+custom_minimum_size = Vector2(176, 220)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_room_corner")
+
+[node name="FloorParquet" type="TextureRect" parent="ContentContainer/DressModeContainer/StageArea/HBox/StagePodium"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("6_floor_wood")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="WovenRug" type="TextureRect" parent="ContentContainer/DressModeContainer/StageArea/HBox/StagePodium"]
+texture_filter = 1
+custom_minimum_size = Vector2(146, 74)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture = ExtResource("7_rug_woven")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CatShadow" type="TextureRect" parent="ContentContainer/DressModeContainer/StageArea/HBox/StagePodium"]
+texture_filter = 1
+custom_minimum_size = Vector2(44, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture = ExtResource("8_shadow")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CatAvatar" type="TextureRect" parent="ContentContainer/DressModeContainer/StageArea/HBox/StagePodium"]
+texture_filter = 1
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_cat")
+stretch_mode = 5
+
+[node name="HatRect" type="TextureRect" parent="ContentContainer/DressModeContainer/StageArea/HBox/StagePodium"]
+texture_filter = 1
+custom_minimum_size = Vector2(48, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ClothesRect" type="TextureRect" parent="ContentContainer/DressModeContainer/StageArea/HBox/StagePodium"]
+texture_filter = 1
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BowRect" type="TextureRect" parent="ContentContainer/DressModeContainer/StageArea/HBox/StagePodium"]
+texture_filter = 1
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AccRect" type="TextureRect" parent="ContentContainer/DressModeContainer/StageArea/HBox/StagePodium"]
+texture_filter = 1
+custom_minimum_size = Vector2(40, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ScoreCard" type="NinePatchRect" parent="ContentContainer/DressModeContainer/StageArea/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("9_clipboard")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="ContentContainer/DressModeContainer/StageArea/HBox/ScoreCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="TagLbl" type="Label" parent="ContentContainer/DressModeContainer/StageArea/HBox/ScoreCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.25, 0.14, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+text = "🌟 ĐIỂM THỜI TRANG BOSS"
+
+[node name="ScoreHBox" type="HBoxContainer" parent="ContentContainer/DressModeContainer/StageArea/HBox/ScoreCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 0
+
+[node name="StarLabel" type="Label" parent="ContentContainer/DressModeContainer/StageArea/HBox/ScoreCard/VBox/ScoreHBox"]
+visible = false
+layout_mode = 2
+text = "⭐⭐⭐⭐⭐"
+
+[node name="FashionStarBar" type="TextureProgressBar" parent="ContentContainer/DressModeContainer/StageArea/HBox/ScoreCard/VBox/ScoreHBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 250.0
+value = 185.0
+texture_under = ExtResource("10_star_track")
+texture_progress = ExtResource("11_star_progress")
+
+[node name="FashionScoreLbl" type="Label" parent="ContentContainer/DressModeContainer/StageArea/HBox/ScoreCard/VBox/ScoreHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.2, 0.12, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 13
+text = "185 Điểm"
+
+[node name="FashionTitleLbl" type="Label" parent="ContentContainer/DressModeContainer/StageArea/HBox/ScoreCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "Fashionista Xóm Trọ 🌟"
+
+[node name="FashionBuffLbl" type="Label" parent="ContentContainer/DressModeContainer/StageArea/HBox/ScoreCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.55, 0.28, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "Hiệu Quả: Dũng Cảm +25 · Tâm Trạng +35"
+autowrap_mode = 2
+
+[node name="ActionRow" type="HBoxContainer" parent="ContentContainer/DressModeContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 254.0
+offset_right = -12.0
+offset_bottom = 290.0
+grow_horizontal = 2
+theme_override_constants/separation = 6
+
+[node name="BtnRandomOutfit" type="Button" parent="ContentContainer/DressModeContainer/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "🎲 Ngẫu Nhiên"
+
+[node name="BtnUnequipAll" type="Button" parent="ContentContainer/DressModeContainer/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "🗑️ Tháo Hết"
+
+[node name="BtnSaveOutfit" type="Button" parent="ContentContainer/DressModeContainer/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "✨ Lưu Đồ"
+
+[node name="BtnGoShop" type="Button" parent="ContentContainer/DressModeContainer/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "🛍️ Mua Thêm"
+
+[node name="DrawerBg" type="NinePatchRect" parent="ContentContainer/DressModeContainer"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 294.0
+offset_right = -10.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_chest_shelf")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="Drawer" type="VBoxContainer" parent="ContentContainer/DressModeContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 302.0
+offset_right = -18.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="SubTabScroll" type="ScrollContainer" parent="ContentContainer/DressModeContainer/Drawer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HBox" type="HBoxContainer" parent="ContentContainer/DressModeContainer/Drawer/SubTabScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ItemsScroll" type="ScrollContainer" parent="ContentContainer/DressModeContainer/Drawer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Grid" type="GridContainer" parent="ContentContainer/DressModeContainer/Drawer/ItemsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="DecorModeContainer" type="Control" parent="ContentContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RoomPreviewArea" type="PanelContainer" parent="ContentContainer/DecorModeContainer"]
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 6.0
+offset_right = -12.0
+offset_bottom = 246.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_stage")
+
+[node name="VBox" type="VBoxContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ScoreCard" type="NinePatchRect" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+texture = ExtResource("9_clipboard")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ScoreCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = -12.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="ScoreHBox" type="HBoxContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ScoreCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StarLabel" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ScoreCard/VBox/ScoreHBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "🏡 ĐIỂM ẤM CÚNG:"
+
+[node name="CozyStarBar" type="TextureProgressBar" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ScoreCard/VBox/ScoreHBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 250.0
+value = 140.0
+texture_under = ExtResource("10_star_track")
+texture_progress = ExtResource("11_star_progress")
+
+[node name="CozyScoreLbl" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ScoreCard/VBox/ScoreHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.5, 0.1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "140 Điểm"
+
+[node name="CozyTitleLbl" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ScoreCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+text = "Căn Hộ Sinh Viên Tiện Nghi 🏡"
+
+[node name="CozyBuffLbl" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ScoreCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.55, 0.28, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "Phúc Lợi: +14 Tâm Trạng mỗi sáng thức dậy ☀️"
+
+[node name="ShowcaseGrid" type="GridContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 3
+
+[node name="SlotBed" type="PanelContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="VBox" type="VBoxContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotBed"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotBed/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.35, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "🛏️ Đệm Ngủ"
+
+[node name="NameLbl" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotBed/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+text = "Đệm Nhung"
+autowrap_mode = 2
+
+[node name="SlotBowl" type="PanelContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="VBox" type="VBoxContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotBowl"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotBowl/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.35, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "🥣 Bát Ăn"
+
+[node name="NameLbl" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotBowl/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+text = "Khay Đôi Inox"
+autowrap_mode = 2
+
+[node name="SlotRug" type="PanelContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="VBox" type="VBoxContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotRug"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotRug/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.35, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "🧶 Thảm Sàn"
+
+[node name="NameLbl" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotRug/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+text = "Thảm Len Boho"
+autowrap_mode = 2
+
+[node name="SlotWall" type="PanelContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="VBox" type="VBoxContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotWall"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotWall/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.35, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "🖼️ Tranh Tường"
+
+[node name="NameLbl" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotWall/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+text = "Tranh Anime"
+autowrap_mode = 2
+
+[node name="SlotPlant" type="PanelContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="VBox" type="VBoxContainer" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotPlant"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotPlant/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.35, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "🪴 Cây Cảnh"
+
+[node name="NameLbl" type="Label" parent="ContentContainer/DecorModeContainer/RoomPreviewArea/VBox/ShowcaseGrid/SlotPlant/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+text = "Cây Bàng"
+autowrap_mode = 2
+
+[node name="ActionRow" type="HBoxContainer" parent="ContentContainer/DecorModeContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 254.0
+offset_right = -12.0
+offset_bottom = 290.0
+grow_horizontal = 2
+theme_override_constants/separation = 6
+
+[node name="BtnSaveDecor" type="Button" parent="ContentContainer/DecorModeContainer/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "💾 Lưu Bài Trí"
+
+[node name="BtnResetDecor" type="Button" parent="ContentContainer/DecorModeContainer/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "🔄 Mặc Định"
+
+[node name="BtnSnapshot" type="Button" parent="ContentContainer/DecorModeContainer/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "📸 Chụp Kỷ Niệm"
+
+[node name="BtnGoShopDecor" type="Button" parent="ContentContainer/DecorModeContainer/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "🛍️ Sắm Đồ Mới"
+
+[node name="DrawerBg" type="NinePatchRect" parent="ContentContainer/DecorModeContainer"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 294.0
+offset_right = -10.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_chest_shelf")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="Drawer" type="VBoxContainer" parent="ContentContainer/DecorModeContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 302.0
+offset_right = -18.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="SubTabScroll" type="ScrollContainer" parent="ContentContainer/DecorModeContainer/Drawer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HBox" type="HBoxContainer" parent="ContentContainer/DecorModeContainer/Drawer/SubTabScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ItemsScroll" type="ScrollContainer" parent="ContentContainer/DecorModeContainer/Drawer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Grid" type="GridContainer" parent="ContentContainer/DecorModeContainer/Drawer/ItemsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2

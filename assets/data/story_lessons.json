@@ -1,0 +1,314 @@
+{
+  "system_info": {
+    "feature": "Interactive Storytelling / Điền ô trống kể chuyện (Fill-in-the-Blank Adventure)",
+    "version": "1.0.0",
+    "description": "Cơ chế học kỹ năng sống thông qua câu chuyện tương tác, kết hợp kéo thả thẻ bài tiếng mèo và hình ảnh trực quan."
+  },
+  "stories": [
+    {
+      "story_id": "story_prep_mother_01",
+      "lesson_id": 1,
+      "title": "Lời Dặn Dò Của Mẹ Khi Chuẩn Bị Lên Đại Học",
+      "context": "Mèo con chuẩn bị hành trang xa nhà, mẹ ân cần dặn dò cách xếp đồ vào vali và dán nhãn các loại thuốc thiết yếu.",
+      "achievement": "Người Con Ngoan Của Mẹ",
+      "reward_fish": 35,
+      "reward_exp": 40,
+      "handbook_tip": "Xếp đồ ngăn nắp vào đúng 4 ngăn vali và ghi nhớ kỹ lời mẹ dặn về liều lượng thuốc khi tự lập xa nhà nhé Sen!",
+      "steps": [
+        {
+          "step_index": 1,
+          "step_title": "Bước 1: Xếp Đồ Vào Đúng Ngăn Vali",
+          "illustration": "res://assets/sprites/skills/lesson_01_step_1.png",
+          "story_prefix": "Tối trước ngày lên trường, Mèo con mở chiếc vali du lịch ra. Mẹ ân cần ngồi bên nhắc Mèo phải ",
+          "story_suffix": " để đồ đạc ngăn nắp, dễ tìm khi cần.",
+          "text_template": "Tối trước ngày lên trường, Mèo con mở chiếc vali du lịch ra. Mẹ ân cần ngồi bên nhắc Mèo phải {blank_1} để đồ đạc ngăn nắp, dễ tìm khi cần.",
+          "blanks": [
+            {
+              "blank_id": "blank_1",
+              "placeholder": "..... [ Ô TRỐNG 1: Cách xếp đồ ] .....",
+              "correct_card_id": "card_pack_slots"
+            }
+          ],
+          "cards": [
+            {
+              "id": "card_pack_slots",
+              "cat_sound": "Meo-pack!",
+              "label": "Phân loại đồ vào 4 ngăn vali",
+              "icon": "📦",
+              "is_correct": true,
+              "desc": "Thuốc, hồ sơ, quần áo và đồ điện tử riêng biệt"
+            },
+            {
+              "id": "card_stuff_all",
+              "cat_sound": "Meo-mess!",
+              "label": "Nhồi nhét tất cả thành một đống",
+              "icon": "🗑️",
+              "is_correct": false,
+              "fail_hint": "Nhồi nhét bừa bãi thế này thì lúc cần tìm hồ sơ hay thuốc biết bới đâu ra hả con!"
+            },
+            {
+              "id": "card_bring_bear",
+              "cat_sound": "Meo-bear!",
+              "label": "Nhét gấu bông khổng lồ 2 mét",
+              "icon": "🧸",
+              "is_correct": false,
+              "fail_hint": "Gấu bông to bằng cái phòng trọ, mang lên để đâu cho hết chỗ hả con!"
+            }
+          ],
+          "correct_meow": "Méo-pack!",
+          "success_prompt": "Méo-pack! Mẹ mỉm cười gật đầu: 'Đúng rồi, 4 ngăn ngăn nắp thế này mới là con ngoan của Mẹ!' 🐾",
+          "cat_reaction_correct": "Méo-pack! Vali đã phân chia 4 ngăn gọn gàng rồi nè Mẹ ơi!"
+        },
+        {
+          "step_index": 2,
+          "step_title": "Bước 2: Dán Nhãn Thuốc Và Lời Mẹ Dặn",
+          "illustration": "res://assets/sprites/skills/lesson_01_step_2.png",
+          "story_prefix": "Mẹ trao cho Mèo con chiếc hộp thuốc nhỏ và dặn: 'Lên phố sống một mình, ốm đau con phải tự lo. Con hãy dán nhãn Paracetamol là ",
+          "story_middle": " và Berberin là ",
+          "story_suffix": " nhé!'",
+          "text_template": "Mẹ trao cho Mèo con chiếc hộp thuốc nhỏ và dặn: 'Lên phố sống một mình, ốm đau con phải tự lo. Con hãy dán nhãn Paracetamol là {blank_2} và Berberin là {blank_3} nhé!'",
+          "blanks": [
+            {
+              "blank_id": "blank_2",
+              "placeholder": "..... [ Ô TRỐNG 2: Nhãn Paracetamol ] .....",
+              "correct_card_id": "card_para"
+            },
+            {
+              "blank_id": "blank_3",
+              "placeholder": "..... [ Ô TRỐNG 3: Nhãn Berberin ] .....",
+              "correct_card_id": "card_berberin"
+            }
+          ],
+          "cards": [
+            {
+              "id": "card_para",
+              "cat_sound": "Meo-fever!",
+              "label": "Hạ sốt, giảm đau (Uống cách 4-6h)",
+              "icon": "💊",
+              "is_correct": true,
+              "target_blank": "blank_2"
+            },
+            {
+              "id": "card_berberin",
+              "cat_sound": "Meo-tummy!",
+              "label": "Đau bụng, tiêu hóa (Uống nước ấm)",
+              "icon": "🌿",
+              "is_correct": true,
+              "target_blank": "blank_3"
+            },
+            {
+              "id": "card_sleep",
+              "cat_sound": "Meo-sleep!",
+              "label": "Uống bừa thuốc khi đói bụng",
+              "icon": "😵",
+              "is_correct": false,
+              "fail_hint": "Uống thuốc bừa bãi khi đói bụng sẽ hại dạ dày và gan của con đấy!"
+            }
+          ],
+          "correct_meow": "Méo-label!",
+          "success_prompt": "Méo-label! Tuyệt vời! Mẹ xoa đầu khen ngợi: 'Nhớ uống đúng liều lượng Mẹ dặn dò nhé con yêu!' 🌟",
+          "cat_reaction_correct": "Méo-label! Con đã dán nhãn xong hộp thuốc và nhớ lời Mẹ rồi ạ!"
+        },
+        {
+          "step_index": 3,
+          "step_title": "Bước 3: Khóa Vali Tự Tin Lên Đường",
+          "illustration": "res://assets/sprites/skills/lesson_01_step_4.png",
+          "story_prefix": "Hành trang đã tươm tất, Mèo con kéo khóa vali cái tách. Mẹ mỉm cười ôm Mèo và dặn con hãy ",
+          "story_suffix": " trên chặng đường mới.",
+          "text_template": "Hành trang đã tươm tất, Mèo con kéo khóa vali cái tách. Mẹ mỉm cười ôm Mèo và dặn con hãy {blank_4} trên chặng đường mới.",
+          "blanks": [
+            {
+              "blank_id": "blank_4",
+              "placeholder": "..... [ Ô TRỐNG 4: Lời dặn yêu thương ] .....",
+              "correct_card_id": "card_ready"
+            }
+          ],
+          "cards": [
+            {
+              "id": "card_ready",
+              "cat_sound": "Meow-love!",
+              "label": "Tự lập, chăm sóc tốt bản thân",
+              "icon": "❤️",
+              "is_correct": true
+            },
+            {
+              "id": "card_skip_food",
+              "cat_sound": "Meo-skip!",
+              "label": "Thức đêm cày game nhịn ăn",
+              "icon": "🎮",
+              "is_correct": false,
+              "fail_hint": "Mẹ xót lắm! Lên đại học phải ăn ngủ điều độ bảo vệ sức khỏe con nhé!"
+            }
+          ],
+          "correct_meow": "Meow-ready!",
+          "success_prompt": "🎉 Meow-ready! Mẹ ôm chặt chúc con thượng lộ bình an, tự tin bước vào giảng đường Đại học! ✨",
+          "cat_reaction_correct": "Méo meo! Cảm ơn Mẹ yêu! Con sẵn sàng rồi!"
+        }
+      ]
+    },
+    {
+      "story_id": "story_commute_bus_01",
+      "lesson_id": 2,
+      "title": "Chuyến Xe Buýt Đầu Tiên Của Mèo",
+      "context": "Mèo con rời quê lên thành phố nhập học, tự mình chinh phục chuyến xe buýt số 08 đến trường Đại học.",
+      "achievement": "Thổ Địa Tuyến 08",
+      "reward_fish": 25,
+      "reward_exp": 40,
+      "handbook_tip": "Luôn mở ứng dụng BusMap định vị lộ trình, chuẩn bị sẵn tiền lẻ 5.000đ cửa trước và ôm chặt ba lô trước ngực để tự tin đến trường!",
+      "steps": [
+        {
+          "step_index": 1,
+          "step_title": "Bước 1: Tìm Đường Ra Trạm",
+          "illustration": "res://assets/sprites/skills/story_bus_step_1.png",
+          "story_prefix": "Sáng nay là ngày đầu tiên Mèo con đến trường Đại học, nhưng đường xa quá Mèo chẳng biết đi bằng cách nào. Đứng ngơ ngác giữa ngã ba đường, Mèo con cần phải ",
+          "story_suffix": " để biết mình nên đi tuyến xe số mấy.",
+          "text_template": "Sáng nay là ngày đầu tiên Mèo con đến trường Đại học, nhưng đường xa quá Mèo chẳng biết đi bằng cách nào. Đứng ngơ ngác giữa ngã ba đường, Mèo con cần phải {blank_1} để biết mình nên đi tuyến xe số mấy.",
+          "blanks": [
+            {
+              "blank_id": "blank_1",
+              "placeholder": "..... [ Ô TRỐNG 1: Chọn cách tìm đường ] .....",
+              "correct_card_id": "card_busmap"
+            }
+          ],
+          "cards": [
+            {
+              "id": "card_busmap",
+              "cat_sound": "Meo-map?",
+              "label": "Tra cứu ứng dụng BusMap",
+              "icon": "📱",
+              "is_correct": true,
+              "desc": "Bật GPS và tìm tuyến xe buýt gần nhất"
+            },
+            {
+              "id": "card_cry",
+              "cat_sound": "Meo-cry!",
+              "label": "Ngồi bệt xuống đường khóc",
+              "icon": "😭",
+              "is_correct": false,
+              "fail_hint": "Khóc hông giải quyết được gì đâu Sen ơi, mở điện thoại tra BusMap tìm tuyến xe nào!"
+            },
+            {
+              "id": "card_run",
+              "cat_sound": "Meo-run!",
+              "label": "Cắm đầu chạy bộ 15 cây số",
+              "icon": "🏃",
+              "is_correct": false,
+              "fail_hint": "Chạy bộ 15km tới trường là xỉu ngang rụng lông luôn đó Sen! Tra BusMap đi xe buýt nha!"
+            }
+          ],
+          "correct_meow": "Méo-tick!",
+          "success_prompt": "Méo-tick! Tuyệt vời! Trên màn hình hiện mũi tên dẫn đường đến trạm xe buýt số 08 chỉ cách 200m! Chuyển sang Bước 2 nào! 🐾",
+          "cat_reaction_correct": "Méo-tick! Đã tìm thấy trạm đón xe buýt số 08 rồi nè Sen ơi!"
+        },
+        {
+          "step_index": 2,
+          "step_title": "Bước 2: Vẫy Xe Và Lên Cửa Trước",
+          "illustration": "res://assets/sprites/skills/story_bus_step_2.png",
+          "story_prefix": "Xác định được trạm dừng rồi, Mèo con hí hửng đứng đợi. Thấy chiếc xe buýt số 08 từ xa trờ tới cách 50 mét, Mèo con liền ",
+          "story_middle": ". Khi cửa trước vừa mở ra, Mèo bước lên và ",
+          "story_suffix": ".",
+          "text_template": "Xác định được trạm dừng rồi, Mèo con hí hửng đứng đợi. Thấy chiếc xe buýt số 08 từ xa trờ tới cách 50 mét, Mèo con liền {blank_2}. Khi cửa trước vừa mở ra, Mèo bước lên và {blank_3}.",
+          "blanks": [
+            {
+              "blank_id": "blank_2",
+              "placeholder": "..... [ Ô TRỐNG 2: Vẫy xe ] .....",
+              "correct_card_id": "card_wave"
+            },
+            {
+              "blank_id": "blank_3",
+              "placeholder": "..... [ Ô TRỐNG 3: Chuẩn bị tiền ] .....",
+              "correct_card_id": "card_cash"
+            }
+          ],
+          "cards": [
+            {
+              "id": "card_wave",
+              "cat_sound": "Meo-o?",
+              "label": "Đứng đúng trạm, giơ tay vẫy dứt khoát",
+              "icon": "✋",
+              "is_correct": true,
+              "target_blank": "blank_2"
+            },
+            {
+              "id": "card_cash",
+              "cat_sound": "Méo meo!",
+              "label": "Cầm sẵn 5.000đ tiền lẻ trên tay",
+              "icon": "💵",
+              "is_correct": true,
+              "target_blank": "blank_3"
+            },
+            {
+              "id": "card_hide",
+              "cat_sound": "Meo-hide!",
+              "label": "Núp sau cột biển báo trốn bác tài",
+              "icon": "🙈",
+              "is_correct": false,
+              "fail_hint": "Núp sau cột biển báo thì bác tài tưởng trạm trống nên xe buýt phóng vèo qua mất tiêu!"
+            },
+            {
+              "id": "card_card500",
+              "cat_sound": "Meo-card!",
+              "label": "Đưa tờ 500.000đ bắt bác phụ xe thối",
+              "icon": "💳",
+              "is_correct": false,
+              "fail_hint": "Sáng sớm đưa tờ 500k bị bác phụ xe càu nhàu vì không có tiền lẻ thối đấy Sen ơi!"
+            }
+          ],
+          "correct_meow": "Purr-pass!",
+          "success_prompt": "Purr-purr! Mèo con bước lên xe an toàn, bác phụ xe mỉm cười xoa đầu xé vé cho Mèo! Chuyển sang Bước 3 nào! ✨",
+          "cat_reaction_correct": "Meooo~! Lên xe thành công rồi, bác tài xoa đầu khen Boss ngoan nữa nè!"
+        },
+        {
+          "step_index": 3,
+          "step_title": "Bước 3: Giữ An Toàn Và Xuống Trạm",
+          "illustration": "res://assets/sprites/skills/story_bus_step_3.png",
+          "story_prefix": "Bước vào khoang xe đông đúc, Mèo tìm được một chỗ đứng vững chãi và cẩn thận ",
+          "story_middle": " để tránh kẻ gian móc túi. Khi loa thông báo còn cách cổng trường 100m, Mèo con nhanh tay ",
+          "story_suffix": " để báo hiệu cho bác tài tấp lề.",
+          "text_template": "Bước vào khoang xe đông đúc, Mèo tìm được một chỗ đứng vững chãi và cẩn thận {blank_4} để tránh kẻ gian móc túi. Khi loa thông báo còn cách cổng trường 100m, Mèo con nhanh tay {blank_5} để báo hiệu cho bác tài tấp lề.",
+          "blanks": [
+            {
+              "blank_id": "blank_4",
+              "placeholder": "..... [ Ô TRỐNG 4: Bảo vệ đồ đạc ] .....",
+              "correct_card_id": "card_backpack"
+            },
+            {
+              "blank_id": "blank_5",
+              "placeholder": "..... [ Ô TRỐNG 5: Báo dừng trạm ] .....",
+              "correct_card_id": "card_bell"
+            }
+          ],
+          "cards": [
+            {
+              "id": "card_backpack",
+              "cat_sound": "Meo-wrr...",
+              "label": "Ôm chặt ba lô trước ngực",
+              "icon": "🎒",
+              "is_correct": true,
+              "target_blank": "blank_4"
+            },
+            {
+              "id": "card_bell",
+              "cat_sound": "Meoo!!",
+              "label": "Bấm nút chuông đỏ trên cột",
+              "icon": "🔔",
+              "is_correct": true,
+              "target_blank": "blank_5"
+            },
+            {
+              "id": "card_jump",
+              "cat_sound": "Meo-jump!",
+              "label": "Nhảy qua cửa sổ xe đang chạy",
+              "icon": "🪟",
+              "is_correct": false,
+              "fail_hint": "Nguy hiểm quá Sen ơi! Xe đang chạy nhảy cửa sổ là chấn thương đó, bấm chuông đỏ trên cột nào!"
+            }
+          ],
+          "correct_meow": "Meoo-keng!",
+          "success_prompt": "KENG KENG! Xe dừng êm ái trước cổng trường! Mèo con bước xuống xe ngẩng cao đầu tự tin!",
+          "cat_reaction_correct": "Keng keng! Tới trường an toàn 100%, Boss Mèo đã thành Thổ Địa Tuyến 08 rồi!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8p2v0qy3k76n"]
+
+[ext_resource type="Script" path="res://scripts/LessonView.gd" id="1_lesson"]
+
+[node name="LessonView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lesson")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.985, 0.97, 0.945, 1)
+
+[node name="Header" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 36.0
+offset_bottom = 128.0
+grow_horizontal = 2
+
+[node name="BtnBack" type="Button" parent="Header"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 6.0
+offset_right = 84.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 12
+text = " Thoát"
+
+[node name="BtnAchievements" type="Button" parent="Header"]
+layout_mode = 0
+offset_left = 78.0
+offset_top = 6.0
+offset_right = 168.0
+offset_bottom = 40.0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 11
+text = "🏆 Bảng Vàng"
+
+[node name="BtnStoryMode" type="Button" parent="Header"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -366.0
+offset_top = 6.0
+offset_right = -268.0
+offset_bottom = 40.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 11
+text = "📜 Chuyện Kể"
+
+[node name="BtnSwitchToMinigame" type="Button" parent="Header"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -262.0
+offset_top = 6.0
+offset_right = -154.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "🎮 Mini-game"
+
+[node name="BtnGuide" type="Button" parent="Header"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -148.0
+offset_top = 6.0
+offset_right = -16.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.75, 0.32, 0.1, 1)
+theme_override_font_sizes/font_size = 12
+text = "📖 Sổ Tay Bỏ Túi"
+
+[node name="TitleLabel" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 46.0
+offset_right = -16.0
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.24, 0.16, 0.1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Bài 1: Bắt Xe Buýt Liên Quận"
+horizontal_alignment = 1
+
+[node name="ContextLabel" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 68.0
+offset_right = -20.0
+offset_bottom = 98.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.5, 0.38, 0.28, 1)
+theme_override_font_sizes/font_size = 11
+text = "Mèo đứng trước trạm xe buýt ngơ ngác, Sen hãy chỉ bảo Mèo nào!"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="CatSection" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 134.0
+offset_right = -16.0
+offset_bottom = 204.0
+grow_horizontal = 2
+
+[node name="CatBubbleLabel" type="Label" parent="CatSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.2, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "Meo meo! Kéo thẻ từ ngữ bên dưới thả vào đúng bức hình tương ứng nhé Sen! 🐾"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="SlotsSection" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 196.0
+offset_right = -16.0
+offset_bottom = 368.0
+grow_horizontal = 2
+
+[node name="SlotsTitle" type="Label" parent="SlotsSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.3, 0.2, 1)
+theme_override_font_sizes/font_size = 12
+text = "🎯 HÀNH TRÌNH TÌNH HUỐNG (Kéo thẻ hành động vào từng chặng):"
+
+[node name="SlotsContainer" type="HBoxContainer" parent="SlotsSection"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="CardsSection" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 384.0
+offset_right = -16.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CardsTitle" type="Label" parent="CardsSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.3, 0.2, 1)
+theme_override_font_sizes/font_size = 12
+text = "🐾 KHO THẺ HÀNH ĐỘNG (Kéo thẻ thả vào hình hoặc chạm để đặt):"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CardsSection"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="CardsPoolContainer" type="VBoxContainer" parent="CardsSection/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ActionFooter" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -95.0
+offset_right = -20.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="BtnReset" type="Button" parent="ActionFooter"]
+custom_minimum_size = Vector2(100, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "🔄 Xếp Lại"
+
+[node name="BtnSubmit" type="Button" parent="ActionFooter"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "🚀 Xong rồi, đi đi Boss!"
+
+[node name="MiniGameHost" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GuideModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="GuideModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+
+[node name="ModalPanel" type="PanelContainer" parent="GuideModal"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -250.0
+offset_right = 230.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ModalVBox" type="VBoxContainer" parent="GuideModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="GuideHeader" type="Label" parent="GuideModal/ModalPanel/ModalVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.42, 0.12, 1)
+theme_override_font_sizes/font_size = 16
+text = "📖 SỔ TAY BỎ TÚI CỦA SINH VIÊN"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GuideModal/ModalPanel/ModalVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GuideContent" type="Label" parent="GuideModal/ModalPanel/ModalVBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 2
+
+[node name="BtnCloseGuide" type="Button" parent="GuideModal/ModalPanel/ModalVBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "✔ Đã Nhớ Rõ, Dạy Boss Tiếp Nào!"

@@ -1,0 +1,35 @@
+# Godot 4+ local cache & editor files
+.godot/
+*.translation
+
+# Godot Mono / C#
+.mono/
+data_*/
+mono_crash.*.json
+
+# Exported builds
+builds/
+*.apk
+*.aab
+*.ipa
+*.pck
+*.wasm
+
+# Large Hugging Face raw dataset dump (exceeds GitHub 100 MB file limit; unused at runtime)
+assets/pixelart/
+
+# Node dependencies
+node_modules/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*~
+.vscode/
+.idea/

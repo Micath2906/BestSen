@@ -1,0 +1,135 @@
+[gd_scene load_steps=6 format=3 uid="uid://dpovj8c5234kn"]
+
+[ext_resource type="Script" path="res://scripts/Main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://c67thudcat01" path="res://scenes/CatProfileHUD.tscn" id="2_hud"]
+[ext_resource type="PackedScene" uid="uid://btmpaw001m" path="res://scenes/BottomPawMenu.tscn" id="3_dock"]
+[ext_resource type="PackedScene" uid="uid://avapick001m" path="res://scenes/AvatarPickerModal.tscn" id="4_modal"]
+[ext_resource type="PackedScene" uid="uid://statusalertmodal001" path="res://scenes/StatusAlertModal.tscn" id="5_alert"]
+[ext_resource type="PackedScene" uid="uid://pausemodal001" path="res://scenes/PauseModal.tscn" id="6_pause"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_toast"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.2, 0.15, 0.1, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9, 0.7, 0.4, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_handbook_btn"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.965, 0.92, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.85, 0.32, 0.22, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="ToastTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ViewsContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CatProfileHUD" parent="." instance=ExtResource("2_hud")]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 4.0
+offset_bottom = 150.0
+grow_horizontal = 2
+
+[node name="BtnHandbookQuick" type="Button" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 16.0
+offset_top = 126.0
+offset_right = 188.0
+offset_bottom = 162.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.85, 0.25, 0.15, 1)
+theme_override_colors/font_hover_color = Color(1, 0.2, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.65, 0.15, 0.1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_handbook_btn")
+text = "CẨM NANG CỨU SEN"
+
+[node name="BottomPawMenu" parent="." instance=ExtResource("3_dock")]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -74.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="AvatarPickerModal" parent="." instance=ExtResource("4_modal")]
+visible = false
+layout_mode = 1
+
+[node name="StatusAlertModal" parent="." instance=ExtResource("5_alert")]
+visible = false
+layout_mode = 1
+
+[node name="PauseModal" parent="." instance=ExtResource("6_pause")]
+visible = false
+layout_mode = 1
+
+[node name="ToastPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -25.0
+offset_right = 220.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_toast")
+
+[node name="ToastLabel" type="Label" parent="ToastPanel"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "Thông báo hệ thống..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2

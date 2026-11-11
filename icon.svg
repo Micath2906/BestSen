@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9F43"/>
+      <stop offset="100%" stop-color="#FF5252"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- App Rounded Rect Background -->
+  <rect x="24" y="24" width="464" height="464" rx="100" fill="url(#bgGrad)" filter="url(#shadow)"/>
+
+  <!-- Cat Ears -->
+  <polygon points="130,220 180,90 240,190" fill="#FFF5EB"/>
+  <polygon points="150,205 180,120 220,185" fill="#FFB8B8"/>
+
+  <polygon points="382,220 332,90 272,190" fill="#FFF5EB"/>
+  <polygon points="362,205 332,120 292,185" fill="#FFB8B8"/>
+
+  <!-- Cat Face Circle -->
+  <circle cx="256" cy="270" r="140" fill="#FFF5EB" filter="url(#shadow)"/>
+
+  <!-- Eyes -->
+  <circle cx="205" cy="255" r="18" fill="#2D3436"/>
+  <circle cx="199" cy="249" r="6" fill="#FFFFFF"/>
+
+  <circle cx="307" cy="255" r="18" fill="#2D3436"/>
+  <circle cx="301" cy="249" r="6" fill="#FFFFFF"/>
+
+  <!-- Blush Cheeks -->
+  <ellipse cx="175" cy="285" rx="18" ry="12" fill="#FFB8B8" opacity="0.8"/>
+  <ellipse cx="337" cy="285" rx="18" ry="12" fill="#FFB8B8" opacity="0.8"/>
+
+  <!-- Cat Nose and Mouth -->
+  <polygon points="256,275 246,263 266,263" fill="#FF7675"/>
+  <path d="M 256,275 Q 244,295 232,290" fill="none" stroke="#2D3436" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 256,275 Q 268,295 280,290" fill="none" stroke="#2D3436" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Graduation Cap / Student Cap (Kỹ Năng Sống / Tự Lập) -->
+  <polygon points="256,95 160,135 256,175 352,135" fill="#2C3E50"/>
+  <polygon points="256,175 220,190 220,215 292,215 292,190" fill="#1A252F"/>
+  <line x1="330" y1="145" x2="330" y2="210" stroke="#F1C40F" stroke-width="5"/>
+  <circle cx="330" cy="214" r="8" fill="#F39C12"/>
+
+  <!-- Backpack Strap -->
+  <path d="M 170,370 Q 256,410 342,370" fill="none" stroke="#2ECC71" stroke-width="20" stroke-linecap="round"/>
+  <!-- Fish Badge on Chest -->
+  <ellipse cx="256" cy="390" rx="20" ry="12" fill="#F39C12"/>
+  <polygon points="274,390 286,380 286,400" fill="#E67E22"/>
+  <circle cx="248" cy="387" r="2.5" fill="#FFFFFF"/>
+</svg>

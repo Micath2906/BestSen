@@ -1,0 +1,577 @@
+[gd_scene load_steps=18 format=3 uid="uid://achvmdl001sen"]
+
+[ext_resource type="Script" path="res://scripts/AchievementModal.gd" id="1_achv"]
+[ext_resource type="StyleBox" path="res://assets/UI/CatUIPaid/slices/cozy_achievements/cork_board_stylebox.tres" id="2_cork_sb"]
+[ext_resource type="StyleBox" path="res://assets/UI/CatUIPaid/slices/cozy_achievements/parchment_scroll_stylebox.tres" id="3_scroll_sb"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_achievements/pin_tack_red.tres" id="4_pin_tex"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_achievements/ribbon_red_gold.tres" id="5_ribbon_tex"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/cozy_achievements/wax_seal_royal_gold.tres" id="6_seal_tex"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_close"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.93, 0.88, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.65, 0.48, 0.35, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat_badge"]
+content_margin_left = 12.0
+content_margin_top = 4.0
+content_margin_right = 12.0
+content_margin_bottom = 4.0
+bg_color = Color(0.98, 0.94, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.80, 0.62, 0.40, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_museum"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.95, 0.90, 0.82, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.75, 0.58, 0.38, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_footer_close"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.18, 0.55, 0.30, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.12, 0.40, 0.20, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cert_quote"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.97, 0.94, 0.87, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.82, 0.70, 0.52, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cert_reward"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.94, 0.98, 0.92, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.40, 0.78, 0.48, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_royal_close"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.85, 0.22, 0.18, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.60, 0.12, 0.10, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup_card"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.985, 0.965, 0.935, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.45, 0.32, 0.22, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup_box"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95, 0.92, 0.86, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.78, 0.7, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="AchievementModal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_achv")
+
+[node name="DimOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(490, 710)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_cork_sb")
+
+[node name="PinOverlay" type="Control" parent="CenterContainer/Panel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PinTopLeft" type="TextureRect" parent="CenterContainer/Panel/PinOverlay"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 28.0
+offset_bottom = 28.0
+mouse_filter = 2
+texture = ExtResource("4_pin_tex")
+stretch_mode = 3
+
+[node name="PinTopRight" type="TextureRect" parent="CenterContainer/Panel/PinOverlay"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -28.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = 28.0
+grow_horizontal = 0
+mouse_filter = 2
+texture = ExtResource("4_pin_tex")
+stretch_mode = 3
+
+[node name="PinBottomLeft" type="TextureRect" parent="CenterContainer/Panel/PinOverlay"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -28.0
+offset_right = 28.0
+offset_bottom = -6.0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("4_pin_tex")
+stretch_mode = 3
+
+[node name="PinBottomRight" type="TextureRect" parent="CenterContainer/Panel/PinOverlay"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -28.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("4_pin_tex")
+stretch_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleBox" type="VBoxContainer" parent="CenterContainer/Panel/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="CenterContainer/Panel/VBox/Header/TitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.16, 0.08, 1)
+theme_override_font_sizes/font_size = 15
+text = "📌 BẢNG GHIM THÀNH TỰU PHÒNG TRỌ"
+
+[node name="SubTitle" type="Label" parent="CenterContainer/Panel/VBox/Header/TitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.36, 0.25, 1)
+theme_override_font_sizes/font_size = 10
+text = "Ghép 16 mảnh ảnh polaroid để rước Bằng Khen Hoàng Gia Sen & Boss!"
+
+[node name="BtnClose" type="Button" parent="CenterContainer/Panel/VBox/Header"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.4, 0.28, 0.18, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_close")
+text = "✖"
+
+[node name="StatsBar" type="HBoxContainer" parent="CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="PiecesBadge" type="PanelContainer" parent="CenterContainer/Panel/VBox/StatsBar"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_badge")
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/VBox/StatsBar/PiecesBadge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.38, 0.08, 1)
+theme_override_font_sizes/font_size = 11
+text = "🧩 Mảnh Ghép: 0/16"
+
+[node name="CertsBadge" type="PanelContainer" parent="CenterContainer/Panel/VBox/StatsBar"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_badge")
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/VBox/StatsBar/CertsBadge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.52, 0.22, 1)
+theme_override_font_sizes/font_size = 11
+text = "📜 Bằng Khen: 0/4"
+
+[node name="Scroll" type="ScrollContainer" parent="CenterContainer/Panel/VBox"]
+custom_minimum_size = Vector2(0, 480)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PuzzleContainer" type="VBoxContainer" parent="CenterContainer/Panel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Footer" type="HBoxContainer" parent="CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="BtnGoMuseum" type="Button" parent="CenterContainer/Panel/VBox/Footer"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_museum")
+text = "🏛️ Ghé Thăm Bảo Tàng Toàn Cảnh ➔"
+
+[node name="BtnCloseFooter" type="Button" parent="CenterContainer/Panel/VBox/Footer"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_footer_close")
+text = "Đóng"
+
+[node name="CertPopup" type="Control" parent="."]
+visible = false
+z_index = 80
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimOverlay" type="ColorRect" parent="CertPopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="Panel" type="PanelContainer" parent="CertPopup"]
+custom_minimum_size = Vector2(430, 520)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -260.0
+offset_right = 215.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(215, 260)
+theme_override_styles/panel = ExtResource("3_scroll_sb")
+
+[node name="VBox" type="VBoxContainer" parent="CertPopup/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="SealCenterBox" type="CenterContainer" parent="CertPopup/Panel/VBox"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+
+[node name="SealStack" type="Control" parent="CertPopup/Panel/VBox/SealCenterBox"]
+custom_minimum_size = Vector2(70, 56)
+layout_mode = 2
+
+[node name="Ribbon" type="TextureRect" parent="CertPopup/Panel/VBox/SealCenterBox/SealStack"]
+custom_minimum_size = Vector2(68, 34)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = -8.0
+offset_right = 34.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_ribbon_tex")
+stretch_mode = 3
+
+[node name="WaxSeal" type="TextureRect" parent="CertPopup/Panel/VBox/SealCenterBox/SealStack"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_seal_tex")
+stretch_mode = 3
+
+[node name="HeaderBadge" type="Label" parent="CertPopup/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.48, 0.10, 1)
+theme_override_font_sizes/font_size = 11
+text = "👑 HIỆP HỘI SEN & BOSS HOÀNG GIA 👑"
+horizontal_alignment = 1
+
+[node name="CertTitle" type="Label" parent="CertPopup/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.35, 0.08, 1)
+theme_override_font_sizes/font_size = 15
+text = "CHỨNG NHẬN THỔ ĐỊA THÀNH PHỐ"
+horizontal_alignment = 1
+
+[node name="CertRank" type="Label" parent="CertPopup/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.42, 0.05, 1)
+theme_override_font_sizes/font_size = 12
+text = "🌟 HẠNG THỦ KHOA ĐƯỜNG PHỐ 🌟"
+horizontal_alignment = 1
+
+[node name="RecipientLabel" type="Label" parent="CertPopup/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+text = "Kính tặng: Sen & Boss Mèo"
+horizontal_alignment = 1
+
+[node name="QuoteBox" type="PanelContainer" parent="CertPopup/Panel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cert_quote")
+
+[node name="QuoteLabel" type="Label" parent="CertPopup/Panel/VBox/QuoteBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38, 0.28, 0.18, 1)
+theme_override_font_sizes/font_size = 10
+text = "“Sen và Boss đã nắm lòng từng cung đường. Tự tin đi học, đi làm không sợ lạc!”"
+autowrap_mode = 2
+
+[node name="RewardBox" type="PanelContainer" parent="CertPopup/Panel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cert_reward")
+
+[node name="VBox" type="VBoxContainer" parent="CertPopup/Panel/VBox/RewardBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="RewardTitle" type="Label" parent="CertPopup/Panel/VBox/RewardBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.52, 0.22, 1)
+theme_override_font_sizes/font_size = 10
+text = "🎁 Phần Thưởng Hoàng Gia Đã Nhận:"
+
+[node name="RewardLabel" type="Label" parent="CertPopup/Panel/VBox/RewardBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.42, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+text = "+50.000đ & Mũ Phượt Thủ Sinh Viên 🧢"
+
+[node name="BtnCloseCert" type="Button" parent="CertPopup/Panel/VBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_royal_close")
+text = "TIẾP TỤC HỌC TẬP 🐾"
+
+[node name="PiecePopup" type="Control" parent="."]
+visible = false
+z_index = 85
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimOverlay" type="ColorRect" parent="PiecePopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Panel" type="PanelContainer" parent="PiecePopup"]
+custom_minimum_size = Vector2(360, 240)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -120.0
+offset_right = 180.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_popup_card")
+
+[node name="VBox" type="VBoxContainer" parent="PiecePopup/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="IconBox" type="CenterContainer" parent="PiecePopup/Panel/VBox"]
+layout_mode = 2
+
+[node name="IconLabel" type="Label" parent="PiecePopup/Panel/VBox/IconBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "🎟️"
+
+[node name="TitleLabel" type="Label" parent="PiecePopup/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 13
+text = "Cuống Vé Buýt 08"
+horizontal_alignment = 1
+
+[node name="DescBox" type="PanelContainer" parent="PiecePopup/Panel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_popup_box")
+
+[node name="DescLabel" type="Label" parent="PiecePopup/Panel/VBox/DescBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.22, 1)
+theme_override_font_sizes/font_size = 11
+text = "Mô tả mảnh ghép chiến lợi phẩm"
+autowrap_mode = 2
+
+[node name="StatusLabel" type="Label" parent="PiecePopup/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.65, 0.25, 1)
+theme_override_font_sizes/font_size = 10
+text = "✔ Mảnh ghép đã thu thập khi hoàn thành Bài 1!"
+horizontal_alignment = 1
+
+[node name="BtnClosePiece" type="Button" parent="PiecePopup/Panel/VBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.22, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_close")
+text = "Đã Hiểu"

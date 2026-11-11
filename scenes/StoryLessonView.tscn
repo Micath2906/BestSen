@@ -1,0 +1,344 @@
+[gd_scene load_steps=2 format=3 uid="uid://df2348572094"]
+
+[ext_resource type="Script" path="res://scripts/StoryLessonView.gd" id="1_story"]
+
+[node name="StoryLessonView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_story")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.985, 0.97, 0.945, 1)
+
+[node name="Header" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 28.0
+offset_bottom = 118.0
+grow_horizontal = 2
+
+[node name="BtnBack" type="Button" parent="Header"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 6.0
+offset_right = 76.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 13
+text = " Thoát"
+
+[node name="BtnMatchingMode" type="Button" parent="Header"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -312.0
+offset_top = 6.0
+offset_right = -178.0
+offset_bottom = 40.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 12
+text = "🎯 Khung Tranh"
+
+[node name="BtnGuide" type="Button" parent="Header"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -170.0
+offset_top = 6.0
+offset_right = -16.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.75, 0.32, 0.1, 1)
+theme_override_font_sizes/font_size = 13
+text = "📖 Cẩm Nang Cứu Sen"
+
+[node name="TitleLabel" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 44.0
+offset_right = -16.0
+offset_bottom = 68.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.24, 0.16, 0.1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Chuyến Xe Buýt Đầu Tiên Của Mèo"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 64.0
+offset_right = -20.0
+offset_bottom = 82.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.15, 1)
+theme_override_font_sizes/font_size = 12
+text = "Bước 1: Tìm Đường Ra Trạm"
+horizontal_alignment = 1
+
+[node name="ProgressDotsContainer" type="HBoxContainer" parent="Header"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 88.0
+offset_bottom = 106.0
+grow_horizontal = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="IllustrationSection" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 114.0
+offset_right = -16.0
+offset_bottom = 310.0
+grow_horizontal = 2
+
+[node name="IllustrationTexture" type="TextureRect" parent="IllustrationSection"]
+texture_filter = 1
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StepBadge" type="PanelContainer" parent="IllustrationSection"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="IllustrationSection/StepBadge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+text = "Chặng 1/3"
+
+[node name="CatSection" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 318.0
+offset_right = -16.0
+offset_bottom = 372.0
+grow_horizontal = 2
+
+[node name="CatBubbleLabel" type="Label" parent="CatSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.2, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "Meo meo! Đọc câu chuyện bên dưới và kéo thẻ hành động đúng thả vào ô trống nhé Sen! 🐾"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="StorySection" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 378.0
+offset_right = -16.0
+offset_bottom = 566.0
+grow_horizontal = 2
+theme_override_constants/separation = 4
+
+[node name="StoryTitle" type="Label" parent="StorySection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.3, 0.2, 1)
+theme_override_font_sizes/font_size = 12
+text = "📜 TRANG TRUYỆN PHIÊU LƯU (Điền vào ô trống):"
+
+[node name="StoryPanel" type="PanelContainer" parent="StorySection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="StorySection/StoryPanel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="StoryFlowContainer" type="HFlowContainer" parent="StorySection/StoryPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="CardsSection" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 574.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="CardsTitle" type="Label" parent="CardsSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.3, 0.2, 1)
+theme_override_font_sizes/font_size = 12
+text = "🐾 KHAY THẺ HÀNH ĐỘNG (Kéo thả hoặc chạm thẻ để điền ô trống):"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CardsSection"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="CardsPoolContainer" type="VBoxContainer" parent="CardsSection/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="GuideModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="GuideModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="ModalPanel" type="PanelContainer" parent="GuideModal"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -180.0
+offset_right = 160.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ModalVBox" type="VBoxContainer" parent="GuideModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ModalTitle" type="Label" parent="GuideModal/ModalPanel/ModalVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.32, 0.1, 1)
+theme_override_font_sizes/font_size = 14
+text = "📖 CẨM NANG CỨU SEN"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GuideModal/ModalPanel/ModalVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GuideContent" type="Label" parent="GuideModal/ModalPanel/ModalVBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 2
+
+[node name="BtnCloseGuide" type="Button" parent="GuideModal/ModalPanel/ModalVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Đã Hiểu, Quay Lại Truyện!"
+
+[node name="VictoryModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="VictoryModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Panel" type="PanelContainer" parent="VictoryModal"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -170.0
+offset_right = 160.0
+offset_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="VictoryModal/Panel"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="VictoryModal/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.4, 0.1, 1)
+theme_override_font_sizes/font_size = 14
+text = "🎉 CHÚC MỪNG HOÀN THÀNH CHUYẾN ĐI! 🎉"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BadgeLabel" type="Label" parent="VictoryModal/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.65, 0.15, 1)
+theme_override_font_sizes/font_size = 13
+text = "🏆 Danh Hiệu Mới: Thổ Địa Tuyến 08"
+horizontal_alignment = 1
+
+[node name="RewardsLabel" type="Label" parent="VictoryModal/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.65, 0.35, 1)
+theme_override_font_sizes/font_size = 12
+text = "🎁 Phần Thưởng: +25 Cá Khô 🐟  •  +40 EXP 🌟"
+horizontal_alignment = 1
+
+[node name="SummaryLabel" type="Label" parent="VictoryModal/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.22, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Mèo con đã hoàn thành chuyến xe buýt đầu tiên an toàn và tự tin!"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BtnVictoryClose" type="Button" parent="VictoryModal/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "🌟 Thu Nhận Phần Thưởng & Trở Về"

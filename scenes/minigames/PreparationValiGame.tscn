@@ -1,0 +1,563 @@
+[gd_scene load_steps=12 format=3 uid="uid://prepvaligame001"]
+
+[ext_resource type="Script" path="res://scripts/minigames/PreparationValiGame.gd" id="1_prep"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.965, 0.945, 0.91, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_btn"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.78, 0.7, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.99, 0.96, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.92, 0.78, 0.62, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.05)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.99, 0.97, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.88, 0.78, 0.66, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.04)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_action"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 14.0
+bg_color = Color(0.95, 0.55, 0.12, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.78, 0.38, 0.08, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.95, 0.55, 0.12, 0.3)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_finish"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 14.0
+bg_color = Color(0.25, 0.72, 0.42, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.15, 0.52, 0.28, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.25, 0.72, 0.42, 0.3)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 14.0
+bg_color = Color(0.92, 0.89, 0.84, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.80, 0.74, 0.66, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_overlay"]
+bg_color = Color(0, 0, 0, 0.55)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_panel"]
+content_margin_left = 20.0
+content_margin_top = 18.0
+content_margin_right = 20.0
+content_margin_bottom = 18.0
+bg_color = Color(1, 0.99, 0.96, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.88, 0.72, 0.52, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 12
+shadow_offset = Vector2(0, 4)
+
+[node name="PreparationValiGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_prep")
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="Header" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = -14.0
+offset_bottom = 54.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="BtnBack" type="Button" parent="Header"]
+custom_minimum_size = Vector2(76, 32)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = " Bản Đồ"
+
+[node name="TitleLabel" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.32, 0.2, 0.1, 1)
+theme_override_font_sizes/font_size = 13
+text = "🎒 LỜI DẶN DÒ CỦA MẸ"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnGuide" type="Button" parent="Header"]
+custom_minimum_size = Vector2(84, 32)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = "📖 Lời Dặn"
+
+[node name="PhaseBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 14.0
+offset_top = 58.0
+offset_right = -14.0
+offset_bottom = 90.0
+grow_horizontal = 2
+
+[node name="HBox" type="HBoxContainer" parent="PhaseBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Phase1Pill" type="Label" parent="PhaseBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Bước 1: Xếp Đồ Vào Vali"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Phase2Pill" type="Label" parent="PhaseBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Bước 2: Dán Nhãn Thuốc"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MascotSection" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 14.0
+offset_top = 96.0
+offset_right = -14.0
+offset_bottom = 170.0
+grow_horizontal = 2
+
+[node name="HBox" type="HBoxContainer" parent="MascotSection"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CatAnchor" type="Control" parent="MascotSection/HBox"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SpeechBubble" type="PanelContainer" parent="MascotSection/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="MotherSpeech" type="Label" parent="MascotSection/HBox/SpeechBubble"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.22, 0.14, 1)
+theme_override_font_sizes/font_size = 11
+text = "Con sắp xa nhà lên đại học rồi, hãy xếp các đồ đạc cần thiết vào đúng 4 ngăn trong vali nhé con!"
+autowrap_mode = 3
+
+[node name="ContentScroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 176.0
+offset_right = -14.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ContentScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Phase1Section" type="VBoxContainer" parent="ContentScroll/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="SuitcaseCard" type="PanelContainer" parent="ContentScroll/VBox/Phase1Section"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ContentScroll/VBox/Phase1Section/SuitcaseCard"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderHBox" type="HBoxContainer" parent="ContentScroll/VBox/Phase1Section/SuitcaseCard/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentScroll/VBox/Phase1Section/SuitcaseCard/VBox/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.32, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "🧳 CHIẾC VALI HÀNH TRANG (4 NGĂN):"
+
+[node name="ValiCountLabel" type="Label" parent="ContentScroll/VBox/Phase1Section/SuitcaseCard/VBox/HeaderHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "Đã xếp: 0/4 ngăn"
+
+[node name="SuitcaseGrid" type="GridContainer" parent="ContentScroll/VBox/Phase1Section/SuitcaseCard/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="ItemsPoolCard" type="PanelContainer" parent="ContentScroll/VBox/Phase1Section"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ContentScroll/VBox/Phase1Section/ItemsPoolCard"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PoolTitle" type="Label" parent="ContentScroll/VBox/Phase1Section/ItemsPoolCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "📦 KHAY ĐỒ VẬT CHUẨN BỊ (Kéo thả hoặc chạm để đặt):"
+
+[node name="ItemsGrid" type="GridContainer" parent="ContentScroll/VBox/Phase1Section/ItemsPoolCard/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="BtnGoPhase2" type="Button" parent="ContentScroll/VBox/Phase1Section"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.38, 0.28, 0.20, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_action")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+disabled = true
+text = "🎒 CẦN XẾP ĐỦ 4 NGĂN VALI (0/4)"
+
+[node name="Phase2Section" type="VBoxContainer" parent="ContentScroll/VBox"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="MedBoxCard" type="PanelContainer" parent="ContentScroll/VBox/Phase2Section"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ContentScroll/VBox/Phase2Section/MedBoxCard"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderHBox" type="HBoxContainer" parent="ContentScroll/VBox/Phase2Section/MedBoxCard/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentScroll/VBox/Phase2Section/MedBoxCard/VBox/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.32, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "💊 HỘP THUỐC CỦA MẸ (Điền khuyết nhãn công dụng):"
+
+[node name="MedCountLabel" type="Label" parent="ContentScroll/VBox/Phase2Section/MedBoxCard/VBox/HeaderHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "Đã dán nhãn: 0/5 loại"
+
+[node name="MedicinesList" type="VBoxContainer" parent="ContentScroll/VBox/Phase2Section/MedBoxCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LabelsPoolCard" type="PanelContainer" parent="ContentScroll/VBox/Phase2Section"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ContentScroll/VBox/Phase2Section/LabelsPoolCard"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PoolTitle" type="Label" parent="ContentScroll/VBox/Phase2Section/LabelsPoolCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "🏷️ KHAY NHÃN DÁN CÔNG DỤNG (Kéo hoặc chạm để dán):"
+
+[node name="LabelsHFlow" type="HFlowContainer" parent="ContentScroll/VBox/Phase2Section/LabelsPoolCard/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+
+[node name="BtnFinishGame" type="Button" parent="ContentScroll/VBox/Phase2Section"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.38, 0.28, 0.20, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_finish")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+disabled = true
+text = "🏷️ CẦN DÁN ĐỦ 5 NHÃN THUỐC (0/5)"
+
+[node name="GuideModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="Panel" parent="GuideModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_overlay")
+
+[node name="ModalPanel" type="PanelContainer" parent="GuideModal"]
+custom_minimum_size = Vector2(460, 480)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -240.0
+offset_right = 230.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="GuideModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="GuideModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 14
+text = "📖 CẨM NANG & LỜI DẶN CỦA MẸ"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="GuideModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GuideText" type="Label" parent="GuideModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.25, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 3
+
+[node name="BtnCloseGuide" type="Button" parent="GuideModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_action")
+text = "ĐÃ HIỂU LỜI MẸ DẶN"
+
+[node name="VictoryModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="Panel" parent="VictoryModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_overlay")
+
+[node name="ModalPanel" type="PanelContainer" parent="VictoryModal"]
+custom_minimum_size = Vector2(460, 420)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -210.0
+offset_right = 230.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="VictoryModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="Label" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.65, 0.3, 1)
+theme_override_font_sizes/font_size = 16
+text = "🎉 HÀNH TRANG ĐÃ SẴN SÀNG! 🎉"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DialogueLabel" type="Label" parent="VictoryModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.22, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 3
+
+[node name="RewardBox" type="PanelContainer" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="VictoryModal/ModalPanel/VBox/RewardBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Exp" type="Label" parent="VictoryModal/ModalPanel/VBox/RewardBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "⭐ +40 EXP"
+
+[node name="Fish" type="Label" parent="VictoryModal/ModalPanel/VBox/RewardBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.65, 0.3, 1)
+theme_override_font_sizes/font_size = 11
+text = "💵 +35.000đ"
+
+[node name="Loot" type="Label" parent="VictoryModal/ModalPanel/VBox/RewardBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.35, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "🎁 Túi Thuốc Của Mẹ"
+
+[node name="BtnClaimReward" type="Button" parent="VictoryModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_finish")
+text = "🚀 BƯỚC VÀO GIẢNG ĐƯỜNG ĐẠI HỌC (NHẬN THƯỞNG)"

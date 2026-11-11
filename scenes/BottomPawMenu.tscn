@@ -1,0 +1,479 @@
+[gd_scene load_steps=18 format=3 uid="uid://btmpaw001m"]
+
+[ext_resource type="Script" path="res://scripts/BottomPawMenu.gd" id="1_menu"]
+[ext_resource type="FontFile" path="res://assets/font/SVN-Retron 2000.ttf" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/dock_wood_shelf_9patch.tres" id="3_dock_bg"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/subdrawer_retro_wood_9patch.tres" id="4_drawer_bg"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/btn_dock_normal.tres" id="5_btn_norm"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/btn_dock_pressed.tres" id="6_btn_press"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/paw_indicator_selected.tres" id="7_paw_ind"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/icon_nav_home_24x24.tres" id="8_ic_home"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/icon_nav_food_24x24.tres" id="9_ic_food"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/icon_nav_play_24x24.tres" id="10_ic_play"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/icon_nav_learn_24x24.tres" id="11_ic_learn"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/icon_nav_handbook_24x24.tres" id="12_ic_hb"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/btn_drawer_close_normal.tres" id="13_close_norm"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/btn_drawer_close_pressed.tres" id="14_close_press"]
+
+[node name="BottomPawMenu" type="Control"]
+z_index = 35
+custom_minimum_size = Vector2(540, 74)
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -74.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_menu")
+
+[node name="SubDrawer" type="NinePatchRect" parent="."]
+texture_filter = 1
+visible = false
+z_index = 35
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -224.0
+offset_right = -12.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("4_drawer_bg")
+patch_margin_left = 14
+patch_margin_top = 14
+patch_margin_right = 14
+patch_margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="SubDrawer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = -14.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="SubDrawer/VBox"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="SubDrawer/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.28, 0.16, 0.08, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "🍲 GÓC ĂN UỐNG & CHĂM SÓC BOSS"
+
+[node name="BtnCloseDrawer" type="TextureButton" parent="SubDrawer/VBox/Header"]
+texture_filter = 1
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("13_close_norm")
+texture_pressed = ExtResource("14_close_press")
+stretch_mode = 3
+
+[node name="ContentGrid" type="GridContainer" parent="SubDrawer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 4
+
+[node name="DockPanel" type="NinePatchRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_dock_bg")
+patch_margin_left = 12
+patch_margin_top = 10
+patch_margin_right = 12
+patch_margin_bottom = 8
+
+[node name="HBox" type="HBoxContainer" parent="DockPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="BtnHome" type="TextureButton" parent="DockPanel/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="BtnBg" type="NinePatchRect" parent="DockPanel/HBox/BtnHome"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_btn_norm")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="PawIndicator" type="TextureRect" parent="DockPanel/HBox/BtnHome"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(14, 12)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = -6.0
+offset_right = 7.0
+offset_bottom = 6.0
+grow_horizontal = 2
+pivot_offset = Vector2(7, 6)
+mouse_filter = 2
+texture = ExtResource("7_paw_ind")
+stretch_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="DockPanel/HBox/BtnHome"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="DockPanel/HBox/BtnHome/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("8_ic_home")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="DockPanel/HBox/BtnHome/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.96, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.04, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "Phòng Trọ"
+horizontal_alignment = 1
+
+[node name="BtnFood" type="TextureButton" parent="DockPanel/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="BtnBg" type="NinePatchRect" parent="DockPanel/HBox/BtnFood"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_btn_norm")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="PawIndicator" type="TextureRect" parent="DockPanel/HBox/BtnFood"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(14, 12)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = -6.0
+offset_right = 7.0
+offset_bottom = 6.0
+grow_horizontal = 2
+pivot_offset = Vector2(7, 6)
+mouse_filter = 2
+texture = ExtResource("7_paw_ind")
+stretch_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="DockPanel/HBox/BtnFood"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="DockPanel/HBox/BtnFood/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("9_ic_food")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="DockPanel/HBox/BtnFood/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.96, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.04, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "Cho Ăn"
+horizontal_alignment = 1
+
+[node name="BtnPlay" type="TextureButton" parent="DockPanel/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="BtnBg" type="NinePatchRect" parent="DockPanel/HBox/BtnPlay"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_btn_norm")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="PawIndicator" type="TextureRect" parent="DockPanel/HBox/BtnPlay"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(14, 12)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = -6.0
+offset_right = 7.0
+offset_bottom = 6.0
+grow_horizontal = 2
+pivot_offset = Vector2(7, 6)
+mouse_filter = 2
+texture = ExtResource("7_paw_ind")
+stretch_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="DockPanel/HBox/BtnPlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="DockPanel/HBox/BtnPlay/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("10_ic_play")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="DockPanel/HBox/BtnPlay/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.96, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.04, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "Đồ Chơi"
+horizontal_alignment = 1
+
+[node name="BtnLearn" type="TextureButton" parent="DockPanel/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="BtnBg" type="NinePatchRect" parent="DockPanel/HBox/BtnLearn"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_btn_norm")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="PawIndicator" type="TextureRect" parent="DockPanel/HBox/BtnLearn"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(14, 12)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = -6.0
+offset_right = 7.0
+offset_bottom = 6.0
+grow_horizontal = 2
+pivot_offset = Vector2(7, 6)
+mouse_filter = 2
+texture = ExtResource("7_paw_ind")
+stretch_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="DockPanel/HBox/BtnLearn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="DockPanel/HBox/BtnLearn/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("11_ic_learn")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="DockPanel/HBox/BtnLearn/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.96, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.04, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "Học Kỹ Năng"
+horizontal_alignment = 1
+
+[node name="BtnHandbook" type="TextureButton" parent="DockPanel/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="BtnBg" type="NinePatchRect" parent="DockPanel/HBox/BtnHandbook"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_btn_norm")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="PawIndicator" type="TextureRect" parent="DockPanel/HBox/BtnHandbook"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(14, 12)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = -6.0
+offset_right = 7.0
+offset_bottom = 6.0
+grow_horizontal = 2
+pivot_offset = Vector2(7, 6)
+mouse_filter = 2
+texture = ExtResource("7_paw_ind")
+stretch_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="DockPanel/HBox/BtnHandbook"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="DockPanel/HBox/BtnHandbook/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("12_ic_hb")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="DockPanel/HBox/BtnHandbook/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.96, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.04, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "Cẩm Nang"
+horizontal_alignment = 1

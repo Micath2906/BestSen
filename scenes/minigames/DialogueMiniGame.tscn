@@ -1,0 +1,245 @@
+[gd_scene load_steps=6 format=3 uid="uid://dialoguemg001"]
+
+[ext_resource type="Script" path="res://scripts/minigames/DialogueMiniGame.gd" id="1_dialogue"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.96, 0.94, 0.90, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.99, 0.97, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.88, 0.78, 0.65, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.06)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.88, 0.78, 0.65, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.98, 0.95, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.85, 0.65, 0.35, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 12
+shadow_offset = Vector2(0, 4)
+
+[node name="DialogueMiniGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dialogue")
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="Header" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="BtnBack" type="Button" parent="Header"]
+custom_minimum_size = Vector2(76, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+text = " Quay lại"
+
+[node name="HeaderTitle" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 13
+text = "💬 MÈO ĐỐI ĐÁP TÌNH HUỐNG"
+horizontal_alignment = 1
+
+[node name="ScenarioCard" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 64.0
+offset_right = -16.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ScenarioCard"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NpcRow" type="HBoxContainer" parent="ScenarioCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NpcIcon" type="Label" parent="ScenarioCard/VBox/NpcRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "🔧"
+
+[node name="NpcName" type="Label" parent="ScenarioCard/VBox/NpcRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 12
+text = "Bác Thợ Sửa Xe Vỉa Hè"
+
+[node name="SituationLabel" type="Label" parent="ScenarioCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 11
+text = "Xe máy bỗng chết máy dắt vào tiệm. Bác thợ cầm cờ-lê nhìn xe bảo: 'Xe này cháy cuộn lửa với bình nặng lắm, để tháo bung máy ra xem, tí tính tiền một thể nhé!'."
+autowrap_mode = 2
+
+[node name="CatSection" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 208.0
+offset_right = -16.0
+offset_bottom = 268.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="HBox" type="HBoxContainer" parent="CatSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CatAnchor" type="Control" parent="CatSection/HBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="CatSpeech" type="Label" parent="CatSection/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Bác thợ đòi bung máy kìa Sen! Chọn câu đối đáp khôn ngoan nhất nhé!"
+autowrap_mode = 2
+
+[node name="OptionsCard" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 276.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="OptionsCard"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="OptionsTitle" type="Label" parent="OptionsCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "💭 BONG BÓNG SUY NGHĨ CỦA BOSS (Chọn cách đối đáp):"
+
+[node name="Scroll" type="ScrollContainer" parent="OptionsCard/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="OptionsContainer" type="VBoxContainer" parent="OptionsCard/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="ResultModal" type="PanelContainer" parent="."]
+visible = false
+z_index = 40
+custom_minimum_size = Vector2(340, 180)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -90.0
+offset_right = 170.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="ResultModal"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Title" type="Label" parent="ResultModal/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.65, 0.28, 1)
+theme_override_font_sizes/font_size = 13
+text = "🎉 ĐỐI ĐÁP XUẤT SẮC 10 ĐIỂM!"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="ResultModal/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.3, 0.22, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Chi tiết phản hồi kết quả đối thoại..."
+autowrap_mode = 2
+
+[node name="BtnClose" type="Button" parent="ResultModal/VBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Tiếp tục bài học ➔"

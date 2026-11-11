@@ -1,0 +1,170 @@
+﻿TÀI LIỆU THIẾT KẾ GAME & BỘ LUẬT CHƠI TOÀN DIỆN (GAME DESIGN DOCUMENT - GDD)
+Tên dự án: MÈO TỰ LẬP (CAT'S LIFE QUEST)
+Thể loại: Cozy Life-Sim / Resource Management (Quản lý tài nguyên) kết hợp Sequence Puzzle (Xếp chuỗi logic quy trình)
+Phong cách thị giác: 2D Flat Doodle / Hand-drawn Meme aesthetic (tối giản, biểu cảm tự trào hài hước, tiết kiệm tài nguyên vẽ)
+Nền tảng mục tiêu: Web Mobile (HTML5 responsive) / Zalo Mini App (Không cần cài đặt, tải ngay lập tức)
+Triết lý thiết kế (Design Philosophy): Hoán đổi bản ngã (Ego-Swapping) & Thử sai an toàn (Safe Failure). Người chơi không đóng vai một sinh viên thiếu kỹ năng bị "dạy đời", mà là một "Sen bảo hộ" chăm sóc chú mèo ngơ ngác mới rời quê lên phố. Dạy mèo hiểu luật đời chính là cách người chơi tự nạp kỹ năng sinh tồn vào thực tế mà không sợ bị phán xét.
+PHẦN 1: CỐT TRUYỆN TOÀN CẢNH & PHÂN ĐOẠN TUYẾN TÍNH (NARRATIVE ARC)
+Cốt truyện kéo dài từ ngày tân sinh viên rời quê đến khi hoàn thành năm nhất đại học, chia làm 4 Cột Mốc Tuyến Tính (Acts). Chú mèo xuyên suốt game luôn là mèo 4 chân lông xù, chỉ biết kêu meo meo, nhưng biểu cảm và hành trang sẽ biến chuyển từ rụt rè, bỡ ngỡ sang dạn dĩ, can trường.
+[HỒI 1: RỜI TỔ] ──► [HỒI 2: ĐỊNH CƯ] ──► [HỒI 3: SINH TỒN VƯỢT KHÓ] ──► [HỒI 4: VỮNG VÀNG THỊ THÀNH] (Bến xe & Xe buýt)   (Phòng trọ & Chi tiêu)   (Bệnh viện & BHYT đêm sốt)     (Part-time, Ponzi & Tốt nghiệp)
+Hồi 1: Rời Tổ Lạ Lẫm (Tuần 1 – Tân Sinh Viên & Di Chuyển)
+Bối cảnh: Mèo rời vùng quê sông nước lên bến xe liên tỉnh, ngơ ngác trước tiếng còi xe, khói bụi và ma trận tuyến đường thành phố lớn.
+Mục tiêu chính: Tìm được đường về ký túc xá/khu trọ làng đại học bằng phương tiện công cộng (Xe buýt số 08).
+Nỗi đau đời thực: Lần đầu vẫy xe buýt, chuẩn bị tiền lẻ, sợ lỡ trạm, không biết bấm chuông lúc nào.
+Hồi 2: Định Cư & Bẫy Cơm Áo (Tuần 2 đến Tuần 4 – Phòng Trọ & Ngân Sách)
+Bối cảnh: Tìm được một căn phòng trọ nhỏ trong hẻm sâu. Đối mặt với chủ nhà, hợp đồng thuê phòng và bài toán chia nhỏ tiền ăn.
+Mục tiêu chính: Soi hợp đồng thuê phòng tránh bẫy phụ phí ngầm; thiết lập chu kỳ chi tiêu ăn uống hàng ngày.
+Nỗi đau đời thực: Bị lừa cọc, tiền điện nước giá "trên trời", chi tiêu vung tay đầu tháng dẫn đến nhịn đói cuối tháng.
+Hồi 3: Đêm Sốt Giữa Đất Khách (Tháng thứ 2 – Sức Khỏe & Pháp Lý Dân Sinh)
+Bối cảnh: Mùa mưa thị thành đổ xuống, Mèo bị dầm mưa cảm lạnh, sốt cao 39 độ giữa đêm vắng trong căn phòng trọ 12m².
+Mục tiêu chính: Tự sơ cứu hạ sốt trong đêm; sáng hôm sau tự thân mang thẻ BHYT đến Bệnh viện Đa khoa Quận khám đúng tuyến.
+Nỗi đau đời thực: Sợ đi bệnh viện một mình, sợ bị y tá gắt gỏng, nộp nhầm sổ khám dịch vụ tốn tiền triệu, không biết khai báo tạm trú.
+Hồi 4: Thao Trường Xã Hội (Tháng thứ 3 trở đi – Việc Làm & Cạm Bẫy Tài Chính)
+Bối cảnh: Muốn tự lập tài chính để đỡ đần gia đình, Mèo bắt đầu tìm việc làm thêm part-time và tiếp xúc với các lời mời gọi làm giàu nhanh.
+Mục tiêu chính: Soạn CV trung thực, phỏng vấn chân chính tại quán ăn; nhận diện bẫy đa cấp/sàn ảo lãi suất cao và bẫy ví trả sau.
+Nỗi đau đời thực: Bị quỵt lương làm thêm, bị dụ cọc tiền nhận lớp gia sư ma, dính bẫy nợ tín dụng trực tuyến.
+PHẦN 2: HỆ THỐNG BIẾN SỐ & QUY TẮC ĐÁNH ĐỔI (RESOURCE ECONOMY & TRADE-OFFS)
+Trò chơi vận hành dựa trên 3 biến số định lượng cốt lõi và 1 chỉ số tiến trình:
+┌────────────────────────────────────────────────────────────────────────┐│                        3 CHỈ SỐ SINH TỒN CỦA MÈO                       │├────────────────────┬────────────────────┬──────────────────────────────┤│ 1. CÁ KHÔ (TÀI CHÍNH)│ 2. ĐỘ NO (THỂ LỰC) │ 3. DŨNG CẢM (TÂM LÝ / SANITY)││ (Khởi điểm: 90 Cá) │ (0 - 100 Điểm)     │ (0 - 100 Điểm)               │└────────────────────┴────────────────────┴──────────────────────────────┘
+1. Chi tiết 3 Chỉ Số Sinh Tồn
+Cá Khô (Ngân sách tháng):
+Cấp cố định: 90 Cá Khô / Chu kỳ 30 ngày (tương đương mỗi ngày có đúng 3 Cá để duy trì sự sống).
+Dùng để chi trả: Tiền hạt ăn hàng ngày, tiền thuốc men khi ốm, đồ chơi giải trí cho Mèo.
+Độ No (Physical Hunger - HP):
+Tiêu hao tự nhiên: -3 điểm mỗi ngày.
+Nếu Độ No : Mèo kiệt sức, nằm bẹp một chỗ, đình công từ chối học mọi kỹ năng mới.
+Nếu Độ No : Kích hoạt trạng thái Ngất xỉu vì hạ đường huyết  Tốn 25 Cá Khô tiền cấp cứu thú y.
+Dũng Cảm (Courage / Sanity):
+Đại diện cho sự tự tin khi bước ra đường.
+Giảm khi: Bị người lớn la mắng, kéo sai thứ tự bị "quê độ", cạn tiền.
+Nếu Dũng Cảm : Mèo bị hoảng loạn (Panic Attack), run rẩy không dám bước ra khỏi cửa phòng trọ.
+2. Bảng Ma Trận Đánh Đổi Giá Trị (Trade-Off Matrix)
+Mọi quyết định của người chơi đều không có phương án hoàn hảo tuyệt đối, mà buộc phải cân nhắc giữa Nhu cầu thiết yếu (Needs) vs. Thỏa mãn tức thì (Wants):
+Hành động của Người chơi
+Chi phí (Cá Khô)
+Thay đổi Chỉ số
+Hệ quả trực tiếp & Bài học rút ra
+Cho ăn Hạt sinh viên (Cơ bản)
+-3 Cá
+No +15, Dũng cảm +0
+Đủ sống qua ngày, Mèo hơi ỉu xìu nhưng bảo toàn ngân sách cho cả tháng.
+Thưởng Pate Thượng Hạng
+-18 Cá
+No +35, Dũng cảm +25
+Mèo nhảy múa cực vui, sẵn sàng học bài ngay  Cảnh báo: Thâm hụt 6 ngày tiền ăn cơ bản!
+Mua Cần câu lông vũ (Đồ chơi)
+-20 Cá
+Dũng cảm +40 (Hưng phấn)
+Mèo chịu ngồi vào bàn học  Bẫy: Hết tiền ở ngày 22, Mèo đói lả bỏ học giữa chừng.
+Tự chế đồ chơi thùng Carton
+0 Cá
+Dũng cảm +15
+Tốn 30 giây làm mini-game thủ công  Tiết kiệm 100% tiền, rèn tính tháo vát.
+Quẹt "Ví Trả Sau" mua đệm êm
+0 Cá (Lúc mua)
+Dũng cảm +30 tạm thời
+Cú đấm kinh tế: Đến ngày 28 bị trừ 35 Cá (gốc 20 Cá + 15 Cá phí dịch vụ/phạt trễ hạn).
+Dạy Mèo unlock Kỹ năng mới
+0 Cá
+EXP kỹ năng +1, Thưởng +30 Cá
+Vượt qua bài học mang lại phần thưởng lớn, bù đắp tài chính để mua Pate bồi dưỡng.
+PHẦN 3: CƠ CHẾ GAMEPLAY CỐT LÕI (CORE GAMEPLAY LOOP)
+Mỗi màn chơi diễn ra qua 3 Giai Đoạn kế tiếp nhau, kéo dài từ 2 đến 3 phút:
+┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐│   GIAI ĐOẠN 1    │  ──►  │   GIAI ĐOẠN 2    │  ──►  │   GIAI ĐOẠN 3    ││  DẠY HỌC TẠI NHÀ │       │ THẢ RA NGOÀI ĐỜI │       │  PHẦN THƯỞNG VỀ  │└──────────────────┘       └──────────────────┘       └──────────────────┘
+GIAI ĐOẠN 1: Dạy Học Tại Nhà (Sequence Puzzle - Giải Mã Tiếng Mèo)
+Thiết lập: Mèo ngồi bên bàn học, trước mặt là 3–5 thẻ âm thanh tiếng mèo bị xáo trộn. Mỗi thẻ gắn liền với một đoạn phát âm và một biểu tượng icon hành động.
+Công cụ hỗ trợ (Scaffolding): Nút "Cẩm Nang Cứu Sen" luôn hiển thị ở góc trên màn hình. Khi bấm vào, người chơi được đọc nhanh 3 gạch đầu dòng quy trình chuẩn ngoài đời thực (đọc trong 15–20 giây).
+Luật chơi: Người chơi phải kéo-thả các thẻ tiếng mèo vào các ô quy trình từ Trái sang Phải theo đúng thứ tự logic thời gian.
+Ví dụ Màn 1: Dạy Mèo Đi Xe Buýt Số 08
+Các thẻ bài được cấp:
+Thẻ A: Meo-o? (Icon: Bàn tay vẫy khi thấy xe buýt còn cách 50m)
+Thẻ B: Méo meo! (Icon: Bước lên cửa trước, cầm sẵn 5.000đ tiền lẻ trên tay)
+Thẻ C: Meo-wrr (Icon: Ngồi ghế nhường người già/phụ nữ, giữ chặt ba lô trước ngực)
+Thẻ D: Meoo!! (Icon: Đứng dậy bấm nút chuông đỏ trên cột trước khi đến trạm 100m)
+Luật chống đoán mò (Anti-Guess Mechanic): Thẻ bài không ghi chữ tiếng Việt lộ liễu. Người chơi buộc phải đọc hiểu cẩm nang thì mới gắn đúng icon và ngữ cảnh âm thanh.
+GIAI ĐOẠN 2: Thả Ra Ngoài Đời (Mô Phỏng Trải Nghiệm & Safe Failure)
+Sau khi Sen bấm nút "Xong rồi, đi đi Boss!", Mèo đeo ba lô bước ra khỏi cửa. Màn hình chuyển sang mô phỏng chuyển động trong 5–10 giây:
+Trường hợp Xếp ĐÚNG 100%:
+Mèo lên xe suôn sẻ, đưa tiền lẻ bác phụ xe mỉm cười xoa đầu, bấm chuông đúng trạm bước xuống cổng trường an toàn.
+Mèo nhảy cẫng lên ăn mừng, phát ra tiếng kêu gừ gừ (purr purr).
+Trường hợp Xếp SAI (Trải nghiệm Thử Sai An Toàn):
+Ví dụ: Xếp thẻ Bấm chuông [D] trước khi Lên xe [B]:
+Mèo đứng ở bến xe bấm chuông lung tung, người xung quanh nhìn với ánh mắt khó hiểu.
+Xe buýt chạy vụt qua không đón vì quên vẫy tay.
+Hệ quả trong game: Mèo mếu máo chạy về phòng trọ, thanh Dũng Cảm bị tụt nhẹ -10 điểm.
+Thông điệp popup không phán xét: "Quê xệ! Mèo bấm chuông khi chưa lên xe buýt rồi Sen ơi! Nhưng hổng sao, chưa mất tiền vé, mở cẩm nang coi lại rồi dạy lại Mèo nào!"  Triệt tiêu cảm giác sợ hãi khi sai lầm.
+GIAI ĐOẠN 3: Phần Thưởng Thu Hoạch (Incentive Distribution)
+Khi Mèo hoàn thành trót lọt chuyến đi và trở về nhà, hệ thống kích hoạt Bộ 3 Phần Thưởng Giá Trị:
+Chiến Lợi Phẩm Của Mèo (Souvenir Loot):
+Mèo mang về 1 món đồ kẹp trong ba lô: Cuống vé xe buýt số 08 đục lỗ may mắn, Vỉ kẹo ngậm C bệnh viện, hoặc Chiếc bút bi xanh ký hợp đồng trọ.
+Đồ vật được lưu vào "Bảo tàng Sinh tồn của Mèo" kèm một dòng mô tả hài hước.
+Tiền Thưởng Nóng (Học bổng / Tiền làm thêm):
+Cộng ngay +25 đến +35 Cá Khô vào ví. Sen có thể lập tức dùng số cá này để mua một lon Pate cá hồi bồi dưỡng cho Mèo mà không lo bị đói tuần sau.
+Thẻ Bảo Bối Bỏ Túi (Digital Cheat-sheet - Phần thưởng cho người chơi):
+Mở khóa một file ảnh Infographic cực kỳ sắc nét, tóm tắt trọn vẹn quy trình thực tế ngoài đời.
+Tích hợp nút: [LƯU VÀO ALBUM ĐIỆN THOẠI]. Người chơi chính thức có tài liệu sinh tồn mang theo người.
+PHẦN 4: HỆ THỐNG CÂY KỸ NĂNG & 4 NHÁNH NHIỆM VỤ (SKILL TREE)
+Game bao gồm 16 Màn chơi, phân bổ đều vào 4 nhánh chuyên biệt:
+                                 ┌──────────────────────────────┐                                 │   CÂY KỸ NĂNG MÈO TỰ LẬP     │                                 └──────────────┬───────────────┘                                                │         ┌──────────────────────┬───────────────┴───────────────┬──────────────────────┐         ▼                      ▼                               ▼                      ▼┌──────────────────┐   ┌──────────────────┐            ┌──────────────────┐   ┌──────────────────┐│  NHÁNH 1: ĐI LẠI  │   │  NHÁNH 2: NƠI Ở  │            │ NHÁNH 3: SỨC KHỎE│   │ NHÁNH 4: TIỀN TÀI│└────────┬─────────┘   └────────┬─────────┘            └────────┬─────────┘   └────────┬─────────┘         │                      │                               │                      │         ├─ Bài 1: Xe buýt      ├─ Bài 5: Soi hợp đồng trọ      ├─ Bài 9: Sơ cứu đêm   ├─ Bài 13: 3 Hũ tiền         ├─ Bài 2: Đọc BusMap   ├─ Bài 6: Test PCCC phòng trọ   ├─ Bài 10: Quy trình   ├─ Bài 14: Lọc đa cấp         ├─ Bài 3: Định vị GPS  ├─ Bài 7: Đăng ký tạm trú       │          khám BHYT   ├─ Bài 15: Phỏng vấn         └─ Bài 4: Chữa hỏng xe └─ Bài 8: Văn hóa ở ghép        ├─ Bài 11: Tủ thuốc trọ└─ Bài 16: Tránh bẫy                                                                └─ Bài 12: Đau bao tử             ví trả sau
+Nhánh 1: Đường Phố Thổ Địa (Di chuyển & Cơ động)
+Bài 1: Bắt xe buýt liên quận (Chuẩn bị tiền lẻ, vẫy xe, bấm chuông).
+Bài 2: Đọc ứng dụng BusMap / Tìm lộ trình chuyển tuyến xe buýt khi đi học xa.
+Bài 3: Định vị la bàn Google Maps khi lạc vào các bùng binh/ngã sáu lớn.
+Bài 4: Cứu hộ xe máy căn bản: Nhận biết dấu hiệu sên chùng, xả ốc nhớt máy, đo áp suất lốp xe.
+Nhánh 2: Bình Yên Xóm Trọ (Pháp lý cư trú & Sinh hoạt)
+Bài 5: Thám tử hợp đồng thuê trọ: Nhận diện 4 điều khoản bẫy (phạt cọc vô lý, điện nước lũy tiến).
+Bài 6: Khảo sát an toàn phòng cháy: Kiểm tra lối thoát hiểm chuồng cọp, bình chữa cháy mini.
+Bài 7: Đăng ký tạm trú dân sinh trực tuyến trên Cổng dịch vụ công quốc gia.
+Bài 8: Thiết lập "Hiệp ước bạn cùng phòng": Bảng phân chia dọn toilet, tiền rác, giờ giấc giới nghiêm.
+Nhánh 3: Thân Thể Kim Cương (Y tế & Sức khỏe tự thân)
+Bài 9: Xử lý sốt cao 39 độ giữa đêm: Đo nhiệt kế nách, uống Paracetamol đúng liều kg, lau mát bẹn và nách.
+Bài 10: 6 Bước đi khám bệnh bằng BHYT đúng tuyến không sợ bị mắng (Bốc số  Tiếp nhận  Khám  Xét nghiệm  Thu ngân  Lấy thuốc).
+Bài 11: Xây dựng túi sơ cứu phòng trọ: Phân biệt thuốc hạ sốt, men tiêu hóa, thuốc dị ứng, băng gạc.
+Bài 12: Phòng ngừa xuất huyết dạ dày sinh viên: Cai mì tôm sống, nhận diện dấu hiệu đau dạ dày do thức đêm.
+Nhánh 4: Túi Tiền Thông Thái (Tài chính & Việc làm thêm)
+Bài 13: Phương pháp phân bổ "3 Hũ Cá": Chia nhỏ tiền trợ cấp thành Sống còn (Hạt) – Phát triển (Học) – Dự phòng (Khẩn cấp).
+Bài 14: Bộ lọc đa cấp Ponzi: Bóc trần các sàn đầu tư sinh lời 1.5%/ngày, mời gọi nạp tiền ăn hoa hồng.
+Bài 15: Phỏng vấn việc làm part-time: Soạn thảo CV trung thực, thỏa thuận lương Gross/Net, từ chối đóng tiền cọc đồng phục.
+Bài 16: Thoát bẫy Ví trả sau (BNPL): Cơ chế kích hoạt bộ lọc "Phanh tiêu dùng 48h" trước khi chốt đơn online.
+PHẦN 5: TÍNH NĂNG MẠNG XÃ HỘI & HỌC LINH HOẠT (PEER NETWORK)
+Nhằm xóa bỏ sự cô độc và kích thích tính lan tỏa tự nhiên (organic viral), hệ thống tích hợp 3 tính năng kết nối bạn bè cực kỳ nhẹ nhàng:
+┌────────────────────────────────────────────────────────────────────────┐│                        TÍNH NĂNG BẠN BÈ: BẢO VỆ NHAU                   │├────────────────────┬────────────────────┬──────────────────────────────┤│ 1. TẶNG THẺ CỨU NGUY│ 2. TỦ ĐỒ PHÒNG TRỌ │ 3. HUY HIỆU QUÊ ĐỘ           ││ (Gift a Card)      │ (Shared Inventory) │ (Badges of Honor)            │└────────────────────┴────────────────────┴──────────────────────────────┘
+Tặng Thẻ Cứu Nguy (Gift a Life-Card):
+Nếu bạn bè ngày mai phải đi khám bệnh một mình nhưng chưa chơi game, người chơi chỉ cần bấm: "Gửi Thẻ BHYT cho bạn".
+Một đường link web siêu nhẹ được tạo qua Zalo/Messenger; người bạn bấm vào mở ra xem trọn vẹn sơ đồ 6 bước mà không cần tạo tài khoản hay cày level.
+Tủ Đồ Phòng Trọ (Roommate Shared Inventory):
+Cho phép nhóm bạn (2–4 người) kết nối thành một "Căn Phòng Trọ Chung".
+Chỉ cần 1 thành viên mở khóa được một Thẻ Bảo Bối bất kỳ (ví dụ: Checklist Hợp Đồng Trọ), toàn bộ thành viên trong phòng trọ đều được cấp thẻ đó vào ba lô cá nhân.
+Cơ Chế "Pate Cứu Đói":
+Khi ghé thăm nhà bạn bè và phát hiện Mèo của bạn đang đói lả (Độ No ) do lỡ tay mua đồ chơi hoang phí, người chơi có thể bấm tặng một Hộp Pate Cứu Nguy. Mèo bạn được cứu sống, hai bên cùng nhận danh hiệu Tình Làng Nghĩa Xóm.
+Bộ Sưu Tập "Huy Hiệu Quê Độ":
+Tích hợp các huy hiệu tự trào: “Từng vẫy xe buýt như vẫy taxi”, “Từng nộp nhầm sổ BHYT sang bàn cấp cứu”, “Từng ăn mì gói 7 ngày vì quẹt thẻ trả sau”.
+Hệ thống hiển thị: "Đã có 9.420 Sen khác cũng từng quê như bạn!"  Bình thường hóa sự non nớt của tuổi mới lớn.
+PHẦN 6: CHẾ ĐỘ THƯ VIỆN MỞ 24/7 (EMERGENCY SANDBOX)
+Đây là quy tắc sống còn để sản phẩm giữ vững tính thực dụng và không gây ức chế:
+Tuyệt đối không khóa tính năng tra cứu (No Level-lock for Reference):
+Chế độ Game vượt ải để giải trí và nhận danh hiệu lúc rảnh.
+Tab "Thư Viện Tra Cứu" luôn luôn mở sẵn 100% tất cả 16 bài học ngay từ giây đầu tiên mở app.
+Nếu một sinh viên đang đứng run rẩy trước cổng bệnh viện lúc 07:00 sáng, họ có quyền bấm ngay vào mục Y tế  Khám BHYT để xem ảnh hướng dẫn 30 giây mà không bị ép phải hoàn thành các ải trước.
+BẢNG TỔNG KẾT BỘ LUẬT CHƠI DÀNH CHO GAME DESIGNER
+Thành phần thiết kế
+Quy tắc vận hành tiêu chuẩn
+Mục đích sư phạm & Trải nghiệm
+Vai trò người chơi
+Sen bảo hộ chăm sóc Mèo con ngơ ngác
+Xóa bỏ sự tự ti, chuyển hóa tâm thế từ "bị dạy" sang "bảo vệ người khác".
+Trạng thái Mèo
+Luôn là mèo 4 chân, nhận thêm phụ kiện hành trang
+Giữ nét dễ thương, không gây kỳ cục, tiết kiệm 80% công vẽ mỹ thuật.
+Quy luật tiền tệ
+90 Cá Khô chia đều cho 30 ngày (3 Cá/ngày)
+Mô phỏng bài toán dòng tiền thực tế, rèn luyện tính kiềm chế tiêu dùng bốc đồng.
+Cơ chế giải đố
+Kéo-thả thẻ tiếng Mèo theo chuỗi thời gian
+Chống chọn bừa/đoán mò, buộc người chơi phải nạp quy trình vào đầu.
+Xử lý sai lầm
+Mèo bối rối chạy về, thông điệp vui vẻ, trừ ít điểm
+Thử sai an toàn (Safe Failure), không trừng phạt nặng nề người học.
+Phần thưởng cốt lõi
+Infographic Cheat-sheet lưu thẳng vào điện thoại
+Cung cấp công cụ sinh tồn bỏ túi thực tế để người chơi ứng dụng ngoài đời.

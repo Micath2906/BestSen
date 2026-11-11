@@ -1,0 +1,882 @@
+[gd_scene load_steps=22 format=3 uid="uid://civilizedride001"]
+
+[ext_resource type="Script" path="res://scripts/minigames/CivilizedRideGame.gd" id="1_ride"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.92, 0.94, 0.96, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_panel"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.99, 0.97, 0.96)
+border_width_bottom = 2
+border_color = Color(0.85, 0.8, 0.72, 1)
+shadow_color = Color(0, 0, 0, 0.05)
+shadow_size = 6
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_btn"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.78, 0.7, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.98, 0.96, 0.92, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.88, 0.8, 0.68, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
+bg_color = Color(0.85, 0.82, 0.78, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dist_fill"]
+bg_color = Color(0.2, 0.65, 0.9, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_civic_fill"]
+bg_color = Color(0.2, 0.75, 0.38, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.98, 0.92, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.95, 0.65, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.08)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cabin_wall"]
+bg_color = Color(0.9, 0.92, 0.95, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 4
+border_color = Color(0.55, 0.62, 0.72, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bell_widget"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(0.95, 0.95, 0.96, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.7, 0.75, 0.82, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_bell"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9, 0.2, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.65, 0.1, 0.1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotspot_orange"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.98, 0.5, 0.12, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.8, 0.35, 0.05, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotspot_blue"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.18, 0.55, 0.85, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.1, 0.38, 0.62, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotspot_red"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.85, 0.18, 0.18, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.6, 0.1, 0.1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_toast"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.98, 0.92, 0.85, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.9, 0.45, 0.15, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.18)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_panel"]
+content_margin_left = 18.0
+content_margin_top = 16.0
+content_margin_right = 18.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.99, 0.96, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.88, 0.72, 0.52, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 14
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_victory"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.2, 0.68, 0.38, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.12, 0.48, 0.25, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_info"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.15, 0.48, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.08, 0.32, 0.58, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_retry"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.95, 0.45, 0.1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.75, 0.3, 0.05, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="CivilizedRideGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ride")
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="Header" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 64.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_panel")
+
+[node name="HBox" type="HBoxContainer" parent="Header"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BtnBack" type="Button" parent="Header/HBox"]
+custom_minimum_size = Vector2(60, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.22, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = " Thoát"
+
+[node name="TimerBox" type="PanelContainer" parent="Header/HBox"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_box")
+
+[node name="VBox" type="VBoxContainer" parent="Header/HBox/TimerBox"]
+layout_mode = 2
+
+[node name="ClockLabel" type="Label" parent="Header/HBox/TimerBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.05, 1)
+theme_override_font_sizes/font_size = 12
+text = "⏱️ 75s"
+horizontal_alignment = 1
+
+[node name="RouteBox" type="PanelContainer" parent="Header/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_box")
+
+[node name="VBox" type="VBoxContainer" parent="Header/HBox/RouteBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="DistanceLabel" type="Label" parent="Header/HBox/RouteBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.45, 0.8, 1)
+theme_override_font_sizes/font_size = 10
+text = "🏁 Còn 600m đến Trạm Đích"
+horizontal_alignment = 1
+
+[node name="DistanceBar" type="ProgressBar" parent="Header/HBox/RouteBox/VBox"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dist_fill")
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="CivicBox" type="PanelContainer" parent="Header/HBox"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_box")
+
+[node name="VBox" type="VBoxContainer" parent="Header/HBox/CivicBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="CivicLabel" type="Label" parent="Header/HBox/CivicBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.6, 0.25, 1)
+theme_override_font_sizes/font_size = 11
+text = "Văn Minh: 50/100"
+horizontal_alignment = 1
+
+[node name="CivicBar" type="ProgressBar" parent="Header/HBox/CivicBox/VBox"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_civic_fill")
+max_value = 100.0
+value = 50.0
+show_percentage = false
+
+[node name="PromptBanner" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 68.0
+offset_right = -12.0
+offset_bottom = 116.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_banner")
+
+[node name="HBox" type="HBoxContainer" parent="PromptBanner"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PromptLabel" type="Label" parent="PromptBanner/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.18, 0.1, 1)
+theme_override_font_sizes/font_size = 10
+text = "Tình huống văn minh đang diễn ra..."
+autowrap_mode = 2
+
+[node name="PromptTimerBar" type="ProgressBar" parent="PromptBanner/HBox"]
+custom_minimum_size = Vector2(60, 10)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_civic_fill")
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="CabinArea" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 120.0
+offset_right = -12.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CabinFrame" type="Panel" parent="CabinArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cabin_wall")
+
+[node name="WindowBackdrop" type="Control" parent="CabinArea"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 180.0
+grow_horizontal = 2
+
+[node name="Sky" type="ColorRect" parent="CabinArea/WindowBackdrop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.72, 0.85, 0.95, 1)
+
+[node name="Buildings" type="ColorRect" parent="CabinArea/WindowBackdrop"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.55, 0.68, 0.8, 0.75)
+
+[node name="WindowFrame" type="ColorRect" parent="CabinArea/WindowBackdrop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.4, 0.48, 0.58, 0.2)
+
+[node name="CabinCanvas" type="Control" parent="CabinArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StopBellWidget" type="PanelContainer" parent="CabinArea"]
+custom_minimum_size = Vector2(145, 105)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -160.0
+offset_top = 195.0
+offset_right = -15.0
+offset_bottom = 305.0
+grow_horizontal = 0
+grow_vertical = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_bell_widget")
+
+[node name="VBox" type="VBoxContainer" parent="CabinArea/StopBellWidget"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BellTopHBox" type="HBoxContainer" parent="CabinArea/StopBellWidget/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BellLight" type="ColorRect" parent="CabinArea/StopBellWidget/VBox/BellTopHBox"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.3, 0.1, 0.1, 1)
+
+[node name="BellTitle" type="Label" parent="CabinArea/StopBellWidget/VBox/BellTopHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "NÚT CHUÔNG BÁO DỪNG"
+
+[node name="BtnBell" type="Button" parent="CabinArea/StopBellWidget/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_bell")
+text = "🔔 STOP (BẤM XUỐNG)"
+
+[node name="TimingBarContainer" type="Control" parent="CabinArea/StopBellWidget/VBox"]
+visible = false
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+
+[node name="TrackBg" type="ColorRect" parent="CabinArea/StopBellWidget/VBox/TimingBarContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.85, 0.3, 0.25, 0.85)
+
+[node name="GreenZone" type="ColorRect" parent="CabinArea/StopBellWidget/VBox/TimingBarContainer"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_right = 85.0
+grow_vertical = 2
+color = Color(0.2, 0.75, 0.4, 0.95)
+
+[node name="Indicator" type="ColorRect" parent="CabinArea/StopBellWidget/VBox/TimingBarContainer"]
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_right = 8.0
+grow_vertical = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Hotspots" type="Control" parent="CabinArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="BtnDogSeat" type="Button" parent="CabinArea/Hotspots"]
+visible = false
+custom_minimum_size = Vector2(130, 42)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = -215.0
+offset_right = 148.0
+offset_bottom = -173.0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotspot_orange")
+text = "👉 Nhắc Nhường Chỗ"
+
+[node name="BtnBearBackpack" type="Button" parent="CabinArea/Hotspots"]
+visible = false
+custom_minimum_size = Vector2(145, 42)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 175.0
+offset_top = -215.0
+offset_right = 325.0
+offset_bottom = -173.0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotspot_blue")
+text = "🎒 Ôm Ba Lô Trước Ngực"
+
+[node name="BtnThiefHand" type="Button" parent="CabinArea/Hotspots"]
+visible = false
+custom_minimum_size = Vector2(130, 42)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 175.0
+offset_top = -275.0
+offset_right = 315.0
+offset_bottom = -233.0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotspot_red")
+text = "⚡ Bắt Quả Tang!"
+
+[node name="ToastPanel" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(340, 48)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -170.0
+offset_top = 74.0
+offset_right = 170.0
+offset_bottom = 122.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_toast")
+
+[node name="ToastLabel" type="Label" parent="ToastPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+text = "Thông báo tình huống"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ToastTimer" type="Timer" parent="."]
+wait_time = 2.5
+one_shot = true
+
+[node name="VictoryModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="VictoryModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="ModalPanel" type="PanelContainer" parent="VictoryModal"]
+custom_minimum_size = Vector2(360, 460)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -230.0
+offset_right = 180.0
+offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="VictoryModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.65, 0.35, 1)
+theme_override_font_sizes/font_size = 15
+text = "🎉 XUẤT SẮC! CÔNG DÂN GIAO THÔNG MẪU MỰC!"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VictoryLabel" type="Label" parent="VictoryModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Nội dung chúc mừng..."
+autowrap_mode = 2
+
+[node name="BtnViewInfographic" type="Button" parent="VictoryModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_info")
+text = "🗺️ Xem Infographic Bỏ Túi"
+
+[node name="BtnClaimVictory" type="Button" parent="VictoryModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_victory")
+text = "Nhận Thưởng: +35 Cá Khô & Huy Hiệu 🏅"
+
+[node name="DefeatModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="DefeatModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="ModalPanel" type="PanelContainer" parent="DefeatModal"]
+custom_minimum_size = Vector2(360, 420)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -210.0
+offset_right = 180.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="DefeatModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="DefeatModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.25, 0.2, 1)
+theme_override_font_sizes/font_size = 15
+text = "😿 CHUYẾN ĐI CHƯA ĐẠT CHUẨN VĂN MINH!"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="DefeatModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DefeatLabel" type="Label" parent="DefeatModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Nội dung thất bại..."
+autowrap_mode = 2
+
+[node name="BtnRetry" type="Button" parent="DefeatModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_retry")
+text = "🔄 Thử Lại Ngay (Safe Failure)"
+
+[node name="InfographicModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="InfographicModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="ModalPanel" type="PanelContainer" parent="InfographicModal"]
+custom_minimum_size = Vector2(360, 520)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -260.0
+offset_right = 180.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="InfographicModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="InfographicModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.45, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "🗺️ CẨM NANG BỎ TÚI: VĂN HÓA ĐI TÀU XE TP.HCM"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="InfographicModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InfoVBox" type="VBoxContainer" parent="InfographicModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="GuideLabel" type="Label" parent="InfographicModal/ModalPanel/VBox/Scroll/InfoVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "┌────────────────────────────────────────┐
+│  4 NGUYÊN TẮC VÀNG CHO SINH VIÊN ĐHQG  │
+└────────────────────────────────────────┘
+
+1. 🧓 GHẾ CAM ƯU TIÊN:
+• Dành riêng cho người cao tuổi, phụ nữ có thai, người khuyết tật và trẻ nhỏ.
+• Luôn chủ động đứng dậy nhường chỗ khi thấy người cần giúp đỡ.
+
+2. 🎒 BA LÔ TRÊN XE ĐÔNG:
+• Khi lên xe hoặc tàu điện, luôn tháo ba lô ôm sát trước ngực hoặc để dưới chân.
+• Không đeo ba lô sau lưng làm cản trở và va quẹt người đi lại.
+
+3. 🛡️ BẢO VỆ TƯ TRANG:
+• Không ngủ say khi để điện thoại, ví tiền hớ hênh ở túi ngoài.
+• Cảnh giác khi tàu phanh gấp hoặc lúc chen chúc lên xuống trạm.
+
+4. 🔔 CĂN NHỊP BẤM CHUÔNG:
+• Bấm chuông trước trạm khoảng 100m - 50m để bác tài chủ động tấp lề êm ái.
+• Không bấm chuông quá sớm (>150m) làm xe phanh gấp, hoặc quá sát trạm (<30m) bị lố trạm."
+autowrap_mode = 2
+
+[node name="BtnCloseInfo" type="Button" parent="InfographicModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = "Đóng Cẩm Nang"

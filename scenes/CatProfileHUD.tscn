@@ -1,0 +1,322 @@
+[gd_scene load_steps=19 format=3 uid="uid://c67thudcat01"]
+
+[ext_resource type="Script" path="res://scripts/CatProfileHUD.gd" id="1_hud"]
+[ext_resource type="Texture2D" uid="uid://krc6k1wrfoma" path="res://assets/sprites/avatars/avatar_0.png" id="2_av0"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/hud_wood_parchment_9patch.tres" id="3_hud_bg"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/avatar_picture_frame_32x32.tres" id="4_pic_fr"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/level_ribbon_badge.tres" id="5_ribbon"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/bar_track_under.tres" id="6_bar_under"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/bar_frame_over.tres" id="7_bar_over"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/bar_progress_hunger.tres" id="8_bar_hunger"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/bar_progress_courage.tres" id="9_bar_courage"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/icon_food_bowl_16x16.tres" id="10_icon_bowl"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/icon_heart_16x16.tres" id="11_icon_heart"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/scroll_panel_coin_9patch.tres" id="12_scroll_coin"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/icon_fish_gold_16x16.tres" id="13_fish_gold"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/icon_debt_bill_16x16.tres" id="14_debt_bill"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/btn_pause_normal.tres" id="15_pause_norm"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/btn_pause_pressed.tres" id="16_pause_press"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/btn_shop_normal.tres" id="17_shop_norm"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/toffee_hud/btn_shop_pressed.tres" id="18_shop_press"]
+
+[node name="CatProfileHUD" type="Control"]
+custom_minimum_size = Vector2(500, 150)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 150.0
+grow_horizontal = 2
+script = ExtResource("1_hud")
+
+[node name="HUDContainer" type="NinePatchRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 4.0
+offset_right = -16.0
+offset_bottom = 88.0
+grow_horizontal = 2
+texture = ExtResource("3_hud_bg")
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12
+
+[node name="HBox" type="HBoxContainer" parent="HUDContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="BtnPause" type="TextureButton" parent="HUDContainer/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("15_pause_norm")
+texture_pressed = ExtResource("16_pause_press")
+stretch_mode = 3
+
+[node name="AvatarCol" type="Control" parent="HUDContainer/HBox"]
+custom_minimum_size = Vector2(52, 64)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="AvatarBox" type="Control" parent="HUDContainer/HBox/AvatarCol"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -24.0
+offset_top = 0.0
+offset_right = 24.0
+offset_bottom = 48.0
+grow_horizontal = 2
+
+[node name="AvatarButton" type="TextureButton" parent="HUDContainer/HBox/AvatarCol/AvatarBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = -15.0
+offset_right = 17.0
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(17, 17)
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("2_av0")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="AvatarFrameTex" type="NinePatchRect" parent="HUDContainer/HBox/AvatarCol/AvatarBox"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_pic_fr")
+patch_margin_left = 6
+patch_margin_top = 8
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="LevelBadge" type="NinePatchRect" parent="HUDContainer/HBox/AvatarCol"]
+texture_filter = 1
+custom_minimum_size = Vector2(52, 18)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -26.0
+offset_top = -20.0
+offset_right = 26.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("5_ribbon")
+patch_margin_left = 12
+patch_margin_top = 4
+patch_margin_right = 12
+patch_margin_bottom = 4
+
+[node name="LevelLabel" type="Label" parent="HUDContainer/HBox/AvatarCol/LevelBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_right = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.35, 0.2, 0.08, 1)
+theme_override_font_sizes/font_size = 9
+text = "Cấp 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightInfo" type="VBoxContainer" parent="HUDContainer/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 5
+
+[node name="BarsContainer" type="VBoxContainer" parent="HUDContainer/HBox/RightInfo"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HungerRow" type="HBoxContainer" parent="HUDContainer/HBox/RightInfo/BarsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HungerIcon" type="TextureRect" parent="HUDContainer/HBox/RightInfo/BarsContainer/HungerRow"]
+texture_filter = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("10_icon_bowl")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HungerProgressBar" type="TextureProgressBar" parent="HUDContainer/HBox/RightInfo/BarsContainer/HungerRow"]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 1.0
+value = 70.0
+nine_patch_stretch = true
+stretch_margin_left = 4
+stretch_margin_top = 3
+stretch_margin_right = 4
+stretch_margin_bottom = 3
+texture_under = ExtResource("6_bar_under")
+texture_over = ExtResource("7_bar_over")
+texture_progress = ExtResource("8_bar_hunger")
+
+[node name="HungerValueLabel" type="Label" parent="HUDContainer/HBox/RightInfo/BarsContainer/HungerRow"]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "70/100"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="CourageRow" type="HBoxContainer" parent="HUDContainer/HBox/RightInfo/BarsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="CourageIcon" type="TextureRect" parent="HUDContainer/HBox/RightInfo/BarsContainer/CourageRow"]
+texture_filter = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("11_icon_heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CourageProgressBar" type="TextureProgressBar" parent="HUDContainer/HBox/RightInfo/BarsContainer/CourageRow"]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 1.0
+value = 80.0
+nine_patch_stretch = true
+stretch_margin_left = 4
+stretch_margin_top = 3
+stretch_margin_right = 4
+stretch_margin_bottom = 3
+texture_under = ExtResource("6_bar_under")
+texture_over = ExtResource("7_bar_over")
+texture_progress = ExtResource("9_bar_courage")
+
+[node name="CourageValueLabel" type="Label" parent="HUDContainer/HBox/RightInfo/BarsContainer/CourageRow"]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.28, 0.35, 1)
+theme_override_font_sizes/font_size = 11
+text = "80/100"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="CoinRow" type="HBoxContainer" parent="HUDContainer/HBox/RightInfo"]
+layout_mode = 2
+
+[node name="CoinPanel" type="NinePatchRect" parent="HUDContainer/HBox/RightInfo/CoinRow"]
+texture_filter = 1
+custom_minimum_size = Vector2(115, 22)
+layout_mode = 2
+texture = ExtResource("12_scroll_coin")
+patch_margin_left = 8
+patch_margin_top = 5
+patch_margin_right = 8
+patch_margin_bottom = 5
+
+[node name="CoinHBox" type="HBoxContainer" parent="HUDContainer/HBox/RightInfo/CoinRow/CoinPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 2.0
+offset_right = -6.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 5
+
+[node name="CoinIcon" type="TextureRect" parent="HUDContainer/HBox/RightInfo/CoinRow/CoinPanel/CoinHBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("13_fish_gold")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FishLabel" type="Label" parent="HUDContainer/HBox/RightInfo/CoinRow/CoinPanel/CoinHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "181122"
+vertical_alignment = 1
+
+[node name="DebtIcon" type="TextureRect" parent="HUDContainer/HBox/RightInfo/CoinRow/CoinPanel/CoinHBox"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("14_debt_bill")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DebtLabel" type="Label" parent="HUDContainer/HBox/RightInfo/CoinRow/CoinPanel/CoinHBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "Nợ 35"
+vertical_alignment = 1
+
+[node name="BtnShop" type="TextureButton" parent="."]
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -56.0
+offset_top = 104.0
+offset_right = -24.0
+offset_bottom = 136.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("17_shop_norm")
+texture_pressed = ExtResource("18_shop_press")
+stretch_mode = 5

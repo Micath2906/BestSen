@@ -1,0 +1,806 @@
+{
+  "skill_groups": [
+    {
+      "group_desc": "Kỹ năng làm chủ phương tiện giao thông công cộng, tra cứu lộ trình chuyển tuyến và định vị phương hướng đô thị.",
+      "group_id": "group_life_commute",
+      "group_name": "Đời sống & Đi lại",
+      "skills": [
+        {
+          "cutscene_desc": "Mèo mở BusMap định vị GPS trạm gần nhất -> chọn trạm đích cổng trường -> xem lộ trình xe 08 -> canh giờ xe tới trạm trong 3 phút chuẩn không cần chỉnh.",
+          "handbook_content": [
+            "Bật định vị GPS để xác định chính xác vị trí và trạm đón gần mình nhất.",
+            "Nhập trạm muốn đến hoặc trường học để BusMap gợi ý tuyến xe phù hợp.",
+            "Xem cách đến, lộ trình di chuyển và số lần chuyển tuyến (nếu có).",
+            "Canh giờ thực tế xe cập bến (ETA) để chuẩn bị ra trạm đón xe."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "📍",
+              "card_label": "Định vị vị trí hiện tại",
+              "cat_sound": "Meo-o?",
+              "error_hint": "Chưa bật định vị xác định điểm đón gần mình nhất mà đã vội chọn trạm đích thì sao biết đón tuyến nào hả Sen!",
+              "order": 1
+            },
+            {
+              "action_icon": "🎯",
+              "card_label": "Chọn trạm muốn đến",
+              "cat_sound": "Méo meo!",
+              "error_hint": "Chưa nhập trạm muốn đến để tìm đường mà đã vội xem cách đến thì BusMap biết chỉ đi đâu bây giờ!",
+              "order": 2
+            },
+            {
+              "action_icon": "🗺️",
+              "card_label": "Xem cách đến & Lộ trình",
+              "cat_sound": "Meo-wrr...",
+              "error_hint": "Chưa xem kỹ lộ trình và tuyến xe phù hợp mà đã nhìn giờ xe chạy thì coi chừng lên nhầm tuyến ngược chiều đó!",
+              "order": 3
+            },
+            {
+              "action_icon": "⏱️",
+              "card_label": "Canh giờ xe cập bến",
+              "cat_sound": "Meoo!!",
+              "error_hint": "Không canh thời gian thực tế xe cập bến (ETA) thì Mèo sẽ đứng đợi rụng lông giữa trời nắng chang chang!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Bậc Thầy BusMap & Định Vị",
+          "reward_loot": {
+            "drop_item_id": "item_busmap_app",
+            "drop_rate": 1,
+            "fish_amount": 30,
+            "item_reward_name": "Ứng Dụng BusMap Cài Sẵn",
+            "item_type": "app"
+          },
+          "skill_id": "commute_busmap_transit",
+          "skill_name": "Tra cứu BusMap & Tìm tuyến xe"
+        },
+        {
+          "cutscene_desc": "Mèo đứng trạm vẫy tay -> xe buýt ghé vào -> Mèo đưa 5k tiền lẻ cửa trước -> lên ghế ngồi ôm balo -> bấm chuông keng keng bước xuống an toàn trước cổng trường.",
+          "handbook_content": [
+            "Đứng đúng trạm, thấy xe buýt tới cách 50m thì vẫy tay dứt khoát ra hiệu đón xe.",
+            "Bước lên cửa trước, cầm sẵn 5.000đ tiền lẻ/vé tháng trên tay và ôm chặt ba lô trước ngực.",
+            "Quan sát trạm dừng trên màn hình/loa, bấm nút chuông đỏ trên cột trước trạm đến 100m."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "✋",
+              "card_label": "Vẫy xe từ xa",
+              "cat_sound": "Meo-o?",
+              "error_hint": "Chưa vẫy tay ra hiệu đón xe mà đã chuẩn bị tiền thì xe buýt lướt qua trạm mất đấy Sen ơi!",
+              "order": 1
+            },
+            {
+              "action_icon": "💵",
+              "card_label": "Cầm sẵn tiền lẻ",
+              "cat_sound": "Méo meo!",
+              "error_hint": "Lên xe mà không cầm sẵn tiền lẻ trên tay sẽ làm tắc nghẽn cửa trước và khiến bác phụ xe càu nhàu đó!",
+              "order": 2
+            },
+            {
+              "action_icon": "🎒",
+              "card_label": "Ôm ba lô trước ngực",
+              "cat_sound": "Meo-wrr...",
+              "error_hint": "Ổn định chỗ ngồi mà quên ôm ba lô trước ngực thì rất dễ bị kẻ gian móc túi hoặc va quẹt vào người khác!",
+              "order": 3
+            },
+            {
+              "action_icon": "🔔",
+              "card_label": "Bấm chuông trước 100m",
+              "cat_sound": "Meoo!!",
+              "error_hint": "Đến sát trạm mới vội bấm chuông thì bác tài phanh gấp gây nguy hiểm hoặc chở Mèo sang tận trạm kế tiếp!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Thổ Địa Tuyến 08",
+          "reward_loot": {
+            "drop_item_id": "item_ticket_08",
+            "drop_rate": 1,
+            "fish_amount": 25,
+            "item_reward_name": "Cuống Vé Xe Buýt Số 08",
+            "item_type": "souvenir"
+          },
+          "skill_id": "commute_bus_survival",
+          "skill_name": "Bắt xe buýt liên quận"
+        },
+        {
+          "cutscene_desc": "Mèo tấp xe sát lề đường -> bấm la bàn Google Maps xoay theo hướng mặt -> lái xe vào bùng binh nhẩm đếm 1... 2... lối ra thứ 3 -> bật xi-nhan vọt ra đại lộ gọn gàng.",
+          "handbook_content": [
+            "Tấp xe vào lề đường an toàn trước khi rút điện thoại mở Google Maps.",
+            "Bấm biểu tượng la bàn để bản đồ tự xoay theo hướng mặt mình đang nhìn.",
+            "Đếm chính xác số thứ tự lối ra tại bùng binh và bật xi-nhan dứt khoát khi rời vòng xuyến."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🛑",
+              "card_label": "Tấp lề an toàn",
+              "cat_sound": "Méo-safe!",
+              "error_hint": "Vừa chạy xe vừa cúi gằm bấm điện thoại tìm đường cực kỳ nguy hiểm, phải tấp lề đường an toàn trước tiên!",
+              "order": 1
+            },
+            {
+              "action_icon": "🧭",
+              "card_label": "Xoay la bàn bản đồ",
+              "cat_sound": "Meo-spin?",
+              "error_hint": "Chưa căn chỉnh la bàn định hướng thì Mèo nhìn bản đồ ngược đầu, càng đi càng lạc sâu vào ngõ cụt!",
+              "order": 2
+            },
+            {
+              "action_icon": "🔢",
+              "card_label": "Đếm lối ra thứ mấy",
+              "cat_sound": "Meo-count!",
+              "error_hint": "Lao vào vòng xoay mà không đếm lối ra thì Mèo sẽ phải quay mòng mòng giữa bùng binh như chong chóng!",
+              "order": 3
+            },
+            {
+              "action_icon": "🏍️",
+              "card_label": "Xi-nhan thoát vòng xoay",
+              "cat_sound": "Meow-zoom!",
+              "error_hint": "Thoát khỏi lối rẽ bùng binh mà quên bật xi-nhan chuyển làn thì xe phía sau sẽ tông trúng đuôi Mèo đấy!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "La Bàn Sống Thị Thành",
+          "reward_loot": {
+            "drop_item_id": "item_mini_compass",
+            "drop_rate": 0.95,
+            "fish_amount": 30,
+            "item_reward_name": "La Bàn Đồ Chơi Đeo Cổ",
+            "item_type": "souvenir"
+          },
+          "skill_id": "commute_gps_navigation",
+          "skill_name": "Định vị GPS & Thoát bùng binh"
+        },
+        {
+          "cutscene_desc": "Mèo bình tĩnh dắt xe tấp lề an toàn -> cắm lại đầu nắp bugi bị tuột -> mở điện thoại gọi đội cứu hộ sinh viên -> đội SOS tới hỗ trợ bơm lốp miễn phí -> Mèo nổ máy chạy vi vu về ký túc xá.",
+          "handbook_content": [
+            "Tấp xe vào sát lề đường an toàn, dựng chân chống và bật đèn xi-nhan cảnh báo.",
+            "Kiểm tra xăng, nắp chụp bugi có bị tuột hay ngập nước không trước khi dắt xe.",
+            "Tra cứu tiệm sửa xe uy tín trên bản đồ hoặc gọi đội SOS sinh viên, cảnh giác bẫy 'luộc đồ' vỉa hè."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🛑",
+              "card_label": "Tấp lề & bật đèn báo",
+              "cat_sound": "Meo-stop!",
+              "error_hint": "Xe chết máy giữa đường đông mà không tấp vào lề ngay sẽ gây cản trở giao thông và bị tông trúng đuôi đấy Sen!",
+              "order": 1
+            },
+            {
+              "action_icon": "🔍",
+              "card_label": "Kiểm tra bugi & xăng",
+              "cat_sound": "Meo-spark?",
+              "error_hint": "Chưa kiểm tra bugi lỏng hay cạn xăng mà đã vội dắt vào tiệm lạ thì dễ bị thợ dỏm phán cháy động cơ hét giá triệu bạc!",
+              "order": 2
+            },
+            {
+              "action_icon": "📞",
+              "card_label": "Gọi đội SOS sinh viên",
+              "cat_sound": "Meo-sos!",
+              "error_hint": "Bị thợ lạ ép giá mà không gọi đội cứu hộ sinh viên hỗ trợ thì Mèo sẽ bị ép thay phụ tùng dỏm mất hết tiền ăn!",
+              "order": 3
+            },
+            {
+              "action_icon": "👀",
+              "card_label": "Giám sát sửa xe trực tiếp",
+              "cat_sound": "Meow-watch!",
+              "error_hint": "Để xe lại cho thợ lạ sửa mà không đứng giám sát trực tiếp thì phụ tùng zin của xe sẽ bị tráo sạch mất rồi!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Hiệp Sĩ Xa Lộ Tự Lực",
+          "reward_loot": {
+            "drop_item_id": "item_puncture_kit",
+            "drop_rate": 1,
+            "fish_amount": 30,
+            "item_reward_name": "Bộ Vá Xe Đa Năng Bỏ Cốp",
+            "item_type": "equipment"
+          },
+          "skill_id": "commute_motorbike_rescue",
+          "skill_name": "Cứu hộ xe máy khi hỏng hóc dọc đường"
+        }
+      ]
+    },
+    {
+      "group_desc": "Kỹ năng thẩm định hợp đồng phòng trọ, bảo đảm an toàn phòng cháy chữa cháy, kê khai cư trú và văn hóa sống chung.",
+      "group_id": "group_legal_housing",
+      "group_name": "Pháp lý & Nơi ở",
+      "skills": [
+        {
+          "cutscene_desc": "Mèo đeo kính thám tử chỉ bút bi vào dòng bẫy phạt cọc -> gạch chân chốt giá điện 3.5k/kWh -> giơ điện thoại chụp lia lịa vết nứt tường -> ký hợp đồng và cất bản gốc vào cặp.",
+          "handbook_content": [
+            "Soi kỹ điều khoản hoàn tiền cọc và thời hạn bắt buộc phải báo trước khi chuyển đi.",
+            "Chốt đơn giá điện nước (theo kWh/khối nhà nước) và các phụ phí ngầm bằng văn bản.",
+            "Chụp ảnh toàn bộ hiện trạng phòng nứt vỡ trước khi dọn vào và giữ 01 bản hợp đồng gốc."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "📑",
+              "card_label": "Soi điều khoản cọc",
+              "cat_sound": "Meo-read!",
+              "error_hint": "Chưa đọc kỹ điều khoản hoàn cọc mà vội đặt bút ký thì lúc dọn đi sẽ bị chủ trừ sạch tiền cọc vô lý đó!",
+              "order": 1
+            },
+            {
+              "action_icon": "⚡",
+              "card_label": "Chốt giá điện nước",
+              "cat_sound": "Meo-bill?",
+              "error_hint": "Không chốt rõ ràng biểu giá điện nước và phí dịch vụ thì cuối tháng nhận giấy báo giá trên trời khóc không kịp!",
+              "order": 2
+            },
+            {
+              "action_icon": "📸",
+              "card_label": "Chụp hiện trạng phòng",
+              "cat_sound": "Meo-snap!",
+              "error_hint": "Không chụp ảnh lưu bằng chứng vết nứt tường, thiết bị cũ trước khi nhận phòng thì sau này sẽ bị bắt đền oan uổng!",
+              "order": 3
+            },
+            {
+              "action_icon": "✍️",
+              "card_label": "Ký giữ bản hợp đồng gốc",
+              "cat_sound": "Meow-sign!",
+              "error_hint": "Ký tên xong mà để chủ trọ giữ hết giấy tờ, không cầm bản gốc có chữ ký sống về tay thì mất trắng căn cứ pháp lý!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Thám Tử Hợp Đồng Trọ",
+          "reward_loot": {
+            "drop_item_id": "item_blue_pen",
+            "drop_rate": 1,
+            "fish_amount": 35,
+            "item_reward_name": "Bút Bi Xanh Ký Hợp Đồng",
+            "item_type": "souvenir"
+          },
+          "skill_id": "housing_rental_contract",
+          "skill_name": "Soi hợp đồng thuê trọ tránh bẫy cọc"
+        },
+        {
+          "cutscene_desc": "Mèo ra ban công giật thử chốt cửa chuồng cọp kiểm tra chìa treo cạnh -> ngó kim bình cứu hỏa hành lang chỉ vạch xanh -> leo thử thang phụ lên sân thượng -> xếp khăn mặt và đèn pin đầu giường.",
+          "handbook_content": [
+            "Kiểm tra lồng sắt chuồng cọp có cửa mở thoát hiểm và khóa phải có chìa treo sẵn.",
+            "Xác định bình chữa cháy hành lang còn kim ở vạch xanh (đủ áp suất phun).",
+            "Định vị lối thoát hiểm phụ lên sân thượng; chuẩn bị sẵn khăn mặt và đèn pin đầu giường."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🚪",
+              "card_label": "Kiểm tra chuồng cọp",
+              "cat_sound": "Meo-door?",
+              "error_hint": "Chuồng cọp ban công bị hàn chết không có cửa mở thoát hiểm sẽ biến căn phòng thành lồng bẫy nguy hiểm nhất!",
+              "order": 1
+            },
+            {
+              "action_icon": "🧯",
+              "card_label": "Soi kim bình cứu hỏa",
+              "cat_sound": "Meo-gauge!",
+              "error_hint": "Bình cứu hỏa có kim tụt sang vạch đỏ là đã hết áp suất xịt không ra bọt, cần yêu cầu chủ trọ thay mới ngay!",
+              "order": 2
+            },
+            {
+              "action_icon": "🪜",
+              "card_label": "Định vị lối sân thượng",
+              "cat_sound": "Meo-roof!",
+              "error_hint": "Cầu thang chính tắc khói mà không biết lối thoát phụ lên sân thượng thì Mèo sẽ bị cô lập hoàn toàn giữa tầng trọ!",
+              "order": 3
+            },
+            {
+              "action_icon": "🔦",
+              "card_label": "Chuẩn bị khăn & đèn pin",
+              "cat_sound": "Meow-torch!",
+              "error_hint": "Lúc cúp điện khói mịt mù mới cuống cuồng mò tìm đèn pin và khăn mặt thì đã hít phải khí độc mất rồi Sen ơi!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Hiệp Sĩ PCCC Xóm Trọ",
+          "reward_loot": {
+            "drop_item_id": "item_glow_keychain",
+            "drop_rate": 0.9,
+            "fish_amount": 30,
+            "item_reward_name": "Móc Khóa Dạ Quang Thoát Hiểm",
+            "item_type": "equipment"
+          },
+          "skill_id": "housing_fire_safety",
+          "skill_name": "Khảo sát an toàn PCCC phòng trọ"
+        },
+        {
+          "cutscene_desc": "Mèo lễ phép xin số CCCD chủ trọ -> mở điện thoại quét xác thực khuôn mặt trên VNeID -> tải ảnh chụp hợp đồng thuê phòng lên mạng -> nhận ngay thông báo hồ sơ tạm trú được duyệt.",
+          "handbook_content": [
+            "Thu thập thông tin số CCCD của chủ nhà trọ và địa chỉ định danh thửa đất căn phòng.",
+            "Đăng nhập Cổng Dịch vụ công Quốc gia bằng tài khoản VNeID định danh mức 2.",
+            "Khai mẫu CT01 trực tuyến, đính kèm ảnh hợp đồng thuê phòng và lưu mã hồ sơ theo dõi."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🪪",
+              "card_label": "Lấy CCCD chủ trọ",
+              "cat_sound": "Meo-info?",
+              "error_hint": "Chưa xin được CCCD chủ trọ và thông tin thửa đất thì hệ thống dịch vụ công không thể xác định căn nhà để nộp hồ sơ!",
+              "order": 1
+            },
+            {
+              "action_icon": "📲",
+              "card_label": "Đăng nhập VNeID mức 2",
+              "cat_sound": "Meo-app!",
+              "error_hint": "Chưa kích hoạt tài khoản định danh VNeID mức 2 thì cổng dịch vụ công sẽ từ chối quyền nộp hồ sơ cư trú trực tuyến!",
+              "order": 2
+            },
+            {
+              "action_icon": "📤",
+              "card_label": "Tải ảnh hợp đồng trọ",
+              "cat_sound": "Meo-attach!",
+              "error_hint": "Điền mẫu CT01 mà quên đính kèm tệp ảnh chụp hợp đồng thuê nhà thì cán bộ công an phường sẽ bấm hủy hồ sơ ngay!",
+              "order": 3
+            },
+            {
+              "action_icon": "✅",
+              "card_label": "Lưu mã hồ sơ phê duyệt",
+              "cat_sound": "Meow-done!",
+              "error_hint": "Gửi hồ sơ xong mà không lưu lại mã tra cứu để nhận kết quả phê duyệt thì không chứng minh được mình đã đăng ký hợp pháp!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Công Dân Tạm Trú Mẫu Mực",
+          "reward_loot": {
+            "drop_item_id": "item_ct07_paper",
+            "drop_rate": 1,
+            "fish_amount": 30,
+            "item_reward_name": "Thông Báo Xác Nhận Tạm Trú CT07",
+            "item_type": "souvenir"
+          },
+          "skill_id": "housing_residence_registration",
+          "skill_name": "Đăng ký tạm trú trực tuyến (VNeID)"
+        },
+        {
+          "cutscene_desc": "3 chú mèo ngồi quanh bàn trà sữa thảo luận rôm rả -> cùng nhau vẽ bảng dọn toilet dán lên tủ lạnh -> quẹt app chia tiền dầu ăn mắm muối -> đúng 11h đêm tự giác tắt đèn đeo bịt mắt đi ngủ.",
+          "handbook_content": [
+            "Họp mặt trà sữa thảo luận thẳng thắn, nhẹ nhàng ngay tuần đầu tiên dọn về ở chung.",
+            "Dán lịch trực nhật dọn toilet, rửa bát và đổ rác luân phiên lên cửa tủ lạnh.",
+            "Tạo nhóm app chia tiền quỹ dùng chung minh bạch; thống nhất giờ tắt đèn ngủ và dẫn khách."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🍵",
+              "card_label": "Họp phòng trà sữa",
+              "cat_sound": "Meo-talk!",
+              "error_hint": "Chờ đến lúc tức giận mới nói chuyện thì thành cãi cọ to tiếng, phải họp mặt chia sẻ vui vẻ ngay từ những ngày đầu!",
+              "order": 1
+            },
+            {
+              "action_icon": "🧹",
+              "card_label": "Dán lịch trực nhật",
+              "cat_sound": "Meo-clean!",
+              "error_hint": "Không lập lịch phân công cụ thể thì nhà vệ sinh sẽ bẩn thỉu, rác chất đầy nhà không ai chịu dọn dẹp!",
+              "order": 2
+            },
+            {
+              "action_icon": "📊",
+              "card_label": "Tạo app chia tiền quỹ",
+              "cat_sound": "Meo-split!",
+              "error_hint": "Tiền mua dầu ăn, mắm muối, giấy vệ sinh dùng chung mà mập mờ không ghi sổ thì sớm muộn cũng nghi ngờ xích mích!",
+              "order": 3
+            },
+            {
+              "action_icon": "🌙",
+              "card_label": "Chốt giờ tắt đèn ngủ",
+              "cat_sound": "Meow-rule!",
+              "error_hint": "Không thống nhất giờ tắt đèn và quy định dẫn bạn bè về phòng ngủ lại sẽ làm đảo lộn hoàn toàn giấc ngủ của người khác!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Bạn Cùng Phòng Điểm 10",
+          "reward_loot": {
+            "drop_item_id": "item_house_rules_poster",
+            "drop_rate": 1,
+            "fish_amount": 30,
+            "item_reward_name": "Bảng Nội Quy Phòng Trọ Vẽ Tay",
+            "item_type": "decoration"
+          },
+          "skill_id": "housing_roommate_culture",
+          "skill_name": "Thiết lập hiệp ước bạn cùng phòng"
+        }
+      ]
+    },
+    {
+      "group_desc": "Kỹ năng tự xử lý cấp cứu ban đêm, quy trình đi khám BHYT đúng tuyến không sợ bỡ ngỡ và thiết lập tủ thuốc phòng trọ.",
+      "group_id": "group_health_medical",
+      "group_name": "Sức khỏe & Y tế",
+      "skills": [
+        {
+          "cutscene_desc": "Mèo run run kẹp nhiệt kế kêu tít tít 39 độ -> uống đúng liều Paracetamol theo cân nặng -> vắt khăn nước ấm lau nách bẹn -> nhấp từng ngụm Oresol rồi đắp chăn mỏng ngủ say hạ sốt an toàn.",
+          "handbook_content": [
+            "Kẹp nhiệt kế nách 5 phút; nếu sốt trên 38.5°C uống Paracetamol đúng liều 10-15mg/kg.",
+            "Dùng khăn nhúng nước ẤM lau mát các vị trí mạch lớn ở hai bên nách, bẹn và trán.",
+            "Mặc quần áo mỏng rộng thoáng khí và nhấp từng ngụm nhỏ dung dịch Oresol bù nước."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🌡️",
+              "card_label": "Kẹp nhiệt kế nách",
+              "cat_sound": "Meo-temp?",
+              "error_hint": "Dùng tay sờ trán rồi đoán mò tự uống thuốc rất nguy hiểm, phải kẹp nhiệt kế đo chính xác nhiệt độ trước tiên!",
+              "order": 1
+            },
+            {
+              "action_icon": "💊",
+              "card_label": "Uống đúng liều Para",
+              "cat_sound": "Meo-pill!",
+              "error_hint": "Uống thuốc hạ sốt quá liều hoặc uống dồn dập dưới 4 tiếng sẽ gây ngộ độc suy gan cấp tính nguy hiểm cho Mèo!",
+              "order": 2
+            },
+            {
+              "action_icon": "💧",
+              "card_label": "Lau khăn nước ấm",
+              "cat_sound": "Meo-warm!",
+              "error_hint": "Dùng đá lạnh chườm trán sẽ làm co mạch đột ngột, giữ nhiệt bên trong gây sốt run và co giật dữ dội!",
+              "order": 3
+            },
+            {
+              "action_icon": "🥤",
+              "card_label": "Uống bù nước Oresol",
+              "cat_sound": "Meow-oresol!",
+              "error_hint": "Sốt cao mất nước mà không bù điện giải Oresol thì cơ thể kiệt sức, li bì lú lẫn không thể hồi phục!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Chiến Binh Hạ Sốt Can Trường",
+          "reward_loot": {
+            "drop_item_id": "item_digital_thermometer",
+            "drop_rate": 1,
+            "fish_amount": 35,
+            "item_reward_name": "Nhiệt Kế Điện Tử Đầu Mềm",
+            "item_type": "medical"
+          },
+          "skill_id": "health_midnight_fever",
+          "skill_name": "Xử lý sốt cao 39 độ giữa đêm"
+        },
+        {
+          "cutscene_desc": "Mèo đến bệnh viện lúc 7h sáng bấm máy lấy số BHYT -> đưa CCCD gắn chip nhận sổ đúng tuyến -> vào gặp bác sĩ nghe tim phổi ân cần -> sang quầy Dược nhận bọc thuốc miễn phí mỉm cười ra về.",
+          "handbook_content": [
+            "Có mặt lúc 7h sáng bấm số thứ tự tại máy phát số khu 'Khám BHYT'.",
+            "Xuất trình thẻ CCCD gắn chip (hoặc app VssID) tại quầy tiếp nhận để lấy sổ khám.",
+            "Khám phòng chuyên khoa, làm xét nghiệm, thanh toán viện phí chênh lệch và sang quầy Dược nhận thuốc."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🎟️",
+              "card_label": "Bốc số BHYT sớm",
+              "cat_sound": "Meo-num!",
+              "error_hint": "Đến bệnh viện muộn không bốc số BHYT sớm thì Mèo phải ngồi chờ ròng rã cả buổi sáng đến trưa trật mới tới lượt!",
+              "order": 1
+            },
+            {
+              "action_icon": "🪪",
+              "card_label": "Trình CCCD lấy sổ",
+              "cat_sound": "Meo-id!",
+              "error_hint": "Nộp sổ khám nhầm sang khu khám dịch vụ quốc tế VIP thì hóa đơn lên tiền triệu không được quỹ BHYT chi trả đâu!",
+              "order": 2
+            },
+            {
+              "action_icon": "🩺",
+              "card_label": "Vào gặp bác sĩ khám",
+              "cat_sound": "Meo-doc!",
+              "error_hint": "Chưa vào phòng khám để bác sĩ chỉ định mà đã tự ý đi nộp tiền làm xét nghiệm là sai quy trình bệnh viện rồi!",
+              "order": 3
+            },
+            {
+              "action_icon": "💊",
+              "card_label": "Lấy thuốc kho Dược",
+              "cat_sound": "Meow-pharm!",
+              "error_hint": "Khám xong mà quên mang toa thuốc qua quầy Dược BHYT nhận thuốc cấp phát thì Mèo phải tự bỏ tiền túi ra mua đắt đỏ!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Bậc Thầy BHYT Không Bị Mắng",
+          "reward_loot": {
+            "drop_item_id": "item_vitamin_c_pack",
+            "drop_rate": 1,
+            "fish_amount": 35,
+            "item_reward_name": "Vỉ Kẹo Ngậm C Bệnh Viện",
+            "item_type": "consumable"
+          },
+          "skill_id": "health_insurance_hospital",
+          "skill_name": "Khám bệnh BHYT đúng tuyến 6 bước"
+        },
+        {
+          "cutscene_desc": "Mèo mở hộp thiếc chia làm 3 ngăn -> xếp thuốc hạ sốt, men tiêu hóa, cồn đỏ gọn gàng -> dùng bút lông dán nhãn hạn dùng lên từng nắp -> đóng hộp cất lên kệ khô ráo tự tin.",
+          "handbook_content": [
+            "Phân 3 nhóm thuốc thiết yếu: Hạ sốt/giảm đau, tiêu hóa (Berberin, men vi sinh, Oresol), sát trùng vết thương.",
+            "Dán nhãn ghi rõ liều lượng uống và hạn sử dụng ngay trên nắp từng vỉ thuốc.",
+            "Bảo quản hộp thuốc ở nơi khô ráo thoáng mát, định kỳ kiểm tra loại bỏ thuốc hết hạn mỗi 6 tháng."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🩹",
+              "card_label": "Xếp hạ sốt & nhiệt kế",
+              "cat_sound": "Meo-fever!",
+              "error_hint": "Tủ thuốc phòng trọ mà thiếu Paracetamol và nhiệt kế điện tử thì nửa đêm ốm đau biết lấy gì để hạ sốt khẩn cấp!",
+              "order": 1
+            },
+            {
+              "action_icon": "🧪",
+              "card_label": "Bổ sung Berberin & men",
+              "cat_sound": "Meo-stomach!",
+              "error_hint": "Ăn trúng đồ lạ đau bụng tiêu chảy mà thiếu Berberin và Oresol bù nước thì cả đêm ôm toilet kiệt quệ sức lực!",
+              "order": 2
+            },
+            {
+              "action_icon": "🩸",
+              "card_label": "Chuẩn bị cồn đỏ & gạc",
+              "cat_sound": "Meo-wound!",
+              "error_hint": "Bị trầy xước đứt tay mà không có cồn đỏ Povidine và gạc vô trùng thì vết thương nhiễm trùng mưng mủ nguy hiểm!",
+              "order": 3
+            },
+            {
+              "action_icon": "🏷️",
+              "card_label": "Dán nhãn hạn dùng",
+              "cat_sound": "Meow-label!",
+              "error_hint": "Thuốc để trong hộp mà không ghi nhãn liều dùng thì lúc ốm mệt mờ mắt rất dễ uống nhầm loại thuốc hoặc uống quá liều!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Dược Sĩ Phòng Trọ Tháo Vát",
+          "reward_loot": {
+            "drop_item_id": "item_tin_med_box",
+            "drop_rate": 1,
+            "fish_amount": 25,
+            "item_reward_name": "Hộp Cứu Thương Mini Bằng Thiếc",
+            "item_type": "equipment"
+          },
+          "skill_id": "health_first_aid_kit",
+          "skill_name": "Xây dựng túi thuốc trọ sinh tồn"
+        },
+        {
+          "cutscene_desc": "Mèo kiên quyết vứt gói mì sống bẻ vụn -> bật bếp từ đun sôi nước chần mì -> thả thêm rau cải và quả trứng béo ngậy -> múc ra tô thơm phức ăn ngon lành bảo vệ bao tử.",
+          "handbook_content": [
+            "Tuyệt đối không ăn mì tôm sống bẻ vụn thay bữa chính vì gây nóng trong và viêm loét dạ dày.",
+            "Luôn nấu mì chín với nước sôi, chần bỏ nước đầu tiên để loại bỏ bớt dầu chiên công nghiệp.",
+            "Bổ sung thêm rau xanh, 1 quả trứng luộc hoặc đậu phụ để cân bằng dinh dưỡng sinh viên."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🚫",
+              "card_label": "Nói không với mì sống",
+              "cat_sound": "Meo-no!",
+              "error_hint": "Lười nấu mà ăn mì gói sống bẻ vụn cả tuần sẽ khiến dạ dày co thắt quằn quại giữa đêm đấy Sen ơi!",
+              "order": 1
+            },
+            {
+              "action_icon": "🍲",
+              "card_label": "Nấu sôi chần bỏ nước đầu",
+              "cat_sound": "Meo-boil!",
+              "error_hint": "Đổ nước sôi ăn liền không chần bỏ nước đầu thì nuốt trọn lượng dầu chiên cũ gây khó tiêu và ợ nóng!",
+              "order": 2
+            },
+            {
+              "action_icon": "🥚",
+              "card_label": "Thêm trứng & rau xanh",
+              "cat_sound": "Meo-egg!",
+              "error_hint": "Chỉ ăn mì gói suông không bổ sung đạm và chất xơ thì cơ thể suy nhược xanh xao rụng lông hết!",
+              "order": 3
+            },
+            {
+              "action_icon": "🥗",
+              "card_label": "Ăn đúng giờ bảo vệ bao tử",
+              "cat_sound": "Meow-good!",
+              "error_hint": "Bỏ bữa sáng rồi dồn ăn đêm khuya thì thuốc tiên cũng không cứu nổi vết loét dạ dày đâu Sen!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Vua Đầu Bếp Xóm Trọ",
+          "reward_loot": {
+            "drop_item_id": "item_mini_cooker",
+            "drop_rate": 1,
+            "fish_amount": 30,
+            "item_reward_name": "Nồi Cơm Điện Mini Siêu Tốc",
+            "item_type": "decoration"
+          },
+          "skill_id": "health_gastric_care",
+          "skill_name": "Bảo vệ dạ dày: Bỏ thói quen ăn mì sống"
+        }
+      ]
+    },
+    {
+      "group_desc": "Kỹ năng phân bổ dòng tiền sinh viên, bóc trần cạm bẫy lừa đảo đa cấp ảo và bảo vệ quyền lợi khi đi làm thêm.",
+      "group_id": "group_finance_career",
+      "group_name": "Tài chính & Việc làm",
+      "skills": [
+        {
+          "cutscene_desc": "Mèo nhận 90 Cá Khô chu cấp -> chia nhanh vào 3 hũ thủy tinh: 45 Cá hũ trọ ăn uống, 27 Cá hũ sách vở bạn bè, 18 Cá hũ khẩn cấp dán băng keo niêm phong -> cuối tháng ung dung dư tiền mua pate.",
+          "handbook_content": [
+            "Hũ 1 (Sống còn - 50%): Khóa cứng tiền nhà trọ, tiền ăn cơ bản và vé xe đi lại cả tháng.",
+            "Hũ 2 (Phát triển - 30%): Chi cho giáo trình học tập, chứng chỉ và giao lưu bạn bè lành mạnh.",
+            "Hũ 3 (Khẩn cấp - 20%): Tuyệt đối không đụng vào, cất riêng phòng khi xe hỏng hoặc ốm đau bất ngờ."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "🪙",
+              "card_label": "Chia ngay 3 phần tiền",
+              "cat_sound": "Meo-split!",
+              "error_hint": "Nhận tiền chu cấp mà để chung một tài khoản thì Mèo sẽ quẹt thẻ mua sắm vô tội vạ, rỗng túi sau 10 ngày!",
+              "order": 1
+            },
+            {
+              "action_icon": "🏠",
+              "card_label": "Khóa 50% tiền sống còn",
+              "cat_sound": "Meo-survive!",
+              "error_hint": "Chưa trích tiền đóng trọ và tiền ăn cơ bản cả tháng mà đã vội tiêu xài thì giữa tháng bị chủ đòi nhà nhịn đói đó!",
+              "order": 2
+            },
+            {
+              "action_icon": "📚",
+              "card_label": "Dành 30% phát triển",
+              "cat_sound": "Meo-study!",
+              "error_hint": "Cắt bỏ hoàn toàn khoản đầu tư học hành và phát triển bản thân thì Mèo sẽ dậm chân tại chỗ không tiến bộ được!",
+              "order": 3
+            },
+            {
+              "action_icon": "🔒",
+              "card_label": "Niêm phong 20% khẩn cấp",
+              "cat_sound": "Meow-lock!",
+              "error_hint": "Đem tiền quỹ khẩn cấp đi ăn liên hoan mua sắm thì lúc ốm đau xe thủng lốp chỉ biết dắt bộ khóc ròng trong đêm!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Thủ Kho Cá Khô Thông Thái",
+          "reward_loot": {
+            "drop_item_id": "item_three_jars",
+            "drop_rate": 1,
+            "fish_amount": 35,
+            "item_reward_name": "Bộ 3 Hũ Thủy Tinh Đựng Cá Khô",
+            "item_type": "souvenir"
+          },
+          "skill_id": "finance_three_jars_rule",
+          "skill_name": "Quy tắc quản lý ngân sách 3 Hũ Tiền"
+        },
+        {
+          "cutscene_desc": "Mèo ngồi nghe hội trường tung hô lãi 1.5%/ngày -> rút máy tính bấm soi ra bẫy Ponzi -> thấy không có sản phẩm gì bán -> ôm chặt ví kéo khóa cất CCCD -> giơ tay chào 'em về học bài' chạy thẳng ra cửa an toàn.",
+          "handbook_content": [
+            "Quy tắc vàng: Cam kết sinh lời trên 15%/năm không rủi ro chắc chắn là bẫy lừa đảo tài chính.",
+            "Soi dòng tiền: Nếu công ty không có sản phẩm thương mại thật mà chỉ chăm chăm tuyển người nạp tiền -> Ponzi.",
+            "Tuyệt đối không đóng cọc, cất chặt CCCD trong ví và kiên quyết đứng dậy rời hội thảo ngay."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "📉",
+              "card_label": "Soi lãi khủng phi lý",
+              "cat_sound": "Meo-math?",
+              "error_hint": "Nghe lời đường mật cam kết lãi khủng 1.5%/ngày (hơn 500%/năm) mà tin sái cổ là Mèo chuẩn bị mất sạch tiền học phí rồi!",
+              "order": 1
+            },
+            {
+              "action_icon": "📦",
+              "card_label": "Kiểm tra sản phẩm thật",
+              "cat_sound": "Meo-product?",
+              "error_hint": "Doanh nghiệp không có sản phẩm chất lượng bán ra thị trường mà ép nạp tiền lôi kéo người quen chính là mô hình Ponzi lừa đảo!",
+              "order": 2
+            },
+            {
+              "action_icon": "🚫",
+              "card_label": "Cất chặt ví & CCCD",
+              "cat_sound": "Meo-pocket!",
+              "error_hint": "Bị thao túng tâm lý rồi vội vàng rút ví đóng cọc 'giữ chỗ kim cương' hoặc đưa CCCD cho họ chụp là dính bẫy nợ nần!",
+              "order": 3
+            },
+            {
+              "action_icon": "🏃",
+              "card_label": "Rời hội thảo dứt khoát",
+              "cat_sound": "Meow-escape!",
+              "error_hint": "Ngại từ chối mà tiếp tục ngồi nghe họ 'tẩy não truyền lửa' thì sẽ bị giam lỏng tâm lý ép vay tiền online ngay tại chỗ!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Khắc Tinh Sàn Ảo Đa Cấp",
+          "reward_loot": {
+            "drop_item_id": "item_detect_magnifier",
+            "drop_rate": 0.9,
+            "fish_amount": 35,
+            "item_reward_name": "Kính Lúp Soi Sàn Ảo Ponzi",
+            "item_type": "souvenir"
+          },
+          "skill_id": "finance_detect_ponzi_scam",
+          "skill_name": "Nhận diện bẫy đa cấp Ponzi & Sàn ảo"
+        },
+        {
+          "cutscene_desc": "Mèo đến quán cafe nộp CV chốt ca ngoài giờ học -> hỏi rõ lương 25k/giờ trả ngày 5 hàng tháng -> thẳng thắn từ chối khi quản lý đòi giữ CCCD gốc -> ký biên nhận thỏa thuận rồi vào ca mỉm cười tự tin.",
+          "handbook_content": [
+            "Chốt lịch làm thêm không trùng lịch học/thi cử và thỏa thuận rõ mức lương giờ (Gross/Net), ngày trả lương.",
+            "Tuyệt đối TỪ CHỐI đóng tiền cọc giữ chân, cọc mua đồng phục hoặc nộp bản gốc CCCD/thẻ sinh viên.",
+            "Yêu cầu ký hợp đồng lao động thời vụ hoặc văn bản xác nhận thỏa thuận qua tin nhắn/email trước khi vào ca."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "📄",
+              "card_label": "Trình CV khớp lịch học",
+              "cat_sound": "Meo-cv!",
+              "error_hint": "Chưa sắp xếp lịch học mà nhận ca làm bừa bãi sẽ dẫn đến tình trạng cúp học rớt môn, tiền làm thêm không bù nổi tiền học lại!",
+              "order": 1
+            },
+            {
+              "action_icon": "💵",
+              "card_label": "Chốt lương giờ & ngày trả",
+              "cat_sound": "Meo-wage?",
+              "error_hint": "Ngại ngùng không hỏi rõ lương giờ bao nhiêu và trả vào ngày nào thì cuối tháng sẽ bị chủ trừ xén lương vô lý!",
+              "order": 2
+            },
+            {
+              "action_icon": "🛡️",
+              "card_label": "Từ chối nộp cọc & CCCD",
+              "cat_sound": "Meo-id!",
+              "error_hint": "Giao nộp bản gốc CCCD và đóng tiền cọc tạp dề cho chỗ tuyển dụng ma là Mèo rơi vào bẫy quỵt tiền cọc mất trắng!",
+              "order": 3
+            },
+            {
+              "action_icon": "🤝",
+              "card_label": "Ký thỏa thuận trước ca",
+              "cat_sound": "Meow-agree!",
+              "error_hint": "Đi làm mà không có hợp đồng văn bản hay tin nhắn thỏa thuận cụ thể thì lúc bị quỵt lương không có bằng chứng pháp lý để đòi lại!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Người Lao Động Trẻ Tỉnh Táo",
+          "reward_loot": {
+            "drop_item_id": "item_barista_badge",
+            "drop_rate": 1,
+            "fish_amount": 30,
+            "item_reward_name": "Thẻ Nhân Viên Pha Chế Xịn Sò",
+            "item_type": "souvenir"
+          },
+          "skill_id": "finance_part_time_rights",
+          "skill_name": "Bảo vệ quyền lợi làm thêm Part-time"
+        },
+        {
+          "cutscene_desc": "Mèo bấm 'Hủy giỏ hàng' sau 48h suy nghĩ -> mở app tắt tính năng ví trả sau -> thở phào nhẹ nhõm vì bảo toàn trọn vẹn số tiền ăn học tháng tới.",
+          "handbook_content": [
+            "Kích hoạt quy tắc 'Phanh Tiêu Dùng 48 Giờ': Chờ 2 ngày trước khi quyết định mua món đồ không thiết yếu.",
+            "Đọc kỹ biểu phí phạt chậm trả và lãi suất ẩn giấu sau dòng quảng cáo '0% lãi suất'.",
+            "Tự hỏi: 'Nếu không có ví trả sau, mình có đủ tiền mặt mua món này không?' Nếu không -> Bỏ giỏ hàng và khóa hạn mức."
+          ],
+          "puzzle_cards": [
+            {
+              "action_icon": "⏳",
+              "card_label": "Kích hoạt phanh 48h",
+              "cat_sound": "Meo-wait!",
+              "error_hint": "Thấy đồ đẹp mà quẹt mua ngay không suy nghĩ 48h thì sẽ rước về món đồ vô bổ và ôm cục nợ to đùng!",
+              "order": 1
+            },
+            {
+              "action_icon": "🔍",
+              "card_label": "Soi phí trễ hạn & phạt",
+              "cat_sound": "Meo-fine?",
+              "error_hint": "Quên soi biểu phí phạt chậm trả thì chỉ sau 1 tuần khoản nợ sẽ nhân đôi nhân ba với lãi suất cắt cổ!",
+              "order": 2
+            },
+            {
+              "action_icon": "🤔",
+              "card_label": "Chỉ mua khi có tiền mặt",
+              "cat_sound": "Meo-cash?",
+              "error_hint": "Không có tiền mặt dự phòng mà cứ tiêu xài trước tương lai thì tháng sau nhịn đói trả nợ tín dụng!",
+              "order": 3
+            },
+            {
+              "action_icon": "🔒",
+              "card_label": "Khóa hạn mức ví trả sau",
+              "cat_sound": "Meow-lock!",
+              "error_hint": "Để mở hạn mức ví trả sau sẽ liên tục kích thích cơn nghiện mua sắm không kiểm soát được!",
+              "order": 4
+            }
+          ],
+          "reward_achievement": "Chiến Sĩ Tự Do Tài Chính",
+          "reward_loot": {
+            "drop_item_id": "item_golden_scissors",
+            "drop_rate": 1,
+            "fish_amount": 35,
+            "item_reward_name": "Chiếc Kéo Vàng Cắt Thẻ Nợ",
+            "item_type": "souvenir"
+          },
+          "skill_id": "finance_credit_trap_escape",
+          "skill_name": "Thoát bẫy nợ 'Ví trả sau' & Thấu chi"
+        }
+      ]
+    }
+  ],
+  "system_info": {
+    "description": "Hệ thống kỹ năng sống sinh viên tích hợp thẻ kéo-thả âm thanh mèo (Cat Voice Sequence Puzzle), cẩm nang hiện trường, kịch bản cutscene mô phỏng và bảng cấu hình phần thưởng chuẩn Dev.",
+    "project_name": "Best Sen",
+    "version": "1.1.0"
+  }
+}

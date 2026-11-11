@@ -1,0 +1,452 @@
+[
+  {
+    "file": "clip_01.wav",
+    "duration": 0.2,
+    "attackMs": 3,
+    "pitchStart": 234,
+    "pitchMid": 234,
+    "pitchEnd": 218,
+    "category": "ui_click_pop"
+  },
+  {
+    "file": "clip_02.wav",
+    "duration": 0.66,
+    "attackMs": 46,
+    "pitchStart": 103,
+    "pitchMid": 89,
+    "pitchEnd": 89,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_03.wav",
+    "duration": 0.18,
+    "attackMs": 42,
+    "pitchStart": 1043,
+    "pitchMid": 1043,
+    "pitchEnd": 1043,
+    "category": "unknown"
+  },
+  {
+    "file": "clip_04.wav",
+    "duration": 0.26,
+    "attackMs": 58,
+    "pitchStart": 1091,
+    "pitchMid": 1143,
+    "pitchEnd": 1171,
+    "category": "unknown"
+  },
+  {
+    "file": "clip_05.wav",
+    "duration": 0.16,
+    "attackMs": 52,
+    "pitchStart": null,
+    "pitchMid": null,
+    "pitchEnd": null,
+    "category": "unknown"
+  },
+  {
+    "file": "clip_06.wav",
+    "duration": 0.2,
+    "attackMs": 67,
+    "pitchStart": null,
+    "pitchMid": null,
+    "pitchEnd": null,
+    "category": "unknown"
+  },
+  {
+    "file": "clip_07.wav",
+    "duration": 0.4,
+    "attackMs": 53,
+    "pitchStart": 197,
+    "pitchMid": 196,
+    "pitchEnd": 196,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_08.wav",
+    "duration": 0.72,
+    "attackMs": 44,
+    "pitchStart": 527,
+    "pitchMid": 533,
+    "pitchEnd": 533,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_09.wav",
+    "duration": 0.28,
+    "attackMs": 44,
+    "pitchStart": 1412,
+    "pitchMid": 842,
+    "pitchEnd": 857,
+    "category": "downward_fail_or_sad_meow"
+  },
+  {
+    "file": "clip_10.wav",
+    "duration": 0.2,
+    "attackMs": 54,
+    "pitchStart": null,
+    "pitchMid": null,
+    "pitchEnd": null,
+    "category": "unknown"
+  },
+  {
+    "file": "clip_11.wav",
+    "duration": 0.38,
+    "attackMs": 60,
+    "pitchStart": 500,
+    "pitchMid": 623,
+    "pitchEnd": 615,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_12.wav",
+    "duration": 0.28,
+    "attackMs": 44,
+    "pitchStart": 774,
+    "pitchMid": 873,
+    "pitchEnd": 857,
+    "category": "unknown"
+  },
+  {
+    "file": "clip_13.wav",
+    "duration": 0.34,
+    "attackMs": 57,
+    "pitchStart": 110,
+    "pitchMid": 94,
+    "pitchEnd": 110,
+    "category": "unknown"
+  },
+  {
+    "file": "clip_14.wav",
+    "duration": 0.6,
+    "attackMs": 52,
+    "pitchStart": 1043,
+    "pitchMid": 150,
+    "pitchEnd": 150,
+    "category": "downward_fail_or_sad_meow"
+  },
+  {
+    "file": "clip_15.wav",
+    "duration": 1.18,
+    "attackMs": 146,
+    "pitchStart": 667,
+    "pitchMid": 131,
+    "pitchEnd": 131,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_16.wav",
+    "duration": 1.18,
+    "attackMs": 59,
+    "pitchStart": 558,
+    "pitchMid": 131,
+    "pitchEnd": 131,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_17.wav",
+    "duration": 1.14,
+    "attackMs": 149,
+    "pitchStart": 132,
+    "pitchMid": 131,
+    "pitchEnd": 131,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_18.wav",
+    "duration": 1.2,
+    "attackMs": 155,
+    "pitchStart": 219,
+    "pitchMid": 696,
+    "pitchEnd": 706,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_19.wav",
+    "duration": 0.56,
+    "attackMs": 121,
+    "pitchStart": 1021,
+    "pitchMid": 1116,
+    "pitchEnd": 1143,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_20.wav",
+    "duration": 1.26,
+    "attackMs": 113,
+    "pitchStart": null,
+    "pitchMid": 131,
+    "pitchEnd": 131,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_21.wav",
+    "duration": 0.56,
+    "attackMs": 57,
+    "pitchStart": 762,
+    "pitchMid": 686,
+    "pitchEnd": 578,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_22.wav",
+    "duration": 0.76,
+    "attackMs": 147,
+    "pitchStart": 329,
+    "pitchMid": 132,
+    "pitchEnd": 132,
+    "category": "downward_fail_or_sad_meow"
+  },
+  {
+    "file": "clip_23.wav",
+    "duration": 0.44,
+    "attackMs": 114,
+    "pitchStart": null,
+    "pitchMid": null,
+    "pitchEnd": 170,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_24.wav",
+    "duration": 0.44,
+    "attackMs": 51,
+    "pitchStart": 533,
+    "pitchMid": 475,
+    "pitchEnd": 466,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_25.wav",
+    "duration": 1.04,
+    "attackMs": 72,
+    "pitchStart": null,
+    "pitchMid": 585,
+    "pitchEnd": 147,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_26.wav",
+    "duration": 1.12,
+    "attackMs": 51,
+    "pitchStart": 262,
+    "pitchMid": 87,
+    "pitchEnd": 87,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_27.wav",
+    "duration": 1.1,
+    "attackMs": 66,
+    "pitchStart": 262,
+    "pitchMid": 87,
+    "pitchEnd": 87,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_28.wav",
+    "duration": 0.66,
+    "attackMs": 567,
+    "pitchStart": 117,
+    "pitchMid": null,
+    "pitchEnd": null,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_29.wav",
+    "duration": 0.36,
+    "attackMs": 55,
+    "pitchStart": 578,
+    "pitchMid": 857,
+    "pitchEnd": 800,
+    "category": "rising_inquisitive_meow"
+  },
+  {
+    "file": "clip_30.wav",
+    "duration": 0.66,
+    "attackMs": 60,
+    "pitchStart": 106,
+    "pitchMid": null,
+    "pitchEnd": 1091,
+    "category": "rising_inquisitive_meow"
+  },
+  {
+    "file": "clip_31.wav",
+    "duration": 0.74,
+    "attackMs": 61,
+    "pitchStart": 774,
+    "pitchMid": 787,
+    "pitchEnd": 787,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_32.wav",
+    "duration": 0.86,
+    "attackMs": 252,
+    "pitchStart": 615,
+    "pitchMid": 658,
+    "pitchEnd": 545,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_33.wav",
+    "duration": 0.98,
+    "attackMs": 194,
+    "pitchStart": 511,
+    "pitchMid": 393,
+    "pitchEnd": 390,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_34.wav",
+    "duration": 1.5,
+    "attackMs": 62,
+    "pitchStart": 571,
+    "pitchMid": 176,
+    "pitchEnd": 98,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_35.wav",
+    "duration": 1.68,
+    "attackMs": 419,
+    "pitchStart": 1171,
+    "pitchMid": 262,
+    "pitchEnd": 262,
+    "category": "downward_fail_or_sad_meow"
+  },
+  {
+    "file": "clip_36.wav",
+    "duration": 1.1,
+    "attackMs": 143,
+    "pitchStart": 261,
+    "pitchMid": 87,
+    "pitchEnd": 131,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_37.wav",
+    "duration": 0.56,
+    "attackMs": 56,
+    "pitchStart": 338,
+    "pitchMid": 322,
+    "pitchEnd": 289,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_38.wav",
+    "duration": 0.48,
+    "attackMs": 60,
+    "pitchStart": 251,
+    "pitchMid": null,
+    "pitchEnd": 250,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_39.wav",
+    "duration": 0.44,
+    "attackMs": 50,
+    "pitchStart": 466,
+    "pitchMid": 750,
+    "pitchEnd": 762,
+    "category": "rising_inquisitive_meow"
+  },
+  {
+    "file": "clip_40.wav",
+    "duration": 0.6,
+    "attackMs": 54,
+    "pitchStart": 147,
+    "pitchMid": 558,
+    "pitchEnd": 552,
+    "category": "rising_inquisitive_meow"
+  },
+  {
+    "file": "clip_41.wav",
+    "duration": 1.1,
+    "attackMs": 101,
+    "pitchStart": 262,
+    "pitchMid": 262,
+    "pitchEnd": 262,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_42.wav",
+    "duration": 0.72,
+    "attackMs": 43,
+    "pitchStart": 123,
+    "pitchMid": 123,
+    "pitchEnd": 123,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_43.wav",
+    "duration": 1.24,
+    "attackMs": 272,
+    "pitchStart": 787,
+    "pitchMid": 87,
+    "pitchEnd": 87,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_44.wav",
+    "duration": 2.28,
+    "attackMs": 283,
+    "pitchStart": 131,
+    "pitchMid": 131,
+    "pitchEnd": 131,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_45.wav",
+    "duration": 1.52,
+    "attackMs": 242,
+    "pitchStart": 264,
+    "pitchMid": 262,
+    "pitchEnd": 1412,
+    "category": "rising_inquisitive_meow"
+  },
+  {
+    "file": "clip_46.wav",
+    "duration": 1.3,
+    "attackMs": 379,
+    "pitchStart": 686,
+    "pitchMid": 131,
+    "pitchEnd": 131,
+    "category": "purr_or_low_meow"
+  },
+  {
+    "file": "clip_47.wav",
+    "duration": 0.52,
+    "attackMs": 142,
+    "pitchStart": null,
+    "pitchMid": null,
+    "pitchEnd": null,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_48.wav",
+    "duration": 0.56,
+    "attackMs": 51,
+    "pitchStart": null,
+    "pitchMid": null,
+    "pitchEnd": null,
+    "category": "cat_meow"
+  },
+  {
+    "file": "clip_49.wav",
+    "duration": 0.3,
+    "attackMs": 59,
+    "pitchStart": null,
+    "pitchMid": null,
+    "pitchEnd": 151,
+    "category": "unknown"
+  },
+  {
+    "file": "clip_50.wav",
+    "duration": 0.62,
+    "attackMs": 56,
+    "pitchStart": null,
+    "pitchMid": null,
+    "pitchEnd": null,
+    "category": "cat_meow"
+  }
+]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_scroll_hyp"]
+
+[ext_resource type="Script" path="res://tests/TestScrollHypothesis.gd" id="1_scr"]
+
+[node name="TestScrollHypothesis" type="Node"]
+script = ExtResource("1_scr")

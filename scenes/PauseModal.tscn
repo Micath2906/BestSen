@@ -1,0 +1,262 @@
+[gd_scene load_steps=10 format=3 uid="uid://dom6mgwlk0eqq"]
+
+[ext_resource type="Script" path="res://scripts/PauseModal.gd" id="1_pause"]
+[ext_resource type="Texture2D" uid="uid://dg2udt7r32ruc" path="res://assets/UI/CatUIPaid/slices/panel_cat_ear_beige.png" id="2_6jiyp"]
+[ext_resource type="Texture2D" uid="uid://yiy2qlpuoc1e" path="res://assets/UI/CatUIPaid/slices/icon_pause.png" id="2_pause_icon"]
+[ext_resource type="Texture2D" uid="uid://vvsyrm24dm1d" path="res://assets/UI/CatUIPaid/slices/icon_sound.png" id="4_star_icon"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_pause"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.985, 0.965, 0.935, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.85, 0.50, 0.20, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 12
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_bg"]
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.90, 0.86, 0.80, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.72, 0.65, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_fg"]
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.92, 0.52, 0.15, 1)
+corner_radius_top_left = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_resume"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.28, 0.68, 0.45, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.18, 0.48, 0.3, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.28, 0.68, 0.45, 0.25)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_back_menu"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.92, 0.88, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.78, 0.72, 0.65, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="PauseModal" type="Control"]
+z_index = 95
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pause")
+
+[node name="DimOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Panel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -180.0
+offset_right = 180.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(180, 180)
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_pause")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleBox" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="TitleIcon" type="TextureRect" parent="Panel/VBox/TitleBox"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_pause_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="Panel/VBox/TitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 15
+text = "TẠM DỪNG TRÒ CHƠI"
+horizontal_alignment = 1
+
+[node name="SFXBox" type="VBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SFXHeader" type="HBoxContainer" parent="Panel/VBox/SFXBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SFXIcon" type="TextureRect" parent="Panel/VBox/SFXBox/SFXHeader"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_star_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Panel/VBox/SFXBox/SFXHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+text = "Âm lượng Hiệu Ứng (SFX):"
+
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox/SFXBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SliderSFX" type="HSlider" parent="Panel/VBox/SFXBox/HBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/slider = SubResource("StyleBoxFlat_slider_bg")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_slider_fg")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_fg")
+value = 100.0
+
+[node name="LblSFXVal" type="Label" parent="Panel/VBox/SFXBox/HBox"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 10
+text = "100%"
+horizontal_alignment = 2
+
+[node name="BGMBox" type="VBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BGMHeader" type="HBoxContainer" parent="Panel/VBox/BGMBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BGMIcon" type="TextureRect" parent="Panel/VBox/BGMBox/BGMHeader"]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_star_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Panel/VBox/BGMBox/BGMHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+text = "Âm lượng Nhạc Nền (BGM):"
+
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox/BGMBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SliderBGM" type="HSlider" parent="Panel/VBox/BGMBox/HBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/slider = SubResource("StyleBoxFlat_slider_bg")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_slider_fg")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_fg")
+value = 80.0
+
+[node name="LblBGMVal" type="Label" parent="Panel/VBox/BGMBox/HBox"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 10
+text = "80%"
+horizontal_alignment = 2
+
+[node name="CheckHaptic" type="CheckBox" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_hover_pressed_color = Color(0.2, 0.15, 0.1, 1)
+theme_override_colors/font_hover_color = Color(0.2, 0.15, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+button_pressed = true
+text = "Rung Phản Hồi (Haptic Feedback)"
+
+[node name="Spacing" type="Control" parent="Panel/VBox"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="BtnResume" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_resume")
+text = "TIẾP TỤC"
+
+[node name="BtnBackMenu" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_back_menu")
+text = " MENU CHÍNH"
+expand_icon = true

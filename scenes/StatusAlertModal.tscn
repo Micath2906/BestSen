@@ -1,0 +1,182 @@
+[gd_scene load_steps=5 format=3 uid="uid://statusalertmodal001"]
+
+[ext_resource type="Script" path="res://scripts/StatusAlertModal.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+bg_color = Color(0, 0, 0, 0.45)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 18.0
+content_margin_top = 16.0
+content_margin_right = 18.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.985, 0.96, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.85, 0.45, 0.25, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 10
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_descbox"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95, 0.91, 0.86, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.78, 0.7, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_action"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.92, 0.45, 0.20, 1.0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.75, 0.32, 0.10, 1.0)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.92, 0.45, 0.20, 0.25)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_close"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.95, 0.92, 0.88, 1.0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.80, 0.74, 0.66, 1.0)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="StatusAlertModal" type="Control"]
+z_index = 60
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Overlay" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+pivot_offset = Vector2(170, 140)
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="IconBox" type="Control" parent="CenterContainer/Panel/VBox"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+
+[node name="IconLabel" type="Label" parent="CenterContainer/Panel/VBox/IconBox"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -24.0
+offset_right = 30.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "⚠️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.25, 0.15, 1)
+theme_override_font_sizes/font_size = 13
+text = "⚠️ CẢNH BÁO: MÈO QUÁ NO!"
+horizontal_alignment = 1
+
+[node name="StatLabel" type="Label" parent="CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.65, 0.3, 1)
+theme_override_font_sizes/font_size = 11
+text = "Độ No: 100/100"
+horizontal_alignment = 1
+
+[node name="DescBox" type="PanelContainer" parent="CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_descbox")
+
+[node name="DescLabel" type="Label" parent="CenterContainer/Panel/VBox/DescBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.22, 0.16, 1)
+theme_override_font_sizes/font_size = 11
+text = "Boss Mèo đã ăn no căng tròn bụng rồi! Hãy để Boss nghỉ ngơi hoặc đi dạo nhé!"
+autowrap_mode = 2
+
+[node name="BtnAction" type="Button" parent="CenterContainer/Panel/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_action")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_action")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_action")
+text = "🐾 Cho Boss Đi Dạo Tiêu Hóa"
+
+[node name="BtnClose" type="Button" parent="CenterContainer/Panel/VBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_close")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_close")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_close")
+text = "❌ Đã Hiểu"

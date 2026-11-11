@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_mouse_parse"]
+
+[ext_resource type="Script" path="res://tests/TestRealMouseParse.gd" id="1_tmp"]
+
+[node name="TestRealMouseParse" type="Node"]
+script = ExtResource("1_tmp")

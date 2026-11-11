@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfreepackcat001"]
+
+[ext_resource type="Script" path="res://tests/TestFreepackCat.gd" id="1_test"]
+
+[node name="TestFreepackCat" type="Node"]
+script = ExtResource("1_test")

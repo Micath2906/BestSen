@@ -1,0 +1,187 @@
+[gd_scene load_steps=5 format=3 uid="uid://cx8xaym8p552s"]
+
+[ext_resource type="Script" path="res://scripts/HandbookView.gd" id="1_handbook"]
+[ext_resource type="Texture2D" uid="uid://02dghf1sil2x" path="res://assets/UI/CatUIPaid/slices/btn_arrow_right_brown.png" id="2_xuujq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_panel"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.99, 0.98, 0.95, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 4
+border_color = Color(0.55, 0.38, 0.25, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_btn"]
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.92, 0.85, 0.78, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.65, 0.48, 0.35, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="HandbookView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_handbook")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.95, 0.96, 0.95, 1)
+
+[node name="BtnBack" type="Button" parent="."]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 126.0
+offset_right = 96.0
+offset_bottom = 162.0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 13
+text = " Thoát"
+
+[node name="Header" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 100.0
+offset_top = 126.0
+offset_right = -100.0
+offset_bottom = 186.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.35, 0.25, 1)
+theme_override_font_sizes/font_size = 18
+text = "CẨM NANG LÀM SEN"
+horizontal_alignment = 1
+
+[node name="SubTitle" type="Label" parent="Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.5, 0.45, 1)
+theme_override_font_sizes/font_size = 12
+text = "Tra cứu khẩn cấp"
+horizontal_alignment = 1
+
+[node name="SearchBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 192.0
+offset_right = -20.0
+offset_bottom = 232.0
+grow_horizontal = 2
+
+[node name="SearchEdit" type="LineEdit" parent="SearchBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+placeholder_text = "🔍 Tìm bài học (vd: xe buýt, BHYT, hợp đồng, đa cấp)..."
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 240.0
+offset_right = -20.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LessonsContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="DetailModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="DetailModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+
+[node name="Panel" type="PanelContainer" parent="DetailModal"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -270.0
+offset_right = 230.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="DetailModal/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DetailTitle" type="Label" parent="DetailModal/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 15
+text = "TIÊU ĐỀ BÀI HỌC"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="DetailModal/Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailText" type="Label" parent="DetailModal/Panel/VBox/Scroll"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 2
+
+[node name="BtnCloseDetail" type="Button" parent="DetailModal/Panel/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_close_btn")
+text = "✖ Đóng Sổ Tay"

@@ -1,0 +1,748 @@
+[gd_scene load_steps=16 format=3 uid="uid://shopview001m"]
+
+[ext_resource type="Script" path="res://scripts/ShopView.gd" id="1_shop"]
+[ext_resource type="Texture2D" uid="uid://02dghf1sil2x" path="res://assets/UI/CatUIPaid/slices/btn_arrow_right_brown.png" id="2_70s81"]
+[ext_resource type="Texture2D" uid="uid://krc6k1wrfoma" path="res://assets/sprites/avatars/avatar_0.png" id="2_cat"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(0.95, 0.92, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.78, 0.72, 0.65, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+content_margin_left = 12.0
+content_margin_top = 4.0
+content_margin_right = 12.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0.95, 0.85, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.9, 0.6, 0.1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.1)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stage"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.985, 0.965, 0.94, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.88, 0.82, 0.75, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.08)
+shadow_size = 6
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_podium"]
+bg_color = Color(0.94, 0.88, 0.82, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.85, 0.75, 0.65, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_revert"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.92, 0.89, 0.85, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.78, 0.72, 0.65, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_stage_action"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.55, 0.12, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.85, 0.35, 0.05, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.85, 0.35, 0.05, 0.2)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.75, 0.65, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.08)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_score_tag"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0.975, 0.92, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.9, 0.75, 0.5, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_card"]
+content_margin_left = 18.0
+content_margin_top = 18.0
+content_margin_right = 18.0
+content_margin_bottom = 18.0
+bg_color = Color(1, 0.985, 0.96, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.85, 0.55, 0.25, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 12
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_icon"]
+bg_color = Color(0.96, 0.92, 0.85, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.72, 0.58, 1)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_box"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.96, 0.93, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.78, 0.7, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_action"]
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.55, 0.1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.85, 0.35, 0.05, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.85, 0.35, 0.05, 0.3)
+shadow_size = 6
+shadow_offset = Vector2(0, 2)
+
+[node name="ShopView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_shop")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.965, 0.95, 0.925, 1)
+
+[node name="Header" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 6.0
+offset_right = -12.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="BtnBack" type="Button" parent="Header"]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/hover = SubResource("StyleBoxFlat_back")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back")
+theme_override_styles/normal = SubResource("StyleBoxFlat_back")
+icon = ExtResource("2_70s81")
+flat = true
+icon_alignment = 1
+
+[node name="Title" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "CỬA HÀNG THÚ YÊU"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FishBadge" type="PanelContainer" parent="Header"]
+custom_minimum_size = Vector2(130, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="HBox" type="HBoxContainer" parent="Header/FishBadge"]
+layout_mode = 2
+alignment = 1
+
+[node name="FishLabel" type="Label" parent="Header/FishBadge/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+text = "90.000đ 💵"
+
+[node name="FittingStage" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 48.0
+offset_right = -12.0
+offset_bottom = 566.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stage")
+
+[node name="StagePodium" type="VBoxContainer" parent="FittingStage"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StageCenter" type="Control" parent="FittingStage/StagePodium"]
+custom_minimum_size = Vector2(0, 310)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PodiumEllipse" type="Panel" parent="FittingStage/StagePodium/StageCenter"]
+custom_minimum_size = Vector2(260, 68)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = 60.0
+offset_right = 130.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_podium")
+
+[node name="CatAvatar" type="TextureRect" parent="FittingStage/StagePodium/StageCenter"]
+texture_filter = 1
+custom_minimum_size = Vector2(170, 170)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -85.0
+offset_top = -65.0
+offset_right = 85.0
+offset_bottom = 105.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(85, 85)
+texture = ExtResource("2_cat")
+stretch_mode = 5
+
+[node name="HatRect" type="TextureRect" parent="FittingStage/StagePodium/StageCenter"]
+texture_filter = 1
+custom_minimum_size = Vector2(72, 48)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -36.0
+offset_top = -48.0
+offset_right = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ClothesRect" type="TextureRect" parent="FittingStage/StagePodium/StageCenter"]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -5.0
+offset_right = 40.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BowRect" type="TextureRect" parent="FittingStage/StagePodium/StageCenter"]
+texture_filter = 1
+custom_minimum_size = Vector2(54, 54)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -27.0
+offset_right = 27.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AccRect" type="TextureRect" parent="FittingStage/StagePodium/StageCenter"]
+texture_filter = 1
+custom_minimum_size = Vector2(60, 36)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -32.0
+offset_right = 30.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StageFooter" type="VBoxContainer" parent="FittingStage/StagePodium"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnRow" type="HBoxContainer" parent="FittingStage/StagePodium/StageFooter"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="BtnRevertOutfit" type="Button" parent="FittingStage/StagePodium/StageFooter/BtnRow"]
+custom_minimum_size = Vector2(110, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.22, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_revert")
+text = " Về Đồ Cũ"
+
+[node name="BtnStageAction" type="Button" parent="FittingStage/StagePodium/StageFooter/BtnRow"]
+custom_minimum_size = Vector2(220, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_stage_action")
+text = "🛒 Mua Ngay"
+
+[node name="FurnitureStage" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 48.0
+offset_right = -12.0
+offset_bottom = 566.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stage")
+
+[node name="FurniturePodium" type="VBoxContainer" parent="FurnitureStage"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SpeechBubble" type="PanelContainer" parent="FurnitureStage/FurniturePodium"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="SpeechLabel" type="Label" parent="FurnitureStage/FurniturePodium/SpeechBubble"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.22, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Món đồ này bày vào phòng nhìn ấm cúng xỉu luôn Sen ơi! 🛋️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FurnitureCenter" type="Control" parent="FurnitureStage/FurniturePodium"]
+custom_minimum_size = Vector2(0, 310)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RoomFloorPreview" type="Panel" parent="FurnitureStage/FurniturePodium/FurnitureCenter"]
+custom_minimum_size = Vector2(280, 140)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = 10.0
+offset_right = 140.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_podium")
+
+[node name="FurnitureSprite" type="TextureRect" parent="FurnitureStage/FurniturePodium/FurnitureCenter"]
+texture_filter = 1
+custom_minimum_size = Vector2(220, 160)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = -60.0
+offset_right = 110.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(110, 80)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FurnitureInfoTag" type="PanelContainer" parent="FurnitureStage/FurniturePodium/FurnitureCenter"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -170.0
+offset_top = -34.0
+offset_right = 170.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_score_tag")
+
+[node name="InfoLabel" type="Label" parent="FurnitureStage/FurniturePodium/FurnitureCenter/FurnitureInfoTag"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "🏡 Nội Thất Mobile • +25 Tâm Trạng"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FurnitureFooter" type="VBoxContainer" parent="FurnitureStage/FurniturePodium"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="FurnitureStatusLabel" type="Label" parent="FurnitureStage/FurniturePodium/FurnitureFooter"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+text = "🛋️ Đang Xem Mẫu: Nệm Xanh Dương Mobile"
+horizontal_alignment = 1
+
+[node name="BtnRow" type="HBoxContainer" parent="FurnitureStage/FurniturePodium/FurnitureFooter"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="BtnApplyFurniture" type="Button" parent="FurnitureStage/FurniturePodium/FurnitureFooter/BtnRow"]
+custom_minimum_size = Vector2(130, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_revert")
+text = "🏡 Đặt Vào Phòng"
+
+[node name="BtnBuyFurniture" type="Button" parent="FurnitureStage/FurniturePodium/FurnitureFooter/BtnRow"]
+custom_minimum_size = Vector2(170, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_stage_action")
+text = "🛒 Mua Ngay [Nệm Xanh]"
+
+[node name="LblFurnitureHint" type="Label" parent="FurnitureStage/FurniturePodium/FurnitureFooter"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.38, 1)
+theme_override_font_sizes/font_size = 10
+text = "💡 Nhấp vào danh sách bên dưới để chuyển đổi món đồ cần xem thử"
+horizontal_alignment = 1
+
+[node name="CategoryBar" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 572.0
+offset_right = -12.0
+offset_bottom = 608.0
+grow_horizontal = 2
+
+[node name="MainTabs" type="HBoxContainer" parent="CategoryBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="SubCategoryBar" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 612.0
+offset_right = -12.0
+offset_bottom = 644.0
+grow_horizontal = 2
+vertical_scroll_mode = 0
+
+[node name="SubTabs" type="HBoxContainer" parent="SubCategoryBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ProductsScroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 648.0
+offset_right = -12.0
+offset_bottom = -78.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="ProductsGrid" type="GridContainer" parent="ProductsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="ItemDetailModal" type="Control" parent="."]
+visible = false
+z_index = 50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimOverlay" type="ColorRect" parent="ItemDetailModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="ModalPanel" type="PanelContainer" parent="ItemDetailModal"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -160.0
+offset_right = 180.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(180, 160)
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_card")
+
+[node name="VBox" type="VBoxContainer" parent="ItemDetailModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="IconBox" type="Panel" parent="ItemDetailModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_icon")
+
+[node name="IconLabel" type="Label" parent="ItemDetailModal/ModalPanel/VBox/IconBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "🧥"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DetailTexture" type="TextureRect" parent="ItemDetailModal/ModalPanel/VBox/IconBox"]
+visible = false
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="ItemDetailModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+theme_override_font_sizes/font_size = 14
+text = "Áo Hoodie Sinh Viên"
+horizontal_alignment = 1
+
+[node name="SubcatLabel" type="Label" parent="ItemDetailModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.4, 1)
+theme_override_font_sizes/font_size = 10
+text = "Phân Loại: Trang Phục • Yêu Cầu Cấp 1"
+horizontal_alignment = 1
+
+[node name="DescBox" type="PanelContainer" parent="ItemDetailModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_box")
+
+[node name="DescLabel" type="Label" parent="ItemDetailModal/ModalPanel/VBox/DescBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.22, 1)
+theme_override_font_sizes/font_size = 11
+text = "Chiếc áo nỉ ấm áp, phong cách năng động cho sinh viên."
+autowrap_mode = 2
+
+[node name="BoostBox" type="PanelContainer" parent="ItemDetailModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_box")
+
+[node name="BoostLabel" type="Label" parent="ItemDetailModal/ModalPanel/VBox/BoostBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.6, 0.35, 1)
+theme_override_font_sizes/font_size = 11
+text = "Hiệu Quả: +35 ⭐ Thời Trang"
+horizontal_alignment = 1
+
+[node name="BtnAction" type="Button" parent="ItemDetailModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_modal_action")
+text = "🛒 MUA NGAY VỚI 25.000đ 💵"
+
+[node name="BtnClose" type="Button" parent="ItemDetailModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.5, 0.45, 0.4, 1)
+theme_override_font_sizes/font_size = 11
+text = "✕ Đóng"

@@ -1,0 +1,503 @@
+[gd_scene load_steps=13 format=3 uid="uid://isoroom001m"]
+
+[ext_resource type="Script" path="res://scripts/IsometricRoomView.gd" id="1_room"]
+[ext_resource type="Script" path="res://scripts/IsometricRoomCanvas.gd" id="2_canvas"]
+[ext_resource type="Texture2D" uid="uid://ksydadkp1g5y" path="res://assets/furnitures/PetMobileGameAsset/PetMobileGameAsset/Backgrounds/Classic/1.png" id="5_classic_bg"]
+[ext_resource type="Texture2D" uid="uid://cddfrghjghrb5" path="res://assets/UI/CatUIPaid/slices/icon_pencil.png" id="7_pencil"]
+[ext_resource type="Script" path="res://scripts/IsometricFurniture.gd" id="3_furn"]
+[ext_resource type="PackedScene" uid="uid://isocat001m" path="res://scenes/IsometricCat.tscn" id="4_cat"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/icon_toy_yarn_ball.png" id="8_toy_yarn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
+content_margin_left = 12.0
+content_margin_top = 4.0
+content_margin_right = 12.0
+content_margin_bottom = 4.0
+bg_color = Color(0.98, 0.96, 0.93, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.35, 0.25, 0.18, 0.45)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tool_btn"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(1, 0.97, 0.93, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.72, 0.58, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tool_btn_p"]
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.95, 0.89, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.65, 0.5, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_overlay"]
+bg_color = Color(0, 0, 0, 0.45)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_card"]
+content_margin_left = 18.0
+content_margin_top = 16.0
+content_margin_right = 18.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.985, 0.96, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.85, 0.45, 0.25, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 10
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.96, 0.93, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.8, 0.65, 0.5, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cancel"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.88, 0.85, 0.8, 1)
+border_width_bottom = 2
+border_color = Color(0.75, 0.7, 0.65, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_save"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.25, 0.72, 0.42, 1)
+border_width_bottom = 2
+border_color = Color(0.18, 0.55, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="IsometricRoomView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_room")
+
+[node name="RoomBackground" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_classic_bg")
+expand_mode = 1
+
+[node name="RoomCanvas" type="Node2D" parent="."]
+visible = false
+script = ExtResource("2_canvas")
+
+[node name="FloorTouchArea" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="RoomTitleBanner" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -140.0
+offset_top = 136.0
+offset_right = 140.0
+offset_bottom = 168.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_banner")
+
+[node name="HBox" type="HBoxContainer" parent="RoomTitleBanner"]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="RoomTitleBanner/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.25, 0.18, 1)
+theme_override_font_sizes/font_size = 11
+text = "Phòng của Mèo Mướp Cam"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnEditRoomName" type="Button" parent="RoomTitleBanner/HBox"]
+custom_minimum_size = Vector2(28, 24)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tool_btn_p")
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+icon = ExtResource("7_pencil")
+icon_alignment = 1
+expand_icon = true
+
+[node name="UnifiedActionRow" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 0
+
+[node name="BtnHandbookQuick" type="Button" parent="UnifiedActionRow"]
+layout_mode = 2
+
+[node name="BtnDressingQuick" type="Button" parent="UnifiedActionRow"]
+layout_mode = 2
+
+[node name="BtnDecorQuick" type="Button" parent="UnifiedActionRow"]
+layout_mode = 2
+
+[node name="YSortEntities" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="CushionBed" type="Node2D" parent="YSortEntities"]
+script = ExtResource("3_furn")
+grid_coord = Vector2(1.5, 2.5)
+
+[node name="FoodBowl" type="Node2D" parent="YSortEntities"]
+script = ExtResource("3_furn")
+furniture_type = 1
+grid_coord = Vector2(3, 4)
+
+[node name="WaterBowl" type="Node2D" parent="YSortEntities"]
+script = ExtResource("3_furn")
+furniture_type = 2
+grid_coord = Vector2(4, 4)
+
+[node name="LitterBox" type="Node2D" parent="YSortEntities"]
+script = ExtResource("3_furn")
+furniture_type = 3
+grid_coord = Vector2(6, 4)
+
+[node name="ToyItem" type="Node2D" parent="YSortEntities"]
+visible = false
+
+[node name="ToySprite" type="Sprite2D" parent="YSortEntities/ToyItem"]
+texture_filter = 1
+texture = ExtResource("8_toy_yarn")
+
+[node name="ToyLabel" type="Label" parent="YSortEntities/ToyItem"]
+offset_left = -16.0
+offset_top = -24.0
+offset_right = 16.0
+offset_bottom = 8.0
+theme_override_font_sizes/font_size = 18
+text = "🧶"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IsoCat" parent="YSortEntities" instance=ExtResource("4_cat")]
+
+[node name="FloatingContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RoamTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="RoomNameModal" type="Control" parent="."]
+visible = false
+z_index = 50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="Panel" parent="RoomNameModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_overlay")
+
+[node name="CenterContainer" type="CenterContainer" parent="RoomNameModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="RoomNameModal/CenterContainer"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_card")
+
+[node name="VBox" type="VBoxContainer" parent="RoomNameModal/CenterContainer/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="RoomNameModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 14
+text = "Đổi Tên Căn Phòng"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="RoomNameModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.38, 1)
+theme_override_font_sizes/font_size = 10
+text = "Tùy chỉnh tên căn phòng trọ của Boss và Sen:"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="RoomNameModal/CenterContainer/Panel/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+placeholder_text = "Nhập tên phòng... (vd: Phòng của Mướp Ca)"
+alignment = 1
+max_length = 32
+
+[node name="ChipsRow1" type="HBoxContainer" parent="RoomNameModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ChipsRow2" type="HBoxContainer" parent="RoomNameModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BtnRow" type="HBoxContainer" parent="RoomNameModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="BtnCancel" type="Button" parent="RoomNameModal/CenterContainer/Panel/VBox/BtnRow"]
+custom_minimum_size = Vector2(100, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.25, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_cancel")
+text = "Hủy"
+
+[node name="BtnSave" type="Button" parent="RoomNameModal/CenterContainer/Panel/VBox/BtnRow"]
+custom_minimum_size = Vector2(120, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_save")
+text = " Lưu Tên"
+
+[node name="MonthlyExpensesModal" type="Control" parent="."]
+visible = false
+z_index = 52
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="Panel" parent="MonthlyExpensesModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_overlay")
+
+[node name="CenterContainer" type="CenterContainer" parent="MonthlyExpensesModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="MonthlyExpensesModal/CenterContainer"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_card")
+
+[node name="VBox" type="VBoxContainer" parent="MonthlyExpensesModal/CenterContainer/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 13
+text = "📋 SỔ CHI PHÍ SINH VIÊN KTX"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.38, 1)
+theme_override_font_sizes/font_size = 10
+text = "Định mức chi tiêu sinh tồn tháng 1 của tân sinh viên"
+horizontal_alignment = 1
+
+[node name="ExpenseList" type="VBoxContainer" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RowRent" type="HBoxContainer" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList/RowRent"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_font_sizes/font_size = 10
+text = "🏠 Tiền phòng KTX / trọ:"
+
+[node name="Val" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList/RowRent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.1, 1)
+theme_override_font_sizes/font_size = 10
+text = "50.000đ"
+
+[node name="RowUtil" type="HBoxContainer" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList/RowUtil"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_font_sizes/font_size = 10
+text = "⚡ Điện nước & Wifi:"
+
+[node name="Val" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList/RowUtil"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.1, 1)
+theme_override_font_sizes/font_size = 10
+text = "15.000đ"
+
+[node name="RowFood" type="HBoxContainer" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList/RowFood"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_font_sizes/font_size = 10
+text = "🐟 Quỹ thức ăn hạt Boss:"
+
+[node name="Val" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/ExpenseList/RowFood"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.1, 1)
+theme_override_font_sizes/font_size = 10
+text = "20.000đ"
+
+[node name="Divider" type="HSeparator" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+
+[node name="RowTotal" type="HBoxContainer" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/RowTotal"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 11
+text = "💰 TỔNG CHI PHÍ THÁNG:"
+
+[node name="Val" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/RowTotal"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.4, 0.05, 1)
+theme_override_font_sizes/font_size = 12
+text = "85.000đ"
+
+[node name="StatusLabel" type="Label" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.5, 0.3, 1)
+theme_override_font_sizes/font_size = 10
+text = "⏳ Hạn nộp: Còn 25 ngày"
+horizontal_alignment = 1
+
+[node name="BtnRow" type="HBoxContainer" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="BtnPayExpenses" type="Button" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/BtnRow"]
+custom_minimum_size = Vector2(140, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_save")
+text = "💵 Đóng Tiền KTX (85k)"
+
+[node name="BtnCloseExpenses" type="Button" parent="MonthlyExpensesModal/CenterContainer/Panel/VBox/BtnRow"]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_cancel")
+text = "Đóng"

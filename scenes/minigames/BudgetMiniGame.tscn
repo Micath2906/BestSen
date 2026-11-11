@@ -1,0 +1,384 @@
+[gd_scene load_steps=6 format=3 uid="uid://budgetmg001"]
+
+[ext_resource type="Script" path="res://scripts/minigames/BudgetMiniGame.gd" id="1_budget"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.96, 0.94, 0.90, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.99, 0.97, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.88, 0.78, 0.65, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.06)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.88, 0.78, 0.65, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_action"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(0.25, 0.72, 0.42, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.15, 0.52, 0.28, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.25, 0.72, 0.42, 0.25)
+shadow_size = 6
+shadow_offset = Vector2(0, 2)
+
+[node name="BudgetMiniGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_budget")
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="Header" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="BtnBack" type="Button" parent="Header"]
+custom_minimum_size = Vector2(76, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+text = " Quay lại"
+
+[node name="HeaderTitle" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 13
+text = "⚖️ CÂN BẰNG 3 HŨ TIỀN"
+horizontal_alignment = 1
+
+[node name="CatSection" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 64.0
+offset_right = -16.0
+offset_bottom = 124.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="HBox" type="HBoxContainer" parent="CatSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CatAnchor" type="Control" parent="CatSection/HBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="CatSpeech" type="Label" parent="CatSection/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Phân bổ cá vào 3 hũ theo tỷ lệ vàng giúp Boss nhé!"
+autowrap_mode = 2
+
+[node name="BalanceCard" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 132.0
+offset_right = -16.0
+offset_bottom = 262.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="BalanceCard"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StatusRow" type="HBoxContainer" parent="BalanceCard/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="BalanceCard/VBox/StatusRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 12
+text = "⚖️ CÁN CÂN TÀI CHÍNH SINH VIÊN:"
+
+[node name="RemainingFishLabel" type="Label" parent="BalanceCard/VBox/StatusRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "Tổng: 90/90 🐟"
+horizontal_alignment = 2
+
+[node name="ScaleContainer" type="Control" parent="BalanceCard/VBox"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+
+[node name="BaseLine" type="ColorRect" parent="BalanceCard/VBox/ScaleContainer"]
+custom_minimum_size = Vector2(260, 4)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = -2.0
+offset_right = 130.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.8, 0.72, 0.62, 1)
+
+[node name="PivotTriangle" type="Polygon2D" parent="BalanceCard/VBox/ScaleContainer"]
+position = Vector2(170, 28)
+color = Color(0.55, 0.42, 0.3, 1)
+polygon = PackedVector2Array(-10, 16, 10, 16, 0, -2)
+
+[node name="NeedleAnchor" type="Control" parent="BalanceCard/VBox/ScaleContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Beam" type="ColorRect" parent="BalanceCard/VBox/ScaleContainer/NeedleAnchor"]
+custom_minimum_size = Vector2(240, 6)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -3.0
+offset_right = 120.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.9, 0.55, 0.15, 1)
+
+[node name="LeftDish" type="ColorRect" parent="BalanceCard/VBox/ScaleContainer/NeedleAnchor"]
+custom_minimum_size = Vector2(24, 6)
+layout_mode = 0
+offset_left = -125.0
+offset_top = 6.0
+offset_right = -101.0
+offset_bottom = 12.0
+color = Color(0.4, 0.6, 0.8, 1)
+
+[node name="RightDish" type="ColorRect" parent="BalanceCard/VBox/ScaleContainer/NeedleAnchor"]
+custom_minimum_size = Vector2(24, 6)
+layout_mode = 0
+offset_left = 101.0
+offset_top = 6.0
+offset_right = 125.0
+offset_bottom = 12.0
+color = Color(0.8, 0.4, 0.4, 1)
+
+[node name="BalanceStatusLabel" type="Label" parent="BalanceCard/VBox/ScaleContainer"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 10.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.2, 0.72, 0.35, 1)
+theme_override_font_sizes/font_size = 11
+text = "✨ CÁN CÂN THĂNG BẰNG AN TOÀN ✨"
+horizontal_alignment = 1
+
+[node name="JarsCard" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 270.0
+offset_right = -16.0
+offset_bottom = -118.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="JarsCard"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SurviveBox" type="VBoxContainer" parent="JarsCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="JarsCard/VBox/SurviveBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 11
+text = "🏠 HŨ SỐNG CÒN (Mục tiêu: 50% = 45 Cá)"
+
+[node name="HBox" type="HBoxContainer" parent="JarsCard/VBox/SurviveBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SliderSurvive" type="HSlider" parent="JarsCard/VBox/SurviveBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+max_value = 90.0
+value = 30.0
+
+[node name="ValSurvive" type="Label" parent="JarsCard/VBox/SurviveBox/HBox"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "30 🐟"
+horizontal_alignment = 2
+
+[node name="GrowthBox" type="VBoxContainer" parent="JarsCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="JarsCard/VBox/GrowthBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 11
+text = "📚 HŨ PHÁT TRIỂN (Mục tiêu: 30% = 27 Cá)"
+
+[node name="HBox" type="HBoxContainer" parent="JarsCard/VBox/GrowthBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SliderGrowth" type="HSlider" parent="JarsCard/VBox/GrowthBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+max_value = 90.0
+value = 30.0
+
+[node name="ValGrowth" type="Label" parent="JarsCard/VBox/GrowthBox/HBox"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.55, 0.75, 1)
+theme_override_font_sizes/font_size = 11
+text = "30 🐟"
+horizontal_alignment = 2
+
+[node name="EmergencyBox" type="VBoxContainer" parent="JarsCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="JarsCard/VBox/EmergencyBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 11
+text = "🔒 HŨ KHẨN CẤP (Mục tiêu: 20% = 18 Cá)"
+
+[node name="HBox" type="HBoxContainer" parent="JarsCard/VBox/EmergencyBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SliderEmergency" type="HSlider" parent="JarsCard/VBox/EmergencyBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+max_value = 90.0
+value = 30.0
+
+[node name="ValEmergency" type="Label" parent="JarsCard/VBox/EmergencyBox/HBox"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.25, 0.55, 1)
+theme_override_font_sizes/font_size = 11
+text = "30 🐟"
+horizontal_alignment = 2
+
+[node name="ActionFooter" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -110.0
+offset_right = -16.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="BtnPresetGold" type="Button" parent="ActionFooter"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "✨ Gợi Ý Tỷ Lệ Vàng 50% - 30% - 20%"
+
+[node name="BtnCheckBalance" type="Button" parent="ActionFooter"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_action")
+text = "⚖️ KIỂM TRA ĐỘ CÂN BẰNG TÀI CHÍNH"

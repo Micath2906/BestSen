@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfqxdh0lxhgbu"]
+
+[ext_resource type="PackedScene" uid="uid://dpovj8c5234kn" path="res://scenes/Main.tscn" id="1_main"]
+
+[sub_resource type="GDScript" id="GDScript_cap"]
+script/source = "extends Node
+
+func _ready():
+	await get_tree().create_timer(1.2).timeout
+	var img = get_viewport().get_texture().get_image()
+	img.save_png(\"D:/BestSen/screenshot_isometric_room.png\")
+	print(\"Saved screenshot_isometric_room.png\")
+	get_tree().quit()
+"
+
+[node name="TestCapture" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Main" parent="." instance=ExtResource("1_main")]
+layout_mode = 1
+
+[node name="Capturer" type="Node" parent="."]
+script = SubResource("GDScript_cap")

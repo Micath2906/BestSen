@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_drag_main"]
+
+[ext_resource type="Script" path="res://tests/TestDragInMain.gd" id="1_tdm"]
+
+[node name="TestDragInMain" type="Node"]
+script = ExtResource("1_tdm")

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://capturemg001"]
+
+[ext_resource type="Script" path="res://tests/CaptureMiniGamesShowcase.gd" id="1_cap"]
+
+[node name="CaptureMiniGamesShowcase" type="Node"]
+script = ExtResource("1_cap")

@@ -1,0 +1,654 @@
+[gd_scene load_steps=13 format=3 uid="uid://dmkm8h5f3q16l"]
+
+[ext_resource type="Script" path="res://scripts/SkillTree.gd" id="1_skill"]
+[ext_resource type="Texture2D" uid="uid://d3c67cx28wfno" path="res://assets/UI/CatUIPaid/slices/icon_question.png" id="2_4gf5b"]
+[ext_resource type="Texture2D" uid="uid://bwhqbt2a3gkbp" path="res://assets/UI/CatUIPaid/slices/icon_arrow_left.png" id="3_arrow_l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.965, 0.92, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.85, 0.45, 0.15, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.08)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
+bg_color = Color(0.9, 0.86, 0.8, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fg"]
+bg_color = Color(0.95, 0.55, 0.12, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gate1"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.88, 0.94, 1, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.35, 0.65, 0.95, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chest"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.97, 0.92, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.88, 0.55, 0.15, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.1)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gate2"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.92, 0.9, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.95, 0.45, 0.35, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gate3"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.88, 0.96, 0.92, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.25, 0.75, 0.55, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gate4"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.95, 0.88, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.95, 0.65, 0.15, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preview_card"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.985, 0.96, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.85, 0.55, 0.25, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preview_box"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.96, 0.93, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.78, 0.7, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="SkillTree" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_skill")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.965, 0.95, 0.925, 1)
+
+[node name="BtnBack" type="Button" parent="."]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 126.0
+offset_right = 100.0
+offset_bottom = 162.0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 13
+icon = ExtResource("3_arrow_l")
+text = " Thoát"
+
+[node name="HeaderContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 100.0
+offset_top = 126.0
+offset_right = -100.0
+offset_bottom = 164.0
+grow_horizontal = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="HeaderContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.12, 1)
+theme_override_font_sizes/font_size = 15
+text = "🗺️ BẢN ĐỒ KỸ NĂNG TỰ LẬP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MasteryBanner" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 170.0
+offset_right = -16.0
+offset_bottom = 224.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_banner")
+
+[node name="HBox" type="HBoxContainer" parent="MasteryBanner"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="VBox" type="VBoxContainer" parent="MasteryBanner/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="MasteryTitle" type="Label" parent="MasteryBanner/HBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+text = "🌟 CẤP ĐỘ MÈO: CẤP 1 - MÈO RỤT RÈ"
+
+[node name="ExpHBox" type="HBoxContainer" parent="MasteryBanner/HBox/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="MasteryProgressBar" type="ProgressBar" parent="MasteryBanner/HBox/VBox/ExpHBox"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fg")
+show_percentage = false
+
+[node name="MasteryExpLabel" type="Label" parent="MasteryBanner/HBox/VBox/ExpHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.3, 0.2, 1)
+theme_override_font_sizes/font_size = 10
+text = "0/100 EXP"
+
+[node name="BtnBox" type="HBoxContainer" parent="MasteryBanner/HBox"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="BtnLevelReqs" type="Button" parent="MasteryBanner/HBox/BtnBox"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 10
+icon = ExtResource("2_4gf5b")
+icon_alignment = 1
+
+[node name="BtnAchievements" type="Button" parent="MasteryBanner/HBox/BtnBox"]
+custom_minimum_size = Vector2(100, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 10
+text = "THÀNH TỰU"
+
+[node name="FilterBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 230.0
+offset_right = -16.0
+offset_bottom = 264.0
+grow_horizontal = 2
+theme_override_constants/separation = 4
+
+[node name="BtnBranch1" type="Button" parent="FilterBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "🎒 Hành Trang"
+
+[node name="BtnBranch2" type="Button" parent="FilterBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "🏠 Xóm Trọ"
+
+[node name="BtnBranch3" type="Button" parent="FilterBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "🩺 Sức Khỏe"
+
+[node name="BtnBranch4" type="Button" parent="FilterBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "💰 Tài Chính"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 270.0
+offset_right = -16.0
+offset_bottom = -78.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="RoadmapContent" type="Control" parent="ScrollContainer"]
+custom_minimum_size = Vector2(508, 2340)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="PathCanvas" type="Control" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BannerBranch1" type="PanelContainer" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 25.0
+offset_right = 454.0
+offset_bottom = 65.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gate1")
+
+[node name="HBox" type="HBoxContainer" parent="ScrollContainer/RoadmapContent/BannerBranch1"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ScrollContainer/RoadmapContent/BannerBranch1/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.45, 0.85, 1)
+theme_override_font_sizes/font_size = 12
+text = "🚏 TRẠM 1: BẾN XE & ĐƯỜNG PHỐ (Bài 1 - 4)"
+
+[node name="ChestBranch_1" type="Button" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 510.0
+offset_right = 364.0
+offset_bottom = 554.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.75, 0.4, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/hover = SubResource("StyleBoxFlat_chest")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chest")
+theme_override_styles/normal = SubResource("StyleBoxFlat_chest")
+text = "🎁 Hòm Cứu Trợ Trạm 1"
+
+[node name="BannerBranch2" type="PanelContainer" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 585.0
+offset_right = 454.0
+offset_bottom = 625.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gate2")
+
+[node name="HBox" type="HBoxContainer" parent="ScrollContainer/RoadmapContent/BannerBranch2"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ScrollContainer/RoadmapContent/BannerBranch2/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.2, 1)
+theme_override_font_sizes/font_size = 12
+text = "🏠 TRẠM 2: BÌNH YÊN XÓM TRỌ (Bài 5 - 8)"
+
+[node name="ChestBranch_2" type="Button" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 1070.0
+offset_right = 364.0
+offset_bottom = 1114.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.75, 0.4, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/hover = SubResource("StyleBoxFlat_chest")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chest")
+theme_override_styles/normal = SubResource("StyleBoxFlat_chest")
+text = "🎁 Hòm Cứu Trợ Trạm 2"
+
+[node name="BannerBranch3" type="PanelContainer" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 1145.0
+offset_right = 454.0
+offset_bottom = 1185.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gate3")
+
+[node name="HBox" type="HBoxContainer" parent="ScrollContainer/RoadmapContent/BannerBranch3"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ScrollContainer/RoadmapContent/BannerBranch3/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.55, 0.38, 1)
+theme_override_font_sizes/font_size = 12
+text = "🩺 TRẠM 3: THÂN THỂ KIM CƯƠNG (Bài 9 - 12)"
+
+[node name="ChestBranch_3" type="Button" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 1630.0
+offset_right = 364.0
+offset_bottom = 1674.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.75, 0.4, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/hover = SubResource("StyleBoxFlat_chest")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chest")
+theme_override_styles/normal = SubResource("StyleBoxFlat_chest")
+text = "🎁 Hòm Cứu Trợ Trạm 3"
+
+[node name="BannerBranch4" type="PanelContainer" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 1705.0
+offset_right = 454.0
+offset_bottom = 1745.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gate4")
+
+[node name="HBox" type="HBoxContainer" parent="ScrollContainer/RoadmapContent/BannerBranch4"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ScrollContainer/RoadmapContent/BannerBranch4/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+text = "💰 TRẠM 4: TÚI TIỀN THÔNG THÁI (Bài 13 - 16)"
+
+[node name="ChestBranch_4" type="Button" parent="ScrollContainer/RoadmapContent"]
+layout_mode = 0
+offset_left = 124.0
+offset_top = 2195.0
+offset_right = 384.0
+offset_bottom = 2245.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.05, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_chest")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_chest")
+theme_override_styles/normal = SubResource("StyleBoxFlat_chest")
+text = "🏆 CÚP THỦ KHOA TỰ LẬP"
+
+[node name="LevelPreviewModal" type="Control" parent="."]
+visible = false
+z_index = 20
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="LevelPreviewModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="ModalPanel" type="PanelContainer" parent="LevelPreviewModal"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -200.0
+offset_right = 220.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(220, 200)
+theme_override_styles/panel = SubResource("StyleBoxFlat_preview_card")
+
+[node name="VBox" type="VBoxContainer" parent="LevelPreviewModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BranchLabel" type="Label" parent="LevelPreviewModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "🚌 TRẠM 1: ĐƯỜNG PHỐ THỔ ĐỊA"
+horizontal_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="LevelPreviewModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.12, 1)
+theme_override_font_sizes/font_size = 15
+text = "Bài 1: Bắt xe buýt liên quận"
+horizontal_alignment = 1
+
+[node name="StarsLabel" type="Label" parent="LevelPreviewModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.65, 0.1, 1)
+theme_override_font_sizes/font_size = 12
+text = "⭐⭐⭐ ĐÃ THÀNH THẠO"
+horizontal_alignment = 1
+
+[node name="ContextBox" type="PanelContainer" parent="LevelPreviewModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_preview_box")
+
+[node name="HBox" type="HBoxContainer" parent="LevelPreviewModal/ModalPanel/VBox/ContextBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PreviewImage" type="TextureRect" parent="LevelPreviewModal/ModalPanel/VBox/ContextBox/HBox"]
+custom_minimum_size = Vector2(54, 54)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ContextLabel" type="Label" parent="LevelPreviewModal/ModalPanel/VBox/ContextBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.25, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+text = "Đứng đúng trạm, thấy xe tới vẫy tay dứt khoát ra hiệu đón xe..."
+autowrap_mode = 2
+
+[node name="RewardBox" type="PanelContainer" parent="LevelPreviewModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_preview_box")
+
+[node name="HBox" type="HBoxContainer" parent="LevelPreviewModal/ModalPanel/VBox/RewardBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="FishLabel" type="Label" parent="LevelPreviewModal/ModalPanel/VBox/RewardBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.5, 0.85, 1)
+theme_override_font_sizes/font_size = 11
+text = "💵 +15.000đ"
+
+[node name="LootLabel" type="Label" parent="LevelPreviewModal/ModalPanel/VBox/RewardBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "🎁 Vé Tháng Bus"
+
+[node name="BtnPreviewPuzzle" type="Button" parent="LevelPreviewModal/ModalPanel/VBox/RewardBox/HBox"]
+custom_minimum_size = Vector2(88, 22)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 10
+text = "🧩 Xem Puzzle"
+
+[node name="StatusLabel" type="Label" parent="LevelPreviewModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.3, 0.25, 1)
+theme_override_font_sizes/font_size = 10
+text = "🐾 Boss đang hào hứng! Hãy dạy Boss qua chuỗi hành động kéo thả."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BtnStartLesson" type="Button" parent="LevelPreviewModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 13
+text = "🚀 BẮT ĐẦU DẠY MÈO NGAY!"
+
+[node name="BtnClosePreview" type="Button" parent="LevelPreviewModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.5, 0.45, 0.4, 1)
+theme_override_font_sizes/font_size = 11
+text = "✖ Đóng"
+
+[node name="LevelInfoModal" type="Control" parent="."]
+visible = false
+z_index = 20
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="LevelInfoModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="ModalPanel" type="PanelContainer" parent="LevelInfoModal"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -250.0
+offset_right = 230.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="LevelInfoModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ModalTitle" type="Label" parent="LevelInfoModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.35, 0.1, 1)
+theme_override_font_sizes/font_size = 14
+text = "🏆 ĐIỀU KIỆN THĂNG CẤP & MỞ KHÓA SKILL"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="LevelInfoModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LevelList" type="VBoxContainer" parent="LevelInfoModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="BtnCloseModal" type="Button" parent="LevelInfoModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "✅ ĐÃ HIỂU, CHO MÈO HỌC TIẾP!"

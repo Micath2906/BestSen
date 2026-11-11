@@ -1,0 +1,231 @@
+{
+  "project": "Best Sen",
+  "version": "2.0.0",
+  "description": "Bảng tỷ lệ rơi đồ Gacha Hộp Quà theo Cat Mastery Level (Cấp độ thuần thục của Mèo)",
+  "mastery_levels": [
+    {
+      "level": 1,
+      "title": "Mèo Rụt Rè (Novice)",
+      "min_exp": 0,
+      "loot_drop_weights": {
+        "soft_currency": 65,
+        "basic_food": 25,
+        "decor_common": 8,
+        "cat_costume": 2,
+        "legendary": 0
+      },
+      "guaranteed_pity": "Mỗi 3 lần mở rương chắc chắn nhận tối thiểu 1 món Decor cơ bản"
+    },
+    {
+      "level": 2,
+      "title": "Mèo Tháo Vát (Learner)",
+      "min_exp": 100,
+      "loot_drop_weights": {
+        "soft_currency": 45,
+        "basic_food": 25,
+        "decor_common": 20,
+        "cat_costume": 8,
+        "legendary": 2
+      },
+      "guaranteed_pity": "Mỗi 4 lần mở rương chắc chắn nhận 1 phụ kiện trang phục"
+    },
+    {
+      "level": 3,
+      "title": "Mèo Dạn Dĩ (Adept)",
+      "min_exp": 250,
+      "loot_drop_weights": {
+        "soft_currency": 30,
+        "basic_food": 15,
+        "decor_common": 35,
+        "cat_costume": 15,
+        "legendary": 5
+      },
+      "guaranteed_pity": "Tăng 50% tỷ lệ rơi đồ Decor Isometric cao cấp"
+    },
+    {
+      "level": 4,
+      "title": "Mèo Bản Lĩnh (Master)",
+      "min_exp": 450,
+      "loot_drop_weights": {
+        "soft_currency": 20,
+        "basic_food": 10,
+        "decor_common": 35,
+        "cat_costume": 25,
+        "legendary": 10
+      },
+      "guaranteed_pity": "Chắc chắn nhận phụ kiện thời trang hiếm sau mỗi 3 rương"
+    },
+    {
+      "level": 5,
+      "title": "Sen Đỉnh Chóp (Champion)",
+      "min_exp": 700,
+      "loot_drop_weights": {
+        "soft_currency": 10,
+        "basic_food": 5,
+        "decor_common": 35,
+        "cat_costume": 35,
+        "legendary": 15
+      },
+      "guaranteed_pity": "Mở khóa toàn bộ Infographic độ phân giải cao và Trang phục Huyền Thoại"
+    }
+  ],
+  "items_pool": {
+    "soft_currency": [
+      {
+        "item_id": "fish_pouch_small",
+        "name": "Túi Cá Khô Nhỏ",
+        "amount": 20,
+        "icon": "🐟",
+        "rarity": "common",
+        "desc": "Túi tiền lẻ đủ ăn hạt sinh viên 6 ngày."
+      },
+      {
+        "item_id": "fish_pouch_medium",
+        "name": "Túi Cá Khô Vừa",
+        "amount": 40,
+        "icon": "🐟🐟",
+        "rarity": "uncommon",
+        "desc": "Khoản chi tiêu thoải mái mua pate và nước ngọt."
+      },
+      {
+        "item_id": "fish_pouch_large",
+        "name": "Hũ Cá Khô Tiết Kiệm",
+        "amount": 80,
+        "icon": "🏺",
+        "rarity": "rare",
+        "desc": "Khoản tiết kiệm sinh viên dồi dào, không sợ viêm màng túi!"
+      }
+    ],
+    "basic_food": [
+      {
+        "item_id": "food_kibble_pack",
+        "name": "Bao Hạt Sinh Viên Giòn Rụm",
+        "icon": "🍚",
+        "rarity": "common",
+        "stat_boost": { "hunger": 25, "courage": 5, "mood": 10 },
+        "desc": "Bữa ăn chắc dạ, đồng hành cùng Mèo qua tháng ngày ôn thi."
+      },
+      {
+        "item_id": "food_pate_luxury",
+        "name": "Lon Pate Cá Ngừ Thượng Hạng",
+        "icon": "🥫",
+        "rarity": "rare",
+        "stat_boost": { "hunger": 45, "courage": 30, "mood": 30 },
+        "desc": "Đại tiệc cuối tuần giúp Mèo nhảy múa tưng bừng khắp phòng!"
+      },
+      {
+        "item_id": "food_rural_fish",
+        "name": "Cá Khô Nướng Mẹ Gửi",
+        "icon": "🐟🔥",
+        "rarity": "uncommon",
+        "stat_boost": { "hunger": 30, "courage": 15, "mood": 25 },
+        "desc": "Món quà quê đậm đà tình thương mẫu tử nơi đất khách."
+      }
+    ],
+    "decor_common": [
+      {
+        "item_id": "decor_cardboard_box",
+        "name": "Thùng Carton Cũ Siêu Êm",
+        "icon": "📦",
+        "isometric_sprite": "res://assets/sprites/room_items/empty_cardboard_box.png",
+        "rarity": "common",
+        "comfort": 10,
+        "desc": "Chiếc hộp carton chân ái của mọi chú mèo trên thế giới."
+      },
+      {
+        "item_id": "decor_wool_rug",
+        "name": "Thảm Dệt Len Màu Be Ấm Áp",
+        "icon": "🧶",
+        "isometric_sprite": "res://assets/sprites/room_items/rug_isometric.png",
+        "rarity": "uncommon",
+        "comfort": 15,
+        "desc": "Tấm thảm giữ ấm bàn chân Mèo trong những đêm đông se lạnh."
+      },
+      {
+        "item_id": "decor_scratch_post",
+        "name": "Cây Cào Móng Dây Thừng Sisal",
+        "icon": "🪵",
+        "isometric_sprite": "res://assets/sprites/room_items/scratching_post.png",
+        "rarity": "uncommon",
+        "comfort": 20,
+        "desc": "Nơi Mèo mài dũa móng vuốt kim cương, không cào rách ghế nệm của Sen."
+      },
+      {
+        "item_id": "decor_vintage_lamp",
+        "name": "Đèn Bàn Học Ánh Vàng Vintage",
+        "icon": "💡",
+        "isometric_sprite": "res://assets/sprites/room_items/vintage_lamp.png",
+        "rarity": "rare",
+        "comfort": 25,
+        "desc": "Ánh đèn ấm áp soi rọi từng trang cẩm nang tự lập của Mèo."
+      },
+      {
+        "item_id": "decor_bonsai_plant",
+        "name": "Chậu Cây Trầu Bà Lọc Không Khí",
+        "icon": "🪴",
+        "isometric_sprite": "res://assets/sprites/room_items/potted_plant.png",
+        "rarity": "rare",
+        "comfort": 25,
+        "desc": "Góc xanh mát mắt mang lại sinh khí tươi tắn cho phòng trọ nhỏ."
+      }
+    ],
+    "cat_costume": [
+      {
+        "item_id": "costume_grad_cap",
+        "name": "Mũ Cử Nhân Đại Học",
+        "icon": "🎓",
+        "slot": "head",
+        "rarity": "rare",
+        "courage_boost": 20,
+        "desc": "Biểu tượng của chú mèo ham học, tốt nghiệp đại học tự lập!"
+      },
+      {
+        "item_id": "costume_red_bowtie",
+        "name": "Nơ Đỏ Quý Tộc Xóm Trọ",
+        "icon": "🎀",
+        "slot": "neck",
+        "rarity": "rare",
+        "courage_boost": 15,
+        "desc": "Biến chú mèo xóm trọ thành quý ông bảnh bao nhất khu phố."
+      },
+      {
+        "item_id": "costume_cool_shades",
+        "name": "Kính Râm Cực Ngầu Thách Thức Bùng Binh",
+        "icon": "🕶️",
+        "slot": "eyes",
+        "rarity": "rare",
+        "courage_boost": 25,
+        "desc": "Đeo vào là dạn dĩ phi xe buýt, không ngán bất kỳ vòng xoay nào."
+      },
+      {
+        "item_id": "costume_student_backpack",
+        "name": "Ba Lô Sinh Viên Mini Đeo Ngực",
+        "icon": "🎒",
+        "slot": "back",
+        "rarity": "epic",
+        "courage_boost": 35,
+        "desc": "Ba lô đựng thẻ xe buýt, thẻ BHYT và cẩm nang cứu nguy 24/7."
+      }
+    ],
+    "legendary": [
+      {
+        "item_id": "legendary_golden_crown",
+        "name": "Vương Miện Sen Đỉnh Chóp Vàng Ròng",
+        "icon": "👑",
+        "slot": "head",
+        "rarity": "legendary",
+        "courage_boost": 50,
+        "desc": "Huy chương tối thượng dành cho chú mèo đã xuất sắc làm chủ 16 kỹ năng sống!"
+      },
+      {
+        "item_id": "legendary_royal_cushion",
+        "name": "Đệm Ngủ Hoàng Gia Bọc Nhung",
+        "icon": "🛋️",
+        "isometric_sprite": "res://assets/sprites/room_items/royal_cushion.png",
+        "rarity": "legendary",
+        "comfort": 50,
+        "desc": "Nơi an nghỉ êm ái bậc nhất, xua tan mọi mỏi mệt sau chuỗi ngày bươn chải."
+      }
+    ]
+  }
+}

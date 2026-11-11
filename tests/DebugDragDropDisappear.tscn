@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b00t9debug001"]
+
+[ext_resource type="Script" path="res://tests/DebugDragDropDisappear.gd" id="1_dbg"]
+
+[node name="DebugDragDropDisappear" type="Node"]
+script = ExtResource("1_dbg")

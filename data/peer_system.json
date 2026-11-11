@@ -1,0 +1,71 @@
+{
+  "project": "Best Sen",
+  "version": "2.0.0",
+  "description": "Hệ thống Bạn Bè, Ghé Thăm Phòng 2.5D, Tặng Đồ & Quỹ Cá Cứu Trợ Sinh Viên",
+  "daily_relief_limits": {
+    "max_send_per_day": 20,
+    "max_receive_per_day": 40,
+    "reset_hour": 0
+  },
+  "gift_trade_rules": {
+    "allow_duplicate_gift": true,
+    "max_gifts_per_day": 3,
+    "eligible_categories": ["decor_common", "cat_costume"]
+  },
+  "mock_friends": [
+    {
+      "friend_id": "friend_01_an",
+      "name": "Bạn An (Xóm Trọ Cầu Giấy)",
+      "room_title": "Phòng 201 - Mèo Tuxedo Quý Tộc",
+      "cat_name": "Tuxedo Ham Học",
+      "cat_avatar_id": 4,
+      "mastery_level": 3,
+      "decor_items": [
+        { "item_id": "decor_wool_rug", "tile_coord": [4.0, 4.0] },
+        { "item_id": "decor_vintage_lamp", "tile_coord": [1.5, 1.5] }
+      ],
+      "cat_costume": "costume_grad_cap",
+      "last_online": "5 phút trước",
+      "relief_status": {
+        "can_receive": true,
+        "received_today": 10
+      }
+    },
+    {
+      "friend_id": "friend_02_binh",
+      "name": "Bạn Bình (KTX Khu B)",
+      "room_title": "Phòng 305 - Mèo Vàng Thông Thái",
+      "cat_name": "Vàng Bách Khoa",
+      "cat_avatar_id": 1,
+      "mastery_level": 4,
+      "decor_items": [
+        { "item_id": "decor_scratch_post", "tile_coord": [1.5, 6.0] },
+        { "item_id": "decor_bonsai_plant", "tile_coord": [6.0, 5.0] }
+      ],
+      "cat_costume": "costume_cool_shades",
+      "last_online": "30 phút trước",
+      "relief_status": {
+        "can_receive": true,
+        "received_today": 0
+      }
+    },
+    {
+      "friend_id": "friend_03_chi",
+      "name": "Bạn Chi (Phòng Trọ Thủ Đức)",
+      "room_title": "Phòng 108 - Mèo Tam Thể Dễ Thương",
+      "cat_name": "Tam Thể Dịu Dàng",
+      "cat_avatar_id": 2,
+      "mastery_level": 2,
+      "decor_items": [
+        { "item_id": "decor_cardboard_box", "tile_coord": [3.5, 1.5] },
+        { "item_id": "decor_wool_rug", "tile_coord": [4.0, 4.0] }
+      ],
+      "cat_costume": "costume_red_bowtie",
+      "last_online": "2 giờ trước",
+      "relief_status": {
+        "can_receive": false,
+        "received_today": 40
+      }
+    }
+  ]
+}

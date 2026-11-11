@@ -1,0 +1,172 @@
+[gd_scene load_steps=5 format=3 uid="uid://cathousinglegal001"]
+
+[ext_resource type="Script" path="res://scripts/categories/CategoryHousingLegal.gd" id="1_house"]
+[ext_resource type="Texture2D" uid="uid://bwhqbt2a3gkbp" path="res://assets/UI/CatUIPaid/slices/icon_arrow_left.png" id="2_arr_l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_card"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.99, 0.96, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.95, 0.45, 0.35, 0.5)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.05)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prog_bar"]
+bg_color = Color(0.95, 0.45, 0.35, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="CategoryHousingLegal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_house")
+
+[node name="BgRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.99, 0.95, 0.93, 1)
+
+[node name="TopBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = 56.0
+grow_horizontal = 2
+theme_override_constants/separation = 12
+
+[node name="BtnBack" type="Button" parent="TopBar"]
+custom_minimum_size = Vector2(92, 38)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.35, 0.24, 0.16, 1)
+theme_override_font_sizes/font_size = 13
+text = " Thoát"
+icon = ExtResource("2_arr_l")
+
+[node name="TitleBox" type="VBoxContainer" parent="TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="CatBadgeLabel" type="Label" parent="TopBar/TitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.25, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "🏠 DANH MỤC 2"
+
+[node name="CatTitleLabel" type="Label" parent="TopBar/TitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.15, 0.1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Bình Yên Xóm Trọ"
+
+[node name="CategorySwitcher" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 64.0
+offset_right = -16.0
+offset_bottom = 102.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="HeaderCard" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 110.0
+offset_right = -16.0
+offset_bottom = 192.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_card")
+
+[node name="VBox" type="VBoxContainer" parent="HeaderCard"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DescLabel" type="Label" parent="HeaderCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.35, 0.3, 1)
+theme_override_font_sizes/font_size = 11
+text = "An cư lập nghiệp - Tránh bẫy hợp đồng, phòng cháy an toàn & hòa thuận"
+autowrap_mode = 3
+
+[node name="ProgressHBox" type="HBoxContainer" parent="HeaderCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ProgressLabel" type="Label" parent="HeaderCard/VBox/ProgressHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Tiến độ: 0 / 5 Kỹ năng"
+
+[node name="ProgressBar" type="ProgressBar" parent="HeaderCard/VBox/ProgressHBox"]
+custom_minimum_size = Vector2(160, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_prog_bar")
+max_value = 5.0
+show_percentage = false
+
+[node name="StarsLabel" type="Label" parent="HeaderCard/VBox/ProgressHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.65, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "⭐ 0 / 15 Sao"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 202.0
+offset_right = -16.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="CardsContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="MinigameHolder" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

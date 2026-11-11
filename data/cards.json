@@ -1,0 +1,647 @@
+{
+  "project": "Best Sen",
+  "version": "2.0.0",
+  "description": "Kho thẻ bài âm thanh tiếng Mèo phục vụ cơ chế kéo thả Sequence Puzzle giải mã tình huống",
+  "cards": [
+    {
+      "card_id": 101,
+      "skill_id": 1,
+      "step_order": 1,
+      "cat_sound": "Meo-o?",
+      "action_icon": "✋",
+      "title": "Vẫy tay đón xe",
+      "description": "Đứng đúng trạm, thấy xe cách 50m thì vẫy tay dứt khoát ra hiệu.",
+      "error_feedback": "Chưa vẫy tay ra hiệu đón xe mà đã chuẩn bị tiền thì xe buýt vút qua trạm mất đấy Sen ơi!"
+    },
+    {
+      "card_id": 102,
+      "skill_id": 1,
+      "step_order": 2,
+      "cat_sound": "Méo meo!",
+      "action_icon": "💵",
+      "title": "Cầm sẵn tiền lẻ",
+      "description": "Bước lên cửa trước, cầm sẵn 5.000đ hoặc vé tháng trên tay.",
+      "error_feedback": "Lên xe mà không cầm sẵn tiền lẻ sẽ làm nghẽn cửa trước và khiến bác phụ xe càu nhàu đó!"
+    },
+    {
+      "card_id": 103,
+      "skill_id": 1,
+      "step_order": 3,
+      "cat_sound": "Meo-wrr...",
+      "action_icon": "🎒",
+      "title": "Ôm ba lô trước ngực",
+      "description": "Ổn định chỗ đứng hoặc ngồi, luôn ôm chặt ba lô trước ngực.",
+      "error_feedback": "Đứng trên xe đông người mà quên ôm ba lô trước ngực thì rất dễ bị kẻ gian móc túi mất điện thoại!"
+    },
+    {
+      "card_id": 104,
+      "skill_id": 1,
+      "step_order": 4,
+      "cat_sound": "Meoo!!",
+      "action_icon": "🔔",
+      "title": "Bấm chuông trước 100m",
+      "description": "Quan sát bảng trạm dừng, bấm nút chuông đỏ trên cột trước trạm 100m.",
+      "error_feedback": "Đến sát trạm mới vội bấm chuông thì bác tài phanh gấp hoặc chở Mèo sang tận trạm kế tiếp!"
+    },
+    {
+      "card_id": 105,
+      "skill_id": 2,
+      "step_order": 1,
+      "cat_sound": "Meo-map?",
+      "action_icon": "📱",
+      "title": "Tra cứu lộ trình",
+      "description": "Mở BusMap chọn tuyến xe buýt có số lần đổi ít nhất.",
+      "error_feedback": "Chưa tra lộ trình tối ưu mà đã ra trạm thì dễ bắt nhầm xe chạy ngược hướng lắm Sen!"
+    },
+    {
+      "card_id": 106,
+      "skill_id": 2,
+      "step_order": 2,
+      "cat_sound": "Méo-tick!",
+      "action_icon": "⏱️",
+      "title": "Soi mã trạm & Giờ đến",
+      "description": "Kiểm tra mã số trạm dừng và thời gian thực tế xe kế tiếp cập bến.",
+      "error_feedback": "Không kiểm tra mã trạm và giờ xe cập bến thì Mèo sẽ đứng đợi rụng lông giữa trời nắng chang chang!"
+    },
+    {
+      "card_id": 107,
+      "skill_id": 2,
+      "step_order": 3,
+      "cat_sound": "Meow-hop!",
+      "action_icon": "🚏",
+      "title": "Đúng cột trung chuyển",
+      "description": "Xuống xe, đối chiếu biển báo để tìm đúng vị trí đón tuyến số 2.",
+      "error_feedback": "Xuống trạm chuyển tiếp mà không quan sát cột đón xe thì Mèo sẽ nhảy nhầm xe đi về bến khác mất thôi!"
+    },
+    {
+      "card_id": 108,
+      "skill_id": 2,
+      "step_order": 4,
+      "cat_sound": "Purr-pass!",
+      "action_icon": "🎫",
+      "title": "Trình thẻ sinh viên",
+      "description": "Bước lên xe thứ hai, nhanh nhẹn xuất trình thẻ sinh viên/vé.",
+      "error_feedback": "Bước lên xe tiếp theo mà chưa rút sẵn thẻ vé tháng thì lại lúng túng làm rơi đồ đạc đấy Sen!"
+    },
+    {
+      "card_id": 109,
+      "skill_id": 3,
+      "step_order": 1,
+      "cat_sound": "Méo-safe!",
+      "action_icon": "🛑",
+      "title": "Tấp lề an toàn",
+      "description": "Tấp xe vào lề đường an toàn trước khi rút điện thoại mở bản đồ.",
+      "error_feedback": "Vừa chạy xe vừa cúi gằm bấm điện thoại tìm đường cực kỳ nguy hiểm, phải tấp lề đường trước tiên!"
+    },
+    {
+      "card_id": 110,
+      "skill_id": 3,
+      "step_order": 2,
+      "cat_sound": "Meo-spin?",
+      "action_icon": "🧭",
+      "title": "Căn la bàn Maps",
+      "description": "Bấm biểu tượng la bàn để bản đồ tự xoay theo hướng mặt nhìn.",
+      "error_feedback": "Chưa căn chỉnh la bàn định hướng thì Mèo nhìn bản đồ ngược đầu, càng đi càng lạc sâu vào ngõ cụt!"
+    },
+    {
+      "card_id": 111,
+      "skill_id": 3,
+      "step_order": 3,
+      "cat_sound": "Meo-count!",
+      "action_icon": "🔢",
+      "title": "Đếm lối ra vòng xoay",
+      "description": "Đếm chính xác số thứ tự nhánh rẽ cần thoát ra khỏi bùng binh.",
+      "error_feedback": "Lao vào vòng xoay mà không đếm lối ra thì Mèo sẽ phải quay mòng mòng giữa bùng binh như chong chóng!"
+    },
+    {
+      "card_id": 112,
+      "skill_id": 3,
+      "step_order": 4,
+      "cat_sound": "Meow-zoom!",
+      "action_icon": "🏍️",
+      "title": "Bật xi-nhan dứt khoát",
+      "description": "Bật xi-nhan phải, quan sát gương chiếu hậu rồi dứt khoát rẽ ra.",
+      "error_feedback": "Thoát khỏi lối rẽ bùng binh mà quên bật xi-nhan chuyển làn thì xe phía sau sẽ tông trúng đuôi Mèo đấy!"
+    },
+    {
+      "card_id": 113,
+      "skill_id": 4,
+      "step_order": 1,
+      "cat_sound": "Meo-look!",
+      "action_icon": "🔍",
+      "title": "Tự soi lốp và sên",
+      "description": "Dựng chân chống đứng, tự kiểm tra mắt sên xích và áp suất lốp.",
+      "error_feedback": "Xe vừa có tiếng kêu lạ mà không tự soi xem có bị kẹt đá hay tuột xích thì dễ bị thợ phán bậy moi tiền!"
+    },
+    {
+      "card_id": 114,
+      "skill_id": 4,
+      "step_order": 2,
+      "cat_sound": "Méo-price?",
+      "action_icon": "💬",
+      "title": "Hỏi rõ giá trước",
+      "description": "Hỏi cụ thể tiền công và tiền phụ tùng trước khi thợ bắt đầu sửa.",
+      "error_feedback": "Để thợ tháo tung máy móc rồi mới hỏi giá thì người ta hét giá bao nhiêu cũng phải cắn răng trả đấy!"
+    },
+    {
+      "card_id": 115,
+      "skill_id": 4,
+      "step_order": 3,
+      "cat_sound": "Meo-seal!",
+      "action_icon": "🏷️",
+      "title": "Xem tem chai nhớt",
+      "description": "Kiểm tra tem niêm phong nắp chai nhớt còn nguyên vẹn hay không.",
+      "error_feedback": "Thay nhớt dỏm đóng lại từ dầu thải sẽ làm lột dên, hỏng luôn cả động cơ xe máy của Mèo đấy!"
+    },
+    {
+      "card_id": 116,
+      "skill_id": 4,
+      "step_order": 4,
+      "cat_sound": "Purr-ride!",
+      "action_icon": "🛵",
+      "title": "Chạy thử kiểm tra",
+      "description": "Nổ máy chạy thử một vòng ngắn, kiểm tra phanh trước khi rời tiệm.",
+      "error_feedback": "Trả tiền xong phóng đi ngay mà quên bóp thử phanh thì cực kỳ nguy hiểm nếu thợ siết chưa chặt!"
+    },
+    {
+      "card_id": 201,
+      "skill_id": 5,
+      "step_order": 1,
+      "cat_sound": "Meo-read!",
+      "action_icon": "📑",
+      "title": "Soi điều khoản cọc",
+      "description": "Đọc kỹ điều kiện hoàn cọc và thời gian báo trước khi chuyển trọ.",
+      "error_feedback": "Chưa đọc kỹ điều khoản hoàn cọc mà vội đặt bút ký thì lúc dọn đi sẽ bị chủ trừ sạch tiền cọc vô lý đó!"
+    },
+    {
+      "card_id": 202,
+      "skill_id": 5,
+      "step_order": 2,
+      "cat_sound": "Meo-bill?",
+      "action_icon": "⚡",
+      "title": "Chốt đơn giá điện nước",
+      "description": "Ghi rõ đơn giá điện, nước, rác, wifi vào hợp đồng bằng số cụ thể.",
+      "error_feedback": "Không chốt rõ ràng biểu giá điện nước và phí dịch vụ thì cuối tháng nhận giấy báo giá trên trời khóc không kịp!"
+    },
+    {
+      "card_id": 203,
+      "skill_id": 5,
+      "step_order": 3,
+      "cat_sound": "Meo-snap!",
+      "action_icon": "📸",
+      "title": "Chụp ảnh hiện trạng",
+      "description": "Chụp ảnh các vết nứt tường, thiết bị cũ trước ngày nhận phòng.",
+      "error_feedback": "Không chụp ảnh lưu bằng chứng vết nứt tường, thiết bị cũ trước khi nhận phòng thì sau này sẽ bị bắt đền oan uổng!"
+    },
+    {
+      "card_id": 204,
+      "skill_id": 5,
+      "step_order": 4,
+      "cat_sound": "Meow-sign!",
+      "action_icon": "✍️",
+      "title": "Giữ 1 bản gốc có ký",
+      "description": "Ký kết và giữ lại 01 bản hợp đồng gốc có chữ ký của hai bên.",
+      "error_feedback": "Ký tên xong mà để chủ trọ giữ hết giấy tờ, không cầm bản gốc có chữ ký sống về tay thì mất trắng căn cứ pháp lý!"
+    },
+    {
+      "card_id": 205,
+      "skill_id": 6,
+      "step_order": 1,
+      "cat_sound": "Meo-door?",
+      "action_icon": "🚪",
+      "title": "Cửa chuồng cọp mở được",
+      "description": "Kiểm tra lồng sắt ban công phải có cửa thoát và chìa treo sẵn.",
+      "error_feedback": "Chuồng cọp bị hàn chết không lối thoát hiểm thì khi xảy ra hỏa hoạn ở cầu thang sẽ bị kẹt lại hoàn toàn!"
+    },
+    {
+      "card_id": 206,
+      "skill_id": 6,
+      "step_order": 2,
+      "cat_sound": "Meo-gauge!",
+      "action_icon": "🧯",
+      "title": "Bình cứu hỏa vạch xanh",
+      "description": "Xác định đồng hồ áp suất bình chữa cháy hành lang chỉ vạch xanh.",
+      "error_feedback": "Bình cứu hỏa tụt kim về vạch đỏ là bình đã mất áp suất, lúc có lửa bóp cò không xịt ra bọt được đâu!"
+    },
+    {
+      "card_id": 207,
+      "skill_id": 6,
+      "step_order": 3,
+      "cat_sound": "Meo-stair!",
+      "action_icon": "🪜",
+      "title": "Lối thoát lên thượng",
+      "description": "Định vị trước đường cầu thang phụ dẫn lên sân thượng tòa nhà.",
+      "error_feedback": "Khói độc luôn bốc lên trên, nếu không biết cửa sân thượng có bị khóa hay không thì chạy lên sẽ rơi vào đường cùng!"
+    },
+    {
+      "card_id": 208,
+      "skill_id": 6,
+      "step_order": 4,
+      "cat_sound": "Purr-towel!",
+      "action_icon": "🧣",
+      "title": "Khăn ướt đầu giường",
+      "description": "Luôn chuẩn bị sẵn khăn mặt sạch và chai nước cạnh đầu giường.",
+      "error_feedback": "Khi có báo cháy, hít phải 3 hơi khói độc là ngất xỉu. Phải thấm ướt khăn bịt mũi bò thấp người ngay lập tức!"
+    },
+    {
+      "card_id": 209,
+      "skill_id": 7,
+      "step_order": 1,
+      "cat_sound": "Meo-id?",
+      "action_icon": "🪪",
+      "title": "Xin CCCD chủ nhà",
+      "description": "Lấy thông tin số CCCD và mã định danh chủ nhà trọ để kê khai.",
+      "error_feedback": "Không có thông tin CCCD và xác nhận của chủ hộ thì hồ sơ đăng ký cư trú trực tuyến sẽ bị công an từ chối ngay!"
+    },
+    {
+      "card_id": 210,
+      "skill_id": 7,
+      "step_order": 2,
+      "cat_sound": "Meo-app!",
+      "action_icon": "📲",
+      "title": "Đăng nhập VNeID",
+      "description": "Đăng nhập Cổng Dịch vụ công hoặc app VNeID định danh mức 2.",
+      "error_feedback": "VNeID chưa kích hoạt mức 2 thì không thể nộp thủ tục hành chính trực tuyến được đâu Sen ơi!"
+    },
+    {
+      "card_id": 211,
+      "skill_id": 7,
+      "step_order": 3,
+      "cat_sound": "Meo-doc!",
+      "action_icon": "📄",
+      "title": "Đính kèm hợp đồng",
+      "description": "Tải ảnh chụp hợp đồng thuê trọ hợp lệ lên hồ sơ trực tuyến.",
+      "error_feedback": "Nộp đơn mà thiếu tài liệu chứng minh chỗ ở hợp pháp (ảnh hợp đồng thuê trọ) thì hệ thống sẽ trả hồ sơ về!"
+    },
+    {
+      "card_id": 212,
+      "skill_id": 7,
+      "step_order": 4,
+      "cat_sound": "Purr-code!",
+      "action_icon": "📬",
+      "title": "Lưu mã hồ sơ CT07",
+      "description": "Lưu lại mã hồ sơ để tra cứu tiến độ và nhận giấy xác nhận CT07.",
+      "error_feedback": "Nộp xong mà tắt máy không lưu lại mã hồ sơ thì công an hẹn ngày bổ sung giấy tờ Mèo không biết lấy gì tra cứu!"
+    },
+    {
+      "card_id": 213,
+      "skill_id": 8,
+      "step_order": 1,
+      "cat_sound": "Meo-talk!",
+      "action_icon": "🧋",
+      "title": "Họp mặt thẳng thắn",
+      "description": "Mời bạn trọ uống trà sữa, thẳng thắn trao đổi thói quen cá nhân.",
+      "error_feedback": "Ngại ngùng không nói trước các thói quen cá nhân thì sau này bức xúc dồn nén rất dễ bùng nổ cãi vã to tiếng!"
+    },
+    {
+      "card_id": 214,
+      "skill_id": 8,
+      "step_order": 2,
+      "cat_sound": "Meo-clean!",
+      "action_icon": "🧹",
+      "title": "Lịch trực nhật toilet",
+      "description": "Dán lịch phân công dọn dẹp nhà vệ sinh và đổ rác luân phiên.",
+      "error_feedback": "Không có lịch phân công cụ thể thì việc dọn vệ sinh sẽ bị đùn đẩy, phòng trọ biến thành ổ chuột bốc mùi!"
+    },
+    {
+      "card_id": 215,
+      "skill_id": 8,
+      "step_order": 3,
+      "cat_sound": "Meo-split!",
+      "action_icon": "📱",
+      "title": "Cài app chia tiền",
+      "description": "Sử dụng ứng dụng chia tiền minh bạch, nhập chi phí chung hàng ngày.",
+      "error_feedback": "Tiền nong nhập nhằng 'bữa nay tao trả, bữa sau mày bao' là nguyên nhân số 1 khiến bạn cùng phòng cạch mặt nhau!"
+    },
+    {
+      "card_id": 216,
+      "skill_id": 8,
+      "step_order": 4,
+      "cat_sound": "Purr-light!",
+      "action_icon": "🌙",
+      "title": "Quy ước giờ tắt đèn",
+      "description": "Thống nhất sau 23h đeo tai nghe và tắt đèn chùm lớn để ngủ.",
+      "error_feedback": "Nửa đêm một người bật loa ngoài xem video, một người cần ngủ dậy sớm đi học thì sớm muộn cũng xảy ra xung đột!"
+    },
+    {
+      "card_id": 301,
+      "skill_id": 9,
+      "step_order": 1,
+      "cat_sound": "Meo-temp?",
+      "action_icon": "🌡️",
+      "title": "Kẹp nhiệt kế 5 phút",
+      "description": "Kẹp nhiệt kế vào nách 5 phút, xác định chính xác độ sốt.",
+      "error_feedback": "Chưa kẹp nhiệt kế đo độ sốt mà đã vội uống thuốc bừa bãi sẽ gây ngộ độc gan rất nguy hiểm!"
+    },
+    {
+      "card_id": 302,
+      "skill_id": 9,
+      "step_order": 2,
+      "cat_sound": "Meo-dose!",
+      "action_icon": "💊",
+      "title": "Uống đúng liều mg/kg",
+      "description": "Uống Paracetamol đúng liều lượng cân nặng, cách nhau 4-6 tiếng.",
+      "error_feedback": "Uống quá liều paracetamol hoặc uống dồn dập 2 viên cách nhau 1 tiếng là nguyên nhân suy gan cấp tính đấy!"
+    },
+    {
+      "card_id": 303,
+      "skill_id": 9,
+      "step_order": 3,
+      "cat_sound": "Meo-warm!",
+      "action_icon": "💧",
+      "title": "Lau nước ẤM nách bẹn",
+      "description": "Dùng khăn nhúng nước ẤM lau trán, nách, bẹn để dãn mạch hạ nhiệt.",
+      "error_feedback": "Sai lầm chết người: Dùng nước đá chườm lạnh làm mạch máu co thắt, nhiệt không thoát ra được gây co giật!"
+    },
+    {
+      "card_id": 304,
+      "skill_id": 9,
+      "step_order": 4,
+      "cat_sound": "Purr-drink!",
+      "action_icon": "🥛",
+      "title": "Uống bù nước Oresol",
+      "description": "Pha đúng tỷ lệ 1 gói Oresol với nước sôi để nguội, uống từng ngụm.",
+      "error_feedback": "Sốt cao làm mất nước điện giải trầm trọng. Không bù nước Oresol kịp thời sẽ dẫn đến tụt huyết áp và kiệt sức!"
+    },
+    {
+      "card_id": 305,
+      "skill_id": 10,
+      "step_order": 1,
+      "cat_sound": "Meo-ticket!",
+      "action_icon": "🎫",
+      "title": "Bốc số BHYT",
+      "description": "Đến cây lấy số tự động, chọn đúng luồng tiếp nhận khám BHYT.",
+      "error_feedback": "Lúng túng bấm nhầm vào nút 'Khám dịch vụ tự nguyện' thì mất quyền lợi chi trả BHYT, tốn cả triệu tiền khám!"
+    },
+    {
+      "card_id": 306,
+      "skill_id": 10,
+      "step_order": 2,
+      "cat_sound": "Meo-card!",
+      "action_icon": "🪪",
+      "title": "Trình CCCD / VssID",
+      "description": "Xuất trình CCCD gắn chip tích hợp BHYT hoặc mở mã QR trên VssID.",
+      "error_feedback": "Đến lượt gọi số mà quên mang CCCD hoặc điện thoại hết pin không mở được VssID thì phải quay về tay không!"
+    },
+    {
+      "card_id": 307,
+      "skill_id": 10,
+      "step_order": 3,
+      "cat_sound": "Meo-doc!",
+      "action_icon": "🩺",
+      "title": "Vào phòng chuyên khoa",
+      "description": "Chờ trước cửa phòng khám chuyên khoa, khai báo triệu chứng trung thực.",
+      "error_feedback": "Ngại ngùng giấu bệnh hoặc kể vòng vo làm bác sĩ chẩn đoán không chính xác triệu chứng bệnh!"
+    },
+    {
+      "card_id": 308,
+      "skill_id": 10,
+      "step_order": 4,
+      "cat_sound": "Purr-pill!",
+      "action_icon": "💊",
+      "title": "Nhận thuốc quầy BHYT",
+      "description": "Cầm đơn thuốc có dấu đỏ qua quầy Dược BHYT nhận thuốc miễn phí.",
+      "error_feedback": "Cầm đơn thuốc chạy thẳng ra tiệm thuốc tây tư nhân ngoài cổng viện mua thì tốn tiền túi oan uổng!"
+    },
+    {
+      "card_id": 309,
+      "skill_id": 11,
+      "step_order": 1,
+      "cat_sound": "Meo-box!",
+      "action_icon": "📦",
+      "title": "Hộp nhựa nắp kín",
+      "description": "Chuẩn bị hộp nhựa trong suốt có nắp gài kín, để nơi khô ráo.",
+      "error_feedback": "Vứt thuốc lung tung trong ngăn kéo bàn ẩm thấp sẽ làm viên thuốc bị mốc hỏng, chảy nước biến chất!"
+    },
+    {
+      "card_id": 310,
+      "skill_id": 11,
+      "step_order": 2,
+      "cat_sound": "Meo-fever!",
+      "action_icon": "🌡️",
+      "title": "Hạ sốt + Nhiệt kế",
+      "description": "Xếp sẵn 1 vỉ Paracetamol 500mg kèm 1 chiếc nhiệt kế điện tử.",
+      "error_feedback": "Nửa đêm sốt hầm hập mà tủ thuốc không có sẵn nhiệt kế và paracetamol thì biết xoay xở ở đâu!"
+    },
+    {
+      "card_id": 311,
+      "skill_id": 11,
+      "step_order": 3,
+      "cat_sound": "Meo-gut!",
+      "action_icon": "🫚",
+      "title": "Tiêu hóa + Oresol",
+      "description": "Trang bị thuốc cầm tiêu chảy Berberin, men vi sinh và 3 gói Oresol.",
+      "error_feedback": "Ăn trúng đồ ôi thiu đau bụng đi ngoài dữ dội mà không có Oresol và Berberin thì nguy cơ mất nước rất cao!"
+    },
+    {
+      "card_id": 312,
+      "skill_id": 11,
+      "step_order": 4,
+      "cat_sound": "Purr-label!",
+      "action_icon": "🏷️",
+      "title": "Dán nhãn hạn sử dụng",
+      "description": "Dùng bút dạ ghi rõ liều dùng và hạn sử dụng lên từng vỉ thuốc.",
+      "error_feedback": "Uống nhầm thuốc quá hạn sử dụng hoặc uống lộn thuốc hạ sốt thành kháng sinh vì không dán nhãn!"
+    },
+    {
+      "card_id": 313,
+      "skill_id": 12,
+      "step_order": 1,
+      "cat_sound": "Meo-pain?",
+      "action_icon": "⚡",
+      "title": "Nhận biết ợ chua",
+      "description": "Lắng nghe cơn đau rát vùng thượng vị và cảm giác ợ chua sau khi ăn.",
+      "error_feedback": "Thấy đau bụng âm ỉ mà cứ nghĩ do no hơi, chủ quan bỏ qua dấu hiệu viêm loét niêm mạc dạ dày!"
+    },
+    {
+      "card_id": 314,
+      "skill_id": 12,
+      "step_order": 2,
+      "cat_sound": "Meo-stop!",
+      "action_icon": "🚫",
+      "title": "Bỏ mì tôm sống",
+      "description": "Dừng ngay thói quen bẻ mì tôm sống ăn khô và uống nước ngọt có ga.",
+      "error_feedback": "Mì tôm sống chiên dầu mỡ kèm gia vị cay nồng ăn vào ban đêm là kẻ thù số 1 đục thủng dạ dày của Mèo!"
+    },
+    {
+      "card_id": 315,
+      "skill_id": 12,
+      "step_order": 3,
+      "cat_sound": "Meo-cook!",
+      "action_icon": "🥣",
+      "title": "Nấu cháo ấm đúng giờ",
+      "description": "Ăn cháo yến mạch ấm hoặc cơm canh nhạt đúng giờ sinh học hàng ngày.",
+      "error_feedback": "Bỏ bữa sáng rồi dồn vào ăn một bữa trưa thật no sẽ làm dịch vị axit dạ dày tiết ra quá mức bào mòn thành ruột!"
+    },
+    {
+      "card_id": 316,
+      "skill_id": 12,
+      "step_order": 4,
+      "cat_sound": "Purr-check!",
+      "action_icon": "🏥",
+      "title": "Khám nội soi nếu đau",
+      "description": "Nếu cơn đau kéo dài quá 3 ngày, đi khám chuyên khoa tiêu hóa ngay.",
+      "error_feedback": "Tự ý mua thuốc giảm đau trôi nổi uống để dập cơn đau sẽ làm vết loét dạ dày xuất huyết chảy máu ồ ạt!"
+    },
+    {
+      "card_id": 401,
+      "skill_id": 13,
+      "step_order": 1,
+      "cat_sound": "Meo-need!",
+      "action_icon": "🏠",
+      "title": "50% Nhu cầu thiết yếu",
+      "description": "Trích ngay 50% tiền chu cấp đóng tiền phòng, điện nước và mua hạt ăn.",
+      "error_feedback": "Mới nhận tiền đã vội đi mua sắm quần áo sang chảnh, cuối tháng không còn tiền đóng trọ bị chủ đuổi!"
+    },
+    {
+      "card_id": 402,
+      "skill_id": 13,
+      "step_order": 2,
+      "cat_sound": "Meo-want!",
+      "action_icon": "☕",
+      "title": "30% Nhu cầu cá nhân",
+      "description": "Giới hạn tối đa 30% cho chi tiêu cà phê bạn bè, tài liệu học và 4G.",
+      "error_feedback": "Chi tiêu cho nhu cầu cá nhân vượt quá 50% thu nhập sẽ làm cạn kiệt ngân sách ăn uống cơ bản!"
+    },
+    {
+      "card_id": 403,
+      "skill_id": 13,
+      "step_order": 3,
+      "cat_sound": "Meo-safe!",
+      "action_icon": "🛡️",
+      "title": "20% Quỹ khẩn cấp",
+      "description": "Cất riêng 20% vào tài khoản riêng, tuyệt đối không đụng đến.",
+      "error_feedback": "Không có quỹ khẩn cấp thì lúc xe thủng lốp hay ốm sốt giữa đêm Mèo sẽ rơi vào cảnh tuyệt vọng vay nóng!"
+    },
+    {
+      "card_id": 404,
+      "skill_id": 13,
+      "step_order": 4,
+      "cat_sound": "Purr-log!",
+      "action_icon": "📝",
+      "title": "Ghi chép sổ thu chi",
+      "description": "Cuối ngày dành 2 phút nhập mọi khoản chi tiêu vào sổ hoặc app.",
+      "error_feedback": "Không ghi chép chi tiêu thì tiền bốc hơi đi đâu Mèo cũng không hề hay biết!"
+    },
+    {
+      "card_id": 405,
+      "skill_id": 14,
+      "step_order": 1,
+      "cat_sound": "Meo-scam?",
+      "action_icon": "🚨",
+      "title": "Cảnh giác lãi > 15%",
+      "description": "Nhận diện dấu hiệu lừa đảo: cam kết lợi nhuận khủng không rủi ro.",
+      "error_feedback": "Tin vào lời quảng cáo 'đầu tư 1 triệu nhận về 500k mỗi ngày' thì mất sạch toàn bộ tiền tiết kiệm!"
+    },
+    {
+      "card_id": 406,
+      "skill_id": 14,
+      "step_order": 2,
+      "cat_sound": "Meo-prod?",
+      "action_icon": "📦",
+      "title": "Soi sản phẩm thật",
+      "description": "Kiểm tra xem công ty có sản phẩm thực tế hay chỉ huy động vốn.",
+      "error_feedback": "Một mô hình không bán bất cứ thứ gì, chỉ hứa trả thưởng hoa hồng khi lôi kéo người khác là đa cấp biến tướng!"
+    },
+    {
+      "card_id": 407,
+      "skill_id": 14,
+      "step_order": 3,
+      "cat_sound": "Meo-no!",
+      "action_icon": "🛑",
+      "title": "Cấm nộp tiền cọc",
+      "description": "Dứt khoát từ chối mọi yêu cầu nộp 'tiền cọc giữ chỗ' hoặc mua gói tài liệu.",
+      "error_feedback": "Nộp tiền cọc cho bọn lừa đảo là 'tiền vào nhà khó, không bao giờ lấy lại được'!"
+    },
+    {
+      "card_id": 408,
+      "skill_id": 14,
+      "step_order": 4,
+      "cat_sound": "Purr-exit!",
+      "action_icon": "🚪",
+      "title": "Rút lui dứt khoát",
+      "description": "Đứng dậy ra về ngay lập tức, chặn số điện thoại kẻ lôi kéo.",
+      "error_feedback": "Cả nể ngồi nghe chúng nó 'thao túng tâm lý' trong phòng kín thì sớm muộn cũng bị dụ ký giấy vay nợ!"
+    },
+    {
+      "card_id": 409,
+      "skill_id": 15,
+      "step_order": 1,
+      "cat_sound": "Meo-time!",
+      "action_icon": "⏰",
+      "title": "Chọn việc theo lịch học",
+      "description": "Ưu tiên việc làm theo ca linh hoạt, không ảnh hưởng giờ lên lớp.",
+      "error_feedback": "Ham kiếm tiền nhận ca làm việc trùng lịch thi học kỳ thì rớt môn phải đóng tiền học lại gấp đôi!"
+    },
+    {
+      "card_id": 410,
+      "skill_id": 15,
+      "step_order": 2,
+      "cat_sound": "Meo-wage?",
+      "action_icon": "💰",
+      "title": "Hỏi rõ mức lương giờ",
+      "description": "Thống nhất rõ mức lương (20k-25k/h), tiền tip và ngày thanh toán.",
+      "error_feedback": "Thỏa thuận miệng chung chung 'làm tốt rồi thưởng' thì cuối tháng chủ trừ hết tiền phạt không còn một cắc!"
+    },
+    {
+      "card_id": 411,
+      "skill_id": 15,
+      "step_order": 3,
+      "cat_sound": "Meo-hold!",
+      "action_icon": "🪪",
+      "title": "Cấm giao CCCD gốc",
+      "description": "Chỉ nộp bản photo CCCD, tuyệt đối không để chủ giữ bản gốc hoặc đóng cọc.",
+      "error_feedback": "Giao CCCD gốc cho chủ giữ là Mèo bị nắm đằng chuôi, họ bắt ép làm việc quần quật không dám xin nghỉ!"
+    },
+    {
+      "card_id": 412,
+      "skill_id": 15,
+      "step_order": 4,
+      "cat_sound": "Purr-job!",
+      "action_icon": "🤝",
+      "title": "Ký thỏa thuận làm việc",
+      "description": "Ký biên bản thỏa thuận công việc và theo dõi bảng chấm công.",
+      "error_feedback": "Không có thỏa thuận công việc bằng giấy tờ thì lúc xảy ra tranh chấp quyền lợi Mèo không có bằng chứng!"
+    },
+    {
+      "card_id": 413,
+      "skill_id": 16,
+      "step_order": 1,
+      "cat_sound": "Meo-wait!",
+      "action_icon": "⏳",
+      "title": "Quy tắc phanh 48 giờ",
+      "description": "Bắt bản thân chờ 48 tiếng trước khi bấm mua món đồ muốn quẹt ví trả sau.",
+      "error_feedback": "Mua sắm bốc đồng theo cảm xúc nhất thời là nguyên nhân chính khiến bạn trẻ vướng vào nợ nần!"
+    },
+    {
+      "card_id": 414,
+      "skill_id": 16,
+      "step_order": 2,
+      "cat_sound": "Meo-fee?",
+      "action_icon": "🔍",
+      "title": "Đọc phí phạt trễ hạn",
+      "description": "Xem kỹ biểu phí kích hoạt và lãi suất phạt khi chậm trả.",
+      "error_feedback": "Vay 500k nhưng quên trả 5 ngày bị phạt thêm 200k tiền trễ hạn, lãi mẹ đẻ lãi con!"
+    },
+    {
+      "card_id": 415,
+      "skill_id": 16,
+      "step_order": 3,
+      "cat_sound": "Meo-cash!",
+      "action_icon": "💵",
+      "title": "Chỉ mua khi có tiền mặt",
+      "description": "Nếu tài khoản ngân hàng không có sẵn tiền mặt thì dứt khoát không mua.",
+      "error_feedback": "Trông chờ vào 'tiền tương lai chưa có' để chi tiêu cho hiện tại là cái bẫy tài chính nguy hiểm nhất!"
+    },
+    {
+      "card_id": 416,
+      "skill_id": 16,
+      "step_order": 4,
+      "cat_sound": "Purr-off!",
+      "action_icon": "🔕",
+      "title": "Tắt tính năng ví trả sau",
+      "description": "Chủ động tắt hạn mức tín dụng trên app để bảo vệ túi tiền.",
+      "error_feedback": "Để hạn mức ví mở sẵn sẽ kích thích tính thèm mua sắm, tích tiểu thành đại biến thành khoản nợ khổng lồ!"
+    }
+  ]
+}

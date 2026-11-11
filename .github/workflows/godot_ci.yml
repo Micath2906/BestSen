@@ -1,0 +1,31 @@
+name: BestSen Godot CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Run Headless QA Tests
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run BestSen QA Complete Suite
+        run: |
+          godot --headless tests/TestQASuite.tscn
+          godot --headless tests/TestAllMiniGames.tscn
+          godot --headless tests/TestFreepackCat.tscn
+          godot --headless tests/TestHouseAndDress.tscn
+          godot --headless tests/TestLifeSkillScene.tscn
+          godot --headless tests/TestMasteryAndSequenceCards.tscn
+          godot --headless tests/TestNewMainMenuAndClassicRoom.tscn
+          godot --headless tests/TestShopSystem.tscn
+          godot --headless tests/TestSoundScene.tscn
+          godot --headless tests/TestStatLimitsAndHandbook.tscn
+          godot --headless tests/TestNewFeatures.tscn

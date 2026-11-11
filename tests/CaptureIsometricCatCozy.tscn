@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://captureisocat01"]
+
+[ext_resource type="Script" path="res://tests/CaptureIsometricCatCozy.gd" id="1_test"]
+
+[node name="CaptureIsometricCatCozy" type="Node"]
+script = ExtResource("1_test")
