@@ -65,42 +65,64 @@ var tone_players: Array = []
 var tone_player_idx: int = 0
 var last_click_time_msec: int = 0
 
-# Cài đặt âm thanh (Volume Settings)
+# Hằng số kiến trúc Bus & An toàn thính giác (SYS-02)
+const BUS_MASTER: String = "Master"
+const BUS_BGM: String = "BGM"
+const BUS_SFX: String = "SFX"
+const SFX_CEILING_DB: float = -6.0
+
+# Cài đặt âm thanh & Haptic (Volume / Toggles Settings)
 var master_volume: float = 1.0
 var sfx_volume: float = 1.0
 var bgm_volume: float = 0.8
+var bgm_enabled: bool = true
+var sfx_enabled: bool = true
 var haptic_enabled: bool = true
 
+# Tracking rung phản hồi (Structured Haptics telemetry cho kiểm thử & debounce)
+var last_haptic_ms: int = 0
+var last_haptic_pattern: Array = []
+
 func _ready() -> void:
+	_ensure_audio_buses()
+
 	# Khởi tạo các kênh âm thanh chuyên biệt để không bị ngắt tiếng lẫn nhau
 	cat_channel = AudioStreamPlayer.new()
 	cat_channel.name = "CatVoiceChannel"
+	cat_channel.bus = BUS_SFX
 	add_child(cat_channel)
 	
 	ui_channel = AudioStreamPlayer.new()
 	ui_channel.name = "UIChannel"
+	ui_channel.bus = BUS_SFX
 	add_child(ui_channel)
 	
 	sfx_channel = AudioStreamPlayer.new()
 	sfx_channel.name = "SFXChannel"
+	sfx_channel.bus = BUS_SFX
 	add_child(sfx_channel)
 	
 	reel_channel = AudioStreamPlayer.new()
 	reel_channel.name = "ReelChannel"
+	reel_channel.bus = BUS_SFX
 	add_child(reel_channel)
 	
 	bgm_channel = AudioStreamPlayer.new()
 	bgm_channel.name = "BGMChannel"
+	bgm_channel.bus = BUS_BGM
 	add_child(bgm_channel)
 	
 	# Pre-allocate pool cho procedural fallback tones để tránh cấp phát động gây leak RID
 	for i in range(3):
 		var tp = AudioStreamPlayer.new()
 		tp.name = "TonePlayer_%d" % i
+		tp.bus = BUS_SFX
 		add_child(tp)
 		tone_players.append(tp)
 	
 	_load_sound_assets()
+	_sync_from_game_manager()
+	_update_channel_volumes()
 
 func _load_sound_assets() -> void:
 	# 1. Load các file clip WAV đã cắt lọc chuẩn
@@ -370,57 +392,155 @@ func play_reel_cue(cue_name: String, pitch: float = 1.0) -> void:
 
 # --- TRỢ GIÚP PHÁT KÊNH & VIBRATE ---
 
+func _ensure_audio_buses() -> void:
+	if AudioServer.get_bus_index(BUS_BGM) == -1:
+		var bgm_idx := AudioServer.bus_count
+		AudioServer.add_bus(bgm_idx)
+		AudioServer.set_bus_name(bgm_idx, BUS_BGM)
+		AudioServer.set_bus_send(bgm_idx, BUS_MASTER)
+	if AudioServer.get_bus_index(BUS_SFX) == -1:
+		var sfx_idx := AudioServer.bus_count
+		AudioServer.add_bus(sfx_idx)
+		AudioServer.set_bus_name(sfx_idx, BUS_SFX)
+		AudioServer.set_bus_send(sfx_idx, BUS_MASTER)
+
+func _sync_from_game_manager() -> void:
+	var gm := get_node_or_null("/root/GameManager")
+	if gm and "saved_audio_settings" in gm and gm.saved_audio_settings is Dictionary:
+		var cfg: Dictionary = gm.saved_audio_settings
+		master_volume = clampf(float(cfg.get("master_volume", 1.0)), 0.0, 1.0)
+		sfx_volume = clampf(float(cfg.get("sfx_volume", 1.0)), 0.0, 1.0)
+		bgm_volume = clampf(float(cfg.get("bgm_volume", 0.8)), 0.0, 1.0)
+		bgm_enabled = bool(cfg.get("bgm_enabled", true))
+		sfx_enabled = bool(cfg.get("sfx_enabled", true))
+		haptic_enabled = bool(cfg.get("haptic_enabled", true))
+
+func _push_settings_to_game_manager() -> void:
+	var gm := get_node_or_null("/root/GameManager")
+	if gm and "saved_audio_settings" in gm:
+		gm.saved_audio_settings = {
+			"master_volume": master_volume,
+			"sfx_volume": sfx_volume,
+			"bgm_volume": bgm_volume,
+			"bgm_enabled": bgm_enabled,
+			"sfx_enabled": sfx_enabled,
+			"haptic_enabled": haptic_enabled
+		}
+
 func set_master_volume(vol: float) -> void:
 	master_volume = clampf(vol, 0.0, 1.0)
+	_push_settings_to_game_manager()
 	_update_channel_volumes()
 
 func set_sfx_volume(vol: float) -> void:
 	sfx_volume = clampf(vol, 0.0, 1.0)
+	_push_settings_to_game_manager()
 	_update_channel_volumes()
 
 func set_bgm_volume(vol: float) -> void:
 	bgm_volume = clampf(vol, 0.0, 1.0)
+	_push_settings_to_game_manager()
+	_update_channel_volumes()
+
+func set_bgm_enabled(enabled: bool) -> void:
+	bgm_enabled = enabled
+	_push_settings_to_game_manager()
+	_update_channel_volumes()
+
+func set_sfx_enabled(enabled: bool) -> void:
+	sfx_enabled = enabled
+	_push_settings_to_game_manager()
 	_update_channel_volumes()
 
 func set_haptic_enabled(enabled: bool) -> void:
 	haptic_enabled = enabled
+	_push_settings_to_game_manager()
 
 func _update_channel_volumes() -> void:
+	_ensure_audio_buses()
+	var master_idx := AudioServer.get_bus_index(BUS_MASTER)
+	if master_idx != -1:
+		AudioServer.set_bus_mute(master_idx, master_volume <= 0.01)
+		AudioServer.set_bus_volume_db(master_idx, -80.0 if master_volume <= 0.01 else linear_to_db(master_volume))
+
+	var bgm_idx := AudioServer.get_bus_index(BUS_BGM)
+	var eff_bgm: float = bgm_volume if bgm_enabled else 0.0
+	if bgm_idx != -1:
+		AudioServer.set_bus_mute(bgm_idx, eff_bgm <= 0.01)
+		AudioServer.set_bus_volume_db(bgm_idx, -80.0 if eff_bgm <= 0.01 else linear_to_db(eff_bgm))
 	if bgm_channel:
-		var eff_bgm = master_volume * bgm_volume
-		if eff_bgm <= 0.01:
-			bgm_channel.volume_db = -80.0
-		else:
-			bgm_channel.volume_db = linear_to_db(eff_bgm)
+		bgm_channel.volume_db = -80.0 if (eff_bgm * master_volume) <= 0.01 else 0.0
+
+	var sfx_idx := AudioServer.get_bus_index(BUS_SFX)
+	var eff_sfx: float = sfx_volume if sfx_enabled else 0.0
+	if sfx_idx != -1:
+		AudioServer.set_bus_mute(sfx_idx, eff_sfx <= 0.01)
+		# Trần âm lượng SFX tối đa -6.0 dBFS để bảo vệ tai người nghe
+		var sfx_db: float = -80.0 if eff_sfx <= 0.01 else minf(SFX_CEILING_DB, linear_to_db(eff_sfx) + SFX_CEILING_DB)
+		AudioServer.set_bus_volume_db(sfx_idx, sfx_db)
 
 func _play_on_channel(player: AudioStreamPlayer, stream: AudioStream, pitch: float = 1.0, volume_db: float = 0.0) -> void:
 	if not player or not stream:
 		return
 	if not player.is_inside_tree():
 		return
-	var eff_sfx = master_volume * sfx_volume
-	if eff_sfx <= 0.01:
+	if not sfx_enabled or master_volume <= 0.01 or sfx_volume <= 0.01:
 		return
 	player.stream = stream
 	player.pitch_scale = pitch
-	player.volume_db = volume_db + linear_to_db(eff_sfx)
+	# SFX Bus đã áp trần -6 dBFS; kẹp biên player tối đa 0 dB để không vượt ngưỡng
+	player.volume_db = clampf(volume_db, -40.0, 0.0)
 	player.play()
 
 func vibrate(ms: int = 30) -> void:
 	if not haptic_enabled:
 		return
+	last_haptic_ms = ms
 	if OS.has_feature("mobile"):
 		Input.vibrate_handheld(ms)
+
+## Rung chạm thẻ / đồ vật ngắn nhẹ (15ms)
+func vibrate_tap() -> void:
+	if not haptic_enabled:
+		return
+	last_haptic_pattern = [15]
+	vibrate(15)
+
+## Rung xác nhận ghép đúng nhịp đôi (30ms - nghỉ 50ms - 30ms)
+func vibrate_confirm() -> void:
+	if not haptic_enabled:
+		return
+	last_haptic_pattern = [30, 50, 30]
+	vibrate(30)
+	if is_inside_tree():
+		get_tree().create_timer(0.08).timeout.connect(func(): vibrate(30))
+
+## Chạm giao diện nhẹ + rung tap 15ms
+func play_tap() -> void:
+	play_click()
+
+## Âm báo lỗi nhẹ nhàng (Soft Low Warning Chime) + rung báo nhẹ thay tiếng rè khó chịu
+func play_error_chime() -> void:
+	if sfx_enabled and master_volume > 0.01 and sfx_volume > 0.01:
+		if sound_cache.has("cancel_cozy"):
+			_play_on_channel(ui_channel, sound_cache["cancel_cozy"], 0.85, -3.0)
+		else:
+			play_tone(220.0, 0.14, 0.25)
+	if haptic_enabled:
+		last_haptic_pattern = [25]
+		vibrate(25)
 
 # --- PROCEDURAL SINE FALLBACK ---
 
 func play_tone(freq: float, duration: float, volume: float = 0.5) -> void:
+	if not sfx_enabled or master_volume <= 0.01 or sfx_volume <= 0.01:
+		return
 	var stream = generate_tone_wav(freq, duration, volume)
 	if stream and tone_players.size() > 0:
 		var p = tone_players[tone_player_idx]
 		tone_player_idx = (tone_player_idx + 1) % tone_players.size()
 		p.stream = stream
-		p.volume_db = linear_to_db(clampf(volume * master_volume * sfx_volume, 0.001, 1.0))
+		p.volume_db = clampf(linear_to_db(clampf(volume, 0.001, 1.0)), -40.0, 0.0)
 		p.play()
 
 func play_sequence(notes: Array, note_duration: float) -> void:

@@ -32,7 +32,16 @@ signal reached_destination(state)
 @onready var shadow_node: Sprite2D = $Shadow
 @onready var cat_touch_zone: Control = $Visual/CatTouchZone
 @onready var bubble: Control = $Bubble
+@onready var bubble_tail: TextureRect = $Bubble.get_node_or_null("BubbleTail")
 @onready var dialogue_label: Label = $Bubble/Margin/DialogueLabel if $Bubble.has_node("Margin/DialogueLabel") else ($Bubble.get_node_or_null("DialogueLabel") as Label)
+
+const COZY_TYPE_INTERVAL: float = 0.03
+const COZY_MAX_CHARS: int = 60
+const SLEEP_CREAM_TEX: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cat_sleep_cream.png")
+
+var cozy_sleep_sprite: Sprite2D = null
+var cozy_sleep_mode: bool = false
+var _last_pet_rub_msec: int = -1000
 
 var current_state: State = State.IDLE
 var grid_pos: Vector2 = Vector2(4.0, 4.0)
@@ -48,9 +57,9 @@ var thoughts: Array = [
 	"Phòng trọ 2.5D ấm cúng quá Sen ơi! 🐾",
 	"Chiếc đệm ngủ này êm như mây vậy đó! 🛋️",
 	"Cây cào móng sisal mài vuốt siêu đã luôn! 🪵",
-	"Đổ hạt vào khay cho Boss nạp năng lượng học skill nha! 🥣",
+	"Đổ hạt vào khay cho Boss nạp năng lượng nhé! 🥣",
 	"Chạm sàn thả cuộn len cho Boss bắt đi nào! 🧶",
-	"Khởi đầu tự lập tuy vất vả nhưng có Sen là vui rồi! ✨"
+	"Tự lập tuy vất vả nhưng có Sen là vui rồi! ✨"
 ]
 
 var costume_overlay: Node2D
@@ -58,11 +67,22 @@ var hat_label: Label
 var bow_label: Label
 var acc_label: Label
 var _bubble_tween: Tween = null
+var _is_typing_dialogue: bool = false
+var _type_elapsed: float = 0.0
+var _dialogue_total_chars: int = 0
 
 func show_dialogue(text: String, duration: float = 4.0) -> void:
 	if not bubble or not dialogue_label:
 		return
-	dialogue_label.text = text
+	var clean_text: String = text.strip_edges()
+	if clean_text.length() > COZY_MAX_CHARS:
+		clean_text = clean_text.substr(0, COZY_MAX_CHARS - 1).strip_edges() + "…"
+	dialogue_label.text = clean_text
+	_dialogue_total_chars = clean_text.length()
+	_type_elapsed = 0.0
+	_is_typing_dialogue = _dialogue_total_chars > 0
+	dialogue_label.visible_characters = 0 if _is_typing_dialogue else -1
+	_resize_and_align_bubble(clean_text)
 	bubble.visible = true
 	bubble.modulate.a = 1.0
 	bubble.scale = Vector2(0.85, 0.85)
@@ -81,7 +101,41 @@ func show_dialogue(text: String, duration: float = 4.0) -> void:
 				bubble.visible = false
 		)
 
+func reveal_dialogue_instantly() -> void:
+	_is_typing_dialogue = false
+	if dialogue_label:
+		dialogue_label.visible_characters = -1
+
+func _resize_and_align_bubble(text: String) -> void:
+	if not bubble:
+		return
+	var width: float = clampf(90.0 + float(mini(text.length(), 32)) * 4.2, 148.0, 236.0)
+	var half_w: float = width * 0.5
+	var est_height: float = 54.0 if text.length() > 26 else 40.0
+	bubble.offset_left = -half_w
+	bubble.offset_right = half_w
+	bubble.offset_top = -46.0 - est_height
+	bubble.offset_bottom = -46.0
+	_align_bubble_tail(width)
+
+func _align_bubble_tail(bubble_width: float = -1.0) -> void:
+	if not bubble_tail or not bubble:
+		return
+	var w: float = bubble_width if bubble_width > 0.0 else bubble.size.x
+	var mouth_offset: float = 10.0 if last_facing_right else -10.0
+	var tail_x: float = clampf((w * 0.5) + mouth_offset - 6.0, 14.0, maxf(18.0, w - 26.0))
+	bubble_tail.offset_left = tail_x - (w * 0.5)
+	bubble_tail.offset_right = bubble_tail.offset_left + 12.0
+
+func _on_bubble_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if _is_typing_dialogue:
+			reveal_dialogue_instantly()
+		else:
+			hide_dialogue()
+
 func hide_dialogue() -> void:
+	_is_typing_dialogue = false
 	if _bubble_tween and _bubble_tween.is_valid():
 		_bubble_tween.kill()
 	if bubble:
@@ -89,6 +143,7 @@ func hide_dialogue() -> void:
 
 func _ready() -> void:
 	_setup_sprite_frames(GameManager.selected_avatar_id)
+	_setup_cozy_sleep_sprite()
 	_setup_costume_overlay()
 	_update_screen_position()
 	set_state(State.IDLE)
@@ -96,6 +151,8 @@ func _ready() -> void:
 	
 	if cat_touch_zone:
 		cat_touch_zone.gui_input.connect(_on_touch_zone_gui_input)
+	if bubble:
+		bubble.gui_input.connect(_on_bubble_gui_input)
 		
 	GameManager.costume_changed.connect(func(_slot, _id): update_costume_overlay())
 	GameManager.avatar_changed.connect(func(new_id): _setup_sprite_frames(new_id))
@@ -174,6 +231,14 @@ func set_skin(skin_name: String) -> void:
 	_setup_sprite_frames(b_id)
 
 func _process(delta: float) -> void:
+	if _is_typing_dialogue and dialogue_label:
+		_type_elapsed += delta
+		var target_chars: int = mini(_dialogue_total_chars, int(floor(_type_elapsed / COZY_TYPE_INTERVAL)) + 1)
+		if dialogue_label.visible_characters != target_chars:
+			dialogue_label.visible_characters = target_chars
+		if target_chars >= _dialogue_total_chars:
+			reveal_dialogue_instantly()
+
 	# Đồng bộ trạng thái ngất xỉu hoặc hồi phục
 	if GameManager.hunger <= 0 and current_state != State.FAINT:
 		set_state(State.FAINT)
@@ -188,12 +253,15 @@ func _process(delta: float) -> void:
 			
 			# Hướng di chuyển trên màn hình
 			var screen_dir = (IsometricGrid.grid_to_screen(target_grid_pos, origin) - IsometricGrid.grid_to_screen(grid_pos, origin)).normalized()
+			var prev_facing: bool = last_facing_right
 			if screen_dir.x > 0.05:
 				last_facing_right = true
 				anim_sprite.flip_h = false
 			elif screen_dir.x < -0.05:
 				last_facing_right = false
 				anim_sprite.flip_h = true
+			if last_facing_right != prev_facing and bubble and bubble.visible:
+				_align_bubble_tail()
 				
 			var walk_anim = "run"
 			if anim_sprite.animation != walk_anim:
@@ -263,6 +331,8 @@ func set_state(new_state: State) -> void:
 	anim_sprite.visible = true
 	cat_idle_sprite.visible = false
 	cat_box_sprite.visible = false
+	if cozy_sleep_sprite:
+		cozy_sleep_sprite.visible = false
 	
 	match current_state:
 		State.IDLE:
@@ -283,8 +353,14 @@ func set_state(new_state: State) -> void:
 			anim_sprite.flip_h = not last_facing_right
 			move_speed_grid = 4.2 # Chạy nước rút vồ đồ chơi
 		State.SLEEP:
-			anim_sprite.play("sleep")
-			anim_sprite.flip_h = not last_facing_right
+			if cozy_sleep_mode and cozy_sleep_sprite:
+				anim_sprite.visible = false
+				cozy_sleep_sprite.visible = true
+			else:
+				if cozy_sleep_sprite:
+					cozy_sleep_sprite.visible = false
+				anim_sprite.play("sleep")
+				anim_sprite.flip_h = not last_facing_right
 			show_dialogue("Khò khò... Zzz... Đệm êm quá! 💤", 3.5)
 		State.SCRATCH:
 			anim_sprite.play("scratch")
@@ -480,3 +556,40 @@ func _jump_reaction(height: float) -> void:
 	var tween = create_tween()
 	tween.tween_property(self, "jump_offset_y", -height, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "jump_offset_y", 0.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+func _setup_cozy_sleep_sprite() -> void:
+	if cozy_sleep_sprite and is_instance_valid(cozy_sleep_sprite):
+		return
+	cozy_sleep_sprite = Sprite2D.new()
+	cozy_sleep_sprite.name = "CozySleepCreamSprite"
+	cozy_sleep_sprite.texture = SLEEP_CREAM_TEX
+	cozy_sleep_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	cozy_sleep_sprite.scale = Vector2(1.4, 1.4)
+	cozy_sleep_sprite.position = Vector2(0, -14)
+	cozy_sleep_sprite.visible = false
+	$Visual.add_child(cozy_sleep_sprite)
+
+func set_cozy_sleep_mode(enabled: bool) -> void:
+	cozy_sleep_mode = enabled
+	GameManager.is_offline_auto_sleeping = enabled
+	if cozy_sleep_sprite:
+		cozy_sleep_sprite.visible = enabled
+	if enabled:
+		set_state(State.SLEEP)
+		show_dialogue("Ngủ tiết kiệm sức chờ Sen về nè~ Zzz", 4.0)
+	else:
+		if current_state == State.SLEEP:
+			set_state(State.IDLE)
+
+func pet_rub(_touch_y_relative: float = -12.0) -> void:
+	var now_msec: int = Time.get_ticks_msec()
+	if now_msec - _last_pet_rub_msec < 300:
+		return
+	_last_pet_rub_msec = now_msec
+	if cozy_sleep_mode:
+		set_cozy_sleep_mode(false)
+	SoundManager.play_purr()
+	_play_squash_and_stretch()
+	_spawn_floating_hearts(2)
+	GameManager.update_stats(0, 0, +1, +2)
+	show_dialogue("Purr~ Vuốt ve thích quá Sen ơi!", 2.5)

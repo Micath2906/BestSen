@@ -14,6 +14,11 @@ signal show_status_alert(alert_type)
 signal avatar_frame_changed(frame_id)
 signal classic_bg_changed(bg_id)
 signal placed_decor_changed
+signal minigame_hud_active(active: bool)
+signal minigame_hud_updated(time_left: float, progress_pct: float)
+
+# Hệ thống hội thoại Cozy (UI-03)
+var cozy_dialogs: Dictionary = {}
 
 # 3 CHỈ SỐ SINH TỒN CỐT LÕI & TÂM TRẠNG
 var fish: int = 90        # Đồng Vàng (Khởi điểm 90 Đồng Vàng / chu kỳ 30 ngày)
@@ -88,6 +93,20 @@ var equipped_decor: Dictionary = {
 }
 var placed_room_decor: Array = []
 var custom_room_name: String = ""
+
+signal room_state_updated
+const ROOM_SAVE_PATH = "user://room_save.json"
+const HUNGER_DECAY_PER_HOUR: float = 5.0
+var room_upgrades: Dictionary = {
+	"heat_insulation": false,
+	"mini_fan": false
+}
+var furniture_grid_positions: Dictionary = {}
+var food_bowl_servings: int = 0
+var last_active_unix: int = 0
+var is_offline_auto_sleeping: bool = false
+var last_offline_summary: Dictionary = {}
+var _hunger_tick_accum: float = 0.0
 
 # HỆ THỐNG CHI PHÍ HÀNG THÁNG SINH VIÊN (KTX / TRỌ)
 var monthly_rent_cost: int = 50       # 50.000đ Tiền phòng KTX / trọ
@@ -531,6 +550,9 @@ func _ready() -> void:
 	_setup_font_fallback()
 	load_json_data()
 	load_game()
+	load_room_state()
+	if last_active_unix <= 0:
+		last_active_unix = int(Time.get_unix_time_from_system())
 	
 	# Đảm bảo có vật phẩm khởi đầu cho Boss để thay đồ & bài trí phòng
 	var starter_costumes = ["c_hoodie_student", "c_hat_cap"]
@@ -634,6 +656,21 @@ func load_json_data() -> void:
 			for st in parsed_story["stories"]:
 				story_lessons_data[st.get("story_id", "")] = st
 			print("Loaded story lessons data -> ", story_lessons_data.size(), " interactive stories active.")
+
+	# 8. Cozy Dialog System Data (UI-03)
+	var cozy_path = "res://data/cozy_dialogs.json"
+	if FileAccess.file_exists(cozy_path):
+		var f_cozy = FileAccess.open(cozy_path, FileAccess.READ)
+		var parsed_cozy = JSON.parse_string(f_cozy.get_as_text())
+		if parsed_cozy is Dictionary and parsed_cozy.has("dialogs"):
+			cozy_dialogs.clear()
+			for entry in parsed_cozy["dialogs"]:
+				if entry is Dictionary and entry.has("dialog_id"):
+					cozy_dialogs[str(entry["dialog_id"])] = entry
+			print("Loaded cozy dialogs -> ", cozy_dialogs.size(), " entries active.")
+
+func get_cozy_dialog(dialog_id: String) -> Dictionary:
+	return cozy_dialogs.get(dialog_id, {})
 
 const LESSON_IMAGE_DATA = {
 	1: [
@@ -1265,6 +1302,7 @@ func get_food_count(food_type: String) -> int:
 func add_food_stock(food_type: String, amount: int = 1) -> void:
 	food_inventory[food_type] = food_inventory.get(food_type, 0) + amount
 	save_game()
+	save_room_state()
 	emit_signal("stats_changed")
 
 func feed_kibble() -> bool:
@@ -1479,6 +1517,10 @@ func buy_shop_item(item_id: String) -> Dictionary:
 			inventory_decor.append(item_id)
 		var subcat = item.get("subcategory", "general")
 		equipped_decor[subcat] = item_id
+		var upg_type: String = str(item.get("upgrade_type", ""))
+		if upg_type != "":
+			room_upgrades[upg_type] = true
+			save_room_state()
 		emit_signal("decor_changed", subcat, item_id)
 	elif cat == "toys":
 		if not (item_id in inventory_toys):
@@ -1500,6 +1542,7 @@ func buy_shop_item(item_id: String) -> Dictionary:
 			food_inventory["dry_fish"] = food_inventory.get("dry_fish", 0) + 2
 		
 	save_game()
+	save_room_state()
 	emit_signal("stats_changed")
 	return {"ok": true, "item": item}
 
@@ -1647,6 +1690,7 @@ func unequip_decor(subcategory: String) -> void:
 func save_placed_decor(decor_list: Array) -> void:
 	placed_room_decor = decor_list.duplicate(true)
 	save_game()
+	save_room_state()
 	emit_signal("placed_decor_changed")
 
 func get_placed_decor() -> Array:
@@ -1655,7 +1699,119 @@ func get_placed_decor() -> Array:
 func clear_placed_decor() -> void:
 	placed_room_decor.clear()
 	save_game()
+	save_room_state()
 	emit_signal("placed_decor_changed")
+
+func _process(delta: float) -> void:
+	if is_offline_auto_sleeping or hunger <= 0:
+		return
+	_hunger_tick_accum += delta
+	var secs_per_point: float = 3600.0 / HUNGER_DECAY_PER_HOUR # 720s = 5/giờ
+	if _hunger_tick_accum >= secs_per_point:
+		var steps: int = int(floor(_hunger_tick_accum / secs_per_point))
+		_hunger_tick_accum -= float(steps) * secs_per_point
+		update_stats(0, -steps, 0, 0)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_WM_CLOSE_REQUEST:
+		last_active_unix = int(Time.get_unix_time_from_system())
+		save_game()
+		save_room_state()
+	elif what == NOTIFICATION_APPLICATION_RESUMED:
+		var now_unix: int = int(Time.get_unix_time_from_system())
+		if last_active_unix > 0 and now_unix > last_active_unix:
+			apply_offline_hunger_decay(float(now_unix - last_active_unix), true)
+		last_active_unix = now_unix
+
+static func calculate_hunger_decay(hours: float, auto_sleep: bool = false) -> int:
+	if hours <= 0.0:
+		return 0
+	var rate: float = HUNGER_DECAY_PER_HOUR * (0.5 if auto_sleep else 1.0)
+	return maxi(0, int(round(hours * rate)))
+
+func apply_offline_hunger_decay(elapsed_seconds: float, auto_sleep_conserve: bool = true) -> Dictionary:
+	if elapsed_seconds < 60.0:
+		return {"hunger_lost": 0, "auto_sleep": false, "hours": 0.0}
+	var hours: float = elapsed_seconds / 3600.0
+	var decay: int = calculate_hunger_decay(hours, auto_sleep_conserve)
+	is_offline_auto_sleeping = auto_sleep_conserve
+	var prev_hunger: int = hunger
+	# Chế độ tự động ngủ bảo toàn năng lượng khi chủ đi vắng: không bao giờ để ngất xỉu/ốm/phạt (<10)
+	if auto_sleep_conserve:
+		hunger = clampi(maxf(10.0, float(prev_hunger - decay)), 10, 100)
+	else:
+		hunger = clampi(prev_hunger - decay, 0, 100)
+	var actual_loss: int = maxi(0, prev_hunger - hunger)
+	last_offline_summary = {
+		"hours": hours,
+		"hunger_lost": actual_loss,
+		"auto_sleep": auto_sleep_conserve,
+		"cat_sprite": "res://assets/UI/CatUIPaid/slices/cat_sleep_cream.png"
+	}
+	if actual_loss > 0:
+		emit_signal("stats_changed")
+	return last_offline_summary
+
+func set_furniture_grid_pos(furn_key: String, cell: Vector2i) -> void:
+	furniture_grid_positions[furn_key] = {"u": cell.x, "v": cell.y}
+	save_room_state()
+
+func get_room_comfort_summary() -> Dictionary:
+	var cooling_bonus: int = 0
+	if room_upgrades.get("heat_insulation", false) or ("d_insulation_curtain" in inventory_decor):
+		room_upgrades["heat_insulation"] = true
+		cooling_bonus += 5
+	if room_upgrades.get("mini_fan", false) or ("d_mini_fan" in inventory_decor):
+		room_upgrades["mini_fan"] = true
+		cooling_bonus += 5
+	return {
+		"heat_insulation": room_upgrades.get("heat_insulation", false),
+		"mini_fan": room_upgrades.get("mini_fan", false),
+		"cooling_bonus_c": cooling_bonus
+	}
+
+func save_room_state() -> bool:
+	var payload := {
+		"version": 1,
+		"placed_room_decor": placed_room_decor,
+		"furniture_grid_positions": furniture_grid_positions,
+		"room_upgrades": room_upgrades,
+		"food_bowl_servings": food_bowl_servings,
+		"last_active_unix": int(Time.get_unix_time_from_system())
+	}
+	var f = FileAccess.open(ROOM_SAVE_PATH, FileAccess.WRITE)
+	if not f:
+		return false
+	f.store_string(JSON.stringify(payload))
+	emit_signal("room_state_updated")
+	return true
+
+func load_room_state() -> Dictionary:
+	if not FileAccess.file_exists(ROOM_SAVE_PATH):
+		return {}
+	var f = FileAccess.open(ROOM_SAVE_PATH, FileAccess.READ)
+	if not f:
+		return {}
+	var json = JSON.new()
+	if json.parse(f.get_as_text()) != OK:
+		return {}
+	var parsed = json.get_data()
+	if not (parsed is Dictionary):
+		return {}
+	if parsed.has("placed_room_decor") and parsed["placed_room_decor"] is Array and parsed["placed_room_decor"].size() > 0:
+		placed_room_decor = parsed["placed_room_decor"]
+	if parsed.has("furniture_grid_positions") and parsed["furniture_grid_positions"] is Dictionary:
+		furniture_grid_positions = parsed["furniture_grid_positions"]
+	if parsed.has("room_upgrades") and parsed["room_upgrades"] is Dictionary:
+		for k in parsed["room_upgrades"]:
+			room_upgrades[k] = bool(parsed["room_upgrades"][k])
+	if parsed.has("food_bowl_servings"):
+		food_bowl_servings = maxi(0, int(parsed["food_bowl_servings"]))
+	if "d_insulation_curtain" in inventory_decor:
+		room_upgrades["heat_insulation"] = true
+	if "d_mini_fan" in inventory_decor:
+		room_upgrades["mini_fan"] = true
+	return parsed
 
 # --- HỆ THỐNG CHI PHÍ SINH VIÊN & SỔ CHI PHÍ KTX HÀNG THÁNG ---
 func get_total_monthly_expenses() -> int:
@@ -1760,6 +1916,8 @@ const FURNITURE_SPRITE_PATHS = {
 	"d_litter_box": "res://assets/sprites/room_items/litter_box.png",
 	"d_cat_food_bag": "res://assets/sprites/room_items/cat_food_bag.png",
 	"d_toy_yarn_ball": "res://assets/sprites/room_items/toy_yarn_ball.png",
+	"d_insulation_curtain": "res://assets/sprites/room_items/window_curtains.png",
+	"d_mini_fan": "res://assets/sprites/room_items/single_cat_home.png",
 }
 
 const FOOD_SPRITE_PATHS = {
@@ -1819,6 +1977,30 @@ func has_minigame(lesson_id: int) -> bool:
 	return minigames_data.has(str(lesson_id))
 
 const SAVE_SALT = "BestSen_CatLifeQuest_v43_2026_SecureKey"
+const BEST_SEN_SAVE_PATH: String = "user://best_sen_data.save"
+const BEST_SEN_TMP_PATH: String = "user://best_sen_data.tmp"
+const SAVE_CRYPTO_KEY: String = "BestSen_AES256_ToffeeCraft_2026_Key!"
+
+var _aes_key_cache: PackedByteArray = PackedByteArray()
+
+var saved_audio_settings: Dictionary = {
+	"master_volume": 1.0,
+	"sfx_volume": 1.0,
+	"bgm_volume": 0.8,
+	"bgm_enabled": true,
+	"sfx_enabled": true,
+	"haptic_enabled": true
+}
+var last_save_duration_usec: int = 0
+var last_encrypted_write_usec: int = 0
+var last_save_loaded_source: String = "default"
+var was_migrated_from_legacy: bool = false
+
+func _get_aes_key_bytes() -> PackedByteArray:
+	if _aes_key_cache.size() != 32:
+		# SHA-256 chuẩn 32 byte cho AES-256 (không lặp PBKDF2 gây trễ I/O mỗi lần save)
+		_aes_key_cache = SAVE_CRYPTO_KEY.sha256_buffer()
+	return _aes_key_cache
 
 func _calculate_save_checksum(json_str: String) -> String:
 	return (json_str + SAVE_SALT).sha256_text()
@@ -1845,10 +2027,76 @@ func advance_day() -> void:
 	check_debt_status()
 	
 	save_game()
+	save_room_state()
 	emit_signal("stats_changed")
 
-func save_game() -> void:
-	var save_dict = {
+func build_player_profile() -> Dictionary:
+	return {
+		"schema_version": 3,
+		"identity": {
+			"owner_name": owner_name,
+			"custom_cat_name": custom_cat_name,
+			"selected_avatar_id": selected_avatar_id,
+			"selected_avatar_frame": selected_avatar_frame
+		},
+		"stats": {
+			"fish": fish,
+			"hunger": hunger,
+			"courage": courage,
+			"mood": mood,
+			"cat_mastery_level": cat_mastery_level,
+			"cat_mastery_exp": cat_mastery_exp,
+			"current_day": current_day,
+			"streak_days": current_day
+		},
+		"progress": {
+			"unlocked_lessons": unlocked_lessons,
+			"completed_lessons": completed_lessons,
+			"badges": badges,
+			"claimed_certificates": claimed_certificates
+		},
+		"room": {
+			"custom_room_name": custom_room_name,
+			"selected_classic_bg_id": selected_classic_bg_id,
+			"placed_room_decor": placed_room_decor,
+			"room_upgrades": room_upgrades,
+			"furniture_grid_positions": furniture_grid_positions
+		},
+		"audio_settings": saved_audio_settings.duplicate(true)
+	}
+
+func _sync_audio_settings_from_sound_manager() -> void:
+	var sm := get_node_or_null("/root/SoundManager")
+	if sm:
+		saved_audio_settings = {
+			"master_volume": sm.master_volume,
+			"sfx_volume": sm.sfx_volume,
+			"bgm_volume": sm.bgm_volume,
+			"bgm_enabled": sm.bgm_enabled if "bgm_enabled" in sm else true,
+			"sfx_enabled": sm.sfx_enabled if "sfx_enabled" in sm else true,
+			"haptic_enabled": sm.haptic_enabled
+		}
+
+func _apply_audio_settings_to_sound_manager() -> void:
+	var sm := get_node_or_null("/root/SoundManager")
+	if not sm:
+		return
+	if sm.has_method("set_master_volume"):
+		sm.set_master_volume(float(saved_audio_settings.get("master_volume", 1.0)))
+	if sm.has_method("set_sfx_volume"):
+		sm.set_sfx_volume(float(saved_audio_settings.get("sfx_volume", 1.0)))
+	if sm.has_method("set_bgm_volume"):
+		sm.set_bgm_volume(float(saved_audio_settings.get("bgm_volume", 0.8)))
+	if sm.has_method("set_bgm_enabled"):
+		sm.set_bgm_enabled(bool(saved_audio_settings.get("bgm_enabled", true)))
+	if sm.has_method("set_sfx_enabled"):
+		sm.set_sfx_enabled(bool(saved_audio_settings.get("sfx_enabled", true)))
+	if sm.has_method("set_haptic_enabled"):
+		sm.set_haptic_enabled(bool(saved_audio_settings.get("haptic_enabled", true)))
+
+func _build_save_dict() -> Dictionary:
+	_sync_audio_settings_from_sound_manager()
+	return {
 		"fish": fish,
 		"hunger": hunger,
 		"courage": courage,
@@ -1885,10 +2133,76 @@ func save_game() -> void:
 		"is_rent_paid_this_month": is_rent_paid_this_month,
 		"selected_avatar_frame": selected_avatar_frame,
 		"selected_classic_bg_id": selected_classic_bg_id,
-		"placed_room_decor": placed_room_decor
+		"placed_room_decor": placed_room_decor,
+		"room_upgrades": room_upgrades,
+		"furniture_grid_positions": furniture_grid_positions,
+		"food_bowl_servings": food_bowl_servings,
+		"audio_settings": saved_audio_settings.duplicate(true),
+		"last_active_unix": int(Time.get_unix_time_from_system())
 	}
-	
-	# 1. Sao lưu file dự phòng (.bak) trước khi ghi đè
+
+func _write_encrypted_atomic_save(save_dict: Dictionary, cached_payload_json: String = "") -> bool:
+	var t0 := Time.get_ticks_usec()
+	var payload_json := cached_payload_json if cached_payload_json != "" else JSON.stringify(save_dict)
+	var wire_text := "BS3|%s|%s" % [payload_json.md5_text(), payload_json]
+	var tmp_file := FileAccess.open_encrypted(BEST_SEN_TMP_PATH, FileAccess.WRITE, _get_aes_key_bytes())
+	if not tmp_file:
+		return false
+	tmp_file.store_string(wire_text)
+	tmp_file.close()
+
+	var abs_tmp := ProjectSettings.globalize_path(BEST_SEN_TMP_PATH)
+	var abs_dst := ProjectSettings.globalize_path(BEST_SEN_SAVE_PATH)
+	var rename_err := DirAccess.rename_absolute(abs_tmp, abs_dst)
+	if rename_err != OK:
+		if FileAccess.file_exists(BEST_SEN_SAVE_PATH):
+			DirAccess.remove_absolute(abs_dst)
+		rename_err = DirAccess.rename_absolute(abs_tmp, abs_dst)
+	last_encrypted_write_usec = Time.get_ticks_usec() - t0
+	return rename_err == OK
+
+func _try_load_encrypted_save(path: String = BEST_SEN_SAVE_PATH) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {}
+	# Kiểm tra nhanh 4 byte header GDEC trước khi mở AES để tránh báo lỗi C++ khi file hỏng
+	var peek := FileAccess.open(path, FileAccess.READ)
+	if not peek or peek.get_length() < 16:
+		return {}
+	var magic := peek.get_buffer(4)
+	peek.close()
+	if magic != PackedByteArray([0x47, 0x44, 0x45, 0x43]):
+		return {}
+
+	var enc_file := FileAccess.open_encrypted(path, FileAccess.READ, _get_aes_key_bytes())
+	if not enc_file:
+		return {}
+	var raw_text := enc_file.get_as_text()
+	enc_file.close()
+	if not raw_text.begins_with("BS3|"):
+		return {}
+	var parts := raw_text.split("|", true, 2)
+	if parts.size() != 3:
+		return {}
+	var expected_md5 := parts[1]
+	var payload_json := parts[2]
+	if payload_json.md5_text() != expected_md5:
+		printerr("CẢNH BÁO SYS-01: MD5 không khớp trong %s! Từ chối dữ liệu lỗi." % path)
+		return {}
+	var data = JSON.parse_string(payload_json)
+	return data if data is Dictionary else {}
+
+func is_encrypted_save_valid(path: String = BEST_SEN_SAVE_PATH) -> bool:
+	return not _try_load_encrypted_save(path).is_empty()
+
+func save_game() -> void:
+	var t0_usec: int = Time.get_ticks_usec()
+	var save_dict := _build_save_dict()
+	var raw_json := JSON.stringify(save_dict)
+
+	# 1. Ghi file mã hóa AES-256 + MD5 nguyên tử (.tmp -> rename -> best_sen_data.save)
+	_write_encrypted_atomic_save(save_dict, raw_json)
+
+	# 2. Duy trì bản sao lưu dự phòng (.bak) & Envelope v2 SHA-256 (tương thích ngược)
 	if FileAccess.file_exists("user://save_game.json"):
 		var read_src = FileAccess.open("user://save_game.json", FileAccess.READ)
 		if read_src:
@@ -1896,21 +2210,27 @@ func save_game() -> void:
 			var backup_file = FileAccess.open("user://save_game.bak", FileAccess.WRITE)
 			if backup_file:
 				backup_file.store_string(prev_content)
-	
-	# 2. Đóng gói Envelope bảo mật với SHA-256 Checksum
-	var raw_json = JSON.stringify(save_dict)
+
 	var envelope = {
 		"version": 2,
 		"timestamp": Time.get_unix_time_from_system(),
 		"checksum": _calculate_save_checksum(raw_json),
 		"data": save_dict
 	}
-	
+
 	var file = FileAccess.open("user://save_game.json", FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(envelope))
+	last_save_duration_usec = Time.get_ticks_usec() - t0_usec
 
 func load_game() -> void:
+	was_migrated_from_legacy = false
+	var enc_data := _try_load_encrypted_save(BEST_SEN_SAVE_PATH)
+	if not enc_data.is_empty():
+		last_save_loaded_source = "encrypted_v3"
+		_apply_loaded_save_dict(enc_data)
+		return
+
 	var target_path = "user://save_game.json"
 	if not FileAccess.file_exists(target_path):
 		if FileAccess.file_exists("user://save_game.bak"):
@@ -1965,6 +2285,16 @@ func load_game() -> void:
 			# Legacy format Version 1
 			data = parsed_data
 
+	if data.is_empty():
+		return
+
+	_apply_loaded_save_dict(data)
+	# Tự động nâng cấp dữ liệu cũ sang định dạng mã hóa AES-256 atomic (SYS-01)
+	if _write_encrypted_atomic_save(_build_save_dict()):
+		was_migrated_from_legacy = true
+		last_save_loaded_source = "legacy_migrated"
+
+func _apply_loaded_save_dict(data: Dictionary) -> void:
 	if data.is_empty():
 		return
 
@@ -2029,6 +2359,30 @@ func load_game() -> void:
 	selected_avatar_frame = data.get("selected_avatar_frame", "beige")
 	selected_classic_bg_id = data.get("selected_classic_bg_id", 1)
 	placed_room_decor = data.get("placed_room_decor", [])
+	var loaded_upgrades = data.get("room_upgrades", {})
+	if loaded_upgrades is Dictionary:
+		room_upgrades["heat_insulation"] = bool(loaded_upgrades.get("heat_insulation", false)) or ("d_insulation_curtain" in inventory_decor)
+		room_upgrades["mini_fan"] = bool(loaded_upgrades.get("mini_fan", false)) or ("d_mini_fan" in inventory_decor)
+	var loaded_grid_pos = data.get("furniture_grid_positions", {})
+	if loaded_grid_pos is Dictionary:
+		furniture_grid_positions = loaded_grid_pos
+	food_bowl_servings = maxi(0, int(data.get("food_bowl_servings", 0)))
+	var loaded_audio = data.get("audio_settings", {})
+	if loaded_audio is Dictionary and not loaded_audio.is_empty():
+		saved_audio_settings["master_volume"] = float(loaded_audio.get("master_volume", saved_audio_settings["master_volume"]))
+		saved_audio_settings["sfx_volume"] = float(loaded_audio.get("sfx_volume", saved_audio_settings["sfx_volume"]))
+		saved_audio_settings["bgm_volume"] = float(loaded_audio.get("bgm_volume", saved_audio_settings["bgm_volume"]))
+		saved_audio_settings["bgm_enabled"] = bool(loaded_audio.get("bgm_enabled", saved_audio_settings["bgm_enabled"]))
+		saved_audio_settings["sfx_enabled"] = bool(loaded_audio.get("sfx_enabled", saved_audio_settings["sfx_enabled"]))
+		saved_audio_settings["haptic_enabled"] = bool(loaded_audio.get("haptic_enabled", saved_audio_settings["haptic_enabled"]))
+		_apply_audio_settings_to_sound_manager()
+	last_active_unix = int(data.get("last_active_unix", 0))
+	if last_active_unix > 0:
+		var now_unix: int = int(Time.get_unix_time_from_system())
+		var away_sec: float = float(now_unix - last_active_unix)
+		if away_sec >= 60.0:
+			apply_offline_hunger_decay(away_sec, true)
+		last_active_unix = now_unix
 
 func reset_save_data() -> void:
 	fish = 90
@@ -2039,6 +2393,12 @@ func reset_save_data() -> void:
 	selected_avatar_frame = "beige"
 	selected_classic_bg_id = 1
 	placed_room_decor = []
+	room_upgrades = {"heat_insulation": false, "mini_fan": false}
+	furniture_grid_positions = {}
+	food_bowl_servings = 0
+	is_offline_auto_sleeping = false
+	last_offline_summary = {}
+	last_active_unix = int(Time.get_unix_time_from_system())
 	custom_cat_name = ""
 	owner_name = "Tân Sinh Viên"
 	custom_room_name = ""
@@ -2083,6 +2443,7 @@ func reset_save_data() -> void:
 	is_fainted = false
 	is_shy = false
 	save_game()
+	save_room_state()
 	emit_signal("stats_changed")
 	emit_signal("avatar_changed", 0)
 	emit_signal("room_name_changed", get_room_name())

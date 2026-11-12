@@ -55,7 +55,25 @@ signal open_handbook_requested
 @onready var floor_touch_area: Control = $FloorTouchArea
 @onready var roam_timer: Timer = $RoamTimer
 
+const LONG_PRESS_DECOR_SEC: float = 1.0
+const FOOD_BAG_TEX: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_cat_food_bag.png")
+
 var origin: Vector2 = Vector2(270.0, 690.0)
+var food_bowl_drop_zone: Control = null
+var food_bag_widget: TextureRect = null
+var food_bag_qty_lbl: Label = null
+var is_dragging_food_bag: bool = false
+var food_bag_base_pos: Vector2 = Vector2(338.0, 790.0)
+
+var _floor_press_active: bool = false
+var _floor_press_elapsed: float = 0.0
+var _floor_press_pos: Vector2 = Vector2.ZERO
+var _floor_press_handled_long: bool = false
+
+var is_decor_mode: bool = false
+var selected_decor_furn_key: String = ""
+var decor_mode_bar: Control = null
+var comfort_status_lbl: Label = null
 
 func _ready() -> void:
 	room_canvas.origin = origin
@@ -73,6 +91,7 @@ func _ready() -> void:
 	food_bowl.grid_coord = IsometricGrid.screen_to_grid(food_bowl.position, origin)
 	water_bowl.grid_coord = IsometricGrid.screen_to_grid(water_bowl.position, origin)
 	litter_box.grid_coord = IsometricGrid.screen_to_grid(litter_box.position, origin)
+	_apply_saved_furniture_positions()
 	
 	# Cập nhật background Classic từ PetMobileGameAsset
 	_update_room_background()
@@ -165,6 +184,13 @@ func _ready() -> void:
 		toy_sprite.texture = GameManager.load_texture("res://assets/sprites/room_items/toy_yarn_ball.png")
 		
 	toy_item.visible = false
+	_setup_food_bag_interaction()
+	_setup_decor_mode_ui()
+	_update_comfort_badge()
+	GameManager.room_state_updated.connect(_update_comfort_badge)
+	GameManager.stats_changed.connect(_refresh_food_bag_widget)
+	if GameManager.is_offline_auto_sleeping and iso_cat.has_method("set_cozy_sleep_mode"):
+		iso_cat.set_cozy_sleep_mode(true)
 
 func _update_room_title(room_name: String) -> void:
 	if room_title_label:
@@ -355,6 +381,9 @@ func _on_pay_expenses_pressed() -> void:
 
 # --- TƯƠNG TÁC CHẠM NỘI THẤT ISOMETRIC ---
 func _on_cushion_clicked(_type) -> void:
+	if is_decor_mode:
+		_select_furniture_for_decor("cushion_bed")
+		return
 	# Mèo đi đến đệm và nằm ngủ, hồi phục và sang ngày mới
 	iso_cat.walk_to_grid(cushion_bed.grid_coord + Vector2(0.25, 0.1), iso_cat.State.SLEEP)
 	_spawn_floating_text(cushion_bed.position + Vector2(0, -35), "🛋️ Ngủ ngon! Ngày mới đã sang ✨", Color(0.9, 0.6, 0.4))
@@ -362,14 +391,23 @@ func _on_cushion_clicked(_type) -> void:
 	GameManager.advance_day()
 
 func _on_food_bowl_clicked(_type) -> void:
+	if is_decor_mode:
+		_select_furniture_for_decor("food_bowl")
+		return
 	# Mèo đi đến chén đồ ăn
 	feed_cat("kibble")
 
 func _on_water_bowl_clicked(_type) -> void:
+	if is_decor_mode:
+		_select_furniture_for_decor("water_bowl")
+		return
 	# Mèo đi đến chén nước uống
 	feed_cat("water")
 
 func _on_litter_box_clicked(_type) -> void:
+	if is_decor_mode:
+		_select_furniture_for_decor("litter_box")
+		return
 	# Dọn cát vệ sinh sạch sẽ, nảy chậu cát và tăng chỉ số
 	SoundManager.play_purr()
 	litter_box.play_click_reaction()
@@ -378,6 +416,7 @@ func _on_litter_box_clicked(_type) -> void:
 
 # --- TƯƠNG TÁC KÉO THẢ & CHẠM TRỰC TIẾP LÊN MÈO ---
 var is_dragging_cat: bool = false
+var _cat_drag_lifted: bool = false
 var cat_drag_mouse_offset: Vector2 = Vector2.ZERO
 var cat_press_time: float = 0.0
 var cat_press_pos: Vector2 = Vector2.ZERO
@@ -386,19 +425,20 @@ func _on_cat_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			is_dragging_cat = true
+			_cat_drag_lifted = false
 			cat_press_time = Time.get_ticks_msec() / 1000.0
 			cat_press_pos = event.global_position
 			cat_drag_mouse_offset = iso_cat.position - event.global_position
 			roam_timer.stop()
-			iso_cat.start_drag()
 		else:
 			if is_dragging_cat:
 				is_dragging_cat = false
 				var duration = (Time.get_ticks_msec() / 1000.0) - cat_press_time
 				var dist = event.global_position.distance_to(cat_press_pos)
-				if duration < 0.25 and dist < 12.0:
-					# Nhấp chạm nhanh (Petting/Vuốt ve)
-					iso_cat.end_drag()
+				if not _cat_drag_lifted or (duration < 0.25 and dist < 14.0):
+					# Nhấp chạm / xoa đầu vuốt ve (Petting/Vuốt ve)
+					if _cat_drag_lifted:
+						iso_cat.end_drag()
 					var touch_y = event.position.y - 24.0
 					iso_cat.handle_touch(touch_y)
 					_spawn_heart_burst(iso_cat.position)
@@ -414,6 +454,14 @@ func _on_cat_gui_input(event: InputEvent) -> void:
 func _input(event: InputEvent) -> void:
 	if is_dragging_cat:
 		if event is InputEventMouseMotion:
+			var move_dist: float = event.global_position.distance_to(cat_press_pos)
+			if not _cat_drag_lifted:
+				if move_dist < 14.0:
+					if iso_cat.has_method("pet_rub"):
+						iso_cat.pet_rub(event.position.y - iso_cat.position.y)
+					return
+				_cat_drag_lifted = true
+				iso_cat.start_drag()
 			var target_pos = event.global_position + cat_drag_mouse_offset
 			# Giới hạn trong sàn phòng trọ 2D Classic
 			target_pos.x = clampf(target_pos.x, 70.0, 470.0)
@@ -435,7 +483,10 @@ func _input(event: InputEvent) -> void:
 				
 		elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 			is_dragging_cat = false
-			_on_cat_dropped_at(iso_cat.position)
+			if _cat_drag_lifted:
+				_on_cat_dropped_at(iso_cat.position)
+			else:
+				iso_cat.pet_rub(-12.0)
 
 func _on_cat_dropped_at(drop_pos: Vector2) -> void:
 	iso_cat.end_drag()
@@ -491,16 +542,45 @@ func _on_cat_dropped_at(drop_pos: Vector2) -> void:
 		
 	roam_timer.start(randf_range(6.0, 9.0))
 
-# --- TƯƠNG TÁC CHẠM MẶT SÀN 2D CLASSIC (THẢ ĐỒ CHƠI) ---
+# --- TƯƠNG TÁC CHẠM MẶT SÀN 2D CLASSIC (THẢ ĐỒ CHƠI & LONG-PRESS 1s DECOR MODE) ---
+func _process(delta: float) -> void:
+	if _floor_press_active and not _floor_press_handled_long and not is_decor_mode:
+		_floor_press_elapsed += delta
+		if _floor_press_elapsed >= LONG_PRESS_DECOR_SEC:
+			_floor_press_handled_long = true
+			_floor_press_active = false
+			enter_decor_mode(_floor_press_pos)
+
 func _on_floor_gui_input(event: InputEvent) -> void:
-	if is_dragging_cat:
+	if is_dragging_cat or is_dragging_food_bag:
 		return
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseMotion and is_decor_mode:
+		var g = IsometricGrid.screen_to_grid(event.position, origin)
+		var cell := Vector2i(floori(g.x), floori(g.y))
+		var valid: bool = is_grid_cell_valid(cell, selected_decor_furn_key)
+		room_canvas.set_grid_highlight(cell, valid)
+		return
+	if event is InputEventMouseMotion and _floor_press_active:
+		if event.position.distance_to(_floor_press_pos) > 16.0:
+			_floor_press_active = false
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		var click_pos = event.position
-		# Kiểm tra điểm chạm trên mặt sàn 2D Classic (Y ~ 710..880, X ~ 40..500) hoặc lưới sàn
-		if (click_pos.y >= 710.0 and click_pos.y <= 880.0 and click_pos.x >= 40.0 and click_pos.x <= 500.0) or IsometricGrid.is_point_inside_floor(click_pos, origin, 0.4):
-			var target_grid = IsometricGrid.screen_to_grid(click_pos, origin)
-			_drop_toy_and_chase(target_grid)
+		if event.pressed:
+			_floor_press_active = true
+			_floor_press_elapsed = 0.0
+			_floor_press_pos = click_pos
+			_floor_press_handled_long = false
+		else:
+			var was_long: bool = _floor_press_handled_long
+			_floor_press_active = false
+			if was_long:
+				return
+			if is_decor_mode:
+				_handle_decor_floor_click(click_pos)
+			elif (click_pos.y >= 710.0 and click_pos.y <= 880.0 and click_pos.x >= 40.0 and click_pos.x <= 500.0) or IsometricGrid.is_point_inside_floor(click_pos, origin, 0.4):
+				var target_grid = IsometricGrid.screen_to_grid(click_pos, origin)
+				_drop_toy_and_chase(target_grid)
 
 func _drop_toy_and_chase(grid_target: Vector2) -> void:
 	var screen_pos = IsometricGrid.grid_to_screen(grid_target, origin)
@@ -581,9 +661,17 @@ func feed_cat(food_type: String) -> void:
 		
 	iso_cat.walk_to_grid(food_bowl.grid_coord + Vector2(-0.2, 0.0), iso_cat.State.EAT)
 	SoundManager.play_chomp()
-	food_bowl.play_click_reaction()
+	if food_bowl.has_method("set_bowl_filled"):
+		food_bowl.set_bowl_filled(true)
+	else:
+		food_bowl.play_click_reaction()
+	get_tree().create_timer(2.2).timeout.connect(func():
+		if is_instance_valid(food_bowl) and food_bowl.has_method("set_bowl_filled"):
+			food_bowl.set_bowl_filled(false)
+	)
+	_refresh_food_bag_widget()
 	
-	var msg = "+20 🍗 | +10 ✨"
+	var msg = "+15 🍗 | +5 ✨"
 	if food_type == "pate":
 		msg = "+35 🍗 | +25 💖 | +20 ✨"
 	elif food_type == "dry_fish":
@@ -828,3 +916,252 @@ func _on_custom_decor_interacted(item_id: String, pos: Vector2) -> void:
 		iso_cat.walk_to_grid(target_grid, iso_cat.State.IDLE)
 		_spawn_floating_text(pos + Vector2(0, -35), "✨ Đồ decor xinh xắn: +5 Mood!", Color(0.9, 0.65, 0.2))
 		GameManager.update_stats(0, 0, +2, +5)
+
+# =========================================================================
+# GP-ROOM-01: KÉO THẢ TÚI HẠT VÀO BÁT ĐỒ ĂN & CHẾ ĐỘ NGỦ ẤM ÁP
+# =========================================================================
+func _setup_food_bag_interaction() -> void:
+	# Drop zone trên chén ăn (nhận kéo từ BottomPawMenu hoặc túi hạt trong phòng)
+	food_bowl_drop_zone = Control.new()
+	food_bowl_drop_zone.name = "FoodBowlDropZone"
+	food_bowl_drop_zone.custom_minimum_size = Vector2(72, 56)
+	food_bowl_drop_zone.size = Vector2(72, 56)
+	food_bowl_drop_zone.position = food_bowl.position - Vector2(36, 34)
+	food_bowl_drop_zone.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	food_bowl_drop_zone.set_drag_forwarding(
+		func(_pos: Vector2): return null,
+		func(_pos: Vector2, data):
+			return data is Dictionary and data.get("type", "") == "food_bag",
+		func(_pos: Vector2, _data):
+			pour_food_bag_into_bowl()
+	)
+	add_child(food_bowl_drop_zone)
+
+	# Túi hạt kéo trực tiếp trong phòng cạnh khay ăn
+	food_bag_widget = TextureRect.new()
+	food_bag_widget.name = "RoomFoodBagWidget"
+	food_bag_widget.texture = FOOD_BAG_TEX
+	food_bag_widget.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	food_bag_widget.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	food_bag_widget.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	food_bag_widget.size = Vector2(36, 52)
+	food_bag_widget.position = food_bag_base_pos
+	food_bag_widget.mouse_filter = Control.MOUSE_FILTER_STOP
+	food_bag_widget.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	food_bag_widget.tooltip_text = "Kéo túi hạt thả vào bát ăn để cho Boss ăn!"
+
+	food_bag_qty_lbl = Label.new()
+	food_bag_qty_lbl.position = Vector2(18, 34)
+	food_bag_qty_lbl.add_theme_font_size_override("font_size", 10)
+	food_bag_qty_lbl.add_theme_color_override("font_color", Color(1.0, 0.96, 0.85))
+	food_bag_qty_lbl.add_theme_color_override("font_outline_color", Color("#3d251e"))
+	food_bag_qty_lbl.add_theme_constant_override("outline_size", 2)
+	food_bag_widget.add_child(food_bag_qty_lbl)
+
+	var bag_offset := Vector2.ZERO
+	food_bag_widget.gui_input.connect(func(ev: InputEvent):
+		if ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT:
+			if ev.pressed:
+				is_dragging_food_bag = true
+				bag_offset = food_bag_widget.position - ev.global_position
+				SoundManager.play_click()
+			else:
+				if is_dragging_food_bag:
+					is_dragging_food_bag = false
+					var center: Vector2 = food_bag_widget.position + (food_bag_widget.size * 0.5)
+					if center.distance_to(food_bowl.position) <= 68.0:
+						pour_food_bag_into_bowl()
+					var tw = create_tween()
+					tw.tween_property(food_bag_widget, "position", food_bag_base_pos, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		elif ev is InputEventMouseMotion and is_dragging_food_bag:
+			food_bag_widget.position = ev.global_position + bag_offset
+	)
+	add_child(food_bag_widget)
+	_refresh_food_bag_widget()
+
+func _refresh_food_bag_widget() -> void:
+	if not food_bag_widget or not food_bag_qty_lbl:
+		return
+	var qty: int = GameManager.food_inventory.get("kibble", 0)
+	food_bag_qty_lbl.text = "x%d" % qty
+	food_bag_widget.modulate.a = 1.0 if qty > 0 else 0.45
+	if food_bowl_drop_zone and food_bowl:
+		food_bowl_drop_zone.position = food_bowl.position - Vector2(36, 34)
+
+func pour_food_bag_into_bowl() -> bool:
+	if GameManager.hunger >= 100:
+		GameManager.can_feed()
+		return false
+	if GameManager.food_inventory.get("kibble", 0) <= 0:
+		GameManager.feed_kibble()
+		_refresh_food_bag_widget()
+		return false
+	feed_cat("kibble")
+	if iso_cat.has_method("set_cozy_sleep_mode") and iso_cat.cozy_sleep_mode:
+		iso_cat.set_cozy_sleep_mode(false)
+	_refresh_food_bag_widget()
+	return true
+
+# =========================================================================
+# GP-ROOM-02: DECOR MODE (NHẤN GIỮ 1.0s), LƯỚI 2.5D XANH/CAM & LƯU room_save.json
+# =========================================================================
+func _setup_decor_mode_ui() -> void:
+	decor_mode_bar = PanelContainer.new()
+	decor_mode_bar.name = "DecorModeBar"
+	decor_mode_bar.visible = false
+	decor_mode_bar.position = Vector2(20, 170)
+	decor_mode_bar.custom_minimum_size = Vector2(500, 44)
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.98, 0.94, 0.86, 0.95)
+	style.border_color = Color(0.45, 0.28, 0.16, 1.0)
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(10)
+	decor_mode_bar.add_theme_stylebox_override("panel", style)
+
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 8)
+	decor_mode_bar.add_child(hbox)
+
+	var lbl := Label.new()
+	lbl.name = "HintLabel"
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl.text = "🎨 Decor 2.5D: Chọn đồ rồi chạm ô lưới (Xanh: Hợp lệ)"
+	lbl.add_theme_font_size_override("font_size", 11)
+	lbl.add_theme_color_override("font_color", Color("#3d251e"))
+	hbox.add_child(lbl)
+
+	var btn_done := Button.new()
+	btn_done.name = "BtnDoneDecor"
+	btn_done.text = "✓ Xong"
+	btn_done.custom_minimum_size = Vector2(78, 32)
+	btn_done.pressed.connect(exit_decor_mode)
+	hbox.add_child(btn_done)
+
+	add_child(decor_mode_bar)
+
+	# Nhãn tiện ích cách nhiệt & quạt mini trong phòng
+	comfort_status_lbl = Label.new()
+	comfort_status_lbl.name = "ComfortStatusLabel"
+	comfort_status_lbl.position = Vector2(18, 224)
+	comfort_status_lbl.add_theme_font_size_override("font_size", 10)
+	comfort_status_lbl.add_theme_color_override("font_color", Color(0.25, 0.45, 0.35))
+	comfort_status_lbl.visible = false
+	add_child(comfort_status_lbl)
+
+func _update_comfort_badge() -> void:
+	if not comfort_status_lbl:
+		return
+	var summary: Dictionary = GameManager.get_room_comfort_summary()
+	var tags: Array[String] = []
+	if summary.get("heat_insulation", false):
+		tags.append("🪟 Cách nhiệt -5°C")
+	if summary.get("mini_fan", false):
+		tags.append("🌬️ Quạt Mini mát mẻ")
+	if tags.size() > 0:
+		comfort_status_lbl.text = " • ".join(tags)
+		comfort_status_lbl.visible = true
+	else:
+		comfort_status_lbl.visible = false
+
+func _get_furniture_map() -> Dictionary:
+	return {
+		"cushion_bed": cushion_bed,
+		"food_bowl": food_bowl,
+		"water_bowl": water_bowl,
+		"litter_box": litter_box
+	}
+
+func _apply_saved_furniture_positions() -> void:
+	var furn_map := _get_furniture_map()
+	for k in GameManager.furniture_grid_positions.keys():
+		if furn_map.has(k):
+			var pos_dict = GameManager.furniture_grid_positions[k]
+			if pos_dict is Dictionary and pos_dict.has("u") and pos_dict.has("v"):
+				var cell := Vector2i(int(pos_dict["u"]), int(pos_dict["v"]))
+				if cell.x >= 0 and cell.x < IsometricGrid.GRID_SIZE and cell.y >= 0 and cell.y < IsometricGrid.GRID_SIZE:
+					var node: Node2D = furn_map[k]
+					var g_vec := Vector2(float(cell.x) + 0.5, float(cell.y) + 0.5)
+					node.position = IsometricGrid.grid_to_screen(g_vec, origin)
+					node.grid_coord = g_vec
+
+func enter_decor_mode(at_pos: Vector2 = Vector2.ZERO) -> void:
+	if is_decor_mode:
+		return
+	is_decor_mode = true
+	selected_decor_furn_key = "cushion_bed"
+	roam_timer.stop()
+	room_canvas.set_decor_grid_visible(true)
+	if at_pos != Vector2.ZERO:
+		var g := IsometricGrid.screen_to_grid(at_pos, origin)
+		var cell := Vector2i(floori(g.x), floori(g.y))
+		room_canvas.set_grid_highlight(cell, is_grid_cell_valid(cell, selected_decor_furn_key))
+	if decor_mode_bar:
+		decor_mode_bar.visible = true
+	SoundManager.play_confirm()
+	SoundManager.vibrate(15)
+	_spawn_floating_text(Vector2(270, 260), "🎨 Bật Chế Độ Decor 2.5D!", Color(0.2, 0.72, 0.4))
+
+func exit_decor_mode() -> void:
+	if not is_decor_mode:
+		return
+	is_decor_mode = false
+	selected_decor_furn_key = ""
+	room_canvas.set_decor_grid_visible(false)
+	if decor_mode_bar:
+		decor_mode_bar.visible = false
+	GameManager.save_room_state()
+	roam_timer.start(randf_range(4.0, 7.0))
+	SoundManager.play_click()
+
+func _select_furniture_for_decor(furn_key: String) -> void:
+	selected_decor_furn_key = furn_key
+	SoundManager.play_click()
+	if decor_mode_bar:
+		var lbl := decor_mode_bar.find_child("HintLabel", true, false) as Label
+		if lbl:
+			lbl.text = "🎨 Đang chọn: %s • Chạm ô lưới Xanh để đặt" % furn_key
+
+func is_grid_cell_valid(cell: Vector2i, ignore_key: String = "") -> bool:
+	if cell.x < 0 or cell.x >= IsometricGrid.GRID_SIZE or cell.y < 0 or cell.y >= IsometricGrid.GRID_SIZE:
+		return false
+	var furn_map := _get_furniture_map()
+	for k in furn_map.keys():
+		if k == ignore_key:
+			continue
+		var node: Node2D = furn_map[k]
+		if node:
+			var occupied := Vector2i(floori(node.grid_coord.x), floori(node.grid_coord.y))
+			if occupied == cell:
+				return false
+	return true
+
+func move_furniture_to_cell(furn_key: String, cell: Vector2i) -> bool:
+	if not is_grid_cell_valid(cell, furn_key):
+		return false
+	var furn_map := _get_furniture_map()
+	if not furn_map.has(furn_key):
+		return false
+	var node: Node2D = furn_map[furn_key]
+	var g_vec := Vector2(float(cell.x) + 0.5, float(cell.y) + 0.5)
+	node.position = IsometricGrid.grid_to_screen(g_vec, origin)
+	node.grid_coord = g_vec
+	if furn_key == "food_bowl" and food_bowl_drop_zone:
+		food_bowl_drop_zone.position = node.position - Vector2(36, 34)
+	GameManager.set_furniture_grid_pos(furn_key, cell)
+	node.play_click_reaction()
+	SoundManager.play_wooden_pop()
+	return true
+
+func _handle_decor_floor_click(click_pos: Vector2) -> void:
+	var g := IsometricGrid.screen_to_grid(click_pos, origin)
+	var cell := Vector2i(floori(g.x), floori(g.y))
+	if selected_decor_furn_key == "":
+		selected_decor_furn_key = "cushion_bed"
+	var valid: bool = is_grid_cell_valid(cell, selected_decor_furn_key)
+	room_canvas.set_grid_highlight(cell, valid)
+	if not valid:
+		SoundManager.play_fail()
+		_spawn_floating_text(click_pos, "⚠️ Ô cam: Vướng đồ / Ngoài sàn!", Color(0.95, 0.5, 0.15))
+		return
+	if move_furniture_to_cell(selected_decor_furn_key, cell):
+		_spawn_floating_text(click_pos + Vector2(0, -24), "✓ Đã đặt gọn vào lưới (%d,%d)" % [cell.x, cell.y], Color(0.2, 0.8, 0.35))

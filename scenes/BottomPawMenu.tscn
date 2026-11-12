@@ -17,13 +17,13 @@
 
 [node name="BottomPawMenu" type="Control"]
 z_index = 35
-custom_minimum_size = Vector2(540, 74)
+custom_minimum_size = Vector2(540, 64)
 layout_mode = 3
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -74.0
+offset_top = -64.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_menu")
@@ -104,15 +104,29 @@ patch_margin_top = 10
 patch_margin_right = 12
 patch_margin_bottom = 8
 
+[node name="SlidingPawIndicator" type="TextureRect" parent="DockPanel"]
+z_index = 2
+texture_filter = 1
+custom_minimum_size = Vector2(14, 12)
+layout_mode = 0
+offset_left = 40.0
+offset_top = -5.0
+offset_right = 54.0
+offset_bottom = 7.0
+pivot_offset = Vector2(7, 6)
+mouse_filter = 2
+texture = ExtResource("7_paw_ind")
+stretch_mode = 3
+
 [node name="HBox" type="HBoxContainer" parent="DockPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 8.0
-offset_top = 8.0
+offset_top = 4.0
 offset_right = -8.0
-offset_bottom = -6.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 6

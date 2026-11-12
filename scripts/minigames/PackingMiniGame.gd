@@ -1,10 +1,26 @@
 extends Control
 
-# PackingMiniGame.gd - Gameplay "Ba Lô Sinh Tồn / Xếp Đồ Vào Giỏ" (Inventory Packing Puzzle)
-# Người chơi chọn lọc đúng 4 vật phẩm sinh tồn, tránh nhồi nhét đồ vô bổ khiến mèo gãy lưng
+# PackingMiniGame.gd - Gameplay "Ba Lô Sinh Tồn / Xếp Đồ Vào Giỏ" (Grid Inventory Tetris Puzzle)
+# GP-ED-04: Bảng kẹp gỗ clipboard, checklist bảng bần đính đinh ghim đỏ, lưới Tetris 4x3 hỗ trợ xoay/kéo-thả & Safe Failure
 
 signal minigame_completed(sim_steps)
 signal back_requested
+
+const TEX_CLIPBOARD: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_dress/clipboard_wood_frame_9patch.tres")
+const STYLE_CORK_BOARD: StyleBox = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/cork_board_stylebox.tres")
+const TEX_PIN_TACK: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/pin_tack_red.tres")
+const COZY_DIALOG_SCN: PackedScene = preload("res://scenes/ui/CozyDialogBox.tscn")
+
+const TEX_ITEM_KEY: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_06_key.tres")
+const TEX_ITEM_CLIPBOARD: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_08_clipboard.tres")
+const TEX_ITEM_THERMO: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_09_thermometer.tres")
+const TEX_ITEM_PILL: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_10_pill.tres")
+const TEX_ITEM_FIRST_AID: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_11_first_aid.tres")
+const TEX_ITEM_THERMOS: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_12_thermos.tres")
+const TEX_ITEM_COFFEE: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_15_coffee.tres")
+
+const GRID_COLS: int = 4
+const GRID_ROWS: int = 3
 
 @onready var title_lbl: Label = $Header/HeaderTitle
 @onready var btn_back: Button = $Header/BtnBack
@@ -21,11 +37,34 @@ var packed_items: Array = [] # List of item dicts currently in backpack
 var available_items: Array = []
 var cat_anim: AnimatedSprite2D = null
 
+# GP-ED-04 Tetris & Cork Checklist state
+var checklist_cork_card: PanelContainer = null
+var pin_tack_sprite: TextureRect = null
+var checklist_vbox: VBoxContainer = null
+var tetris_controls_row: HBoxContainer = null
+var btn_rotate_item: Button = null
+var active_shape_lbl: Label = null
+var tetris_grid_4x3: GridContainer = null
+var packing_cozy_dialog: Control = null
+
+var is_item_rotated: bool = false
+var selected_item: Dictionary = {}
+var tetris_placements: Array = [] # [{"item": dict, "origin": Vector2i, "size": Vector2i, "rotated": bool}]
+var safe_failure_count: int = 0
+var _last_sync_signature: String = ""
+
 func _ready() -> void:
 	btn_back.icon = preload("res://assets/UI/CatUIPaid/slices/icon_arrow_left.png")
 	btn_back.pressed.connect(func(): emit_signal("back_requested"))
 	btn_pack_done.pressed.connect(_on_pack_done_pressed)
 	_setup_cat_mascot()
+	_setup_gp_ed_04_ui()
+
+func _process(_delta: float) -> void:
+	var sig := _compute_sync_signature()
+	if sig != _last_sync_signature:
+		_last_sync_signature = sig
+		_sync_gp_ed_04_state()
 
 func _setup_cat_mascot() -> void:
 	if cat_anim == null and cat_anchor:
@@ -199,20 +238,40 @@ func _on_pack_done_pressed() -> void:
 		if not it.get("is_required", false):
 			wrong_item = it
 			break
-			
-	if not wrong_item.is_empty():
-		# Thất bại hài hước: Mèo bị ngã chổng vó do mang đồ linh tinh
-		SoundManager.play_fail()
-		var tw = create_tween()
-		if cat_anchor:
-			tw.tween_property(cat_anchor, "rotation", 1.5, 0.25).set_trans(Tween.TRANS_BACK)
-			tw.tween_property(cat_anchor, "rotation", 0.0, 0.35).set_delay(1.5)
-			
-		var humor_msg = wrong_item.get("humor", "Mang món này làm nặng ba lô quá Sen ơi!")
-		cat_speech.text = "ÚI GIỜI ƠI! 😵 " + humor_msg
+
+	# Kiểm tra xem có bỏ quên chìa khóa (nếu đề bài có vật phẩm chìa khóa bắt buộc) hoặc ba lô trống không
+	var forgot_key_item: Dictionary = {}
+	for req in available_items:
+		if req.get("is_required", false):
+			var rid: String = str(req.get("id", "")).to_lower()
+			var rname: String = str(req.get("name", "")).to_lower()
+			if "key" in rid or "chìa khóa" in rname or "chia khoa" in rname:
+				if not _is_item_packed(req):
+					forgot_key_item = req
+					break
+
+	if packed_items.is_empty():
+		_trigger_packing_safe_failure(
+			"Hihi~ Ba lô vẫn trống trơn nè! Boss Mèo cười khúc khích chạy đi nhặt giúp Sen chùm chìa khóa & đồ cần thiết nhé! 🔑🐾",
+			true
+		)
+	elif not wrong_item.is_empty():
+		var humor_msg: String = wrong_item.get("humor", "Mang món này làm nặng ba lô quá Sen ơi!")
+		cat_speech.text = "ÚI GIỜI ƠI! 😹 " + humor_msg
+		_trigger_packing_safe_failure(
+			"Hihi~ %s Boss Mèo chạy đi nhặt lại chìa khóa & giúp Sen cất bớt món nặng nha! 🔑🐾" % humor_msg,
+			false
+		)
+	elif not forgot_key_item.is_empty():
+		_trigger_packing_safe_failure(
+			"Ơ kìa Sen quên mang %s rồi! Boss Mèo cười khúc khích chạy đi nhặt chìa khóa giúp Sen nè! 🔑🐾" % str(forgot_key_item.get("name", "Chìa khóa")),
+			true
+		)
 	else:
 		# Thành công rực rỡ!
 		SoundManager.play_success()
+		if SoundManager.has_method("vibrate"):
+			SoundManager.vibrate(30)
 		if cat_anim:
 			cat_anim.play("jump")
 			
@@ -223,3 +282,477 @@ func _on_pack_done_pressed() -> void:
 		await get_tree().create_timer(1.2).timeout
 		var sim_steps = data.get("sim_steps", [])
 		emit_signal("minigame_completed", sim_steps)
+
+# ==============================================================================
+# GP-ED-04: GRID INVENTORY TETRIS, CORK CHECKLIST & SAFE FAILURE
+# ==============================================================================
+
+func _setup_gp_ed_04_ui() -> void:
+	var backpack_card := get_node_or_null("BackpackCard") as PanelContainer
+	if backpack_card:
+		var clip_sb := StyleBoxTexture.new()
+		clip_sb.texture = TEX_CLIPBOARD
+		clip_sb.texture_margin_left = 12.0
+		clip_sb.texture_margin_top = 12.0
+		clip_sb.texture_margin_right = 12.0
+		clip_sb.texture_margin_bottom = 12.0
+		clip_sb.content_margin_left = 14.0
+		clip_sb.content_margin_top = 14.0
+		clip_sb.content_margin_right = 14.0
+		clip_sb.content_margin_bottom = 14.0
+		backpack_card.add_theme_stylebox_override("panel", clip_sb)
+
+	var vbox := get_node_or_null("BackpackCard/VBox") as VBoxContainer
+	if not vbox:
+		return
+
+	# 1. Checklist ghim trên bảng bần + đinh ghim đỏ
+	checklist_cork_card = PanelContainer.new()
+	checklist_cork_card.name = "ChecklistCorkCard"
+	checklist_cork_card.add_theme_stylebox_override("panel", STYLE_CORK_BOARD.duplicate())
+
+	var cork_vbox := VBoxContainer.new()
+	cork_vbox.name = "CorkVBox"
+	cork_vbox.add_theme_constant_override("separation", 4)
+	checklist_cork_card.add_child(cork_vbox)
+
+	var pin_hdr := HBoxContainer.new()
+	pin_hdr.add_theme_constant_override("separation", 6)
+	pin_tack_sprite = TextureRect.new()
+	pin_tack_sprite.name = "PinTackSprite"
+	pin_tack_sprite.texture = TEX_PIN_TACK
+	pin_tack_sprite.custom_minimum_size = Vector2(20, 20)
+	pin_tack_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pin_tack_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pin_hdr.add_child(pin_tack_sprite)
+
+	var cork_title := Label.new()
+	cork_title.text = "📌 CHECKLIST ĐỒ CẦN MANG (Ghim Bảng Bần)"
+	cork_title.add_theme_font_size_override("font_size", 14)
+	cork_title.add_theme_color_override("font_color", Color(0.28, 0.16, 0.08))
+	pin_hdr.add_child(cork_title)
+	cork_vbox.add_child(pin_hdr)
+
+	checklist_vbox = VBoxContainer.new()
+	checklist_vbox.name = "ChecklistVBox"
+	checklist_vbox.add_theme_constant_override("separation", 2)
+	cork_vbox.add_child(checklist_vbox)
+
+	vbox.add_child(checklist_cork_card)
+	vbox.move_child(checklist_cork_card, 0)
+
+	# 2. Thanh điều khiển xoay khối Tetris 90 độ (touch target >= 56dp)
+	tetris_controls_row = HBoxContainer.new()
+	tetris_controls_row.name = "TetrisControlsRow"
+	tetris_controls_row.add_theme_constant_override("separation", 10)
+
+	btn_rotate_item = Button.new()
+	btn_rotate_item.name = "BtnRotateItem"
+	btn_rotate_item.text = "🔄 Xoay Món (90°)"
+	btn_rotate_item.custom_minimum_size = Vector2(180, 56)
+	btn_rotate_item.add_theme_font_size_override("font_size", 15)
+	btn_rotate_item.pressed.connect(_on_rotate_item_pressed)
+	tetris_controls_row.add_child(btn_rotate_item)
+
+	active_shape_lbl = Label.new()
+	active_shape_lbl.name = "ActiveShapeLabel"
+	active_shape_lbl.text = "Góc xoay: Ngang (0°)"
+	active_shape_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	active_shape_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	active_shape_lbl.add_theme_font_size_override("font_size", 14)
+	active_shape_lbl.add_theme_color_override("font_color", Color(0.26, 0.18, 0.10))
+	tetris_controls_row.add_child(active_shape_lbl)
+
+	vbox.add_child(tetris_controls_row)
+
+	# 3. Lưới Tetris 4x3 trong Ba Lô Clipboard
+	tetris_grid_4x3 = GridContainer.new()
+	tetris_grid_4x3.name = "TetrisGrid4x3"
+	tetris_grid_4x3.columns = GRID_COLS
+	tetris_grid_4x3.add_theme_constant_override("h_separation", 4)
+	tetris_grid_4x3.add_theme_constant_override("v_separation", 4)
+
+	for y in range(GRID_ROWS):
+		for x in range(GRID_COLS):
+			var cell_btn := Button.new()
+			cell_btn.name = "Cell_%d_%d" % [x, y]
+			cell_btn.custom_minimum_size = Vector2(62, 56)
+			cell_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			cell_btn.text = "·"
+			cell_btn.expand_icon = true
+			var origin := Vector2i(x, y)
+			cell_btn.pressed.connect(func(): _on_tetris_cell_pressed(origin))
+			cell_btn.set_drag_forwarding(
+				Callable(),
+				func(_pos, drag_data): return _can_drop_on_cell(drag_data, origin),
+				func(_pos, drag_data): _drop_on_cell(drag_data, origin)
+			)
+			tetris_grid_4x3.add_child(cell_btn)
+
+	vbox.add_child(tetris_grid_4x3)
+
+	# 4. CozyDialogBox cho Safe Failure (Boss Mèo cười khúc khích + nhặt chìa khóa)
+	packing_cozy_dialog = COZY_DIALOG_SCN.instantiate()
+	packing_cozy_dialog.name = "PackingCozyDialog"
+	packing_cozy_dialog.visible = false
+	packing_cozy_dialog.z_index = 40
+	packing_cozy_dialog.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+	packing_cozy_dialog.offset_top = -170.0
+	packing_cozy_dialog.offset_bottom = -20.0
+	packing_cozy_dialog.gui_input.connect(func(ev: InputEvent):
+		if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+			packing_cozy_dialog.visible = false
+	)
+	add_child(packing_cozy_dialog)
+
+func _on_rotate_item_pressed() -> void:
+	is_item_rotated = not is_item_rotated
+	if SoundManager.has_method("play_tap"):
+		SoundManager.play_tap()
+	if SoundManager.has_method("vibrate"):
+		SoundManager.vibrate(15)
+	_update_rotate_label()
+	_refresh_table_item_footprints()
+
+func _update_rotate_label() -> void:
+	if not active_shape_lbl:
+		return
+	var rot_text := "Dọc (90°)" if is_item_rotated else "Ngang (0°)"
+	if not selected_item.is_empty():
+		var fp := get_item_footprint(selected_item, is_item_rotated)
+		active_shape_lbl.text = "Góc: %s | %s (%dx%d)" % [
+			rot_text,
+			str(selected_item.get("name", "Vật phẩm")),
+			fp.x,
+			fp.y
+		]
+	else:
+		active_shape_lbl.text = "Góc xoay: %s" % rot_text
+
+func _compute_sync_signature() -> String:
+	var packed_ids := []
+	for it in packed_items:
+		packed_ids.append(_item_key(it))
+	var avail_ids := []
+	for it in available_items:
+		avail_ids.append(_item_key(it))
+	var table_cnt := table_grid.get_child_count() if table_grid else 0
+	return "%s|%s|%d|%d" % [
+		",".join(packed_ids),
+		",".join(avail_ids),
+		table_cnt,
+		tetris_placements.size()
+	]
+
+func _sync_gp_ed_04_state() -> void:
+	# Prune placements whose item was removed from packed_items
+	var kept: Array = []
+	for p in tetris_placements:
+		var pit: Dictionary = p.get("item", {})
+		if _is_item_packed(pit):
+			kept.append(p)
+	tetris_placements = kept
+
+	# Auto-place items present in packed_items without a Tetris slot yet
+	for it in packed_items:
+		if not _has_placement_for_item(it):
+			_auto_place_item_in_grid(it)
+
+	_rebuild_cork_checklist()
+	_refresh_tetris_grid_visuals()
+	_decorate_table_items()
+	_update_rotate_label()
+
+func _item_key(item: Dictionary) -> String:
+	if item.has("id") and str(item["id"]) != "":
+		return str(item["id"])
+	return str(item.get("name", ""))
+
+func _is_item_packed(item: Dictionary) -> bool:
+	var k := _item_key(item)
+	for it in packed_items:
+		if _item_key(it) == k:
+			return true
+	return false
+
+func _has_placement_for_item(item: Dictionary) -> bool:
+	var k := _item_key(item)
+	for p in tetris_placements:
+		if _item_key(p.get("item", {})) == k:
+			return true
+	return false
+
+func get_item_footprint(item: Dictionary, rotated: bool = false) -> Vector2i:
+	var base := Vector2i(1, 1)
+	if item.has("grid_size"):
+		var raw = item["grid_size"]
+		if raw is Vector2i:
+			base = raw
+		elif raw is Array and raw.size() >= 2:
+			base = Vector2i(int(raw[0]), int(raw[1]))
+	else:
+		var k := _item_key(item).to_lower()
+		var nm := str(item.get("name", "")).to_lower()
+		if "bandage" in k or "băng" in nm or "first_aid" in k or "sơ cứu" in nm:
+			base = Vector2i(2, 1)
+		elif "oresol" in k or "thermos" in k or "nước" in nm or "bình" in nm:
+			base = Vector2i(1, 2)
+		elif "blanket" in k or "chăn" in nm:
+			base = Vector2i(2, 2)
+	if rotated:
+		return Vector2i(base.y, base.x)
+	return base
+
+func _occupied_map(ignore_key: String = "") -> Dictionary:
+	var occ: Dictionary = {}
+	for p in tetris_placements:
+		var pit: Dictionary = p.get("item", {})
+		var pk := _item_key(pit)
+		if ignore_key != "" and pk == ignore_key:
+			continue
+		var ori: Vector2i = p.get("origin", Vector2i.ZERO)
+		var sz: Vector2i = p.get("size", Vector2i.ONE)
+		for dy in range(sz.y):
+			for dx in range(sz.x):
+				occ[ori + Vector2i(dx, dy)] = p
+	return occ
+
+func can_place_in_grid(item: Dictionary, origin: Vector2i, rotated: bool = false) -> bool:
+	var fp := get_item_footprint(item, rotated)
+	if origin.x < 0 or origin.y < 0:
+		return false
+	if origin.x + fp.x > GRID_COLS or origin.y + fp.y > GRID_ROWS:
+		return false
+	var occ := _occupied_map(_item_key(item))
+	for dy in range(fp.y):
+		for dx in range(fp.x):
+			if occ.has(origin + Vector2i(dx, dy)):
+				return false
+	return true
+
+func place_item_at_cell(item: Dictionary, origin: Vector2i, rotated: bool = false) -> bool:
+	if not _is_item_packed(item) and packed_items.size() >= max_slots:
+		return false
+	if not can_place_in_grid(item, origin, rotated):
+		return false
+	remove_item_from_grid(item, false)
+	var fp := get_item_footprint(item, rotated)
+	tetris_placements.append({
+		"item": item,
+		"origin": origin,
+		"size": fp,
+		"rotated": rotated
+	})
+	if not _is_item_packed(item):
+		packed_items.append(item)
+		_render_backpack_slots()
+		_render_table_items()
+		_update_action_button()
+	if SoundManager.has_method("vibrate"):
+		SoundManager.vibrate(15)
+	_refresh_tetris_grid_visuals()
+	_rebuild_cork_checklist()
+	return true
+
+func remove_item_from_grid(item: Dictionary, also_unpack: bool = true) -> void:
+	var k := _item_key(item)
+	var remaining: Array = []
+	for p in tetris_placements:
+		if _item_key(p.get("item", {})) != k:
+			remaining.append(p)
+	tetris_placements = remaining
+	if also_unpack and _is_item_packed(item):
+		for i in range(packed_items.size() - 1, -1, -1):
+			if _item_key(packed_items[i]) == k:
+				packed_items.remove_at(i)
+		_render_backpack_slots()
+		_render_table_items()
+		_update_action_button()
+	_refresh_tetris_grid_visuals()
+	_rebuild_cork_checklist()
+
+func _auto_place_item_in_grid(item: Dictionary) -> bool:
+	var tries := [is_item_rotated, not is_item_rotated]
+	for rot in tries:
+		for y in range(GRID_ROWS):
+			for x in range(GRID_COLS):
+				var origin := Vector2i(x, y)
+				if can_place_in_grid(item, origin, rot):
+					tetris_placements.append({
+						"item": item,
+						"origin": origin,
+						"size": get_item_footprint(item, rot),
+						"rotated": rot
+					})
+					return true
+	return false
+
+func _on_tetris_cell_pressed(origin: Vector2i) -> void:
+	var occ := _occupied_map()
+	if occ.has(origin):
+		var placement: Dictionary = occ[origin]
+		remove_item_from_grid(placement.get("item", {}), true)
+		return
+	if not selected_item.is_empty():
+		place_item_at_cell(selected_item, origin, is_item_rotated)
+
+func _can_drop_on_cell(drag_data, origin: Vector2i) -> bool:
+	if not (drag_data is Dictionary) or not drag_data.has("item"):
+		return false
+	return can_place_in_grid(drag_data["item"], origin, is_item_rotated)
+
+func _drop_on_cell(drag_data, origin: Vector2i) -> void:
+	if not (drag_data is Dictionary) or not drag_data.has("item"):
+		return
+	var item: Dictionary = drag_data["item"]
+	selected_item = item
+	place_item_at_cell(item, origin, is_item_rotated)
+
+func _rebuild_cork_checklist() -> void:
+	if not checklist_vbox:
+		return
+	for ch in checklist_vbox.get_children():
+		ch.queue_free()
+
+	for it in available_items:
+		if not it.get("is_required", false):
+			continue
+		var done := _is_item_packed(it)
+		var fp := get_item_footprint(it, is_item_rotated)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 6)
+
+		var ico := TextureRect.new()
+		ico.texture = _get_item_pixel_texture(it)
+		ico.custom_minimum_size = Vector2(20, 20)
+		ico.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ico.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		row.add_child(ico)
+
+		var lbl := Label.new()
+		lbl.text = "%s %s (%dx%d)" % [
+			"[✅]" if done else "[ ]",
+			str(it.get("name", "Vật phẩm")),
+			fp.x,
+			fp.y
+		]
+		lbl.add_theme_font_size_override("font_size", 13)
+		lbl.add_theme_color_override(
+			"font_color",
+			Color(0.10, 0.48, 0.22) if done else Color(0.28, 0.18, 0.10)
+		)
+		row.add_child(lbl)
+		checklist_vbox.add_child(row)
+
+func _refresh_tetris_grid_visuals() -> void:
+	if not tetris_grid_4x3:
+		return
+	var occ := _occupied_map()
+	for y in range(GRID_ROWS):
+		for x in range(GRID_COLS):
+			var idx := y * GRID_COLS + x
+			if idx >= tetris_grid_4x3.get_child_count():
+				continue
+			var cell_btn := tetris_grid_4x3.get_child(idx) as Button
+			if not cell_btn:
+				continue
+			var pos := Vector2i(x, y)
+			if occ.has(pos):
+				var placement: Dictionary = occ[pos]
+				var pit: Dictionary = placement.get("item", {})
+				var is_origin: bool = placement.get("origin", Vector2i.ZERO) == pos
+				var is_req := bool(pit.get("is_required", false))
+				cell_btn.icon = _get_item_pixel_texture(pit) if is_origin else null
+				cell_btn.text = str(pit.get("name", "")).substr(0, 6) if is_origin else "▪"
+				cell_btn.modulate = Color(0.84, 1.0, 0.86) if is_req else Color(1.0, 0.88, 0.84)
+			else:
+				cell_btn.icon = null
+				cell_btn.text = "·"
+				cell_btn.modulate = Color(1.0, 1.0, 1.0)
+
+func _decorate_table_items() -> void:
+	if not table_grid:
+		return
+	for ch in table_grid.get_children():
+		if not (ch is Control):
+			continue
+		var ctrl := ch as Control
+		ctrl.custom_minimum_size.y = maxf(ctrl.custom_minimum_size.y, 56.0)
+		if ctrl.has_meta("gp_ed_04_decorated"):
+			continue
+		ctrl.set_meta("gp_ed_04_decorated", true)
+		var matched_item := _match_item_for_table_child(ctrl)
+		if matched_item.is_empty():
+			continue
+		var tex := _get_item_pixel_texture(matched_item)
+		if ctrl is Button:
+			var b := ctrl as Button
+			b.icon = tex
+			b.expand_icon = true
+			b.pressed.connect(func():
+				selected_item = matched_item
+				_update_rotate_label()
+			)
+		ctrl.set_drag_forwarding(
+			func(_pos):
+				selected_item = matched_item
+				_update_rotate_label()
+				var preview := TextureRect.new()
+				preview.texture = tex
+				preview.custom_minimum_size = Vector2(40, 40)
+				preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				set_drag_preview(preview)
+				return {"item": matched_item, "rotated": is_item_rotated},
+			Callable(),
+			Callable()
+		)
+
+func _refresh_table_item_footprints() -> void:
+	_rebuild_cork_checklist()
+
+func _match_item_for_table_child(ctrl: Control) -> Dictionary:
+	var txt := ""
+	if ctrl is Button:
+		txt = (ctrl as Button).text.to_lower()
+	else:
+		for sub in ctrl.find_children("*", "Label", true, false):
+			txt += " " + (sub as Label).text.to_lower()
+	for it in available_items:
+		var nm := str(it.get("name", "")).to_lower()
+		if nm != "" and nm in txt:
+			return it
+	return {}
+
+func _get_item_pixel_texture(item: Dictionary) -> Texture2D:
+	var k := _item_key(item).to_lower()
+	var nm := str(item.get("name", "")).to_lower()
+	if "key" in k or "chìa" in nm or "chia" in nm:
+		return TEX_ITEM_KEY
+	if "bandage" in k or "first_aid" in k or "băng" in nm or "sơ cứu" in nm:
+		return TEX_ITEM_FIRST_AID
+	if "oresol" in k or "thermos" in k or "nước" in nm or "bình" in nm:
+		return TEX_ITEM_THERMOS
+	if "thermo" in k or "nhiệt" in nm:
+		return TEX_ITEM_THERMO
+	if "coffee" in k or "cafe" in k or "trà" in nm:
+		return TEX_ITEM_COFFEE
+	if "para" in k or "berberin" in k or "thuốc" in nm or "viên" in nm:
+		return TEX_ITEM_PILL
+	return TEX_ITEM_CLIPBOARD
+
+func _trigger_packing_safe_failure(dialog_msg: String, _forgot_key: bool) -> void:
+	safe_failure_count += 1
+	if SoundManager.has_method("play_giggle"):
+		SoundManager.play_giggle()
+	if cat_anchor:
+		var tw := create_tween()
+		tw.tween_property(cat_anchor, "rotation", 0.2, 0.15).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(cat_anchor, "rotation", -0.2, 0.15).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(cat_anchor, "rotation", 0.0, 0.15).set_trans(Tween.TRANS_SINE)
+	if packing_cozy_dialog and packing_cozy_dialog.has_method("show_dialog"):
+		packing_cozy_dialog.show_dialog(
+			dialog_msg,
+			"playful",
+			"Gợi ý Boss Mèo: Bấm Xoay Món (90°) hoặc bỏ đồ thừa ra ngoài nhé!"
+		)

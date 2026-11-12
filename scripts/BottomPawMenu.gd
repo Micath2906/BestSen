@@ -26,6 +26,7 @@ signal action_drawer_closed
 @onready var btn_handbook: BaseButton = $DockPanel/HBox/BtnHandbook
 @onready var dock_panel: Control = $DockPanel
 @onready var hbox: HBoxContainer = $DockPanel/HBox
+@onready var sliding_paw_indicator: TextureRect = $DockPanel.get_node_or_null("SlidingPawIndicator")
 
 @onready var sub_drawer: Control = $SubDrawer
 @onready var drawer_title: Label = $SubDrawer/VBox/Header/TitleLabel
@@ -40,7 +41,10 @@ const TEX_ITEM_SLOT = preload("res://assets/UI/CatUIPaid/slices/toffee_bottom_me
 var current_drawer_type: String = ""
 var current_active_tab: String = "room"
 var drawer_tween: Tween
+var _paw_slide_tween: Tween
+var _icon_base_y: Dictionary = {}
 
+const DOCK_HEIGHT_DP: float = 64.0
 const DRAWER_OPEN_Y: float = -224.0
 const DRAWER_CLOSED_Y: float = -20.0
 
@@ -87,25 +91,60 @@ func _ready() -> void:
 		emit_signal("open_handbook_requested")
 	)
 	
+	resized.connect(func(): call_deferred("_sync_sliding_paw_pos", false))
 	set_active_tab("room")
+	call_deferred("_sync_sliding_paw_pos", false)
 
 func _animate_button(btn: Control) -> void:
-	var tw = create_tween()
-	tw.tween_property(btn, "scale", Vector2(0.92, 0.92), 0.05).set_trans(Tween.TRANS_QUAD)
-	tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.07).set_trans(Tween.TRANS_BACK)
+	var bg: NinePatchRect = btn.get_node_or_null("BtnBg")
+	var icon_node: Control = btn.get_node_or_null("VBox/Icon")
+	var tw = create_tween().set_parallel(true)
+	if bg:
+		bg.texture = TEX_BTN_PRESS
+		bg.position.y = 2.0
+		tw.tween_property(bg, "position:y", 0.0, 0.14).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	if icon_node:
+		var bid = btn.get_instance_id()
+		if not _icon_base_y.has(bid):
+			_icon_base_y[bid] = icon_node.position.y
+		var base_y: float = _icon_base_y[bid]
+		icon_node.position.y = base_y
+		var icon_tw = create_tween()
+		icon_tw.tween_property(icon_node, "position:y", base_y - 4.0, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		icon_tw.tween_property(icon_node, "position:y", base_y, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	SoundManager.play_wooden_pop()
 
-func set_active_tab(tab_name: String) -> void:
-	if tab_name in ["room", "food", "play", "learn", "handbook"]:
-		current_active_tab = tab_name
-		
-	var all_btns = {
+func _get_tab_button_map() -> Dictionary:
+	return {
 		"room": btn_home,
 		"food": btn_food,
 		"play": btn_play,
 		"learn": btn_learn,
 		"handbook": btn_handbook
 	}
+
+func _sync_sliding_paw_pos(animate: bool = true) -> void:
+	if not sliding_paw_indicator or not dock_panel:
+		return
+	var btn: Control = _get_tab_button_map().get(current_active_tab)
+	if btn == null or not btn.visible:
+		sliding_paw_indicator.visible = false
+		return
+	sliding_paw_indicator.visible = true
+	var target_x: float = (btn.global_position.x - dock_panel.global_position.x) + (btn.size.x - sliding_paw_indicator.size.x) * 0.5
+	if not animate or not is_inside_tree():
+		sliding_paw_indicator.position.x = target_x
+		return
+	if _paw_slide_tween and _paw_slide_tween.is_valid():
+		_paw_slide_tween.kill()
+	_paw_slide_tween = create_tween()
+	_paw_slide_tween.tween_property(sliding_paw_indicator, "position:x", target_x, 0.16).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+func set_active_tab(tab_name: String) -> void:
+	if tab_name in ["room", "food", "play", "learn", "handbook"]:
+		current_active_tab = tab_name
+		
+	var all_btns = _get_tab_button_map()
 	
 	for key in all_btns.keys():
 		var btn = all_btns[key]
@@ -119,17 +158,14 @@ func set_active_tab(tab_name: String) -> void:
 				bg.texture = TEX_BTN_PRESS
 				bg.self_modulate = Color(1.0, 0.96, 0.88, 1.0)
 			if paw:
-				paw.visible = true
-				paw.scale = Vector2(0.6, 0.6)
-				var tw = create_tween()
-				tw.tween_property(paw, "scale", Vector2(1.15, 1.15), 0.08).set_trans(Tween.TRANS_BACK)
-				tw.tween_property(paw, "scale", Vector2(1.0, 1.0), 0.06)
+				paw.visible = (sliding_paw_indicator == null)
 		else:
 			if bg:
 				bg.texture = TEX_BTN_NORM
 				bg.self_modulate = Color(1.0, 1.0, 1.0, 1.0)
 			if paw:
 				paw.visible = false
+	call_deferred("_sync_sliding_paw_pos", true)
 
 func set_view_mode(mode: String) -> void:
 	close_drawer()
@@ -275,6 +311,24 @@ func _build_drawer_content(type: String) -> void:
 					emit_signal("action_food_selected", "kibble")
 					close_drawer()
 			)
+			var kibble_btn: Control = slot_kibble.find_child("SlotBtn", true, false)
+			if kibble_btn:
+				var bag_tex: Texture2D = GameManager.load_texture("res://assets/UI/CatUIPaid/slices/icon_cat_food_bag.png")
+				kibble_btn.set_drag_forwarding(
+					func(_at_pos: Vector2):
+						if bag_tex:
+							var prev := TextureRect.new()
+							prev.texture = bag_tex
+							prev.custom_minimum_size = Vector2(38, 48)
+							prev.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+							prev.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+							prev.position = -prev.custom_minimum_size * 0.5
+							kibble_btn.set_drag_preview(prev)
+						close_drawer()
+						return {"type": "food_bag", "food_type": "kibble"},
+					func(_at_pos: Vector2, _data): return false,
+					func(_at_pos: Vector2, _data): pass
+				)
 			drawer_content.add_child(slot_kibble)
 		
 		# 2. Pate thượng hạng
@@ -493,6 +547,7 @@ func _create_item_slot(title: String, qty_text: String, icon_path_or_tex, on_cli
 	frame_box.add_child(slot_bg)
 	
 	var btn = TextureButton.new()
+	btn.name = "SlotBtn"
 	btn.set_anchors_preset(Control.PRESET_FULL_RECT)
 	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	frame_box.add_child(btn)

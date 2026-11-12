@@ -1,0 +1,112 @@
+[gd_scene load_steps=6 format=3 uid="uid://cozydlgbox01"]
+
+[ext_resource type="Script" path="res://scripts/ui/CozyDialogBox.gd" id="1_dlg"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/chat_bubble_9patch.tres" id="2_bubble"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/chat_bubble_tail.tres" id="3_tail"]
+[ext_resource type="Texture2D" path="res://assets/UI/CatUIPaid/slices/dialog_cat_sleep_brown.png" id="4_sleep"]
+[ext_resource type="FontFile" path="res://assets/font/SVN-Retron 2000.ttf" id="5_font"]
+
+[node name="CozyDialogBox" type="Control"]
+custom_minimum_size = Vector2(280, 74)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 280.0
+offset_bottom = 74.0
+script = ExtResource("1_dlg")
+
+[node name="BubblePanel" type="NinePatchRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 62.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("2_bubble")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Margin" type="MarginContainer" parent="BubblePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="HBox" type="HBoxContainer" parent="BubblePanel/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="EmotionPortrait" type="TextureRect" parent="BubblePanel/Margin/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextCol" type="VBoxContainer" parent="BubblePanel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="DialogLabel" type="Label" parent="BubblePanel/Margin/HBox/TextCol"]
+texture_filter = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.985, 0.935, 1)
+theme_override_colors/font_outline_color = Color(0.239216, 0.145098, 0.117647, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 11
+text = "Meow~ Chào Sen!"
+autowrap_mode = 2
+max_lines_visible = 2
+
+[node name="TipLabel" type="Label" parent="BubblePanel/Margin/HBox/TextCol"]
+visible = false
+texture_filter = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.22, 0.14, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 9
+text = ""
+autowrap_mode = 2
+
+[node name="BubbleTail" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = 132.0
+offset_top = 59.0
+offset_right = 144.0
+offset_bottom = 68.0
+mouse_filter = 2
+texture = ExtResource("3_tail")
+
+[node name="SleepDecor" type="TextureRect" parent="."]
+visible = false
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -46.0
+offset_top = -18.0
+offset_right = -6.0
+offset_bottom = 5.0
+grow_horizontal = 0
+mouse_filter = 2
+texture = ExtResource("4_sleep")
+expand_mode = 1
+stretch_mode = 5

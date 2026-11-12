@@ -128,6 +128,36 @@ var barrier_open_timer: float = 0.0
 var is_passenger_transitioning: bool = false
 var transition_timer: float = 0.0
 
+# GP-ED-01: Metro Line 1 AFC Turnstile Loop (3s Prep -> 0.6s RFID Dwell -> 2.5s Gate Swipe + Safe Failure)
+const TEX_BUS_CARD: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_02_bus_card.tres")
+const TEX_KEY_ITEM: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_06_key.tres")
+const TEX_ICON_CHECK: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_check.png")
+const TEX_ICON_CROSS: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_cross.png")
+const COZY_DIALOG_SCN: PackedScene = preload("res://scenes/ui/CozyDialogBox.tscn")
+
+const METRO_PREP_SEC: float = 3.0
+const RFID_DWELL_HOLD_SEC: float = 0.6
+const AFC_SWIPE_WINDOW_SEC: float = 2.5
+const METRO_TARGET_LOOP_SEC: float = 30.0
+
+var prep_tray_elapsed: float = 0.0
+var is_card_prepped: bool = false
+var is_rfid_dwelling: bool = false
+var rfid_dwell_elapsed: float = 0.0
+var is_afc_gate_ready_to_pass: bool = false
+var afc_swipe_window_left: float = 0.0
+var safe_failure_count: int = 0
+
+var metro_afc_container: VBoxContainer = null
+var btn_prep_key: Button = null
+var btn_prep_card: Button = null
+var rfid_sensor_target: Button = null
+var rfid_dwell_bar: ProgressBar = null
+var sensor_feedback_icon: TextureRect = null
+var btn_afc_swipe_forward: Button = null
+var afc_window_label: Label = null
+var metro_cozy_dialog: Control = null
+
 func _ready() -> void:
 	# Kết nối buttons
 	btn_back.icon = preload("res://assets/UI/CatUIPaid/slices/icon_arrow_left.png")
@@ -162,6 +192,7 @@ func _ready() -> void:
 	toast_panel.visible = false
 	victory_modal.visible = false
 	defeat_modal.visible = false
+	_setup_metro_afc_ui()
 	
 	reset_game()
 
@@ -179,6 +210,7 @@ func reset_game() -> void:
 	
 	is_barrier_open = false
 	barrier_open_timer = 0.0
+	_reset_afc_turnstile_state()
 	_set_barrier_visual(false, "SẴN SÀNG QUÉT VÉ")
 	
 	toast_panel.visible = false
@@ -299,6 +331,7 @@ func _load_next_passenger() -> void:
 	passenger_speech_lbl.text = current_passenger.get("dialogue", "Sen ơi xử lý vé giùm mình!")
 	
 	_setup_cat_visual(current_passenger.get("breed_id", 0))
+	_reset_afc_turnstile_state()
 	_switch_toolbox(current_passenger.get("type", PassengerType.RFID_CARD))
 	
 	_set_barrier_visual(false, "VUI LÒNG CHECK-IN")
@@ -385,6 +418,21 @@ func _process(delta: float) -> void:
 		if passenger_patience <= 0.0:
 			_on_passenger_impatient_lost()
 		
+	if current_passenger.get("type", -1) == PassengerType.RFID_CARD and not is_passenger_transitioning:
+		prep_tray_elapsed += delta
+		if is_rfid_dwelling:
+			rfid_dwell_elapsed += delta
+			if rfid_dwell_bar:
+				rfid_dwell_bar.value = clampf((rfid_dwell_elapsed / RFID_DWELL_HOLD_SEC) * 100.0, 0.0, 100.0)
+			if rfid_dwell_elapsed >= RFID_DWELL_HOLD_SEC:
+				_complete_rfid_dwell_and_open_gate()
+		if is_afc_gate_ready_to_pass:
+			afc_swipe_window_left = maxf(0.0, afc_swipe_window_left - delta)
+			if afc_window_label:
+				afc_window_label.text = "🚪 Quẹt qua cổng ngay: %.1fs" % afc_swipe_window_left
+			if afc_swipe_window_left <= 0.0:
+				_trigger_afc_safe_failure("Cổng tự động khép lại sau 2.5s! Giữ thẻ chạm lại 0.6s rồi sải bước qua nhé!")
+
 	# Xử lý xe buýt chạy cho loại 4
 	if wave_widget.visible and is_bus_driving:
 		bus_pos_x += bus_speed * delta
@@ -641,6 +689,9 @@ func _update_header_ui() -> void:
 		combo_badge.add_theme_color_override("font_color", Color(0.45, 0.4, 0.35))
 		
 	jam_badge.text = "Kẹt cổng: %d/%d ⚠️" % [failed_passengers, max_failed_allowed]
+	if GameManager and GameManager.has_signal("minigame_hud_updated"):
+		GameManager.minigame_hud_updated.emit(time_left, clampf(float(processed_passengers) / float(maxi(1, target_passengers_to_win)), 0.0, 1.0))
+
 	if failed_passengers >= 2:
 		jam_badge.add_theme_color_override("font_color", Color(0.95, 0.2, 0.2))
 	else:
@@ -745,3 +796,226 @@ func _format_money(amount: int) -> String:
 		if cnt % 3 == 0 and i > 0:
 			res = "." + res
 	return res
+
+# =========================================================================
+# GP-ED-01: LUỒNG AFC METRO TUYẾN 1 (KHAY 3s -> RFID 0.6s -> QUA CỔNG 2.5s)
+# =========================================================================
+func _setup_metro_afc_ui() -> void:
+	if not card_widget:
+		return
+	var card_vbox: VBoxContainer = card_widget.get_node_or_null("VBox")
+	if not card_vbox:
+		return
+
+	metro_afc_container = VBoxContainer.new()
+	metro_afc_container.name = "MetroAfcLoopContainer"
+	metro_afc_container.add_theme_constant_override("separation", 6)
+	card_vbox.add_child(metro_afc_container)
+
+	var prep_row := HBoxContainer.new()
+	prep_row.name = "MetroPrepTray"
+	prep_row.add_theme_constant_override("separation", 8)
+	metro_afc_container.add_child(prep_row)
+
+	btn_prep_key = Button.new()
+	btn_prep_key.name = "BtnPrepKey"
+	btn_prep_key.text = "Chìa khóa"
+	btn_prep_key.icon = TEX_KEY_ITEM
+	btn_prep_key.expand_icon = true
+	btn_prep_key.custom_minimum_size = Vector2(98, 40)
+	btn_prep_key.pressed.connect(_on_prep_key_picked)
+	btn_prep_key.set_drag_forwarding(
+		func(_pos: Vector2):
+			var p := TextureRect.new()
+			p.texture = TEX_KEY_ITEM
+			p.custom_minimum_size = Vector2(32, 32)
+			btn_prep_key.set_drag_preview(p)
+			return {"type": "metro_item", "id": "key"},
+		func(_pos: Vector2, _d): return false,
+		func(_pos: Vector2, _d): pass
+	)
+	prep_row.add_child(btn_prep_key)
+
+	btn_prep_card = Button.new()
+	btn_prep_card.name = "BtnPrepCard"
+	btn_prep_card.text = "Thẻ Metro"
+	btn_prep_card.icon = TEX_BUS_CARD
+	btn_prep_card.expand_icon = true
+	btn_prep_card.custom_minimum_size = Vector2(110, 40)
+	btn_prep_card.pressed.connect(_on_prep_card_picked)
+	btn_prep_card.set_drag_forwarding(
+		func(_pos: Vector2):
+			is_card_prepped = true
+			var p := TextureRect.new()
+			p.texture = TEX_BUS_CARD
+			p.custom_minimum_size = Vector2(36, 36)
+			btn_prep_card.set_drag_preview(p)
+			return {"type": "metro_item", "id": "bus_card"},
+		func(_pos: Vector2, _d): return false,
+		func(_pos: Vector2, _d): pass
+	)
+	prep_row.add_child(btn_prep_card)
+
+	var rfid_row := HBoxContainer.new()
+	rfid_row.add_theme_constant_override("separation", 8)
+	metro_afc_container.add_child(rfid_row)
+
+	rfid_sensor_target = Button.new()
+	rfid_sensor_target.name = "RfidSensorCircle"
+	rfid_sensor_target.text = "Giữ Thẻ Lên Đèn (0.6s)"
+	rfid_sensor_target.custom_minimum_size = Vector2(168, 42)
+	rfid_sensor_target.button_down.connect(_start_rfid_dwell)
+	rfid_sensor_target.button_up.connect(_stop_rfid_dwell)
+	rfid_sensor_target.set_drag_forwarding(
+		func(_pos: Vector2): return null,
+		func(_pos: Vector2, data): return data is Dictionary and data.get("type", "") == "metro_item",
+		func(_pos: Vector2, data):
+			if data.get("id", "") == "bus_card":
+				is_card_prepped = true
+				_complete_rfid_dwell_and_open_gate()
+			else:
+				_on_prep_key_picked()
+	)
+	rfid_row.add_child(rfid_sensor_target)
+
+	sensor_feedback_icon = TextureRect.new()
+	sensor_feedback_icon.name = "SensorFeedbackIcon"
+	sensor_feedback_icon.custom_minimum_size = Vector2(28, 28)
+	sensor_feedback_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sensor_feedback_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	sensor_feedback_icon.visible = false
+	rfid_row.add_child(sensor_feedback_icon)
+
+	rfid_dwell_bar = ProgressBar.new()
+	rfid_dwell_bar.name = "RfidDwellBar"
+	rfid_dwell_bar.max_value = 100.0
+	rfid_dwell_bar.value = 0.0
+	rfid_dwell_bar.custom_minimum_size = Vector2(0, 12)
+	metro_afc_container.add_child(rfid_dwell_bar)
+
+	var gate_row := HBoxContainer.new()
+	gate_row.add_theme_constant_override("separation", 6)
+	metro_afc_container.add_child(gate_row)
+
+	afc_window_label = Label.new()
+	afc_window_label.text = "⏱️ Vòng AFC chuẩn: %ds" % int(METRO_TARGET_LOOP_SEC)
+	afc_window_label.add_theme_font_size_override("font_size", 11)
+	afc_window_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	gate_row.add_child(afc_window_label)
+
+	btn_afc_swipe_forward = Button.new()
+	btn_afc_swipe_forward.name = "BtnAfcSwipeForward"
+	btn_afc_swipe_forward.text = "Bước Qua Cổng ➡️"
+	btn_afc_swipe_forward.visible = false
+	btn_afc_swipe_forward.custom_minimum_size = Vector2(132, 36)
+	btn_afc_swipe_forward.pressed.connect(_on_afc_swipe_forward_pressed)
+	gate_row.add_child(btn_afc_swipe_forward)
+
+	metro_cozy_dialog = COZY_DIALOG_SCN.instantiate()
+	metro_cozy_dialog.name = "MetroCozyDialog"
+	metro_cozy_dialog.visible = false
+	metro_cozy_dialog.position = Vector2(20, 460)
+	add_child(metro_cozy_dialog)
+
+func _reset_afc_turnstile_state() -> void:
+	prep_tray_elapsed = 0.0
+	is_card_prepped = false
+	is_rfid_dwelling = false
+	rfid_dwell_elapsed = 0.0
+	is_afc_gate_ready_to_pass = false
+	afc_swipe_window_left = 0.0
+	if rfid_dwell_bar:
+		rfid_dwell_bar.value = 0.0
+	if btn_afc_swipe_forward:
+		btn_afc_swipe_forward.visible = false
+	if sensor_feedback_icon:
+		sensor_feedback_icon.visible = false
+	if afc_window_label:
+		afc_window_label.text = "⏱️ Rút thẻ từ (3s) -> Chạm RFID 0.6s"
+
+func _on_prep_card_picked() -> void:
+	is_card_prepped = true
+	SoundManager.play_wooden_pop()
+	SoundManager.vibrate(15)
+	if sensor_feedback_icon:
+		sensor_feedback_icon.texture = TEX_ICON_CHECK
+		sensor_feedback_icon.visible = true
+	if afc_window_label:
+		afc_window_label.text = "✅ Đã cầm Thẻ Metro! Giữ lên đầu đọc 0.6s"
+
+func _on_prep_key_picked() -> void:
+	# Safe Failure: không mất mạng, nhầm chìa khóa bật nảy nhẹ và hiện nhắc nhở CozyDialog
+	SoundManager.play_fail()
+	SoundManager.vibrate(15)
+	if sensor_feedback_icon:
+		sensor_feedback_icon.texture = TEX_ICON_CROSS
+		sensor_feedback_icon.visible = true
+	if btn_prep_key:
+		var tw := create_tween()
+		tw.tween_property(btn_prep_key, "scale", Vector2(0.85, 0.85), 0.08)
+		tw.tween_property(btn_prep_key, "scale", Vector2.ONE, 0.14).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_trigger_afc_safe_failure("")
+
+func _start_rfid_dwell() -> void:
+	if not is_game_active or is_afc_gate_ready_to_pass:
+		return
+	if not is_card_prepped:
+		is_card_prepped = true
+	is_rfid_dwelling = true
+	rfid_dwell_elapsed = 0.0
+	SoundManager.vibrate(15)
+
+func _stop_rfid_dwell() -> void:
+	if is_rfid_dwelling and rfid_dwell_elapsed < RFID_DWELL_HOLD_SEC:
+		is_rfid_dwelling = false
+		rfid_dwell_elapsed = 0.0
+		if rfid_dwell_bar:
+			rfid_dwell_bar.value = 0.0
+		if afc_window_label:
+			afc_window_label.text = "Giữ đủ 0.6s để đầu đọc nhận thẻ nhé!"
+
+func _complete_rfid_dwell_and_open_gate() -> void:
+	is_rfid_dwelling = false
+	rfid_dwell_elapsed = RFID_DWELL_HOLD_SEC
+	if rfid_dwell_bar:
+		rfid_dwell_bar.value = 100.0
+	is_afc_gate_ready_to_pass = true
+	afc_swipe_window_left = AFC_SWIPE_WINDOW_SEC
+	if sensor_feedback_icon:
+		sensor_feedback_icon.texture = TEX_ICON_CHECK
+		sensor_feedback_icon.visible = true
+	if btn_afc_swipe_forward:
+		btn_afc_swipe_forward.visible = true
+	SoundManager.play_confirm()
+	SoundManager.vibrate(30)
+	_set_barrier_visual(true, "ĐÈN XANH! BƯỚC QUA TRONG 2.5s")
+
+func _on_afc_swipe_forward_pressed() -> void:
+	if not is_game_active or not is_afc_gate_ready_to_pass:
+		return
+	is_afc_gate_ready_to_pass = false
+	if btn_afc_swipe_forward:
+		btn_afc_swipe_forward.visible = false
+	SoundManager.play_success()
+	SoundManager.vibrate(50)
+	_complete_current_passenger()
+
+func _trigger_afc_safe_failure(custom_text: String = "") -> void:
+	safe_failure_count += 1
+	is_rfid_dwelling = false
+	is_afc_gate_ready_to_pass = false
+	passenger_patience = maxf(passenger_patience, current_patience_max)
+	if rfid_dwell_bar:
+		rfid_dwell_bar.value = 0.0
+	if btn_afc_swipe_forward:
+		btn_afc_swipe_forward.visible = false
+	_set_barrier_visual(false, "THỬ LẠI NHẸ NHÀNG (SAFE FAILURE)")
+	if metro_cozy_dialog and is_instance_valid(metro_cozy_dialog):
+		if custom_text == "" and metro_cozy_dialog.has_method("show_dialog_by_id"):
+			metro_cozy_dialog.show_dialog_by_id("metro_fail_01", 0.0, true)
+		elif custom_text != "" and metro_cozy_dialog.has_method("show_dialog"):
+			metro_cozy_dialog.show_dialog(custom_text, "curious", "Chuẩn bị thẻ từ ở ngăn ngoài ví giúp qua cổng siêu nhanh.")
+		get_tree().create_timer(3.2).timeout.connect(func():
+			if is_instance_valid(metro_cozy_dialog):
+				metro_cozy_dialog.visible = false
+		)

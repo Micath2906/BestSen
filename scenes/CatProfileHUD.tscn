@@ -39,10 +39,10 @@ offset_right = -16.0
 offset_bottom = 88.0
 grow_horizontal = 2
 texture = ExtResource("3_hud_bg")
-patch_margin_left = 12
-patch_margin_top = 12
-patch_margin_right = 12
-patch_margin_bottom = 12
+patch_margin_left = 14
+patch_margin_top = 10
+patch_margin_right = 14
+patch_margin_bottom = 10
 
 [node name="HBox" type="HBoxContainer" parent="HUDContainer"]
 layout_mode = 1
@@ -320,3 +320,69 @@ mouse_default_cursor_shape = 2
 texture_normal = ExtResource("17_shop_norm")
 texture_pressed = ExtResource("18_shop_press")
 stretch_mode = 5
+
+[node name="MiniHudPanel" type="NinePatchRect" parent="."]
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_left = 12.0
+offset_top = 6.0
+offset_right = 248.0
+offset_bottom = 44.0
+mouse_filter = 2
+texture = ExtResource("3_hud_bg")
+patch_margin_left = 14
+patch_margin_top = 10
+patch_margin_right = 14
+patch_margin_bottom = 10
+
+[node name="HBox" type="HBoxContainer" parent="MiniHudPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 6.0
+offset_right = -10.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="MiniTimerLabel" type="Label" parent="MiniHudPanel/HBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.28, 0.16, 0.08, 1)
+theme_override_colors/font_outline_color = Color(1, 0.96, 0.88, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 11
+text = "00:30"
+vertical_alignment = 1
+
+[node name="MiniProgressBar" type="TextureProgressBar" parent="MiniHudPanel/HBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(82, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+step = 1.0
+nine_patch_stretch = true
+stretch_margin_left = 4
+stretch_margin_top = 3
+stretch_margin_right = 4
+stretch_margin_bottom = 3
+texture_under = ExtResource("6_bar_under")
+texture_over = ExtResource("7_bar_over")
+texture_progress = ExtResource("9_bar_courage")
+
+[node name="MiniProgressLabel" type="Label" parent="MiniHudPanel/HBox"]
+custom_minimum_size = Vector2(34, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.24, 0.14, 0.08, 1)
+theme_override_font_sizes/font_size = 10
+text = "0%"
+horizontal_alignment = 2
+vertical_alignment = 1

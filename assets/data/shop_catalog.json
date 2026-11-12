@@ -29,7 +29,8 @@
         {"id": "bowls", "name": "Bát Ăn Uống", "icon": "🥣"},
         {"id": "rugs", "name": "Thảm Lát Sàn", "icon": "🧶"},
         {"id": "wall", "name": "Tranh & Cửa Sổ", "icon": "🖼️"},
-        {"id": "plants", "name": "Cây Cảnh", "icon": "🪴"}
+        {"id": "plants", "name": "Cây Cảnh", "icon": "🪴"},
+        {"id": "comfort", "name": "Cách Nhiệt & Quạt", "icon": "🌬️"}
       ]
     },
     {
@@ -510,6 +511,30 @@
       "required_level": 2,
       "stat_boost": {"courage": 30, "mood": 50},
       "desc": "Cục lăn Catnip tự nhiên dán tường, liếm vào là Mèo lăn lộn đê mê ngây ngất!"
+    },
+    {
+      "id": "d_insulation_curtain",
+      "name": "Rèm Cách Nhiệt Chống Nắng Trưa",
+      "category": "decor",
+      "subcategory": "wall",
+      "icon": "🪟",
+      "price": 40,
+      "required_level": 1,
+      "upgrade_type": "heat_insulation",
+      "stat_boost": {"courage": 15, "mood": 25},
+      "desc": "Nâng cấp cách nhiệt giúp giảm 5 độ C phòng trọ mái tôn, giúp Boss ngủ trưa mát rượi."
+    },
+    {
+      "id": "d_mini_fan",
+      "name": "Quạt Gió Mini Để Bàn Siêu Êm",
+      "category": "decor",
+      "subcategory": "comfort",
+      "icon": "🌬️",
+      "price": 35,
+      "required_level": 1,
+      "upgrade_type": "mini_fan",
+      "stat_boost": {"courage": 10, "mood": 30},
+      "desc": "Quạt mini tiết kiệm điện xua tan cái nóng mùa thi, tự động làm mát góc ngủ của Boss."
     }
   ]
 }

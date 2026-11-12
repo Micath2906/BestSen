@@ -21,23 +21,37 @@ enum FurnitureType {
 
 signal item_clicked(type)
 
+const FOOD_BOWL_EMPTY_PATH: String = "res://assets/UI/PetMobileGameAsset/PetMobileGameAsset/Bunnies/BunnyStuffs/FoodBowlEmpty.png"
+const FOOD_BOWL_FULL_PATH: String = "res://assets/UI/PetMobileGameAsset/PetMobileGameAsset/Bunnies/BunnyStuffs/FoodBowl.png"
+
 var sprite_node: Sprite2D
 var shadow_pts: PackedVector2Array
 var is_hovered: bool = false
+var is_bowl_filled: bool = false
 
 const TEXTURE_PATHS = {
 	FurnitureType.CUSHION_BED: "res://assets/sprites/room_items/cat_bed_pink_classic.png",
-	FurnitureType.FOOD_BOWL: "res://assets/sprites/room_items/mobile/bowl_mobile_blue_food.png",
+	FurnitureType.FOOD_BOWL: FOOD_BOWL_EMPTY_PATH,
 	FurnitureType.WATER_BOWL: "res://assets/sprites/room_items/mobile/bowl_mobile_green_water.png",
 	FurnitureType.LITTER_BOX: "res://assets/sprites/room_items/litter_box.png",
 }
 
 func _ready() -> void:
 	z_as_relative = true
+	if furniture_type == FurnitureType.FOOD_BOWL:
+		is_bowl_filled = (GameManager.food_bowl_servings > 0)
 	_setup_sprite_node()
 	_setup_shadow()
 	GameManager.decor_changed.connect(func(_slot, _id): refresh_furniture())
 	refresh_furniture()
+
+func set_bowl_filled(filled: bool) -> void:
+	is_bowl_filled = filled
+	if furniture_type == FurnitureType.FOOD_BOWL:
+		GameManager.food_bowl_servings = 1 if filled else 0
+	refresh_furniture()
+	if filled:
+		play_click_reaction()
 
 func refresh_furniture() -> void:
 	if not sprite_node:
@@ -57,14 +71,15 @@ func refresh_furniture() -> void:
 			sprite_node.position = Vector2(0, -22)
 			
 		FurnitureType.FOOD_BOWL:
-			var bowl_id = GameManager.equipped_decor.get("bowls", "")
-			if bowl_id != "":
-				var path = GameManager.get_furniture_sprite_path(bowl_id)
-				if path != "":
-					tex = _load_texture(path)
+			var target_path: String = FOOD_BOWL_FULL_PATH if is_bowl_filled else FOOD_BOWL_EMPTY_PATH
+			tex = _load_texture(target_path)
 			if tex == null:
-				tex = _load_texture("res://assets/sprites/room_items/mobile/bowl_mobile_blue_food.png")
-			sprite_node.scale = Vector2(1.15, 1.15)
+				var bowl_id = GameManager.equipped_decor.get("bowls", "")
+				if bowl_id != "":
+					var path = GameManager.get_furniture_sprite_path(bowl_id)
+					if path != "":
+						tex = _load_texture(path)
+			sprite_node.scale = Vector2(1.05, 1.05)
 			sprite_node.position = Vector2(0, -14)
 			
 		FurnitureType.WATER_BOWL:

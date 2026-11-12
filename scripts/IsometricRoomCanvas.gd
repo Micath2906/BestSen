@@ -8,6 +8,10 @@ const IsometricGrid = preload("res://scripts/IsometricGrid.gd")
 @export var origin: Vector2 = Vector2(270.0, 436.0)
 @export var wall_height: float = 175.0
 
+var show_iso_grid: bool = false
+var hovered_grid_cell: Vector2i = Vector2i(-1, -1)
+var hovered_cell_valid: bool = true
+
 var window_tex: Texture2D
 var wall_art_tex: Texture2D
 var room_bg_tex: Texture2D
@@ -48,6 +52,8 @@ func _draw() -> void:
 		_draw_floor_rug()
 		_draw_door_and_window()
 		_draw_baseboard_and_border()
+	if show_iso_grid:
+		_draw_decor_grid_overlay()
 
 # 1. Vẽ 2 Bức tường hậu (Góc chiếu 3/4 Isometric)
 func _draw_background_walls() -> void:
@@ -297,3 +303,36 @@ func _make_iso_ellipse(center: Vector2, rx: float, ry: float, segments: int = 24
 		var y = center.y + sin(theta) * ry
 		pts.append(Vector2(x, y))
 	return pts
+
+func set_decor_grid_visible(active: bool) -> void:
+	show_iso_grid = active
+	if not active:
+		hovered_grid_cell = Vector2i(-1, -1)
+	queue_redraw()
+
+func set_grid_highlight(cell: Vector2i, is_valid: bool) -> void:
+	hovered_grid_cell = cell
+	hovered_cell_valid = is_valid
+	queue_redraw()
+
+func _draw_decor_grid_overlay() -> void:
+	var n: int = IsometricGrid.GRID_SIZE
+	for i in range(n + 1):
+		var a1 = IsometricGrid.grid_to_screen(Vector2(float(i), 0.0), origin)
+		var b1 = IsometricGrid.grid_to_screen(Vector2(float(i), float(n)), origin)
+		draw_line(a1, b1, Color(1.0, 0.96, 0.85, 0.35), 1.0)
+		var a2 = IsometricGrid.grid_to_screen(Vector2(0.0, float(i)), origin)
+		var b2 = IsometricGrid.grid_to_screen(Vector2(float(n), float(i)), origin)
+		draw_line(a2, b2, Color(1.0, 0.96, 0.85, 0.35), 1.0)
+
+	if hovered_grid_cell.x >= 0 and hovered_grid_cell.y >= 0:
+		var u: float = float(hovered_grid_cell.x)
+		var v: float = float(hovered_grid_cell.y)
+		var p0 = IsometricGrid.grid_to_screen(Vector2(u, v), origin)
+		var p1 = IsometricGrid.grid_to_screen(Vector2(u + 1.0, v), origin)
+		var p2 = IsometricGrid.grid_to_screen(Vector2(u + 1.0, v + 1.0), origin)
+		var p3 = IsometricGrid.grid_to_screen(Vector2(u, v + 1.0), origin)
+		var fill_col: Color = Color(0.22, 0.85, 0.38, 0.45) if hovered_cell_valid else Color(0.96, 0.52, 0.14, 0.50)
+		var edge_col: Color = Color(0.12, 0.62, 0.25, 0.95) if hovered_cell_valid else Color(0.90, 0.32, 0.05, 0.95)
+		draw_colored_polygon(PackedVector2Array([p0, p1, p2, p3]), fill_col)
+		draw_polyline(PackedVector2Array([p0, p1, p2, p3, p0]), edge_col, 2.0)

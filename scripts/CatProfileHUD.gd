@@ -9,6 +9,17 @@ signal open_avatar_picker_requested
 signal pause_requested
 signal open_shop_requested
 
+enum HUDState {
+	NORMAL,
+	MINIGAME_ACTIVE
+}
+
+@onready var hud_container: NinePatchRect = $HUDContainer
+@onready var mini_hud_panel: NinePatchRect = get_node_or_null("MiniHudPanel")
+@onready var mini_timer_label: Label = get_node_or_null("MiniHudPanel/HBox/MiniTimerLabel")
+@onready var mini_progress_bar: TextureProgressBar = get_node_or_null("MiniHudPanel/HBox/MiniProgressBar")
+@onready var mini_progress_label: Label = get_node_or_null("MiniHudPanel/HBox/MiniProgressLabel")
+
 @onready var btn_pause: BaseButton = $HUDContainer/HBox.get_node_or_null("BtnPause")
 @onready var btn_shop: BaseButton = get_node_or_null("BtnShop") if has_node("BtnShop") else $HUDContainer/HBox/RightInfo/CoinRow.get_node_or_null("BtnShop")
 @onready var avatar_frame_tex: Control = $HUDContainer/HBox.get_node_or_null("AvatarCol/AvatarBox/AvatarFrameTex") if $HUDContainer/HBox.has_node("AvatarCol/AvatarBox/AvatarFrameTex") else $HUDContainer/HBox.get_node_or_null("AvatarBox/AvatarFrameTex")
@@ -17,9 +28,11 @@ signal open_shop_requested
 @onready var star_icon: TextureRect = $HUDContainer/HBox.get_node_or_null("AvatarCol/LevelBadge/HBox/StarIcon")
 @onready var lbl_cat_title: Label = $HUDContainer/HBox/RightInfo.get_node_or_null("TitleRow/CatTitle")
 
+@onready var hunger_icon: TextureRect = $HUDContainer/HBox/RightInfo/BarsContainer/HungerRow.get_node_or_null("HungerIcon")
 @onready var hunger_bar: Range = $HUDContainer/HBox/RightInfo/BarsContainer/HungerRow/HungerProgressBar
 @onready var lbl_hunger_val: Label = $HUDContainer/HBox/RightInfo/BarsContainer/HungerRow.get_node_or_null("HungerValueLabel")
 
+@onready var courage_icon: TextureRect = $HUDContainer/HBox/RightInfo/BarsContainer/CourageRow.get_node_or_null("CourageIcon")
 @onready var courage_bar: Range = $HUDContainer/HBox/RightInfo/BarsContainer/CourageRow/CourageProgressBar
 @onready var lbl_courage_val: Label = $HUDContainer/HBox/RightInfo/BarsContainer/CourageRow.get_node_or_null("CourageValueLabel")
 
@@ -33,6 +46,14 @@ signal open_shop_requested
 
 var avatar_textures: Array = []
 var debt_tween: Tween
+var current_hud_state: HUDState = HUDState.NORMAL
+var _safe_top_inset: float = 0.0
+var _hunger_bar_base_x: float = 0.0
+var _hunger_base_cached: bool = false
+var _hunger_jitter_phase: float = 0.0
+var _icon_pulse_phase: float = 0.0
+var _was_low_hunger: bool = false
+var _last_low_hunger_meow_msec: int = -30000
 
 func _ready() -> void:
 	# Load 10 avatar textures
@@ -68,8 +89,12 @@ func _ready() -> void:
 		)
 		
 	GameManager.stats_changed.connect(update_hud)
-	GameManager.avatar_changed.connect(func(_id): update_avatar())
-	GameManager.avatar_frame_changed.connect(func(_frame_id): _update_avatar_frame())
+	GameManager.avatar_changed.connect(_on_avatar_changed_cb)
+	GameManager.avatar_frame_changed.connect(_on_avatar_frame_changed_cb)
+	if GameManager.has_signal("minigame_hud_active"):
+		GameManager.minigame_hud_active.connect(_on_minigame_hud_active)
+	if GameManager.has_signal("minigame_hud_updated"):
+		GameManager.minigame_hud_updated.connect(update_minigame_hud)
 	
 	# Kết nối sự kiện chạm thanh chỉ số để mở popup cảnh báo / thông tin chi tiết
 	var hunger_row = $HUDContainer/HBox/RightInfo/BarsContainer.get_node_or_null("HungerRow")
@@ -96,8 +121,109 @@ func _ready() -> void:
 					GameManager.emit_signal("show_status_alert", "info")
 		)
 	
+	if hunger_icon:
+		hunger_icon.pivot_offset = Vector2(8, 8)
+	if courage_icon:
+		courage_icon.pivot_offset = Vector2(8, 8)
+	call_deferred("_cache_bar_base_pos")
+	set_hud_state(HUDState.NORMAL)
 	update_avatar()
 	update_hud()
+
+func _exit_tree() -> void:
+	if GameManager.stats_changed.is_connected(update_hud):
+		GameManager.stats_changed.disconnect(update_hud)
+	if GameManager.avatar_changed.is_connected(_on_avatar_changed_cb):
+		GameManager.avatar_changed.disconnect(_on_avatar_changed_cb)
+	if GameManager.avatar_frame_changed.is_connected(_on_avatar_frame_changed_cb):
+		GameManager.avatar_frame_changed.disconnect(_on_avatar_frame_changed_cb)
+	if GameManager.has_signal("minigame_hud_active") and GameManager.minigame_hud_active.is_connected(_on_minigame_hud_active):
+		GameManager.minigame_hud_active.disconnect(_on_minigame_hud_active)
+	if GameManager.has_signal("minigame_hud_updated") and GameManager.minigame_hud_updated.is_connected(update_minigame_hud):
+		GameManager.minigame_hud_updated.disconnect(update_minigame_hud)
+
+func _on_avatar_changed_cb(_id) -> void:
+	update_avatar()
+
+func _on_avatar_frame_changed_cb(_frame_id) -> void:
+	_update_avatar_frame()
+
+func _on_minigame_hud_active(active: bool) -> void:
+	visible = true if active else visible
+	set_hud_state(HUDState.MINIGAME_ACTIVE if active else HUDState.NORMAL)
+
+func _cache_bar_base_pos() -> void:
+	if hunger_bar:
+		_hunger_bar_base_x = hunger_bar.position.x
+		_hunger_base_cached = true
+
+func _process(delta: float) -> void:
+	if current_hud_state != HUDState.NORMAL or not visible:
+		return
+	
+	_icon_pulse_phase += delta * 2.4
+	if courage_icon:
+		var c_s = 1.0 + 0.05 * sin(_icon_pulse_phase)
+		courage_icon.scale = Vector2(c_s, c_s)
+	
+	if GameManager.hunger < 20:
+		_hunger_jitter_phase += delta * TAU * 2.0 # Tần số 2 Hz chuẩn DoD UI-01
+		if not _hunger_base_cached and hunger_bar:
+			_hunger_bar_base_x = hunger_bar.position.x
+			_hunger_base_cached = true
+		if hunger_bar:
+			hunger_bar.position.x = _hunger_bar_base_x + sin(_hunger_jitter_phase) * 2.0
+		if hunger_icon:
+			var h_s = 1.0 + 0.10 * absf(sin(_hunger_jitter_phase))
+			hunger_icon.scale = Vector2(h_s, h_s)
+		
+		var now_msec = Time.get_ticks_msec()
+		if not _was_low_hunger and (now_msec - _last_low_hunger_meow_msec >= 30000):
+			_last_low_hunger_meow_msec = now_msec
+			SoundManager.play_meow(1.05)
+		_was_low_hunger = true
+	else:
+		if _was_low_hunger:
+			_was_low_hunger = false
+			if hunger_bar and _hunger_base_cached:
+				hunger_bar.position.x = _hunger_bar_base_x
+			if hunger_icon:
+				hunger_icon.scale = Vector2.ONE
+
+func set_hud_state(new_state: HUDState) -> void:
+	current_hud_state = new_state
+	if new_state == HUDState.MINIGAME_ACTIVE:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if hud_container:
+			hud_container.visible = false
+		if btn_shop:
+			btn_shop.visible = false
+		if mini_hud_panel:
+			mini_hud_panel.visible = true
+	else:
+		mouse_filter = Control.MOUSE_FILTER_PASS
+		if hud_container:
+			hud_container.visible = true
+		if btn_shop:
+			btn_shop.visible = true
+		if mini_hud_panel:
+			mini_hud_panel.visible = false
+
+func update_minigame_hud(time_left_sec: float, progress_pct: float) -> void:
+	var sec_i = maxi(0, int(ceil(time_left_sec)))
+	var mins = int(sec_i / 60.0)
+	var secs = sec_i % 60
+	if mini_timer_label:
+		mini_timer_label.text = "%02d:%02d" % [mins, secs]
+	var pct = clampf(progress_pct, 0.0, 100.0)
+	if mini_progress_bar:
+		mini_progress_bar.value = pct
+	if mini_progress_label:
+		mini_progress_label.text = "%d%%" % int(round(pct))
+
+func apply_safe_area_top(top_inset: float) -> void:
+	_safe_top_inset = maxf(0.0, top_inset)
+	offset_top = 4.0 + _safe_top_inset
 
 func update_avatar() -> void:
 	var id = GameManager.selected_avatar_id

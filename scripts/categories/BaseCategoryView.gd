@@ -368,6 +368,7 @@ func _launch_minigame(mg_info: Dictionary) -> void:
 		)
 
 func _on_minigame_closed() -> void:
+	GameManager.emit_signal("minigame_hud_active", false)
 	if active_minigame_instance:
 		active_minigame_instance.queue_free()
 		active_minigame_instance = null

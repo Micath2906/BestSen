@@ -1,0 +1,94 @@
+{
+  "dialogs": [
+    {
+      "dialog_id": "metro_fail_01",
+      "cat_emotion": "surprised",
+      "text": "Oái, cửa chưa mở mà Sen đã vội quẹt rồi! Chờ đèn xanh nhé!",
+      "pedagogical_tip": "Giữ khoảng cách 1 bước chân trước vạch vàng để cảm biến nhận diện vé."
+    },
+    {
+      "dialog_id": "metro_dwell_short_01",
+      "cat_emotion": "curious",
+      "text": "Chưa kịp đọc chip kìa Sen, giữ thêm một tẹo nhen!",
+      "pedagogical_tip": "Áp sát mặt thẻ vào vòng tròn RFID khoảng 0.6 giây cho tới khi nghe tiếng bíp."
+    },
+    {
+      "dialog_id": "metro_wrong_item_01",
+      "cat_emotion": "surprised",
+      "text": "Á, đây là chìa khóa mà! Đưa thẻ tàu điện màu xanh nhé Sen!",
+      "pedagogical_tip": "Chuẩn bị sẵn thẻ Metro trước khi tới cổng để không làm ùn tắc hàng sau."
+    },
+    {
+      "dialog_id": "metro_pass_01",
+      "cat_emotion": "happy",
+      "text": "Bíp rồi kìa! Vuốt thẳng qua cổng trước khi cửa đóng nha!",
+      "pedagogical_tip": "Khi đèn LED chuyển xanh và cửa mở, hãy bước dứt khoát qua cổng."
+    },
+    {
+      "dialog_id": "ride_yield_prompt_01",
+      "cat_emotion": "curious",
+      "text": "Có hành khách ưu tiên đứng cạnh nè, Sen tính sao đây?",
+      "pedagogical_tip": "Ghế có biểu tượng trái tim ưu tiên người cao tuổi, phụ nữ mang thai, người khuyết tật."
+    },
+    {
+      "dialog_id": "ride_yield_thanks_01",
+      "cat_emotion": "happy",
+      "text": "Tuyệt vời Sen ơi! Nhường một chỗ ngồi, ấm cả khoang tàu!",
+      "pedagogical_tip": "Sự tử tế nơi công cộng giúp chuyến đi văn minh và an toàn hơn."
+    },
+    {
+      "dialog_id": "ride_reflect_01",
+      "cat_emotion": "thoughtful",
+      "text": "Bà cụ xách đồ nặng quá, Sen đứng một lát cho khỏe chân nha?",
+      "pedagogical_tip": "Quan sát xung quanh khi ngồi ghế gần cửa để kịp thời nhường người cần hơn."
+    },
+    {
+      "dialog_id": "budget_503020_01",
+      "cat_emotion": "happy",
+      "text": "Lương về rồi! Chia 3 hũ 50/30/20 cho Boss yên tâm nào!",
+      "pedagogical_tip": "50% cho thiết yếu (trọ, ăn uống), 30% phát triển & giải trí, 20% dự phòng."
+    },
+    {
+      "dialog_id": "budget_paid_01",
+      "cat_emotion": "happy",
+      "text": "Đóng đủ tiền trọ đúng hạn! Tháng này ngủ ngon quá Sen ơi!",
+      "pedagogical_tip": "Ưu tiên thanh toán chi phí cố định ngay khi nhận lương để tránh trễ hạn."
+    },
+    {
+      "dialog_id": "budget_empty_bowl_01",
+      "cat_emotion": "sad",
+      "text": "Hũ thiết yếu trống rồi, bát hạt của Boss cũng hết trơn...",
+      "pedagogical_tip": "Chi tiêu hết cho trà sữa và mua sắm sẽ khiến sinh hoạt phí thiết yếu thiếu hụt."
+    },
+    {
+      "dialog_id": "pack_fit_01",
+      "cat_emotion": "curious",
+      "text": "Xoay khéo các món đồ để ba lô gọn gàng đủ món nhé Sen!",
+      "pedagogical_tip": "Kiểm tra danh sách vật dụng cốt lõi (chìa khóa, bình nước, tài liệu) trước khi đi."
+    },
+    {
+      "dialog_id": "pack_forgot_key_01",
+      "cat_emotion": "playful",
+      "text": "Hi hi! Sen suýt quên chìa khóa phòng nè, Boss giữ giùm đó!",
+      "pedagogical_tip": "Luôn đặt chìa khóa ở ngăn nhỏ cố định để tránh bị khóa cửa ngoài."
+    },
+    {
+      "dialog_id": "room_pet_01",
+      "cat_emotion": "happy",
+      "text": "Purr purr~ Tay Sen ấm quá, Boss thích được vuốt lắm!",
+      "pedagogical_tip": "Nghỉ ngơi thư giãn ngắn cùng thú cưng giúp giảm căng thẳng hiệu quả."
+    },
+    {
+      "dialog_id": "room_hungry_01",
+      "cat_emotion": "hungry",
+      "text": "Meo~ Bụng Boss kêu ùng ục rồi, cho Boss ăn chút hạt nha!",
+      "pedagogical_tip": "Chú ý ăn uống đúng giờ giống như cách chăm Boss mèo mỗi ngày nhé."
+    },
+    {
+      "dialog_id": "room_feed_01",
+      "cat_emotion": "happy",
+      "text": "Ngon tuyệt cú mèo! Năng lượng tự lập lại đầy ắp rồi!",
+      "pedagogical_tip": "Ăn uống đủ chất giúp duy trì thể lực và sự tập trung khi học tập."
+    }
+  ]
+}

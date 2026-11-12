@@ -33,12 +33,18 @@ var category_scenes = {
 	4: preload("res://scenes/categories/CategoryFinanceCareer.tscn"),
 }
 
+const SAFE_TOP_DP: float = 44.0
+const SAFE_BOTTOM_DP: float = 34.0
+
+var cached_room_view: Control = null
 var current_view_node: Control = null
 var current_tab_name: String = "room"
 var previous_tab_before_handbook: String = "room"
 var current_lesson_id_active: int = 1
 var back_press_count: int = 0
 var back_press_timer: float = 0.0
+var current_safe_top_dp: float = 0.0
+var current_safe_bottom_dp: float = 0.0
 
 func _ready() -> void:
 	_apply_safe_area()
@@ -47,6 +53,8 @@ func _ready() -> void:
 	# Kết nối sự kiện toàn cục
 	GameManager.show_toast.connect(_show_toast_message)
 	GameManager.show_status_alert.connect(_on_show_status_alert)
+	if GameManager.has_signal("minigame_hud_active"):
+		GameManager.minigame_hud_active.connect(_on_minigame_hud_active)
 	toast_timer.timeout.connect(func(): toast_panel.visible = false)
 	toast_panel.visible = false
 	
@@ -66,7 +74,12 @@ func _ready() -> void:
 	# Kết nối Menu tinh gọn dưới cùng
 	bottom_paw_menu.go_home_requested.connect(switch_to_room)
 	if bottom_paw_menu.has_signal("open_decor_studio_requested"):
-		bottom_paw_menu.open_decor_studio_requested.connect(switch_to_decor_studio)
+		bottom_paw_menu.open_decor_studio_requested.connect(func():
+			if current_tab_name == "room":
+				switch_to_decor_studio()
+			else:
+				switch_to_room()
+		)
 	bottom_paw_menu.open_skill_tree_requested.connect(switch_to_map)
 	bottom_paw_menu.open_shop_requested.connect(switch_to_shop)
 	bottom_paw_menu.open_handbook_requested.connect(switch_to_handbook)
@@ -119,28 +132,67 @@ func _handle_back_press() -> void:
 			get_tree().quit()
 
 func _apply_safe_area() -> void:
+	var top_offset: float = 0.0
+	var bottom_offset: float = 0.0
+	var vp_size = get_viewport_rect().size
+	var is_tall_phone = (vp_size.x > 0.0 and (vp_size.y / vp_size.x) >= 1.9)
 	if OS.has_feature("mobile"):
 		var safe_area = DisplayServer.get_display_safe_area()
 		var screen_size = DisplayServer.screen_get_size()
 		if screen_size.y > 0:
-			# 1. Tránh tai thỏ / Dynamic Island trên đỉnh màn hình
 			if safe_area.position.y > 0:
-				var top_offset = float(safe_area.position.y) / float(screen_size.y) * 960.0
-				cat_profile_hud.offset_top = top_offset
-				views_container.offset_top = top_offset
-				btn_handbook_quick.offset_top = 126.0 + top_offset
-				btn_handbook_quick.offset_bottom = 162.0 + top_offset
-			
-			# 2. Tránh thanh cử chỉ vuốt Home Indicator ở cạnh dưới
+				top_offset = float(safe_area.position.y) / float(screen_size.y) * 960.0
 			var bottom_inset = screen_size.y - (safe_area.position.y + safe_area.size.y)
 			if bottom_inset > 0:
-				var bottom_offset = float(bottom_inset) / float(screen_size.y) * 960.0
-				bottom_paw_menu.offset_bottom = -bottom_offset
+				bottom_offset = float(bottom_inset) / float(screen_size.y) * 960.0
+		top_offset = maxf(top_offset, SAFE_TOP_DP)
+		bottom_offset = maxf(bottom_offset, SAFE_BOTTOM_DP)
+	elif is_tall_phone:
+		top_offset = SAFE_TOP_DP
+		bottom_offset = SAFE_BOTTOM_DP
+	apply_safe_area_margins(top_offset, bottom_offset)
+
+func apply_safe_area_margins(top_dp: float, bottom_dp: float) -> void:
+	current_safe_top_dp = maxf(0.0, top_dp)
+	current_safe_bottom_dp = maxf(0.0, bottom_dp)
+	if cat_profile_hud:
+		if cat_profile_hud.has_method("apply_safe_area_top"):
+			cat_profile_hud.apply_safe_area_top(current_safe_top_dp)
+		else:
+			cat_profile_hud.offset_top = 4.0 + current_safe_top_dp
+	if views_container:
+		views_container.offset_top = current_safe_top_dp
+		views_container.offset_bottom = -current_safe_bottom_dp
+	if btn_handbook_quick:
+		btn_handbook_quick.offset_top = 126.0 + current_safe_top_dp
+		btn_handbook_quick.offset_bottom = 162.0 + current_safe_top_dp
+	if bottom_paw_menu:
+		bottom_paw_menu.offset_bottom = -current_safe_bottom_dp
+		bottom_paw_menu.offset_top = -(64.0 + current_safe_bottom_dp)
+
+func _on_minigame_hud_active(active: bool) -> void:
+	if not cat_profile_hud:
+		return
+	if active:
+		cat_profile_hud.visible = true
+		if cat_profile_hud.has_method("set_hud_state"):
+			cat_profile_hud.set_hud_state(1) # HUDState.MINIGAME_ACTIVE
+	else:
+		if cat_profile_hud.has_method("set_hud_state"):
+			cat_profile_hud.set_hud_state(0) # HUDState.NORMAL
+		if current_tab_name.begins_with("category_") or current_tab_name.begins_with("lesson") or current_tab_name == "shop" or current_tab_name == "decor_studio" or current_tab_name == "sim":
+			cat_profile_hud.visible = false
 
 func _clear_current_view() -> void:
+	if cached_room_view and is_instance_valid(cached_room_view):
+		cached_room_view.visible = false
+		cached_room_view.set_process(false)
 	if current_view_node and is_instance_valid(current_view_node):
-		current_view_node.queue_free()
-		current_view_node = null
+		if current_view_node == cached_room_view:
+			current_view_node = null
+		else:
+			current_view_node.queue_free()
+			current_view_node = null
 
 func _on_handbook_quick_pressed() -> void:
 	var tween = create_tween()
@@ -152,21 +204,29 @@ func _on_handbook_quick_pressed() -> void:
 func switch_to_room() -> void:
 	current_tab_name = "room"
 	cat_profile_hud.visible = true
+	if cat_profile_hud.has_method("set_hud_state"):
+		cat_profile_hud.set_hud_state(0) # HUDState.NORMAL
 	btn_handbook_quick.visible = false
 	bottom_paw_menu.visible = true
 	bottom_paw_menu.set_view_mode("room")
 	bottom_paw_menu.set_active_tab("room")
 	_clear_current_view()
-	current_view_node = room_view_scene.instantiate()
-	views_container.add_child(current_view_node)
-	current_view_node.open_skill_tree_requested.connect(switch_to_map)
-	current_view_node.open_lesson_requested.connect(start_lesson)
-	if current_view_node.has_signal("open_handbook_requested"):
-		current_view_node.open_handbook_requested.connect(switch_to_handbook)
-	if current_view_node.has_signal("open_dressing_room_requested"):
-		current_view_node.open_dressing_room_requested.connect(func(): switch_to_house_dress("dress"))
-	if current_view_node.has_signal("open_room_decor_requested"):
-		current_view_node.open_room_decor_requested.connect(switch_to_decor_studio)
+	if cached_room_view and is_instance_valid(cached_room_view):
+		cached_room_view.visible = true
+		cached_room_view.set_process(true)
+		current_view_node = cached_room_view
+		return
+	cached_room_view = room_view_scene.instantiate()
+	current_view_node = cached_room_view
+	views_container.add_child(cached_room_view)
+	cached_room_view.open_skill_tree_requested.connect(switch_to_map)
+	cached_room_view.open_lesson_requested.connect(start_lesson)
+	if cached_room_view.has_signal("open_handbook_requested"):
+		cached_room_view.open_handbook_requested.connect(switch_to_handbook)
+	if cached_room_view.has_signal("open_dressing_room_requested"):
+		cached_room_view.open_dressing_room_requested.connect(func(): switch_to_house_dress("dress"))
+	if cached_room_view.has_signal("open_room_decor_requested"):
+		cached_room_view.open_room_decor_requested.connect(switch_to_decor_studio)
 
 func switch_to_decor_studio() -> void:
 	current_tab_name = "decor_studio"
