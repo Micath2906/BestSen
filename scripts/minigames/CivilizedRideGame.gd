@@ -609,6 +609,11 @@ func _update_header_ui() -> void:
 # =========================================================================
 # THẮNG / THUA & REWARDS
 # =========================================================================
+const TEX_RIDE_POLAROID: StyleBoxTexture = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/polaroid_card_stylebox.tres")
+const TEX_RIDE_WAX_SEAL: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/wax_seal_royal_gold.tres")
+var ride_polaroid_ticket: PanelContainer = null
+var ride_polaroid_caption: Label = null
+
 func _trigger_victory() -> void:
 	if not is_game_active: return
 	is_game_active = false
@@ -621,7 +626,45 @@ func _trigger_victory() -> void:
 	msg += "Văn hóa đi tàu điện Metro & xe buýt văn minh bắt đầu từ những hành động nhỏ nhất của mỗi sinh viên chúng mình!"
 	
 	victory_text.text = msg
+	_show_ride_polaroid_ticket()
 	victory_modal.visible = true
+
+func _show_ride_polaroid_ticket() -> void:
+	var vbox: VBoxContainer = $VictoryModal/ModalPanel/VBox if has_node("VictoryModal/ModalPanel/VBox") else null
+	if vbox == null:
+		return
+	if ride_polaroid_ticket == null:
+		ride_polaroid_ticket = PanelContainer.new()
+		ride_polaroid_ticket.name = "MetroPolaroidTicket"
+		ride_polaroid_ticket.add_theme_stylebox_override("panel", TEX_RIDE_POLAROID)
+		ride_polaroid_ticket.custom_minimum_size = Vector2(0, 96)
+		var hbox := HBoxContainer.new()
+		hbox.add_theme_constant_override("separation", 8)
+		ride_polaroid_ticket.add_child(hbox)
+		var info := VBoxContainer.new()
+		info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		hbox.add_child(info)
+		var t := Label.new()
+		t.text = "🎫 VÉ TÀU KỶ NIỆM METRO LINE 1"
+		t.add_theme_font_size_override("font_size", 12)
+		t.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+		info.add_child(t)
+		ride_polaroid_caption = Label.new()
+		ride_polaroid_caption.add_theme_font_size_override("font_size", 11)
+		ride_polaroid_caption.add_theme_color_override("font_color", Color(0.427, 0.298, 0.255, 1.0))
+		ride_polaroid_caption.autowrap_mode = TextServer.AUTOWRAP_WORD
+		info.add_child(ride_polaroid_caption)
+		var seal := TextureRect.new()
+		seal.texture = TEX_RIDE_WAX_SEAL
+		seal.custom_minimum_size = Vector2(30, 30)
+		seal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		seal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		hbox.add_child(seal)
+		vbox.add_child(ride_polaroid_ticket)
+		vbox.move_child(ride_polaroid_ticket, 0)
+	var sen: String = GameManager.owner_name if ("owner_name" in GameManager and not str(GameManager.owner_name).strip_edges().is_empty()) else "Sen Chăm Chỉ"
+	var room: String = GameManager.room_name if ("room_name" in GameManager and not str(GameManager.room_name).strip_edges().is_empty()) else "Trọ Nắng Ấm"
+	ride_polaroid_caption.text = "Sen: %s  |  Trọ: %s • Mochi vẫy tay trên tàu!" % [sen, room]
 
 func _trigger_defeat(reason: String) -> void:
 	if not is_game_active: return

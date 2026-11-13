@@ -38,10 +38,21 @@ signal reached_destination(state)
 const COZY_TYPE_INTERVAL: float = 0.03
 const COZY_MAX_CHARS: int = 60
 const SLEEP_CREAM_TEX: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cat_sleep_cream.png")
+const MOCHI_EAT_TEX: Texture2D = preload("res://assets/cats/CatMegaBundle/CatMegaBundle/Mochi/Sprites/Classical/Individual/Eating.png")
+const MOCHI_BOX_TEXS: Array = [
+	preload("res://assets/cats/CatMegaBundle/CatMegaBundle/Mochi/Sprites/Classical/Individual/Box1.png"),
+	preload("res://assets/cats/CatMegaBundle/CatMegaBundle/Mochi/Sprites/Classical/Individual/Box2.png"),
+	preload("res://assets/cats/CatMegaBundle/CatMegaBundle/Mochi/Sprites/Classical/Individual/Box3.png")
+]
 
 var cozy_sleep_sprite: Sprite2D = null
 var cozy_sleep_mode: bool = false
 var _last_pet_rub_msec: int = -1000
+var pet_bonding_points: int = 0
+var _box_anim_elapsed: float = 0.0
+var _box_anim_frame: int = 0
+var _eat_chomp_elapsed: float = 0.0
+var _mochi_eating_sprite: Sprite2D = null
 
 var current_state: State = State.IDLE
 var grid_pos: Vector2 = Vector2(4.0, 4.0)
@@ -269,6 +280,15 @@ func _process(delta: float) -> void:
 		else:
 			grid_pos = target_grid_pos
 			_on_reached_target()
+	elif current_state == State.BOX and cat_box_sprite and cat_box_sprite.visible:
+		_box_anim_elapsed += delta
+		if _box_anim_elapsed >= 0.35:
+			_box_anim_elapsed = 0.0
+			_box_anim_frame = (_box_anim_frame + 1) % MOCHI_BOX_TEXS.size()
+			cat_box_sprite.texture = MOCHI_BOX_TEXS[_box_anim_frame]
+	elif current_state == State.EAT:
+		_eat_chomp_elapsed += delta
+		$Visual.scale.y = 1.0 + sin(_eat_chomp_elapsed * 14.0) * 0.06
 			
 	_update_screen_position()
 
@@ -333,6 +353,8 @@ func set_state(new_state: State) -> void:
 	cat_box_sprite.visible = false
 	if cozy_sleep_sprite:
 		cozy_sleep_sprite.visible = false
+	if _mochi_eating_sprite:
+		_mochi_eating_sprite.visible = false
 	
 	match current_state:
 		State.IDLE:
@@ -368,22 +390,38 @@ func set_state(new_state: State) -> void:
 			show_dialogue("Cào cào... Mài móng vuốt kim cương! 🪵✨", 3.5)
 			_play_scratch_animation()
 		State.EAT:
-			anim_sprite.play("eat")
+			if _mochi_eating_sprite == null:
+				_mochi_eating_sprite = Sprite2D.new()
+				_mochi_eating_sprite.name = "MochiEatingSprite"
+				_mochi_eating_sprite.texture = MOCHI_EAT_TEX
+				_mochi_eating_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+				_mochi_eating_sprite.scale = Vector2(1.8, 1.8)
+				_mochi_eating_sprite.position = Vector2(0, -14)
+				$Visual.add_child(_mochi_eating_sprite)
+			if anim_sprite.sprite_frames and anim_sprite.sprite_frames.has_animation("eat"):
+				anim_sprite.visible = true
+				_mochi_eating_sprite.visible = false
+				anim_sprite.play("eat")
+			else:
+				anim_sprite.visible = false
+				_mochi_eating_sprite.visible = true
 			anim_sprite.flip_h = not last_facing_right
-			show_dialogue("Nhai nhồm nhoàm... Nom nom nom! 🍗", 3.5)
+			_eat_chomp_elapsed = 0.0
+			show_dialogue("Nhai nhồm nhoàm... Hạt giòn tan nom nom! 🍗", 3.5)
 		State.DRINK:
+			if _mochi_eating_sprite:
+				_mochi_eating_sprite.visible = false
 			anim_sprite.play("drink")
 			anim_sprite.flip_h = not last_facing_right
 			show_dialogue("Uống nước mát lành... Slurp slurp! 💧", 3.5)
 		State.BOX:
-			if anim_sprite.sprite_frames and anim_sprite.sprite_frames.has_animation("sleep_in_box"):
-				anim_sprite.visible = true
-				cat_box_sprite.visible = false
-				anim_sprite.play("sleep_in_box")
-			else:
-				anim_sprite.visible = false
-				cat_box_sprite.visible = true
-			show_dialogue("Trốn trong hộp carton này không ai tìm ra Boss đâu! 📦", 4.0)
+			if _mochi_eating_sprite:
+				_mochi_eating_sprite.visible = false
+			_box_anim_elapsed = 0.0
+			cat_box_sprite.texture = MOCHI_BOX_TEXS[0]
+			anim_sprite.visible = false
+			cat_box_sprite.visible = true
+			show_dialogue("Chui vào hộp carton chơi ú òa nè! 📦✨", 4.0)
 		State.FAINT:
 			anim_sprite.play("faint")
 			show_dialogue("😵 Xỉu... Hạ đường huyết rồi... Đói lả không thể đứng dậy... 🚑", 0.0)
@@ -586,10 +624,33 @@ func pet_rub(_touch_y_relative: float = -12.0) -> void:
 	if now_msec - _last_pet_rub_msec < 300:
 		return
 	_last_pet_rub_msec = now_msec
+	pet_bonding_points += 1
 	if cozy_sleep_mode:
 		set_cozy_sleep_mode(false)
 	SoundManager.play_purr()
 	_play_squash_and_stretch()
 	_spawn_floating_hearts(2)
 	GameManager.update_stats(0, 0, +1, +2)
-	show_dialogue("Purr~ Vuốt ve thích quá Sen ơi!", 2.5)
+	show_dialogue("Purr~ Vuốt ve thích quá Sen ơi! (Gắn kết +%d 💖)" % pet_bonding_points, 2.5)
+
+func run_autonomous_behavior(food_grid: Vector2 = Vector2(3.5, 4.5), bed_grid: Vector2 = Vector2(1.5, 4.0)) -> String:
+	if GameManager.hunger <= 0:
+		set_state(State.FAINT)
+		return "FAINT"
+	if GameManager.hunger < 30:
+		walk_to_grid(food_grid, State.EAT)
+		show_dialogue("Meo~ Đói bụng rồi Sen ơi, ghé khay ăn đây! 🥣", 3.5)
+		return "SEEK_FOOD"
+	var pick: float = randf()
+	if pick < 0.40:
+		var rug_target := Vector2(1.8 + randf_range(-0.6, 0.6), 2.8 + randf_range(-0.5, 0.5))
+		walk_to_grid(rug_target, State.IDLE)
+		_show_random_thought()
+		return "WANDER_RUG"
+	elif pick < 0.70:
+		walk_to_grid(bed_grid, State.SLEEP)
+		show_dialogue("Ngáp dài... Nằm cuộn tròn một giấc nha~ Zzz", 3.5)
+		return "SLEEP"
+	else:
+		set_state(State.BOX)
+		return "PLAY_BOX"

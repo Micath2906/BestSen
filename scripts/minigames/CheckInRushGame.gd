@@ -128,17 +128,25 @@ var barrier_open_timer: float = 0.0
 var is_passenger_transitioning: bool = false
 var transition_timer: float = 0.0
 
-# GP-ED-01: Metro Line 1 AFC Turnstile Loop (3s Prep -> 0.6s RFID Dwell -> 2.5s Gate Swipe + Safe Failure)
+# GP-ED-01: Metro Line 1 AFC Turnstile Loop + Task 4 (3-Phase Metro Culture & Polaroid Ticket)
+const DraggableItemScript = preload("res://scripts/minigames/DraggableItem.gd")
+const JuicyButtonScript = preload("res://scripts/ui/JuicyButton.gd")
 const TEX_BUS_CARD: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_02_bus_card.tres")
 const TEX_KEY_ITEM: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_06_key.tres")
 const TEX_ICON_CHECK: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_check.png")
 const TEX_ICON_CROSS: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_cross.png")
+const TEX_POLAROID_STYLE: StyleBoxTexture = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/polaroid_card_stylebox.tres")
+const TEX_COURAGE_HEART: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_courage_heart.png")
+const TEX_WAX_SEAL: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/wax_seal_royal_gold.tres")
 const COZY_DIALOG_SCN: PackedScene = preload("res://scenes/ui/CozyDialogBox.tscn")
 
 const METRO_PREP_SEC: float = 3.0
 const RFID_DWELL_HOLD_SEC: float = 0.6
 const AFC_SWIPE_WINDOW_SEC: float = 2.5
 const METRO_TARGET_LOOP_SEC: float = 30.0
+const METRO_PHASE_AFC: int = 1
+const METRO_PHASE_ALIGHT: int = 2
+const METRO_PHASE_PRIORITY_SEAT: int = 3
 
 var prep_tray_elapsed: float = 0.0
 var is_card_prepped: bool = false
@@ -147,16 +155,41 @@ var rfid_dwell_elapsed: float = 0.0
 var is_afc_gate_ready_to_pass: bool = false
 var afc_swipe_window_left: float = 0.0
 var safe_failure_count: int = 0
+var metro_phase: int = METRO_PHASE_AFC
+var priority_seat_yielded: bool = false
+var courage_earned_metro: int = 0
+var civic_culture_points: int = 0
+var _phase2_swipe_start: Vector2 = Vector2.ZERO
+var _phase2_swiping: bool = false
 
 var metro_afc_container: VBoxContainer = null
 var btn_prep_key: Button = null
 var btn_prep_card: Button = null
+var drag_metro_card: Control = null
 var rfid_sensor_target: Button = null
+var rfid_ring_draw: Control = null
 var rfid_dwell_bar: ProgressBar = null
 var sensor_feedback_icon: TextureRect = null
 var btn_afc_swipe_forward: Button = null
 var afc_window_label: Label = null
 var metro_cozy_dialog: Control = null
+
+var metro_3phase_panel: PanelContainer = null
+var btn_phase_toggle: Button = null
+var phase2_container: VBoxContainer = null
+var phase3_container: VBoxContainer = null
+var phase2_exit_track: Panel = null
+var phase2_player_badge: Label = null
+var phase2_alighting_status_lbl: Label = null
+var btn_phase2_left: Button = null
+var btn_phase2_center: Button = null
+var btn_phase2_right: Button = null
+var btn_phase3_yield_seat: Button = null
+var phase3_heart_holder: Control = null
+var phase3_status_lbl: Label = null
+var metro_polaroid_ticket: PanelContainer = null
+var metro_polaroid_caption: Label = null
+var metro_polaroid_cat: AnimatedSprite2D = null
 
 func _ready() -> void:
 	# Kết nối buttons
@@ -424,6 +457,8 @@ func _process(delta: float) -> void:
 			rfid_dwell_elapsed += delta
 			if rfid_dwell_bar:
 				rfid_dwell_bar.value = clampf((rfid_dwell_elapsed / RFID_DWELL_HOLD_SEC) * 100.0, 0.0, 100.0)
+			if rfid_ring_draw:
+				rfid_ring_draw.queue_redraw()
 			if rfid_dwell_elapsed >= RFID_DWELL_HOLD_SEC:
 				_complete_rfid_dwell_and_open_gate()
 		if is_afc_gate_ready_to_pass:
@@ -715,6 +750,7 @@ func _trigger_victory() -> void:
 	msg += "3. Lên xe buýt nhớ chuẩn bị sẵn tiền lẻ 5k hoặc tính nhanh tiền thối để không làm ùn tắc cửa xe!"
 	
 	victory_text.text = msg
+	_update_metro_polaroid_ticket()
 	victory_modal.visible = true
 
 func _trigger_defeat(reason: String) -> void:
@@ -855,6 +891,29 @@ func _setup_metro_afc_ui() -> void:
 		func(_pos: Vector2, _d): pass
 	)
 	prep_row.add_child(btn_prep_card)
+	JuicyButtonScript.attach_juice(btn_prep_key, true)
+	JuicyButtonScript.attach_juice(btn_prep_card, true)
+
+	# Task 4: Thẻ Metro kéo-thả tactile DraggableItem
+	var drag_card := DraggableItemScript.new()
+	drag_card.name = "DragMetroCard"
+	drag_card.custom_minimum_size = Vector2(44, 44)
+	drag_card.size = Vector2(44, 44)
+	drag_card.item_data = {"type": "metro_item", "id": "bus_card"}
+	var drag_icon := TextureRect.new()
+	drag_icon.texture = TEX_BUS_CARD
+	drag_icon.custom_minimum_size = Vector2(36, 36)
+	drag_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	drag_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	drag_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	drag_icon.position = Vector2(4, 4)
+	drag_icon.size = Vector2(36, 36)
+	drag_card.add_child(drag_icon)
+	drag_card.dropped_in_zone.connect(func(_item, _zone):
+		is_card_prepped = true
+		_complete_rfid_dwell_and_open_gate()
+	)
+	prep_metro_tray_add_drag(prep_row, drag_card)
 
 	var rfid_row := HBoxContainer.new()
 	rfid_row.add_theme_constant_override("separation", 8)
@@ -864,6 +923,7 @@ func _setup_metro_afc_ui() -> void:
 	rfid_sensor_target.name = "RfidSensorCircle"
 	rfid_sensor_target.text = "Giữ Thẻ Lên Đèn (0.6s)"
 	rfid_sensor_target.custom_minimum_size = Vector2(168, 42)
+	drag_card.valid_drop_zones = [rfid_sensor_target]
 	rfid_sensor_target.button_down.connect(_start_rfid_dwell)
 	rfid_sensor_target.button_up.connect(_stop_rfid_dwell)
 	rfid_sensor_target.set_drag_forwarding(
@@ -877,6 +937,13 @@ func _setup_metro_afc_ui() -> void:
 				_on_prep_key_picked()
 	)
 	rfid_row.add_child(rfid_sensor_target)
+
+	rfid_ring_draw = Control.new()
+	rfid_ring_draw.name = "RfidRingDraw"
+	rfid_ring_draw.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rfid_ring_draw.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	rfid_ring_draw.draw.connect(_on_rfid_ring_draw)
+	rfid_sensor_target.add_child(rfid_ring_draw)
 
 	sensor_feedback_icon = TextureRect.new()
 	sensor_feedback_icon.name = "SensorFeedbackIcon"
@@ -910,12 +977,45 @@ func _setup_metro_afc_ui() -> void:
 	btn_afc_swipe_forward.custom_minimum_size = Vector2(132, 36)
 	btn_afc_swipe_forward.pressed.connect(_on_afc_swipe_forward_pressed)
 	gate_row.add_child(btn_afc_swipe_forward)
+	JuicyButtonScript.attach_juice(btn_afc_swipe_forward, true)
+
+	btn_phase_toggle = Button.new()
+	btn_phase_toggle.name = "BtnMetro3Phase"
+	btn_phase_toggle.text = "🚇 3 Pha Văn Minh: Pha 1/3 (Quẹt AFC)"
+	btn_phase_toggle.custom_minimum_size = Vector2(0, 34)
+	btn_phase_toggle.pressed.connect(func():
+		var next_p: int = (metro_phase % 3) + 1
+		enter_metro_phase(next_p)
+	)
+	metro_afc_container.add_child(btn_phase_toggle)
+	JuicyButtonScript.attach_juice(btn_phase_toggle, true)
+
+	_setup_metro_3phase_panel()
+	_setup_metro_polaroid_ticket()
 
 	metro_cozy_dialog = COZY_DIALOG_SCN.instantiate()
 	metro_cozy_dialog.name = "MetroCozyDialog"
 	metro_cozy_dialog.visible = false
 	metro_cozy_dialog.position = Vector2(20, 460)
 	add_child(metro_cozy_dialog)
+
+func prep_metro_tray_add_drag(prep_row: HBoxContainer, card_ctrl: Control) -> void:
+	if prep_row and card_ctrl:
+		drag_metro_card = card_ctrl
+		prep_row.add_child(card_ctrl)
+
+func _on_rfid_ring_draw() -> void:
+	if not rfid_ring_draw:
+		return
+	var r: float = minf(rfid_ring_draw.size.x, rfid_ring_draw.size.y) * 0.44
+	if r <= 4.0:
+		return
+	var center: Vector2 = Vector2(rfid_ring_draw.size.x - r - 6.0, rfid_ring_draw.size.y * 0.5)
+	rfid_ring_draw.draw_arc(center, r, 0.0, TAU, 28, Color(0.85, 0.78, 0.65, 0.45), 3.0)
+	var ratio: float = clampf(rfid_dwell_elapsed / RFID_DWELL_HOLD_SEC, 0.0, 1.0)
+	if ratio > 0.0:
+		var arc_col := Color(0.4, 0.73, 0.42, 0.95) if ratio >= 1.0 else Color(0.95, 0.75, 0.25, 0.95)
+		rfid_ring_draw.draw_arc(center, r, -PI * 0.5, -PI * 0.5 + TAU * ratio, 32, arc_col, 3.5)
 
 func _reset_afc_turnstile_state() -> void:
 	prep_tray_elapsed = 0.0
@@ -926,6 +1026,8 @@ func _reset_afc_turnstile_state() -> void:
 	afc_swipe_window_left = 0.0
 	if rfid_dwell_bar:
 		rfid_dwell_bar.value = 0.0
+	if rfid_ring_draw:
+		rfid_ring_draw.queue_redraw()
 	if btn_afc_swipe_forward:
 		btn_afc_swipe_forward.visible = false
 	if sensor_feedback_icon:
@@ -963,6 +1065,8 @@ func _start_rfid_dwell() -> void:
 		is_card_prepped = true
 	is_rfid_dwelling = true
 	rfid_dwell_elapsed = 0.0
+	if rfid_ring_draw:
+		rfid_ring_draw.queue_redraw()
 	SoundManager.vibrate(15)
 
 func _stop_rfid_dwell() -> void:
@@ -971,14 +1075,20 @@ func _stop_rfid_dwell() -> void:
 		rfid_dwell_elapsed = 0.0
 		if rfid_dwell_bar:
 			rfid_dwell_bar.value = 0.0
+		if rfid_ring_draw:
+			rfid_ring_draw.queue_redraw()
 		if afc_window_label:
-			afc_window_label.text = "Giữ đủ 0.6s để đầu đọc nhận thẻ nhé!"
+			afc_window_label.text = "Tít! Chưa kịp đọc chip Sen ơi, giữ thêm xíu nha!"
+		SoundManager.play_error_chime()
+		_trigger_afc_safe_failure("Tít! Chưa kịp đọc chip Sen ơi, giữ thêm xíu nha!")
 
 func _complete_rfid_dwell_and_open_gate() -> void:
 	is_rfid_dwelling = false
 	rfid_dwell_elapsed = RFID_DWELL_HOLD_SEC
 	if rfid_dwell_bar:
 		rfid_dwell_bar.value = 100.0
+	if rfid_ring_draw:
+		rfid_ring_draw.queue_redraw()
 	is_afc_gate_ready_to_pass = true
 	afc_swipe_window_left = AFC_SWIPE_WINDOW_SEC
 	if sensor_feedback_icon:
@@ -1007,6 +1117,8 @@ func _trigger_afc_safe_failure(custom_text: String = "") -> void:
 	passenger_patience = maxf(passenger_patience, current_patience_max)
 	if rfid_dwell_bar:
 		rfid_dwell_bar.value = 0.0
+	if rfid_ring_draw:
+		rfid_ring_draw.queue_redraw()
 	if btn_afc_swipe_forward:
 		btn_afc_swipe_forward.visible = false
 	_set_barrier_visual(false, "THỬ LẠI NHẸ NHÀNG (SAFE FAILURE)")
@@ -1019,3 +1131,285 @@ func _trigger_afc_safe_failure(custom_text: String = "") -> void:
 			if is_instance_valid(metro_cozy_dialog):
 				metro_cozy_dialog.visible = false
 		)
+
+# =========================================================================
+# TASK 4: LUỒNG 3 PHA VĂN MINH METRO & VÉ TÀU POLAROID KỶ NIỆM
+# =========================================================================
+func _setup_metro_3phase_panel() -> void:
+	if not metro_afc_container:
+		return
+	metro_3phase_panel = PanelContainer.new()
+	metro_3phase_panel.name = "Metro3PhasePanel"
+	metro_3phase_panel.visible = false
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.992, 0.965, 0.890, 0.96)
+	sb.border_color = Color(0.427, 0.298, 0.255, 1.0)
+	sb.set_border_width_all(2)
+	sb.set_corner_radius_all(10)
+	sb.set_content_margin_all(8)
+	metro_3phase_panel.add_theme_stylebox_override("panel", sb)
+	metro_afc_container.add_child(metro_3phase_panel)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 6)
+	metro_3phase_panel.add_child(vbox)
+
+	# --- PHA 2: RA TRƯỚC - VÀO SAU ---
+	phase2_container = VBoxContainer.new()
+	phase2_container.name = "Phase2AlightContainer"
+	phase2_container.add_theme_constant_override("separation", 6)
+	vbox.add_child(phase2_container)
+
+	phase2_alighting_status_lbl = Label.new()
+	phase2_alighting_status_lbl.text = "🚪 Pha 2 (Ra Trước - Vào Sau): Vuốt TRÁI / PHẢI nép vạch vàng!"
+	phase2_alighting_status_lbl.add_theme_font_size_override("font_size", 11)
+	phase2_alighting_status_lbl.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+	phase2_alighting_status_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+	phase2_container.add_child(phase2_alighting_status_lbl)
+
+	phase2_exit_track = Panel.new()
+	phase2_exit_track.name = "Phase2ExitTrack"
+	phase2_exit_track.custom_minimum_size = Vector2(260, 56)
+	var track_sb := StyleBoxFlat.new()
+	track_sb.bg_color = Color(0.94, 0.90, 0.80, 1.0)
+	track_sb.border_color = Color(0.427, 0.298, 0.255, 1.0)
+	track_sb.set_border_width_all(1)
+	track_sb.set_corner_radius_all(6)
+	phase2_exit_track.add_theme_stylebox_override("panel", track_sb)
+	phase2_exit_track.gui_input.connect(func(ev: InputEvent):
+		if ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT:
+			if ev.pressed:
+				_phase2_swiping = true
+				_phase2_swipe_start = ev.position
+			elif _phase2_swiping:
+				_phase2_swiping = false
+				var d: Vector2 = ev.position - _phase2_swipe_start
+				if d.x < -30.0:
+					stand_aside_for_alighting("left")
+				elif d.x > 30.0:
+					stand_aside_for_alighting("right")
+				elif d.y < -25.0:
+					rush_into_center()
+	)
+	phase2_container.add_child(phase2_exit_track)
+
+	var exiting_lbl := Label.new()
+	exiting_lbl.text = "🚶‍♂️ 🚶‍♀️ 🐾 Khách đang bước ra..."
+	exiting_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	exiting_lbl.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	exiting_lbl.add_theme_font_size_override("font_size", 11)
+	exiting_lbl.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+	phase2_exit_track.add_child(exiting_lbl)
+
+	phase2_player_badge = Label.new()
+	phase2_player_badge.name = "Phase2PlayerBadge"
+	phase2_player_badge.text = "🐱 Mochi & Sen"
+	phase2_player_badge.position = Vector2(90, 26)
+	phase2_player_badge.add_theme_font_size_override("font_size", 12)
+	phase2_player_badge.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+	phase2_exit_track.add_child(phase2_player_badge)
+
+	var p2_btn_row := HBoxContainer.new()
+	p2_btn_row.add_theme_constant_override("separation", 6)
+	phase2_container.add_child(p2_btn_row)
+
+	btn_phase2_left = Button.new()
+	btn_phase2_left.name = "BtnStandAsideLeft"
+	btn_phase2_left.text = "⬅️ Nép Trái"
+	btn_phase2_left.custom_minimum_size = Vector2(82, 36)
+	btn_phase2_left.pressed.connect(func(): stand_aside_for_alighting("left"))
+	p2_btn_row.add_child(btn_phase2_left)
+
+	btn_phase2_center = Button.new()
+	btn_phase2_center.name = "BtnRushCenter"
+	btn_phase2_center.text = "⬆️ Vào Giữa"
+	btn_phase2_center.custom_minimum_size = Vector2(86, 36)
+	btn_phase2_center.pressed.connect(rush_into_center)
+	p2_btn_row.add_child(btn_phase2_center)
+
+	btn_phase2_right = Button.new()
+	btn_phase2_right.name = "BtnStandAsideRight"
+	btn_phase2_right.text = "Nép Phải ➡️"
+	btn_phase2_right.custom_minimum_size = Vector2(82, 36)
+	btn_phase2_right.pressed.connect(func(): stand_aside_for_alighting("right"))
+	p2_btn_row.add_child(btn_phase2_right)
+
+	JuicyButtonScript.attach_juice(btn_phase2_left, true)
+	JuicyButtonScript.attach_juice(btn_phase2_center, true)
+	JuicyButtonScript.attach_juice(btn_phase2_right, true)
+
+	# --- PHA 3: GHẾ ƯU TIÊN & TRÁI TIM ---
+	phase3_container = VBoxContainer.new()
+	phase3_container.name = "Phase3PrioritySeatContainer"
+	phase3_container.visible = false
+	phase3_container.add_theme_constant_override("separation", 6)
+	vbox.add_child(phase3_container)
+
+	phase3_status_lbl = Label.new()
+	phase3_status_lbl.text = "👴 Cụ Mèo lớn tuổi đang đứng vịn tay cầm! Bấm Ghế Trái Tim để nhường."
+	phase3_status_lbl.add_theme_font_size_override("font_size", 11)
+	phase3_status_lbl.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+	phase3_status_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+	phase3_container.add_child(phase3_status_lbl)
+
+	var p3_row := HBoxContainer.new()
+	p3_row.add_theme_constant_override("separation", 8)
+	phase3_container.add_child(p3_row)
+
+	btn_phase3_yield_seat = Button.new()
+	btn_phase3_yield_seat.name = "BtnPrioritySeatHeart"
+	btn_phase3_yield_seat.text = "💛 Nhường Ghế Ưu Tiên (+Tự Lập)"
+	btn_phase3_yield_seat.icon = TEX_COURAGE_HEART
+	btn_phase3_yield_seat.expand_icon = true
+	btn_phase3_yield_seat.custom_minimum_size = Vector2(220, 56)
+	btn_phase3_yield_seat.pressed.connect(yield_priority_seat_metro)
+	p3_row.add_child(btn_phase3_yield_seat)
+	JuicyButtonScript.attach_juice(btn_phase3_yield_seat, true)
+
+	phase3_heart_holder = Control.new()
+	phase3_heart_holder.name = "Phase3HeartHolder"
+	phase3_heart_holder.custom_minimum_size = Vector2(36, 40)
+	p3_row.add_child(phase3_heart_holder)
+
+func enter_metro_phase(phase_idx: int) -> void:
+	metro_phase = clampi(phase_idx, METRO_PHASE_AFC, METRO_PHASE_PRIORITY_SEAT)
+	if btn_phase_toggle:
+		var labels := {
+			1: "🚇 3 Pha Văn Minh: Pha 1/3 (Quẹt AFC)",
+			2: "🚇 3 Pha Văn Minh: Pha 2/3 (Ra Trước - Vào Sau)",
+			3: "🚇 3 Pha Văn Minh: Pha 3/3 (Ghế Ưu Tiên Trái Tim)"
+		}
+		btn_phase_toggle.text = labels.get(metro_phase, labels[1])
+	if metro_3phase_panel:
+		metro_3phase_panel.visible = (metro_phase != METRO_PHASE_AFC)
+	if phase2_container:
+		phase2_container.visible = (metro_phase == METRO_PHASE_ALIGHT)
+	if phase3_container:
+		phase3_container.visible = (metro_phase == METRO_PHASE_PRIORITY_SEAT)
+
+func stand_aside_for_alighting(side: String = "left") -> void:
+	SoundManager.play_confirm()
+	SoundManager.vibrate(20)
+	civic_culture_points += 10
+	var target_x: float = 12.0 if side == "left" else 168.0
+	if phase2_player_badge:
+		var tw := create_tween()
+		tw.tween_property(phase2_player_badge, "position:x", target_x, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	if phase2_alighting_status_lbl:
+		phase2_alighting_status_lbl.text = "✅ Đứng nép vạch vàng chuẩn chỉnh! Khách đã xuống hết tàu."
+	if metro_cozy_dialog and metro_cozy_dialog.has_method("show_dialog"):
+		metro_cozy_dialog.show_dialog("Tuyệt vời! Đứng nép hai bên để khách xuống trước nè!", "cheerful", "Lịch sự trên sân ga giúp tàu chạy đúng giờ.")
+	enter_metro_phase(METRO_PHASE_PRIORITY_SEAT)
+
+func rush_into_center() -> void:
+	SoundManager.play_bounce()
+	SoundManager.vibrate(25)
+	if phase2_player_badge:
+		var orig_pos: Vector2 = phase2_player_badge.position
+		var tw := create_tween()
+		tw.tween_property(phase2_player_badge, "position:y", orig_pos.y + 14.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(phase2_player_badge, "position", Vector2(90, 26), 0.22).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	if phase2_alighting_status_lbl:
+		phase2_alighting_status_lbl.text = "⚠️ Bị bật nảy! Đợi mọi người ra hết rồi mình lên cho rộng nè!"
+	_trigger_afc_safe_failure("Đợi mọi người ra hết rồi mình lên cho rộng nè!")
+
+func yield_priority_seat_metro() -> void:
+	if not priority_seat_yielded:
+		priority_seat_yielded = true
+		courage_earned_metro += 15
+		civic_culture_points += 15
+		if GameManager:
+			if GameManager.has_method("update_stats"):
+				GameManager.update_stats(0, 0, 15, 0)
+			elif "courage" in GameManager:
+				GameManager.courage += 15
+	SoundManager.play_success()
+	SoundManager.play_purr()
+	SoundManager.vibrate(35)
+	if phase3_status_lbl:
+		phase3_status_lbl.text = "💛 Cụ Mèo cảm ơn Sen ấm áp! (+15 Tự Lập)"
+	if btn_phase3_yield_seat:
+		btn_phase3_yield_seat.text = "✅ Đã Nhường Ghế Ưu Tiên!"
+	_spawn_metro_floating_hearts()
+	_set_barrier_visual(true, "HOÀN THÀNH 3 PHA METRO!")
+
+func _spawn_metro_floating_hearts() -> void:
+	if not phase3_heart_holder or not is_instance_valid(phase3_heart_holder):
+		return
+	for i in range(4):
+		var h := TextureRect.new()
+		h.texture = TEX_COURAGE_HEART
+		h.custom_minimum_size = Vector2(16, 16)
+		h.size = Vector2(16, 16)
+		h.position = Vector2(6.0 + float(i * 5), 22.0)
+		h.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		phase3_heart_holder.add_child(h)
+		var tw := create_tween()
+		tw.set_parallel(true)
+		tw.tween_property(h, "position:y", h.position.y - 36.0 - float(i * 8), 0.75)
+		tw.tween_property(h, "modulate:a", 0.0, 0.75)
+		tw.chain().tween_callback(h.queue_free)
+
+func _setup_metro_polaroid_ticket() -> void:
+	var vbox: VBoxContainer = $VictoryModal/ModalPanel/VBox if has_node("VictoryModal/ModalPanel/VBox") else null
+	if vbox == null or metro_polaroid_ticket != null:
+		return
+	metro_polaroid_ticket = PanelContainer.new()
+	metro_polaroid_ticket.name = "MetroPolaroidTicket"
+	metro_polaroid_ticket.add_theme_stylebox_override("panel", TEX_POLAROID_STYLE)
+	metro_polaroid_ticket.custom_minimum_size = Vector2(0, 110)
+
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 10)
+	metro_polaroid_ticket.add_child(hbox)
+
+	var cat_box := Control.new()
+	cat_box.custom_minimum_size = Vector2(68, 68)
+	hbox.add_child(cat_box)
+	metro_polaroid_cat = AnimatedSprite2D.new()
+	metro_polaroid_cat.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	metro_polaroid_cat.position = Vector2(34, 42)
+	metro_polaroid_cat.scale = Vector2(2.0, 2.0)
+	metro_polaroid_cat.sprite_frames = CatAnimationFactory.get_sprite_frames(GameManager.selected_cat_id if "selected_cat_id" in GameManager else 8)
+	metro_polaroid_cat.play("idle")
+	cat_box.add_child(metro_polaroid_cat)
+
+	var info_vbox := VBoxContainer.new()
+	info_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_vbox.add_theme_constant_override("separation", 3)
+	hbox.add_child(info_vbox)
+
+	var title_lbl := Label.new()
+	title_lbl.text = "🎫 VÉ TÀU KỶ NIỆM METRO LINE 1"
+	title_lbl.add_theme_font_size_override("font_size", 12)
+	title_lbl.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+	info_vbox.add_child(title_lbl)
+
+	metro_polaroid_caption = Label.new()
+	metro_polaroid_caption.name = "PolaroidCaption"
+	metro_polaroid_caption.text = "Sen & Trọ Ấm • Mochi Đồng Hành"
+	metro_polaroid_caption.add_theme_font_size_override("font_size", 11)
+	metro_polaroid_caption.add_theme_color_override("font_color", Color(0.427, 0.298, 0.255, 1.0))
+	metro_polaroid_caption.autowrap_mode = TextServer.AUTOWRAP_WORD
+	info_vbox.add_child(metro_polaroid_caption)
+
+	var seal := TextureRect.new()
+	seal.texture = TEX_WAX_SEAL
+	seal.custom_minimum_size = Vector2(32, 32)
+	seal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	seal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	hbox.add_child(seal)
+
+	vbox.add_child(metro_polaroid_ticket)
+	vbox.move_child(metro_polaroid_ticket, 0)
+
+func _update_metro_polaroid_ticket() -> void:
+	if not metro_polaroid_ticket:
+		_setup_metro_polaroid_ticket()
+	var sen: String = GameManager.owner_name if ("owner_name" in GameManager and not str(GameManager.owner_name).strip_edges().is_empty()) else "Sen Chăm Chỉ"
+	var room: String = GameManager.room_name if ("room_name" in GameManager and not str(GameManager.room_name).strip_edges().is_empty()) else "Trọ Nắng Ấm"
+	if metro_polaroid_caption:
+		metro_polaroid_caption.text = "Sen: %s  |  Trọ: %s\nChứng nhận Văn Minh Tuyến 1 • Mochi vẫy tay!" % [sen, room]
+	if metro_polaroid_cat:
+		metro_polaroid_cat.sprite_frames = CatAnimationFactory.get_sprite_frames(GameManager.selected_cat_id if "selected_cat_id" in GameManager else 8)
+		metro_polaroid_cat.play("idle")

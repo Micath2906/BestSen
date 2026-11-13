@@ -25,8 +25,12 @@ signal back_requested
 @onready var btn_check_balance: Button = $ActionFooter/BtnCheckBalance
 @onready var btn_preset_gold: Button = $ActionFooter/BtnPresetGold
 
-# GP-ED-03: Tủ Gỗ 3 Ngăn + Con Dấu Sáp Vàng + Safe Failure Bát Rỗng & Mèo Đói Ngủ
+# GP-ED-03 & Task 5: Tủ Gỗ 3 Ngăn + DraggableItem Cá Khô + Flash Sale Trà Sữa + Safe Failure
+const DraggableItemScript = preload("res://scripts/minigames/DraggableItem.gd")
+const JuicyButtonScript = preload("res://scripts/ui/JuicyButton.gd")
 const TEX_CHEST_SHELF: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_dress/vintage_chest_shelf_9patch.tres")
+const TEX_ESSENTIAL_BOWL: Texture2D = preload("res://assets/UI/CatUIPaid/slices/toffee_hud/icon_food_bowl_16x16.tres")
+const TEX_WANTS_YARN: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_toy_yarn_ball.png")
 const TEX_MONEY_BAG: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/icon_money_bag.tres")
 const TEX_WAX_SEAL: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/wax_seal_royal_gold.tres")
 const TEX_EMPTY_BOWL: Texture2D = preload("res://assets/UI/PetMobileGameAsset/PetMobileGameAsset/Bunnies/BunnyStuffs/FoodBowlEmpty.png")
@@ -53,6 +57,14 @@ var safe_failure_count: int = 0
 var wax_seal_stamp: TextureRect = null
 var bill_drawer_tray: HBoxContainer = null
 var bill_chip_buttons: Array[Button] = []
+var drag_bills_row: HBoxContainer = null
+var drag_bill_items: Array[Control] = []
+var jar_target_bars: Dictionary = {}
+var flash_sale_bubble: Button = null
+var flash_sale_timer: float = 0.0
+var flash_sale_triggered: bool = false
+var flash_sale_tempted_count: int = 0
+var is_victory_transitioning: bool = false
 var safe_fail_preview: PanelContainer = null
 var empty_bowl_icon: TextureRect = null
 var sleepy_cat_preview: TextureRect = null
@@ -62,8 +74,10 @@ func _ready() -> void:
 	btn_back.icon = preload("res://assets/UI/CatUIPaid/slices/icon_arrow_left.png")
 	btn_back.pressed.connect(func(): emit_signal("back_requested"))
 	btn_check_balance.pressed.connect(_on_check_balance_pressed)
+	JuicyButtonScript.attach_juice(btn_check_balance, true)
 	if btn_preset_gold:
 		btn_preset_gold.pressed.connect(_apply_gold_preset)
+		JuicyButtonScript.attach_juice(btn_preset_gold, true)
 		
 	slider_survive.value_changed.connect(func(v): _on_slider_changed("survive", int(v)))
 	slider_growth.value_changed.connect(func(v): _on_slider_changed("growth", int(v)))
@@ -81,6 +95,11 @@ func _process(delta: float) -> void:
 		displayed_total = target_total
 		_refresh_remaining_label_text(int(target_total))
 
+	if not flash_sale_triggered and not is_victory_transitioning:
+		flash_sale_timer += delta
+		if flash_sale_timer >= 8.0:
+			trigger_flash_sale_temptation()
+
 func _setup_cat_mascot() -> void:
 	if cat_anim == null and cat_anchor:
 		cat_anim = AnimatedSprite2D.new()
@@ -96,10 +115,19 @@ func load_minigame(game_data: Dictionary) -> void:
 	total_budget = data.get("total_budget", 90)
 	safe_failure_count = 0
 	is_essentials_sealed = false
+	flash_sale_timer = 0.0
+	flash_sale_triggered = false
+	flash_sale_tempted_count = 0
+	is_victory_transitioning = false
+	if btn_check_balance:
+		btn_check_balance.disabled = false
+		btn_check_balance.text = "⚖️ KIỂM TRA CÂN ĐỐI"
 	if safe_fail_preview:
 		safe_fail_preview.visible = false
 	if budget_cozy_dialog:
 		budget_cozy_dialog.visible = false
+	if flash_sale_bubble:
+		flash_sale_bubble.visible = false
 	
 	title_lbl.text = "⚖️ " + data.get("title", "CÂN BẰNG 3 HŨ TIỀN")
 	cat_speech.text = data.get("cat_prompt", "Phân bổ cá vào 3 hũ theo tỷ lệ vàng giúp Boss nhé!")
@@ -152,6 +180,7 @@ func _update_sliders_ui() -> void:
 	
 	var total_allocated = val_survive + val_growth + val_emergency
 	_refresh_remaining_label_text(total_allocated)
+	_update_jar_target_gauges()
 	_update_wax_seal_stamp()
 
 func _update_wax_seal_stamp() -> void:
@@ -300,17 +329,22 @@ func _on_check_balance_pressed() -> void:
 		
 	if not _is_balanced_state():
 		if val_survive < 40:
-			cat_speech.text = "ÚI ĐÓI QUÁ! 😵 " + data.get("danger_low_survive", "Thiếu tiền ăn ở rồi!")
-			_show_safe_failure_preview("Ôi không! Bát cơm trống rỗng vì thiếu quỹ Sống Còn 50%!", "Phủ kín Tiền Trọ & Cơm Nước trước để nhận Con Dấu Sáp Vàng Hoàng Gia nhé.")
+			cat_speech.text = "Bát cơm của Mochi sắp trống rồi, ưu tiên phần Thiết Yếu trước nhé Sen!"
+			_show_safe_failure_preview("Bát cơm của Mochi sắp trống rồi, ưu tiên phần Thiết Yếu trước nhé Sen!", "Phủ kín Tiền Trọ & Cơm Nước (50% Thiết Yếu) trước để nhận Con Dấu Sáp Vàng Hoàng Gia nhé.")
 		elif val_emergency < 10:
 			cat_speech.text = "RỦI RO QUÁ! ⚠️ " + data.get("danger_low_emergency", "Không có tiền cấp cứu!")
-			_show_safe_failure_preview("Nguy hiểm! Quỹ Khẩn Cấp 20% đang gần như trống không!", "Hãy trích 20% vào ngăn Khẩn Cấp để luôn sẵn sàng khi ốm đau hoặc hư xe.")
+			_show_safe_failure_preview("Nguy hiểm! Quỹ Tiết Kiệm 20% đang gần như trống không!", "Hãy trích 20% vào ngăn Tiết Kiệm để luôn sẵn sàng khi ốm đau hoặc hư xe.")
 		else:
 			cat_speech.text = "CÁN CÂN SỤP ĐỔ! 💥 " + data.get("danger_over_growth", "Dồn tiền ăn chơi quá mức!")
-			_show_safe_failure_preview("Cán cân bị lệch sang mua sắm/ăn chơi mất rồi!", "Giữ cân bằng 50% Sống còn - 30% Phát triển - 20% Khẩn cấp nhé.")
+			_show_safe_failure_preview("Cán cân bị lệch sang Mong Muốn mua sắm mất rồi!", "Giữ cân bằng 50% Thiết yếu - 30% Mong muốn - 20% Tiết kiệm nhé.")
 	else:
+		if is_victory_transitioning:
+			return
+		is_victory_transitioning = true
 		if safe_fail_preview:
 			safe_fail_preview.visible = false
+		if flash_sale_bubble:
+			flash_sale_bubble.visible = false
 		SoundManager.play_success()
 		SoundManager.vibrate(35)
 		if cat_anim:
@@ -387,11 +421,17 @@ func _setup_gp_ed_03_ui() -> void:
 			)
 			bill_drawer_tray.add_child(chip)
 			bill_chip_buttons.append(chip)
+			JuicyButtonScript.attach_juice(chip, true)
 
 	var drawer_map := {
 		"survive": survive_box,
 		"growth": growth_box,
 		"emergency": emergency_box
+	}
+	var drawer_meta := {
+		"survive": {"icon": TEX_ESSENTIAL_BOWL, "pct": 0.50, "lbl": "50% Thiết Yếu"},
+		"growth": {"icon": TEX_WANTS_YARN, "pct": 0.30, "lbl": "30% Mong Muốn"},
+		"emergency": {"icon": TEX_MONEY_BAG, "pct": 0.20, "lbl": "20% Tiết Kiệm"}
 	}
 	for jk in drawer_map.keys():
 		var box: VBoxContainer = drawer_map[jk]
@@ -402,6 +442,117 @@ func _setup_gp_ed_03_ui() -> void:
 				func(_pos: Vector2, d): return d is Dictionary and d.get("type", "") == "budget_bill",
 				func(_pos: Vector2, d): drop_bill_into_jar(key_copy, int(d.get("amount", 10)))
 			)
+			# Target Marker Gauge + Icon cho từng ngăn tủ
+			var meta: Dictionary = drawer_meta[jk]
+			var meta_row := HBoxContainer.new()
+			meta_row.add_theme_constant_override("separation", 6)
+			box.add_child(meta_row)
+			var cat_icon := TextureRect.new()
+			cat_icon.texture = meta["icon"]
+			cat_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			cat_icon.custom_minimum_size = Vector2(18, 18)
+			cat_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			cat_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			meta_row.add_child(cat_icon)
+			var gauge_wrap := Control.new()
+			gauge_wrap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			gauge_wrap.custom_minimum_size = Vector2(100, 12)
+			meta_row.add_child(gauge_wrap)
+			var bar := ProgressBar.new()
+			bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			bar.max_value = 100.0
+			bar.show_percentage = false
+			gauge_wrap.add_child(bar)
+			var marker := ColorRect.new()
+			marker.color = Color(0.95, 0.72, 0.15, 0.95)
+			marker.size = Vector2(3, 12)
+			marker.anchor_left = float(meta["pct"])
+			marker.anchor_right = float(meta["pct"])
+			marker.offset_left = -1.5
+			marker.offset_right = 1.5
+			marker.offset_top = 0.0
+			marker.offset_bottom = 12.0
+			gauge_wrap.add_child(marker)
+			var badge_lbl := Label.new()
+			badge_lbl.text = meta["lbl"]
+			badge_lbl.add_theme_font_size_override("font_size", 10)
+			badge_lbl.add_theme_color_override("font_color", Color(0.427, 0.298, 0.255, 1.0))
+			meta_row.add_child(badge_lbl)
+			jar_target_bars[jk] = bar
+
+	# Vật phẩm tiền / cá khô DraggableItem chạm kéo thả trực tiếp vào 3 ngăn
+	if jars_vbox:
+		drag_bills_row = HBoxContainer.new()
+		drag_bills_row.name = "DragBillsRow"
+		drag_bills_row.add_theme_constant_override("separation", 8)
+		jars_vbox.add_child(drag_bills_row)
+		jars_vbox.move_child(drag_bills_row, 1)
+		var drop_zones: Array = [survive_box, growth_box, emergency_box]
+		for amt in [5, 10, 20]:
+			var drag_bill := DraggableItemScript.new()
+			drag_bill.name = "DragBill_%d" % amt
+			drag_bill.custom_minimum_size = Vector2(88, 34)
+			drag_bill.size = Vector2(88, 34)
+			drag_bill.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			drag_bill.item_data = {"type": "budget_bill", "amount": amt}
+			drag_bill.valid_drop_zones = drop_zones
+			var pill := PanelContainer.new()
+			pill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			pill.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			var psb := StyleBoxFlat.new()
+			psb.bg_color = Color(0.99, 0.96, 0.89, 1.0)
+			psb.border_color = Color(0.427, 0.298, 0.255, 1.0)
+			psb.set_border_width_all(2)
+			psb.set_corner_radius_all(8)
+			pill.add_theme_stylebox_override("panel", psb)
+			drag_bill.add_child(pill)
+			var ph := HBoxContainer.new()
+			ph.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			ph.alignment = BoxContainer.ALIGNMENT_CENTER
+			pill.add_child(ph)
+			var ic := TextureRect.new()
+			ic.texture = TEX_MONEY_BAG
+			ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			ic.custom_minimum_size = Vector2(18, 18)
+			ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			ph.add_child(ic)
+			var lb := Label.new()
+			lb.text = "Kéo +%d 🐟" % amt
+			lb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			lb.add_theme_font_size_override("font_size", 10)
+			lb.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+			ph.add_child(lb)
+			var bill_amt: int = amt
+			drag_bill.dropped_in_zone.connect(func(_it, zone):
+				if zone == survive_box:
+					drop_bill_into_jar("survive", bill_amt)
+				elif zone == growth_box:
+					drop_bill_into_jar("growth", bill_amt)
+				elif zone == emergency_box:
+					drop_bill_into_jar("emergency", bill_amt)
+			)
+			drag_bills_row.add_child(drag_bill)
+			drag_bill_items.append(drag_bill)
+
+	# Bong bóng cám dỗ Flash Sale 50% Trà Sữa
+	flash_sale_bubble = Button.new()
+	flash_sale_bubble.name = "FlashSaleBubble"
+	flash_sale_bubble.text = "🧋 FLASH SALE 50% TRÀ SỮA! Chạm mua ngay!"
+	flash_sale_bubble.visible = false
+	flash_sale_bubble.z_index = 38
+	flash_sale_bubble.custom_minimum_size = Vector2(280, 44)
+	flash_sale_bubble.position = Vector2(36, 130)
+	var fs_sb := StyleBoxFlat.new()
+	fs_sb.bg_color = Color(1.0, 0.90, 0.92, 0.97)
+	fs_sb.border_color = Color(0.85, 0.30, 0.42, 1.0)
+	fs_sb.set_border_width_all(2)
+	fs_sb.set_corner_radius_all(18)
+	flash_sale_bubble.add_theme_stylebox_override("panel", fs_sb)
+	flash_sale_bubble.add_theme_stylebox_override("normal", fs_sb)
+	flash_sale_bubble.add_theme_color_override("font_color", Color(0.35, 0.10, 0.16, 1.0))
+	flash_sale_bubble.pressed.connect(_on_flash_sale_temptation_clicked)
+	add_child(flash_sale_bubble)
+	JuicyButtonScript.attach_juice(flash_sale_bubble, true)
 
 	safe_fail_preview = PanelContainer.new()
 	safe_fail_preview.name = "BudgetSafeFailPreview"
@@ -458,3 +609,45 @@ func _setup_gp_ed_03_ui() -> void:
 	budget_cozy_dialog.name = "BudgetCozyDialog"
 	budget_cozy_dialog.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sf_hbox.add_child(budget_cozy_dialog)
+
+func _update_jar_target_gauges() -> void:
+	var denom: float = maxf(1.0, float(total_budget))
+	if jar_target_bars.has("survive"):
+		(jar_target_bars["survive"] as ProgressBar).value = clampf((float(val_survive) / denom) * 100.0, 0.0, 100.0)
+	if jar_target_bars.has("growth"):
+		(jar_target_bars["growth"] as ProgressBar).value = clampf((float(val_growth) / denom) * 100.0, 0.0, 100.0)
+	if jar_target_bars.has("emergency"):
+		(jar_target_bars["emergency"] as ProgressBar).value = clampf((float(val_emergency) / denom) * 100.0, 0.0, 100.0)
+
+func trigger_flash_sale_temptation() -> void:
+	flash_sale_triggered = true
+	if not flash_sale_bubble:
+		return
+	flash_sale_bubble.visible = true
+	flash_sale_bubble.position = Vector2(20.0, 130.0)
+	var tw := create_tween()
+	tw.tween_property(flash_sale_bubble, "position:x", 56.0, 1.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(flash_sale_bubble, "position:x", 24.0, 1.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func _on_flash_sale_temptation_clicked() -> void:
+	flash_sale_tempted_count += 1
+	var steal: int = mini(10, val_emergency)
+	if steal <= 0:
+		steal = mini(10, val_survive)
+		val_survive -= steal
+	else:
+		val_emergency -= steal
+	val_growth += steal
+	if flash_sale_bubble:
+		flash_sale_bubble.visible = false
+	SoundManager.play_error_chime()
+	SoundManager.play_meow(0.85)
+	if cat_anim and cat_anim.sprite_frames:
+		if cat_anim.sprite_frames.has_animation("hurt"):
+			cat_anim.play("hurt")
+		elif cat_anim.sprite_frames.has_animation("sleep"):
+			cat_anim.play("sleep")
+	cat_speech.text = "Ôi trà sữa nữa hả Sen? Hụt quỹ tiết kiệm rồi! 😿"
+	_update_sliders_ui()
+	_update_scale_visual()
+	_show_safe_failure_preview("Cám dỗ Flash Sale 50% Trà Sữa!", "Tiền từ quỹ Tiết Kiệm vừa trôi sang ngăn Mong Muốn rồi! Điều chỉnh lại nhé Sen.")

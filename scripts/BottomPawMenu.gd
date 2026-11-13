@@ -34,6 +34,7 @@ signal action_drawer_closed
 @onready var btn_close_drawer: BaseButton = $SubDrawer/VBox/Header/BtnCloseDrawer
 
 const FONT_PIXEL = preload("res://assets/font/SVN-Retron 2000.ttf")
+const JuicyButton = preload("res://scripts/ui/JuicyButton.gd")
 const TEX_BTN_NORM = preload("res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/btn_dock_normal.tres")
 const TEX_BTN_PRESS = preload("res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/btn_dock_pressed.tres")
 const TEX_ITEM_SLOT = preload("res://assets/UI/CatUIPaid/slices/toffee_bottom_menu/item_slot_32x32_9patch.tres")
@@ -91,6 +92,10 @@ func _ready() -> void:
 		emit_signal("open_handbook_requested")
 	)
 	
+	for tab_btn in [btn_home, btn_food, btn_play, btn_learn, btn_handbook]:
+		if tab_btn:
+			tab_btn.custom_minimum_size = Vector2(maxf(tab_btn.custom_minimum_size.x, 56.0), maxf(tab_btn.custom_minimum_size.y, 56.0))
+			JuicyButton.attach_juice(tab_btn, false)
 	resized.connect(func(): call_deferred("_sync_sliding_paw_pos", false))
 	set_active_tab("room")
 	call_deferred("_sync_sliding_paw_pos", false)
@@ -110,7 +115,7 @@ func _animate_button(btn: Control) -> void:
 		var base_y: float = _icon_base_y[bid]
 		icon_node.position.y = base_y
 		var icon_tw = create_tween()
-		icon_tw.tween_property(icon_node, "position:y", base_y - 4.0, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		icon_tw.tween_property(icon_node, "position:y", base_y - 6.0, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		icon_tw.tween_property(icon_node, "position:y", base_y, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	SoundManager.play_wooden_pop()
 

@@ -9,6 +9,8 @@ signal open_avatar_picker_requested
 signal pause_requested
 signal open_shop_requested
 
+const JuicyButton = preload("res://scripts/ui/JuicyButton.gd")
+
 enum HUDState {
 	NORMAL,
 	MINIGAME_ACTIVE
@@ -54,6 +56,8 @@ var _hunger_jitter_phase: float = 0.0
 var _icon_pulse_phase: float = 0.0
 var _was_low_hunger: bool = false
 var _last_low_hunger_meow_msec: int = -30000
+var _hud_initialized: bool = false
+var _bar_tweens: Dictionary = {}
 
 func _ready() -> void:
 	# Load 10 avatar textures
@@ -67,24 +71,19 @@ func _ready() -> void:
 		star_icon.texture = GameManager.load_texture("res://assets/UI/CatUIPaid/slices/icon_star.png")
 		
 	avatar_btn.pressed.connect(_on_avatar_pressed)
+	JuicyButton.attach_juice(avatar_btn, false)
 	
 	if btn_pause:
-		btn_pause.pivot_offset = btn_pause.custom_minimum_size / 2.0
+		btn_pause.custom_minimum_size = Vector2(maxf(btn_pause.custom_minimum_size.x, 44.0), maxf(btn_pause.custom_minimum_size.y, 44.0))
+		JuicyButton.attach_juice(btn_pause, true)
 		btn_pause.pressed.connect(func():
-			SoundManager.play_click()
-			var tw = create_tween()
-			tw.tween_property(btn_pause, "scale", Vector2(0.9, 0.9), 0.05)
-			tw.tween_property(btn_pause, "scale", Vector2(1.0, 1.0), 0.07)
 			emit_signal("pause_requested")
 		)
 		
 	if btn_shop:
-		btn_shop.pivot_offset = btn_shop.custom_minimum_size / 2.0
+		btn_shop.custom_minimum_size = Vector2(maxf(btn_shop.custom_minimum_size.x, 44.0), maxf(btn_shop.custom_minimum_size.y, 44.0))
+		JuicyButton.attach_juice(btn_shop, true)
 		btn_shop.pressed.connect(func():
-			SoundManager.play_click()
-			var tween = create_tween()
-			tween.tween_property(btn_shop, "scale", Vector2(0.9, 0.9), 0.05)
-			tween.tween_property(btn_shop, "scale", Vector2(1.0, 1.0), 0.07)
 			emit_signal("open_shop_requested")
 		)
 		
@@ -227,24 +226,43 @@ func apply_safe_area_top(top_inset: float) -> void:
 
 func update_avatar() -> void:
 	var id = GameManager.selected_avatar_id
-	if id >= 0 and id < avatar_textures.size() and avatar_textures[id] != null:
-		avatar_btn.texture_normal = avatar_textures[id]
+	var expr_idx: int = id
+	# Hiển thị biểu cảm thời gian thực của Mochi: đói/stress hiện mặt buồn, no khỏe hiện mặt tươi
+	if GameManager.hunger < 30 or GameManager.courage <= 20:
+		expr_idx = 5 if avatar_textures.size() > 5 and avatar_textures[5] != null else id
+	elif id == 0 and GameManager.hunger >= 70 and GameManager.courage >= 60:
+		expr_idx = 1 if avatar_textures.size() > 1 and avatar_textures[1] != null else 0
+	if expr_idx >= 0 and expr_idx < avatar_textures.size() and avatar_textures[expr_idx] != null:
+		avatar_btn.texture_normal = avatar_textures[expr_idx]
 	if lbl_cat_title and id >= 0 and id < GameManager.avatar_list.size():
 		lbl_cat_title.text = GameManager.get_cat_name()
 	_update_avatar_frame()
+
+func _tween_bar_value(bar: Range, target_val: float) -> void:
+	if not bar:
+		return
+	if not _hud_initialized or not is_inside_tree():
+		bar.value = target_val
+		return
+	var bid := bar.get_instance_id()
+	if _bar_tweens.has(bid) and _bar_tweens[bid] is Tween and (_bar_tweens[bid] as Tween).is_valid():
+		(_bar_tweens[bid] as Tween).kill()
+	var tw := create_tween()
+	_bar_tweens[bid] = tw
+	tw.tween_property(bar, "value", target_val, 0.28).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 func _update_avatar_frame() -> void:
 	if avatar_frame_tex:
 		avatar_frame_tex.texture = preload("res://assets/UI/CatUIPaid/slices/toffee_hud/avatar_picture_frame_32x32.tres")
 
 func update_hud() -> void:
+	update_avatar()
 	# 0. Cập nhật Cấp Độ Mèo
 	if lbl_level:
 		lbl_level.text = "Cấp %d" % GameManager.cat_mastery_level
 	
 	# 1. Cập nhật Độ No (Hunger)
-	if hunger_bar:
-		hunger_bar.value = GameManager.hunger
+	_tween_bar_value(hunger_bar, float(GameManager.hunger))
 	if lbl_hunger_val:
 		lbl_hunger_val.text = "%d/100" % GameManager.hunger
 		if GameManager.hunger >= 100:
@@ -255,8 +273,7 @@ func update_hud() -> void:
 			lbl_hunger_val.add_theme_color_override("font_color", Color(0.24, 0.16, 0.10))
 	
 	# 2. Cập nhật Dũng Cảm (Courage)
-	if courage_bar:
-		courage_bar.value = GameManager.courage
+	_tween_bar_value(courage_bar, float(GameManager.courage))
 	if lbl_courage_val:
 		lbl_courage_val.text = "%d/100" % GameManager.courage
 		if GameManager.courage <= 15:
@@ -267,10 +284,10 @@ func update_hud() -> void:
 			lbl_courage_val.add_theme_color_override("font_color", Color(0.12, 0.28, 0.36))
 	
 	# 3. Cập nhật Tâm Trạng (nếu có)
-	if mood_bar:
-		mood_bar.value = GameManager.mood
+	_tween_bar_value(mood_bar, float(GameManager.mood))
 	if lbl_mood_val:
 		lbl_mood_val.text = "%d/100" % GameManager.mood
+	_hud_initialized = true
 		
 	# 4. Cập nhật Tiền Cá Vàng
 	if lbl_fish_val:

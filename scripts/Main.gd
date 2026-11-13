@@ -47,6 +47,7 @@ var current_safe_top_dp: float = 0.0
 var current_safe_bottom_dp: float = 0.0
 
 func _ready() -> void:
+	theme = preload("res://assets/themes/MainTheme.tres")
 	_apply_safe_area()
 	get_viewport().size_changed.connect(_apply_safe_area)
 	

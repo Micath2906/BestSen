@@ -6,11 +6,15 @@ extends Control
 signal minigame_completed(sim_steps)
 signal back_requested
 
+const DraggableItemScript = preload("res://scripts/minigames/DraggableItem.gd")
+const JuicyButtonScript = preload("res://scripts/ui/JuicyButton.gd")
 const TEX_CLIPBOARD: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_dress/clipboard_wood_frame_9patch.tres")
 const STYLE_CORK_BOARD: StyleBox = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/cork_board_stylebox.tres")
 const TEX_PIN_TACK: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/pin_tack_red.tres")
+const TEX_MOCHI_YARN: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_toy_yarn_ball.png")
 const COZY_DIALOG_SCN: PackedScene = preload("res://scenes/ui/CozyDialogBox.tscn")
 
+const TEX_ITEM_PEN: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_05_pen.tres")
 const TEX_ITEM_KEY: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_06_key.tres")
 const TEX_ITEM_CLIPBOARD: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_08_clipboard.tres")
 const TEX_ITEM_THERMO: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_09_thermometer.tres")
@@ -21,6 +25,7 @@ const TEX_ITEM_COFFEE: Texture2D = preload("res://assets/UI/CatUIPaid/slices/pix
 
 const GRID_COLS: int = 4
 const GRID_ROWS: int = 3
+var active_grid_rows: int = GRID_ROWS
 
 @onready var title_lbl: Label = $Header/HeaderTitle
 @onready var btn_back: Button = $Header/BtnBack
@@ -43,8 +48,14 @@ var pin_tack_sprite: TextureRect = null
 var checklist_vbox: VBoxContainer = null
 var tetris_controls_row: HBoxContainer = null
 var btn_rotate_item: Button = null
+var btn_toggle_4x5: Button = null
 var active_shape_lbl: Label = null
 var tetris_grid_4x3: GridContainer = null
+var tetris_grid_4x5: GridContainer = null
+var ghost_hover_origin: Vector2i = Vector2i(-1, -1)
+var mochi_yarn_in_backpack: bool = false
+var mochi_mischief_timer: float = 0.0
+var is_packing_completed: bool = false
 var packing_cozy_dialog: Control = null
 
 var is_item_rotated: bool = false
@@ -57,14 +68,19 @@ func _ready() -> void:
 	btn_back.icon = preload("res://assets/UI/CatUIPaid/slices/icon_arrow_left.png")
 	btn_back.pressed.connect(func(): emit_signal("back_requested"))
 	btn_pack_done.pressed.connect(_on_pack_done_pressed)
+	JuicyButtonScript.attach_juice(btn_pack_done, true)
 	_setup_cat_mascot()
 	_setup_gp_ed_04_ui()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	var sig := _compute_sync_signature()
 	if sig != _last_sync_signature:
 		_last_sync_signature = sig
 		_sync_gp_ed_04_state()
+	if not is_packing_completed and not mochi_yarn_in_backpack and packed_items.size() >= 2:
+		mochi_mischief_timer += delta
+		if mochi_mischief_timer >= 6.0:
+			spawn_mochi_mischief_toy()
 
 func _setup_cat_mascot() -> void:
 	if cat_anim == null and cat_anchor:
@@ -80,6 +96,11 @@ func load_minigame(game_data: Dictionary) -> void:
 	data = game_data
 	max_slots = data.get("max_slots", 4)
 	packed_items.clear()
+	tetris_placements.clear()
+	mochi_yarn_in_backpack = false
+	mochi_mischief_timer = 0.0
+	is_packing_completed = false
+	ghost_hover_origin = Vector2i(-1, -1)
 	available_items = data.get("items", []).duplicate()
 	
 	title_lbl.text = "🎒 " + data.get("title", "XẾP BA LÔ SINH TỒN")
@@ -88,6 +109,7 @@ func load_minigame(game_data: Dictionary) -> void:
 	_render_backpack_slots()
 	_render_table_items()
 	_update_action_button()
+	_refresh_tetris_grid_visuals()
 
 func _render_backpack_slots() -> void:
 	for child in backpack_grid.get_children():
@@ -250,6 +272,12 @@ func _on_pack_done_pressed() -> void:
 					forgot_key_item = req
 					break
 
+	if mochi_yarn_in_backpack:
+		_trigger_packing_safe_failure(
+			"Hihi~ Mochi lén gửi Cuộn Len 🧶 vào góc ba lô nè! Bấm vào cuộn len trả lại cho Mochi rồi hẵng kéo khóa nhé!",
+			false
+		)
+		return
 	if packed_items.is_empty():
 		_trigger_packing_safe_failure(
 			"Hihi~ Ba lô vẫn trống trơn nè! Boss Mèo cười khúc khích chạy đi nhặt giúp Sen chùm chìa khóa & đồ cần thiết nhé! 🔑🐾",
@@ -268,16 +296,25 @@ func _on_pack_done_pressed() -> void:
 			true
 		)
 	else:
-		# Thành công rực rỡ!
+		# Thành công rực rỡ! Âm thanh kéo khóa "Rẹt!" + Ba lô căng phồng nhẹ
+		is_packing_completed = true
+		SoundManager.play_card_pop()
 		SoundManager.play_success()
 		if SoundManager.has_method("vibrate"):
 			SoundManager.vibrate(30)
+		var bp := get_node_or_null("BackpackCard") as Control
+		if bp:
+			bp.pivot_offset = bp.size * 0.5
+			var puff := create_tween()
+			puff.tween_property(bp, "scale", Vector2(1.06, 0.96), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			puff.tween_property(bp, "scale", Vector2(1.02, 1.04), 0.12)
+			puff.tween_property(bp, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 		if cat_anim:
 			cat_anim.play("jump")
 			
-		cat_speech.text = data.get("success_msg", "🎒 Ba lô chuẩn y tế 10 điểm! Mèo lên đường tự tin! ✨")
+		cat_speech.text = "🎒 RẸT! Kéo khóa hoàn hảo 10/10! " + data.get("success_msg", "Hành trang sẵn sàng! ✨")
 		btn_pack_done.disabled = true
-		btn_pack_done.text = "🎉 HÀNH TRANG CHUẨN XÁC 10/10!"
+		btn_pack_done.text = "🎉 RẸT! HÀNH TRANG CHUẨN XÁC 10/10!"
 		
 		await get_tree().create_timer(1.2).timeout
 		var sim_steps = data.get("sim_steps", [])
@@ -353,6 +390,16 @@ func _setup_gp_ed_04_ui() -> void:
 	btn_rotate_item.add_theme_font_size_override("font_size", 15)
 	btn_rotate_item.pressed.connect(_on_rotate_item_pressed)
 	tetris_controls_row.add_child(btn_rotate_item)
+	JuicyButtonScript.attach_juice(btn_rotate_item, true)
+
+	btn_toggle_4x5 = Button.new()
+	btn_toggle_4x5.name = "BtnToggle4x5Grid"
+	btn_toggle_4x5.text = "📐 Ngăn 4×5"
+	btn_toggle_4x5.custom_minimum_size = Vector2(88, 56)
+	btn_toggle_4x5.add_theme_font_size_override("font_size", 12)
+	btn_toggle_4x5.pressed.connect(func(): enable_4x5_grid(active_grid_rows == 3))
+	tetris_controls_row.add_child(btn_toggle_4x5)
+	JuicyButtonScript.attach_juice(btn_toggle_4x5, true)
 
 	active_shape_lbl = Label.new()
 	active_shape_lbl.name = "ActiveShapeLabel"
@@ -365,31 +412,13 @@ func _setup_gp_ed_04_ui() -> void:
 
 	vbox.add_child(tetris_controls_row)
 
-	# 3. Lưới Tetris 4x3 trong Ba Lô Clipboard
-	tetris_grid_4x3 = GridContainer.new()
-	tetris_grid_4x3.name = "TetrisGrid4x3"
-	tetris_grid_4x3.columns = GRID_COLS
-	tetris_grid_4x3.add_theme_constant_override("h_separation", 4)
-	tetris_grid_4x3.add_theme_constant_override("v_separation", 4)
-
-	for y in range(GRID_ROWS):
-		for x in range(GRID_COLS):
-			var cell_btn := Button.new()
-			cell_btn.name = "Cell_%d_%d" % [x, y]
-			cell_btn.custom_minimum_size = Vector2(62, 56)
-			cell_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			cell_btn.text = "·"
-			cell_btn.expand_icon = true
-			var origin := Vector2i(x, y)
-			cell_btn.pressed.connect(func(): _on_tetris_cell_pressed(origin))
-			cell_btn.set_drag_forwarding(
-				Callable(),
-				func(_pos, drag_data): return _can_drop_on_cell(drag_data, origin),
-				func(_pos, drag_data): _drop_on_cell(drag_data, origin)
-			)
-			tetris_grid_4x3.add_child(cell_btn)
-
+	# 3. Lưới Tetris 4x3 chuẩn (tương thích kiểm thử) & Lưới mở rộng 4x5
+	tetris_grid_4x3 = _build_backpack_grid_container("TetrisGrid4x3", 3)
 	vbox.add_child(tetris_grid_4x3)
+
+	tetris_grid_4x5 = _build_backpack_grid_container("TetrisGrid4x5", 5)
+	tetris_grid_4x5.visible = false
+	vbox.add_child(tetris_grid_4x5)
 
 	# 4. CozyDialogBox cho Safe Failure (Boss Mèo cười khúc khích + nhặt chìa khóa)
 	packing_cozy_dialog = COZY_DIALOG_SCN.instantiate()
@@ -413,6 +442,7 @@ func _on_rotate_item_pressed() -> void:
 		SoundManager.vibrate(15)
 	_update_rotate_label()
 	_refresh_table_item_footprints()
+	_refresh_tetris_grid_visuals()
 
 func _update_rotate_label() -> void:
 	if not active_shape_lbl:
@@ -482,6 +512,65 @@ func _has_placement_for_item(item: Dictionary) -> bool:
 			return true
 	return false
 
+func _build_backpack_grid_container(grid_name: String, rows_count: int) -> GridContainer:
+	var grid := GridContainer.new()
+	grid.name = grid_name
+	grid.columns = GRID_COLS
+	grid.add_theme_constant_override("h_separation", 4)
+	grid.add_theme_constant_override("v_separation", 4)
+	for y in range(rows_count):
+		for x in range(GRID_COLS):
+			var cell_btn := Button.new()
+			cell_btn.name = "Cell_%d_%d" % [x, y]
+			cell_btn.custom_minimum_size = Vector2(62, 50 if rows_count > 3 else 56)
+			cell_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			cell_btn.text = "·"
+			cell_btn.expand_icon = true
+			var origin := Vector2i(x, y)
+			cell_btn.pressed.connect(func(): _on_tetris_cell_pressed(origin))
+			cell_btn.mouse_entered.connect(func():
+				ghost_hover_origin = origin
+				_refresh_tetris_grid_visuals()
+			)
+			cell_btn.mouse_exited.connect(func():
+				if ghost_hover_origin == origin:
+					ghost_hover_origin = Vector2i(-1, -1)
+					_refresh_tetris_grid_visuals()
+			)
+			cell_btn.gui_input.connect(func(ev: InputEvent):
+				if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_RIGHT:
+					_on_rotate_item_pressed()
+				elif ev is InputEventScreenTouch and ev.pressed and ev.index >= 1:
+					_on_rotate_item_pressed()
+			)
+			cell_btn.set_drag_forwarding(
+				Callable(),
+				func(_pos, drag_data):
+					ghost_hover_origin = origin
+					_refresh_tetris_grid_visuals()
+					return _can_drop_on_cell(drag_data, origin),
+				func(_pos, drag_data):
+					ghost_hover_origin = Vector2i(-1, -1)
+					_drop_on_cell(drag_data, origin)
+			)
+			grid.add_child(cell_btn)
+	return grid
+
+func enable_4x5_grid(enable: bool = true) -> void:
+	active_grid_rows = 5 if enable else 3
+	if tetris_grid_4x3:
+		tetris_grid_4x3.visible = not enable
+	if tetris_grid_4x5:
+		tetris_grid_4x5.visible = enable
+	if btn_toggle_4x5:
+		btn_toggle_4x5.text = "📐 Ngăn 4×3" if enable else "📐 Ngăn 4×5"
+	_refresh_tetris_grid_visuals()
+
+func _active_grid_node() -> GridContainer:
+	if active_grid_rows == 5 and tetris_grid_4x5:
+		return tetris_grid_4x5
+	return tetris_grid_4x3
+
 func get_item_footprint(item: Dictionary, rotated: bool = false) -> Vector2i:
 	var base := Vector2i(1, 1)
 	if item.has("grid_size"):
@@ -497,11 +586,27 @@ func get_item_footprint(item: Dictionary, rotated: bool = false) -> Vector2i:
 			base = Vector2i(2, 1)
 		elif "oresol" in k or "thermos" in k or "nước" in nm or "bình" in nm:
 			base = Vector2i(1, 2)
-		elif "blanket" in k or "chăn" in nm:
+		elif "clipboard" in k or "hồ sơ" in nm or "blanket" in k or "chăn" in nm:
+			base = Vector2i(2, 2)
+		elif "pen" in k or "bút" in nm or "thước" in nm:
 			base = Vector2i(2, 2)
 	if rotated:
 		return Vector2i(base.y, base.x)
 	return base
+
+func get_item_cells(item: Dictionary, rotated: bool = false) -> Array[Vector2i]:
+	var k := _item_key(item).to_lower()
+	var nm := str(item.get("name", "")).to_lower()
+	if "pen" in k or "bút" in nm or "thước" in nm:
+		if rotated:
+			return [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1)]
+		return [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 1)]
+	var fp := get_item_footprint(item, rotated)
+	var cells: Array[Vector2i] = []
+	for dy in range(fp.y):
+		for dx in range(fp.x):
+			cells.append(Vector2i(dx, dy))
+	return cells
 
 func _occupied_map(ignore_key: String = "") -> Dictionary:
 	var occ: Dictionary = {}
@@ -511,23 +616,21 @@ func _occupied_map(ignore_key: String = "") -> Dictionary:
 		if ignore_key != "" and pk == ignore_key:
 			continue
 		var ori: Vector2i = p.get("origin", Vector2i.ZERO)
-		var sz: Vector2i = p.get("size", Vector2i.ONE)
-		for dy in range(sz.y):
-			for dx in range(sz.x):
-				occ[ori + Vector2i(dx, dy)] = p
+		var rot: bool = bool(p.get("rotated", false))
+		var pcells := get_item_cells(pit, rot)
+		for rel in pcells:
+			occ[ori + rel] = p
 	return occ
 
 func can_place_in_grid(item: Dictionary, origin: Vector2i, rotated: bool = false) -> bool:
-	var fp := get_item_footprint(item, rotated)
-	if origin.x < 0 or origin.y < 0:
-		return false
-	if origin.x + fp.x > GRID_COLS or origin.y + fp.y > GRID_ROWS:
-		return false
+	var cells := get_item_cells(item, rotated)
 	var occ := _occupied_map(_item_key(item))
-	for dy in range(fp.y):
-		for dx in range(fp.x):
-			if occ.has(origin + Vector2i(dx, dy)):
-				return false
+	for rel in cells:
+		var c := origin + rel
+		if c.x < 0 or c.y < 0 or c.x >= GRID_COLS or c.y >= active_grid_rows:
+			return false
+		if occ.has(c):
+			return false
 	return true
 
 func place_item_at_cell(item: Dictionary, origin: Vector2i, rotated: bool = false) -> bool:
@@ -556,6 +659,10 @@ func place_item_at_cell(item: Dictionary, origin: Vector2i, rotated: bool = fals
 
 func remove_item_from_grid(item: Dictionary, also_unpack: bool = true) -> void:
 	var k := _item_key(item)
+	if k == "mochi_yarn_toy":
+		mochi_yarn_in_backpack = false
+		SoundManager.play_meow(1.1)
+		cat_speech.text = "Meow~ Cảm ơn Sen trả lại Cuộn Len cho Mochi nè! 🧶"
 	var remaining: Array = []
 	for p in tetris_placements:
 		if _item_key(p.get("item", {})) != k:
@@ -574,7 +681,7 @@ func remove_item_from_grid(item: Dictionary, also_unpack: bool = true) -> void:
 func _auto_place_item_in_grid(item: Dictionary) -> bool:
 	var tries := [is_item_rotated, not is_item_rotated]
 	for rot in tries:
-		for y in range(GRID_ROWS):
+		for y in range(active_grid_rows):
 			for x in range(GRID_COLS):
 				var origin := Vector2i(x, y)
 				if can_place_in_grid(item, origin, rot):
@@ -585,6 +692,34 @@ func _auto_place_item_in_grid(item: Dictionary) -> bool:
 						"rotated": rot
 					})
 					return true
+	return false
+
+func spawn_mochi_mischief_toy() -> bool:
+	if mochi_yarn_in_backpack:
+		return true
+	var yarn_item := {
+		"id": "mochi_yarn_toy",
+		"name": "Cuộn Len",
+		"icon": "🧶",
+		"is_required": false,
+		"is_mochi_toy": true
+	}
+	var occ := _occupied_map()
+	for y in range(active_grid_rows - 1, -1, -1):
+		for x in range(GRID_COLS - 1, -1, -1):
+			var c := Vector2i(x, y)
+			if not occ.has(c):
+				tetris_placements.append({
+					"item": yarn_item,
+					"origin": c,
+					"size": Vector2i(1, 1),
+					"rotated": false
+				})
+				mochi_yarn_in_backpack = true
+				SoundManager.play_giggle()
+				cat_speech.text = "Hihi~ Mochi lén nhét Cuộn Len 🧶 vào góc ba lô rồi nè!"
+				_refresh_tetris_grid_visuals()
+				return true
 	return false
 
 func _on_tetris_cell_pressed(origin: Vector2i) -> void:
@@ -645,30 +780,43 @@ func _rebuild_cork_checklist() -> void:
 		checklist_vbox.add_child(row)
 
 func _refresh_tetris_grid_visuals() -> void:
-	if not tetris_grid_4x3:
-		return
 	var occ := _occupied_map()
-	for y in range(GRID_ROWS):
-		for x in range(GRID_COLS):
-			var idx := y * GRID_COLS + x
-			if idx >= tetris_grid_4x3.get_child_count():
-				continue
-			var cell_btn := tetris_grid_4x3.get_child(idx) as Button
-			if not cell_btn:
-				continue
-			var pos := Vector2i(x, y)
-			if occ.has(pos):
-				var placement: Dictionary = occ[pos]
-				var pit: Dictionary = placement.get("item", {})
-				var is_origin: bool = placement.get("origin", Vector2i.ZERO) == pos
-				var is_req := bool(pit.get("is_required", false))
-				cell_btn.icon = _get_item_pixel_texture(pit) if is_origin else null
-				cell_btn.text = str(pit.get("name", "")).substr(0, 6) if is_origin else "▪"
-				cell_btn.modulate = Color(0.84, 1.0, 0.86) if is_req else Color(1.0, 0.88, 0.84)
-			else:
-				cell_btn.icon = null
-				cell_btn.text = "·"
-				cell_btn.modulate = Color(1.0, 1.0, 1.0)
+	var ghost_cells: Dictionary = {}
+	var ghost_valid: bool = false
+	if ghost_hover_origin.x >= 0 and not selected_item.is_empty():
+		ghost_valid = can_place_in_grid(selected_item, ghost_hover_origin, is_item_rotated)
+		for rel in get_item_cells(selected_item, is_item_rotated):
+			ghost_cells[ghost_hover_origin + rel] = true
+
+	var grids := [[tetris_grid_4x3, 3], [tetris_grid_4x5, 5]]
+	for entry in grids:
+		var grid: GridContainer = entry[0]
+		var rows_cnt: int = entry[1]
+		if not grid:
+			continue
+		for y in range(rows_cnt):
+			for x in range(GRID_COLS):
+				var idx := y * GRID_COLS + x
+				if idx >= grid.get_child_count():
+					continue
+				var cell_btn := grid.get_child(idx) as Button
+				if not cell_btn:
+					continue
+				var pos := Vector2i(x, y)
+				if ghost_cells.has(pos):
+					cell_btn.modulate = Color(0.75, 1.0, 0.78) if ghost_valid else Color(1.0, 0.72, 0.45)
+				elif occ.has(pos):
+					var placement: Dictionary = occ[pos]
+					var pit: Dictionary = placement.get("item", {})
+					var is_origin: bool = placement.get("origin", Vector2i.ZERO) == pos
+					var is_req := bool(pit.get("is_required", false))
+					cell_btn.icon = _get_item_pixel_texture(pit) if is_origin else null
+					cell_btn.text = str(pit.get("name", "")).substr(0, 6) if is_origin else "▪"
+					cell_btn.modulate = Color(0.84, 1.0, 0.86) if is_req else Color(1.0, 0.88, 0.84)
+				else:
+					cell_btn.icon = null
+					cell_btn.text = "·"
+					cell_btn.modulate = Color(1.0, 1.0, 1.0)
 
 func _decorate_table_items() -> void:
 	if not table_grid:
@@ -727,6 +875,10 @@ func _match_item_for_table_child(ctrl: Control) -> Dictionary:
 func _get_item_pixel_texture(item: Dictionary) -> Texture2D:
 	var k := _item_key(item).to_lower()
 	var nm := str(item.get("name", "")).to_lower()
+	if k == "mochi_yarn_toy" or "cuộn len" in nm:
+		return TEX_MOCHI_YARN
+	if "pen" in k or "bút" in nm or "thước" in nm:
+		return TEX_ITEM_PEN
 	if "key" in k or "chìa" in nm or "chia" in nm:
 		return TEX_ITEM_KEY
 	if "bandage" in k or "first_aid" in k or "băng" in nm or "sơ cứu" in nm:

@@ -23,7 +23,9 @@ func _ready() -> void:
 		room_bg_tex = _load_texture("res://assets/furnitures/CatRoomPaid/CatRoomPaid/Rooms/Room1.png")
 	window_tex = _load_texture("res://assets/sprites/room_items/window_sky_white.png")
 	wall_art_tex = _load_texture("res://assets/sprites/room_items/wall_cactus_poster.png")
-	rug_boho_tex = _load_texture("res://assets/sprites/room_items/rug_boho.png")
+	rug_boho_tex = preload("res://assets/UI/CatUIPaid/slices/cozy_dress/rug_woven_cozy_oval.tres")
+	if not rug_boho_tex:
+		rug_boho_tex = _load_texture("res://assets/sprites/room_items/rug_boho.png")
 	GameManager.decor_changed.connect(func(_slot, _id): queue_redraw())
 
 func _load_texture(path: String) -> Texture2D:

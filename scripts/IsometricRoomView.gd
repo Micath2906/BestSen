@@ -57,8 +57,13 @@ signal open_handbook_requested
 
 const LONG_PRESS_DECOR_SEC: float = 1.0
 const FOOD_BAG_TEX: Texture2D = preload("res://assets/UI/CatUIPaid/slices/icon_cat_food_bag.png")
+const CORK_BOARD_9PATCH: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/cork_board_9patch.tres")
+const POLAROID_CARD_9PATCH: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/polaroid_card_9patch.tres")
+const PIN_TACK_RED_TEX: Texture2D = preload("res://assets/UI/CatUIPaid/slices/cozy_achievements/pin_tack_red.tres")
 
 var origin: Vector2 = Vector2(270.0, 690.0)
+var wall_cork_board: PanelContainer = null
+var wall_polaroid_tray: HBoxContainer = null
 var food_bowl_drop_zone: Control = null
 var food_bag_widget: TextureRect = null
 var food_bag_qty_lbl: Label = null
@@ -173,9 +178,9 @@ func _ready() -> void:
 	# Kết nối chạm sàn nhà thả đồ chơi
 	floor_touch_area.gui_input.connect(_on_floor_gui_input)
 	
-	# Kết nối bộ định thời đi dạo ngẫu nhiên (Roaming AI)
+	# Kết nối bộ định thời đi dạo ngẫu nhiên (Roaming AI 5-10s)
 	roam_timer.timeout.connect(_on_roam_timer_timeout)
-	roam_timer.start(randf_range(4.0, 7.0))
+	roam_timer.start(randf_range(5.0, 10.0))
 	
 	if iso_cat.has_signal("reached_destination"):
 		iso_cat.reached_destination.connect(_on_cat_reached_destination)
@@ -186,9 +191,14 @@ func _ready() -> void:
 	toy_item.visible = false
 	_setup_food_bag_interaction()
 	_setup_decor_mode_ui()
+	_setup_wall_achievement_board()
+	refresh_wall_achievement_board()
 	_update_comfort_badge()
 	GameManager.room_state_updated.connect(_update_comfort_badge)
-	GameManager.stats_changed.connect(_refresh_food_bag_widget)
+	GameManager.stats_changed.connect(func():
+		_refresh_food_bag_widget()
+		refresh_wall_achievement_board()
+	)
 	if GameManager.is_offline_auto_sleeping and iso_cat.has_method("set_cozy_sleep_mode"):
 		iso_cat.set_cozy_sleep_mode(true)
 
@@ -456,7 +466,7 @@ func _input(event: InputEvent) -> void:
 		if event is InputEventMouseMotion:
 			var move_dist: float = event.global_position.distance_to(cat_press_pos)
 			if not _cat_drag_lifted:
-				if move_dist < 14.0:
+				if move_dist < 28.0:
 					if iso_cat.has_method("pet_rub"):
 						iso_cat.pet_rub(event.position.y - iso_cat.position.y)
 					return
@@ -696,43 +706,19 @@ func play_activity(activity_type: String) -> void:
 			SoundManager.play_meow(0.85)
 			_spawn_floating_text(iso_cat.position + Vector2(0, -50), "💳 +30 💖 (Nợ 35 Cá sau 5 ngày!)", Color(0.9, 0.2, 0.2))
 
-# --- ROAMING AI: TỰ DO ĐI LẠI TRONG KHÔNG GIAN PHÒNG TRỌ ---
+# --- ROAMING AI: TỰ DO ĐI LẠI TRONG KHÔNG GIAN PHÒNG TRỌ (5-10s) ---
 func _on_roam_timer_timeout() -> void:
-	# Nếu mèo đang xỉu vì hạ đường huyết -> nằm yên
-	if GameManager.hunger <= 0:
-		iso_cat.set_state(iso_cat.State.FAINT)
-		roam_timer.start(4.0)
-		return
-
 	if iso_cat.current_state == iso_cat.State.CHASE_TOY or iso_cat.current_state == iso_cat.State.EAT or iso_cat.current_state == iso_cat.State.DRINK:
-		roam_timer.start(3.0)
+		roam_timer.start(randf_range(5.0, 10.0))
 		return
-		
-	var roll = randf()
-	if roll < 0.45:
-		# Đi dạo ngẫu nhiên đến một vị trí trong phòng
-		var next_u = randf_range(1.5, 6.0)
-		var next_v = randf_range(2.0, 5.5)
-		iso_cat.walk_to_grid(Vector2(next_u, next_v), iso_cat.State.IDLE)
-		iso_cat._show_random_thought()
-	elif roll < 0.65:
-		# Nằm nghỉ tại chỗ
-		iso_cat.set_state(iso_cat.State.IDLE)
-	elif roll < 0.85:
-		# Ghé thăm đệm ngủ hoặc chậu cát đi vệ sinh
-		if randf() < 0.5:
-			iso_cat.walk_to_grid(cushion_bed.grid_coord + Vector2(0.2, 0.1), iso_cat.State.SLEEP)
-		else:
-			iso_cat.walk_to_grid(litter_box.grid_coord, iso_cat.State.IDLE)
-			iso_cat.dialogue_label.text = "Bới cát sột soạt... Chậu cát sạch thơm tho ghê! 🐾"
+	if iso_cat.has_method("run_autonomous_behavior"):
+		iso_cat.run_autonomous_behavior(
+			food_bowl.grid_coord + Vector2(-0.2, 0.0),
+			cushion_bed.grid_coord + Vector2(0.2, 0.1)
+		)
 	else:
-		# Ghé uống nước hoặc chén ăn
-		if randf() < 0.5:
-			iso_cat.walk_to_grid(water_bowl.grid_coord + Vector2(-0.2, 0.0), iso_cat.State.DRINK)
-		else:
-			iso_cat.walk_to_grid(food_bowl.grid_coord + Vector2(-0.2, 0.0), iso_cat.State.EAT)
-		
-	roam_timer.start(randf_range(4.5, 8.5))
+		iso_cat.set_state(iso_cat.State.IDLE)
+	roam_timer.start(randf_range(5.0, 10.0))
 
 func _spawn_floating_text(pos: Vector2, text: String, color: Color) -> void:
 	var label = Label.new()
@@ -996,11 +982,111 @@ func pour_food_bag_into_bowl() -> bool:
 		GameManager.feed_kibble()
 		_refresh_food_bag_widget()
 		return false
+	if food_bowl:
+		_spawn_kibble_pour_particles(food_bowl.position)
 	feed_cat("kibble")
 	if iso_cat.has_method("set_cozy_sleep_mode") and iso_cat.cozy_sleep_mode:
 		iso_cat.set_cozy_sleep_mode(false)
 	_refresh_food_bag_widget()
 	return true
+
+func _spawn_kibble_pour_particles(target_pos: Vector2) -> void:
+	if not has_node("FloatingContainer"):
+		return
+	var fc := $FloatingContainer
+	for i in range(6):
+		var pellet := ColorRect.new()
+		pellet.color = Color(0.55, 0.32, 0.15, 1.0)
+		pellet.size = Vector2(5, 5)
+		pellet.position = target_pos + Vector2(randf_range(-10.0, 10.0), -46.0 - float(i * 4))
+		fc.add_child(pellet)
+		var tw := create_tween()
+		tw.tween_property(pellet, "position:y", target_pos.y - 6.0, 0.32).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		tw.parallel().tween_property(pellet, "modulate:a", 0.0, 0.36)
+		tw.tween_callback(pellet.queue_free)
+
+func _setup_wall_achievement_board() -> void:
+	if wall_cork_board != null:
+		return
+	wall_cork_board = PanelContainer.new()
+	wall_cork_board.name = "RoomAchievementCorkBoard"
+	wall_cork_board.position = Vector2(20, 148)
+	wall_cork_board.custom_minimum_size = Vector2(210, 86)
+	wall_cork_board.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var cork_sb := StyleBoxTexture.new()
+	cork_sb.texture = CORK_BOARD_9PATCH
+	cork_sb.texture_margin_left = 10.0
+	cork_sb.texture_margin_top = 10.0
+	cork_sb.texture_margin_right = 10.0
+	cork_sb.texture_margin_bottom = 10.0
+	cork_sb.set_content_margin_all(8.0)
+	wall_cork_board.add_theme_stylebox_override("panel", cork_sb)
+	add_child(wall_cork_board)
+	move_child(wall_cork_board, 2)
+
+	var v := VBoxContainer.new()
+	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	v.add_theme_constant_override("separation", 4)
+	wall_cork_board.add_child(v)
+
+	var hdr := HBoxContainer.new()
+	hdr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hdr.add_theme_constant_override("separation", 4)
+	v.add_child(hdr)
+
+	var pin := TextureRect.new()
+	pin.texture = PIN_TACK_RED_TEX
+	pin.custom_minimum_size = Vector2(14, 14)
+	pin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hdr.add_child(pin)
+
+	var lbl := Label.new()
+	lbl.text = "Bảng Ghim Thành Tựu Trọ"
+	lbl.add_theme_font_size_override("font_size", 10)
+	lbl.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+	hdr.add_child(lbl)
+
+	wall_polaroid_tray = HBoxContainer.new()
+	wall_polaroid_tray.name = "WallPolaroidTray"
+	wall_polaroid_tray.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	wall_polaroid_tray.add_theme_constant_override("separation", 5)
+	v.add_child(wall_polaroid_tray)
+
+func refresh_wall_achievement_board() -> void:
+	if not wall_polaroid_tray or not is_instance_valid(wall_polaroid_tray):
+		return
+	for ch in wall_polaroid_tray.get_children():
+		wall_polaroid_tray.remove_child(ch)
+		ch.queue_free()
+	var completed: Array = GameManager.completed_lessons if ("completed_lessons" in GameManager) else []
+	var count: int = mini(5, completed.size())
+	if count == 0:
+		var empty_lbl := Label.new()
+		empty_lbl.text = "Chưa có Polaroid - Học ngay!"
+		empty_lbl.add_theme_font_size_override("font_size", 9)
+		empty_lbl.add_theme_color_override("font_color", Color(0.427, 0.298, 0.255, 1.0))
+		wall_polaroid_tray.add_child(empty_lbl)
+		return
+	for i in range(count):
+		var card := PanelContainer.new()
+		card.name = "WallPolaroid_%d" % i
+		card.custom_minimum_size = Vector2(34, 40)
+		var psb := StyleBoxTexture.new()
+		psb.texture = POLAROID_CARD_9PATCH
+		psb.texture_margin_left = 4.0
+		psb.texture_margin_top = 4.0
+		psb.texture_margin_right = 4.0
+		psb.texture_margin_bottom = 6.0
+		psb.set_content_margin_all(4.0)
+		card.add_theme_stylebox_override("panel", psb)
+		var star := Label.new()
+		star.text = "⭐%s" % str(completed[i])
+		star.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		star.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		star.add_theme_font_size_override("font_size", 9)
+		star.add_theme_color_override("font_color", Color(0.243, 0.153, 0.137, 1.0))
+		card.add_child(star)
+		wall_polaroid_tray.add_child(card)
 
 # =========================================================================
 # GP-ROOM-02: DECOR MODE (NHẤN GIỮ 1.0s), LƯỚI 2.5D XANH/CAM & LƯU room_save.json
