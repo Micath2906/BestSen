@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://testhealthcarewellsim001"]
+
+[ext_resource type="Script" path="res://tests/TestHealthcareWellnessSimulation.gd" id="1_test"]
+
+[node name="TestHealthcareWellnessSimulation" type="Node"]
+script = ExtResource("1_test")

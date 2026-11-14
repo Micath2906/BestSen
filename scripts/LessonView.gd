@@ -103,7 +103,10 @@ const MINIGAME_SCENES = {
 	"route_master": preload("res://scenes/minigames/RouteMasterMiniGame.tscn"),
 	"checkin_rush": preload("res://scenes/minigames/CheckInRushGame.tscn"),
 	"civilized_ride": preload("res://scenes/minigames/CivilizedRideGame.tscn"),
-	"transit_simulation": preload("res://scenes/minigames/TransitSimulation.tscn")
+	"transit_simulation": preload("res://scenes/minigames/TransitSimulation.tscn"),
+	"housing_legal_simulation": preload("res://scenes/minigames/HousingLegalSimulation.tscn"),
+	"finance_survival_simulation": preload("res://scenes/minigames/FinanceSurvivalSimulation.tscn"),
+	"healthcare_wellness_simulation": preload("res://scenes/minigames/HealthcareWellnessSimulation.tscn")
 }
 
 # DỮ LIỆU HÌNH ẢNH MINH HỌA & ASSETS CHO 16 BÀI HỌC KỸ NĂNG SỐNG

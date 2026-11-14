@@ -1,0 +1,273 @@
+[gd_scene load_steps=12 format=3 uid="uid://financesurvsim001"]
+
+[ext_resource type="Script" path="res://scripts/minigames/FinanceSurvivalSimulation.gd" id="1_finance"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.96, 0.94, 0.91, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_panel"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.99, 0.97, 0.95)
+border_width_bottom = 2
+border_color = Color(0.85, 0.78, 0.7, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_btn"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.78, 0.7, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.94, 0.92, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.85, 0.75, 0.65, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.99, 0.96, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.92, 0.78, 0.62, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_overlay"]
+bg_color = Color(0, 0, 0, 0.55)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_panel"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.98, 0.96, 0.92, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 4
+border_color = Color(0.7, 0.5, 0.35, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_victory"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.7, 0.35, 1)
+border_width_bottom = 3
+border_color = Color(0.12, 0.5, 0.22, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="FinanceSurvivalSimulation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_finance")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="Header" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="BtnBack" type="Button" parent="Header"]
+custom_minimum_size = Vector2(40, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = "◀"
+
+[node name="TitleLabel" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.2, 0.1, 1)
+theme_override_font_sizes/font_size = 12
+text = "Tài Chính & Chống Lừa Đảo: Sinh Tồn Đô Thị"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelBadgeLabel" type="Label" parent="Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.5, 0.8, 1)
+theme_override_font_sizes/font_size = 10
+text = "CẤP ĐỘ 1 / 3"
+
+[node name="BtnHelp" type="Button" parent="Header"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.2, 0.1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_header_btn")
+text = "❓"
+
+[node name="MascotBox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 48.0
+offset_bottom = 110.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="CatAvatar" type="TextureRect" parent="MascotBox"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SpeechBubble" type="PanelContainer" parent="MascotBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="CatSpeechLabel" type="Label" parent="MascotBox/SpeechBubble"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+theme_override_font_sizes/font_size = 10
+text = "Ngân sách 200k! Soi đơn giá trên 100g và hạn sử dụng nha Sen! 🛒"
+autowrap_mode = 2
+
+[node name="Level1Container" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_top = 0.13
+anchor_right = 1.0
+anchor_bottom = 0.98
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Level2Container" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_top = 0.13
+anchor_right = 1.0
+anchor_bottom = 0.98
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Level3Container" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_top = 0.13
+anchor_right = 1.0
+anchor_bottom = 0.98
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VictoryModal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="Panel" parent="VictoryModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_overlay")
+
+[node name="ModalPanel" type="PanelContainer" parent="VictoryModal"]
+custom_minimum_size = Vector2(460, 480)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -240.0
+offset_right = 230.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_panel")
+
+[node name="VBox" type="VBoxContainer" parent="VictoryModal/ModalPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.6, 0.3, 1)
+theme_override_font_sizes/font_size = 14
+text = "🎉 CHÚC MỪNG BẬC THẦY TÀI CHÍNH & AN TOÀN SỐ!"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="VictoryModal/ModalPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="DialogueLabel" type="Label" parent="VictoryModal/ModalPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.22, 0.2, 1)
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 2
+
+[node name="BtnClaimReward" type="Button" parent="VictoryModal/ModalPanel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_victory")
+text = "🏆 Nhận Chứng Nhận Tài Chính & +45 Cá Khô 🐾"
