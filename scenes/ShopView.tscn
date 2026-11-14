@@ -287,6 +287,19 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_stage")
 layout_mode = 2
 theme_override_constants/separation = 6
 
+[node name="SpeechBubble" type="PanelContainer" parent="FittingStage/StagePodium"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="SpeechLabel" type="Label" parent="FittingStage/StagePodium/SpeechBubble"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.22, 0.15, 1)
+theme_override_font_sizes/font_size = 11
+text = "Sen ơi, thử đồ cho Boss đi nào! Quần áo xịn lắm! ✨"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="StageCenter" type="Control" parent="FittingStage/StagePodium"]
 custom_minimum_size = Vector2(0, 310)
 layout_mode = 2

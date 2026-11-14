@@ -260,7 +260,7 @@ func _render_stage_cat() -> void:
 	if hat_id != "":
 		var path = GameManager.get_costume_sprite_path(hat_id)
 		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			hat_rect.texture = load(path)
+			hat_rect.texture = GameManager.load_texture(path)
 			hat_rect.visible = true
 		else:
 			hat_rect.visible = false
@@ -271,7 +271,7 @@ func _render_stage_cat() -> void:
 	if bow_id != "":
 		var path = GameManager.get_costume_sprite_path(bow_id)
 		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			bow_rect.texture = load(path)
+			bow_rect.texture = GameManager.load_texture(path)
 			bow_rect.visible = true
 		else:
 			bow_rect.visible = false
@@ -282,7 +282,7 @@ func _render_stage_cat() -> void:
 	if clothes_id != "":
 		var path = GameManager.get_costume_sprite_path(clothes_id)
 		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			clothes_rect.texture = load(path)
+			clothes_rect.texture = GameManager.load_texture(path)
 			clothes_rect.visible = true
 		else:
 			clothes_rect.visible = false
@@ -293,7 +293,7 @@ func _render_stage_cat() -> void:
 	if acc_id != "":
 		var path = GameManager.get_costume_sprite_path(acc_id)
 		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			acc_rect.texture = load(path)
+			acc_rect.texture = GameManager.load_texture(path)
 			acc_rect.visible = true
 		else:
 			acc_rect.visible = false
@@ -398,7 +398,7 @@ func _create_dress_item_card(item: Dictionary) -> PanelContainer:
 	var sprite_path = GameManager.get_costume_sprite_path(item["id"])
 	if sprite_path != "" and (ResourceLoader.exists(sprite_path) or FileAccess.file_exists(sprite_path)):
 		var tex_rect = TextureRect.new()
-		tex_rect.texture = load(sprite_path)
+		tex_rect.texture = GameManager.load_texture(sprite_path)
 		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		tex_rect.custom_minimum_size = Vector2(36, 36)
@@ -681,7 +681,7 @@ func _create_decor_item_card(item: Dictionary) -> PanelContainer:
 	var sprite_path = GameManager.get_furniture_sprite_path(item["id"])
 	if sprite_path != "" and (ResourceLoader.exists(sprite_path) or FileAccess.file_exists(sprite_path)):
 		var tex_rect = TextureRect.new()
-		tex_rect.texture = load(sprite_path)
+		tex_rect.texture = GameManager.load_texture(sprite_path)
 		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		tex_rect.custom_minimum_size = Vector2(36, 36)
