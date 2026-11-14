@@ -1,7 +1,7 @@
 extends Node
 
 # TestHousingLegalSimulation.gd - Bộ kiểm thử tự động Trụ Cột 2: Thuê Trọ & Pháp Lý Đời Sống
-# Kiểm tra chi tiết 3 Cấp độ: Khảo sát lỗi phòng 2.5D -> Papers Please Hợp đồng -> Phụ tải CB & Kiểm toán điện
+# Kiểm tra chi tiết 3 Cấp độ: Khảo sát lỗi phòng 2.5D (Kính lúp) -> Papers Please Hợp đồng (Bút dạ quang & Dấu sáp) -> Phụ tải CB, Blackout & Kiểm toán hóa đơn
 
 var pass_count: int = 0
 var fail_count: int = 0
@@ -39,27 +39,32 @@ func _run_all_tests() -> void:
 	_assert_test(sim != null, "Khởi tạo HousingLegalSimulation node thành công")
 	
 	# ---------------------------------------------------------
-	# [TEST CẤP ĐỘ 1: THÁM TỬ XEM TRỌ & 4 LỖI HẠ TẦNG]
+	# [TEST CẤP ĐỘ 1: THÁM TỬ XEM TRỌ & 5 HOTSPOTS PHÒNG 2.5D]
 	# ---------------------------------------------------------
-	print("\n--- [LEVEL 1] Thám Tử Xem Trọ & 4 Lỗi Hạ Tầng ---")
+	print("\n--- [LEVEL 1] Thám Tử Xem Trọ & 5 Hotspots Phòng 2.5D ---")
 	sim.load_level(1)
 	_assert_test(sim.current_level == 1, "Level 1 khởi tạo chính xác")
 	_assert_test(sim.defect_water_found == false and sim.defect_meter_found == false, "Trạng thái ban đầu chưa tìm thấy lỗi")
+	_assert_test(sim.magnifier_preview_panel != null, "Panel kính lúp soi chi tiết loot_14_magnifier hiện diện")
 	
 	# 1. Soi vòi nước
 	sim._on_water_tap_pressed()
 	_assert_test(sim.defect_water_found == true, "Phát hiện lỗi vòi nước chảy yếu")
 	_assert_test(sim.cat_speech_lbl.text.contains("nhỏ giọt"), "Mochi phản hồi cảnh báo mất nước giờ cao điểm")
+	_assert_test(sim.magnifier_lbl.text.contains("giọt"), "Kính lúp hiển thị phóng to chi tiết giọt nước nhỏ giọt")
 	
 	# 2. Soi trần nhà
 	sim._on_ceiling_pressed()
 	_assert_test(sim.defect_ceiling_found == true, "Phát hiện lỗi trần nhà loang ố dột mưa")
 	
-	# 3. Lay chốt cửa
+	# 3. Lay chốt cửa & Khóa cửa sổ
 	sim._on_door_lock_pressed()
 	_assert_test(sim.defect_door_found == true, "Phát hiện lỗi chốt cửa lỏng lẻo rỉ sét")
+	sim._on_window_lock_pressed()
+	_assert_test(sim.defect_window_found == true, "Phát hiện lỗi then cài cửa sổ hỏng ngàm")
 	
 	# 4. Tắt điện soi công tơ quay trộm
+	_assert_test(sim.meter_wheel_rotation_speed > 0, "Đĩa công tơ có tốc độ quay ban đầu")
 	sim._on_switch_meter_pressed()
 	_assert_test(sim.defect_meter_found == true and sim.all_switches_turned_off == true, "Bắt được lỗi công tơ vẫn quay khi tắt sạch điện")
 	_assert_test(sim.completed_levels.has(1), "Hoàn thành Level 1 Thám tử xem trọ")
@@ -71,6 +76,7 @@ func _run_all_tests() -> void:
 	sim.load_level(2)
 	_assert_test(sim.current_level == 2, "Chuyển sang Level 2 Hợp đồng thành công")
 	_assert_test(sim.btn_seal.disabled == true, "Ban đầu con dấu sáp vàng bị khóa")
+	_assert_test(sim.pen_indicator_rect != null, "Biểu tượng bút dạ quang Highlight loot_05_pen hiện diện")
 	
 	# Bóc lỗi điều khoản 1 (Cọc)
 	sim._on_correct_flag_pressed(1)
@@ -92,12 +98,14 @@ func _run_all_tests() -> void:
 	_assert_test(sim.completed_levels.has(2), "Hoàn thành Level 2 Hợp đồng thuê nhà")
 	
 	# ---------------------------------------------------------
-	# [TEST CẤP ĐỘ 3: QUẢN TRỊ PHỤ TẢI CB & KIỂM TOÁN HÓA ĐƠN]
+	# [TEST CẤP ĐỘ 3: QUẢN TRỊ PHỤ TẢI CB, BLACKOUT & KIỂM TOÁN HÓA ĐƠN]
 	# ---------------------------------------------------------
-	print("\n--- [LEVEL 3] Phụ Tải Cầu Dao (CB) & Kiểm Toán Hóa Đơn ---")
+	print("\n--- [LEVEL 3] Phụ Tải Cầu Dao (CB), Blackout & Kiểm Toán Hóa Đơn ---")
 	sim.load_level(3)
 	_assert_test(sim.current_level == 3, "Chuyển sang Level 3 Quản trị phụ tải & Hóa đơn")
 	_assert_test(sim._calculate_current_power() == 80, "Phụ tải cơ bản ban đầu 80W (Đèn + Quạt)")
+	_assert_test(sim.blackout_overlay != null, "Lớp phủ Blackout sập nguồn hiện diện")
+	_assert_test(sim.blackout_overlay.visible == false, "Ban đầu chưa sập nguồn điện")
 	
 	# Bật Bếp từ 2000W -> 2080W
 	sim._on_toggle_cooker()
@@ -105,21 +113,24 @@ func _run_all_tests() -> void:
 	_assert_test(sim._calculate_current_power() == 2080, "Công suất 2080W <= 3000W (An toàn)")
 	_assert_test(sim.is_cb_tripped == false, "Cầu dao chưa nhảy")
 	
-	# Bật Ấm siêu tốc 1500W -> 3580W -> QUÁ TẢI SẬP CB
+	# Bật Ấm siêu tốc 1500W -> 3580W -> QUÁ TẢI SẬP CB (SỰ KIỆN BLACKOUT)
 	sim._on_toggle_kettle()
 	_assert_test(sim.is_kettle_on == true, "Ấm siêu tốc 1500W đã bật")
 	_assert_test(sim.is_cb_tripped == true, "Quá tải 3580W > 3000W làm cầu dao (CB) nhảy lập tức")
+	_assert_test(sim.blackout_overlay.visible == true, "Sự kiện Blackout làm tối om màn hình")
 	_assert_test(sim.btn_cb_reset.disabled == false, "Nút gạt lại CB được kích hoạt")
 	
 	# Cố gạt lại CB khi phụ tải vẫn đang quá tải
 	sim._on_cb_reset_pressed()
 	_assert_test(sim.is_cb_tripped == true, "Chưa tắt thiết bị mà gạt CB sẽ bị nảy lại ngay")
+	_assert_test(sim.blackout_overlay.visible == true, "Màn hình vẫn đang tối")
 	_assert_test(sim.cat_speech_lbl.text.contains("nảy lại ngay"), "Mochi hướng dẫn tắt bớt thiết bị")
 	
 	# Tắt ấm siêu tốc rồi gạt lại CB
 	sim.is_kettle_on = false
 	sim._on_cb_reset_pressed()
 	_assert_test(sim.is_cb_tripped == false, "Tắt ấm điện đưa công suất về 2080W giúp đóng CB thành công")
+	_assert_test(sim.blackout_overlay.visible == false, "Đèn sáng trở lại sau khi đóng CB an toàn")
 	
 	# Test trả hóa đơn bị khống (Safe Failure)
 	sim._on_bill_pay_scam()

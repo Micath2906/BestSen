@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://caphousingshowcase01"]
+
+[ext_resource type="Script" path="res://tests/CaptureHousingShowcase.gd" id="1_housingcap"]
+
+[node name="CaptureHousingShowcase" type="Node"]
+script = ExtResource("1_housingcap")

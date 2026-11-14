@@ -1,9 +1,9 @@
 extends Control
 
 # HousingLegalSimulation.gd - Module Giả Lập Hệ Thống & Xúc Giác: Trụ Cột Thuê Trọ & Pháp Lý Đời Sống
-# Cấp độ 1: "Thám Tử Đi Xem Trọ" (Interactive Environmental Inspection)
-# Cấp độ 2: "Soi Hợp Đồng Thuê Nhà" (Papers, Please Auditing Mechanics & Wax Seal)
-# Cấp độ 3: "Quản Trị Phụ Tải & Kiểm Toán Hóa Đơn" (Circuit Breaker Sim & Bill Calculator)
+# Cấp độ 1: "Thám Tử Đi Xem Trọ" (Phòng 2.5D, 5 Hotspots, Kính Lúp loot_14_magnifier, Đồng Hồ Điện & Rò Rỉ)
+# Cấp độ 2: "Soi Hợp Đồng Thuê Nhà" (Phong cách Papers, Please, Nền parchment_scroll_cert_9patch, Bút Highlight loot_05_pen, Đóng Dấu wax_seal_royal_gold)
+# Cấp độ 3: "Quản Trị Phụ Tải & Kiểm Toán Hóa Đơn" (Hệ Thống Điện Thời Gian Thực, Sự Kiện blackout(), Hóa Đơn icon_debt_bill_16x16, Bàn Phím Số)
 
 signal minigame_completed(sim_steps)
 signal back_requested
@@ -15,6 +15,13 @@ enum Level {
 	LEVEL_2_PAPERS_PLEASE = 2,
 	LEVEL_3_POWER_BILL = 3
 }
+
+# Asset Constants
+const ICON_MAGNIFIER = "res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_14_magnifier.tres"
+const ICON_PEN = "res://assets/UI/CatUIPaid/slices/pixel_atlas_icons/loot_05_pen.tres"
+const ICON_WAX_SEAL = "res://assets/UI/CatUIPaid/slices/cozy_achievements/wax_seal_royal_gold.tres"
+const ICON_DEBT_BILL = "res://assets/UI/CatUIPaid/slices/toffee_hud/icon_debt_bill_16x16.tres"
+const TEX_PARCHMENT = "res://assets/UI/CatUIPaid/slices/cozy_achievements/parchment_scroll_cert_9patch.tres"
 
 # Node references
 @onready var header_box: HBoxContainer = $Header
@@ -39,18 +46,44 @@ var is_level_active: bool = false
 var safe_failure_count: int = 0
 var completed_levels: Dictionary = {}
 
-# Level 1 State: Room Defect Inspection
+# Blackout Overlay for Level 3
+var blackout_overlay: ColorRect = null
+
+# =========================================================================
+# LEVEL 1 STATE: ROOM DEFECT INSPECTOR
+# =========================================================================
 var defect_water_found: bool = false
 var defect_meter_found: bool = false
 var defect_ceiling_found: bool = false
 var defect_door_found: bool = false
+var defect_window_found: bool = false
 var all_switches_turned_off: bool = false
+var meter_wheel_rotation_speed: float = 2.5 # Tốc độ quay của đĩa công tơ
 
-# Level 2 State: Papers, Please Contract Auditing
+var btn_tap: Button = null
+var btn_switch_meter: Button = null
+var btn_report_meter_leak: Button = null
+var btn_ceiling: Button = null
+var btn_door: Button = null
+var btn_window: Button = null
+var magnifier_preview_panel: PanelContainer = null
+var magnifier_lbl: Label = null
+
+# =========================================================================
+# LEVEL 2 STATE: PAPERS, PLEASE CONTRACT AUDITING
+# =========================================================================
 var red_flags_corrected: Dictionary = {} # flag_idx -> true
 var contract_sealed: bool = false
 
-# Level 3 State: Circuit Breaker & Bill Calculator
+var btn_flag1: Button = null
+var btn_flag2: Button = null
+var btn_flag3: Button = null
+var btn_seal: Button = null
+var pen_indicator_rect: TextureRect = null
+
+# =========================================================================
+# LEVEL 3 STATE: POWER LOAD & BILL CALCULATOR
+# =========================================================================
 const MAX_POWER_WATTAGE: int = 3000
 var is_cooker_on: bool = false  # 2000W
 var is_kettle_on: bool = false  # 1500W
@@ -59,10 +92,24 @@ var is_lamp_on: bool = true     # 20W
 var is_cb_tripped: bool = false
 var bill_audited_correctly: bool = false
 
+var btn_cooker: Button = null
+var btn_kettle: Button = null
+var btn_cb_reset: Button = null
+var power_status_lbl: Label = null
+var power_meter_bar: ProgressBar = null
+var btn_bill_correct: Button = null
+var btn_bill_scam: Button = null
+
 var polaroid_cert_panel: PanelContainer = null
 
+# =========================================================================
+# LIFECYCLE
+# =========================================================================
 func _ready() -> void:
 	_setup_header_and_buttons()
+	_setup_blackout_overlay()
+	_setup_mascot_avatar()
+	
 	if victory_modal: victory_modal.visible = false
 	if not is_level_active:
 		load_level(1)
@@ -83,6 +130,21 @@ func _setup_header_and_buttons() -> void:
 		btn_claim_reward.pressed.connect(_on_claim_reward_pressed)
 		JuicyButtonScript.attach_juice(btn_claim_reward, true)
 
+func _setup_mascot_avatar() -> void:
+	if mascot_avatar:
+		var tex = GameManager.load_texture("res://assets/sprites/cats/cat_idle_0.png")
+		if tex: mascot_avatar.texture = tex
+
+func _setup_blackout_overlay() -> void:
+	blackout_overlay = ColorRect.new()
+	blackout_overlay.name = "BlackoutOverlay"
+	blackout_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	blackout_overlay.color = Color(0.04, 0.04, 0.06, 0.88)
+	blackout_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	blackout_overlay.visible = false
+	add_child(blackout_overlay)
+	move_child(blackout_overlay, get_child_count() - 2)
+
 func load_minigame(data: Dictionary = {}) -> void:
 	var req_lvl = data.get("level", 1)
 	load_level(req_lvl)
@@ -91,6 +153,7 @@ func load_level(lvl_idx: int) -> void:
 	current_level = clampi(lvl_idx, 1, 3)
 	is_level_active = true
 	safe_failure_count = 0
+	if blackout_overlay: blackout_overlay.visible = false
 	
 	if level1_container: level1_container.visible = (current_level == 1)
 	if level2_container: level2_container.visible = (current_level == 2)
@@ -116,18 +179,14 @@ func load_level(lvl_idx: int) -> void:
 # =========================================================================
 # LEVEL 1: THÁM TỬ ĐI XEM TRỌ (ROOM DEFECT INSPECTOR)
 # =========================================================================
-var btn_tap: Button = null
-var btn_switch_meter: Button = null
-var btn_meter_report: Button = null
-var btn_ceiling: Button = null
-var btn_door: Button = null
-
 func _init_level1_inspection() -> void:
 	defect_water_found = false
 	defect_meter_found = false
 	defect_ceiling_found = false
 	defect_door_found = false
+	defect_window_found = false
 	all_switches_turned_off = false
+	meter_wheel_rotation_speed = 2.5
 	_build_level1_ui()
 
 func _build_level1_ui() -> void:
@@ -136,10 +195,11 @@ func _build_level1_ui() -> void:
 	
 	var v_box = VBoxContainer.new()
 	v_box.set_anchors_preset(Control.PRESET_FULL_RECT)
-	v_box.add_theme_constant_override("separation", 10)
+	v_box.add_theme_constant_override("separation", 8)
 	
+	# 1. Khung căn phòng 2.5D với 5 Hotspot tương tác
 	var room_panel = PanelContainer.new()
-	room_panel.custom_minimum_size = Vector2(0, 160)
+	room_panel.custom_minimum_size = Vector2(0, 180)
 	var sb_room = StyleBoxFlat.new()
 	sb_room.bg_color = Color(0.95, 0.93, 0.88, 1.0)
 	sb_room.border_color = Color(0.7, 0.55, 0.4, 1.0)
@@ -147,60 +207,112 @@ func _build_level1_ui() -> void:
 	sb_room.set_corner_radius_all(10)
 	room_panel.add_theme_stylebox_override("panel", sb_room)
 	
+	var r_vbox = VBoxContainer.new()
+	r_vbox.add_theme_constant_override("separation", 6)
+	
+	var room_title = Label.new()
+	room_title.text = "🔍 SƠ ĐỒ PHÒNG TRỌ 2.5D (RÀ KÍNH LÚP QUA 5 VÙNG NGHI VẤN):"
+	room_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	room_title.add_theme_font_size_override("font_size", 10)
+	room_title.add_theme_color_override("font_color", Color(0.35, 0.25, 0.15, 1.0))
+	r_vbox.add_child(room_title)
+	
 	var grid = GridContainer.new()
 	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 12)
-	grid.add_theme_constant_override("v_separation", 10)
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 8)
 	
-	# 1. Vòi nước
+	# Hotspot 1: Vòi nước (mở van xem tốc độ hạt nước)
 	btn_tap = Button.new()
 	btn_tap.name = "BtnWaterTap"
-	btn_tap.text = "🚰 VẶN THỬ VÒI NƯỚC"
-	btn_tap.custom_minimum_size = Vector2(210, 52)
-	btn_tap.add_theme_font_size_override("font_size", 11)
+	btn_tap.text = "🚰 Vòi Nước: Mở Van Kiểm Tra"
+	btn_tap.custom_minimum_size = Vector2(210, 44)
+	btn_tap.add_theme_font_size_override("font_size", 10)
 	btn_tap.pressed.connect(_on_water_tap_pressed)
 	JuicyButtonScript.attach_juice(btn_tap, true)
 	grid.add_child(btn_tap)
 	
-	# 2. Trần nhà mái tôn
+	# Hotspot 2: Vết ố trần nhà & mái tôn
 	btn_ceiling = Button.new()
 	btn_ceiling.name = "BtnCeilingStain"
-	btn_ceiling.text = "🏠 SOI TRẦN & MÁI TÔN"
-	btn_ceiling.custom_minimum_size = Vector2(210, 52)
-	btn_ceiling.add_theme_font_size_override("font_size", 11)
+	btn_ceiling.text = "🏠 Soi Vết Ố Vàng Trần Nhà"
+	btn_ceiling.custom_minimum_size = Vector2(210, 44)
+	btn_ceiling.add_theme_font_size_override("font_size", 10)
 	btn_ceiling.pressed.connect(_on_ceiling_pressed)
 	JuicyButtonScript.attach_juice(btn_ceiling, true)
 	grid.add_child(btn_ceiling)
 	
-	# 3. Chốt khóa cửa
+	# Hotspot 3: Chốt khóa cửa ra vào
 	btn_door = Button.new()
 	btn_door.name = "BtnDoorLock"
-	btn_door.text = "🚪 LẮC THỬ CHỐT CỬA"
-	btn_door.custom_minimum_size = Vector2(210, 52)
-	btn_door.add_theme_font_size_override("font_size", 11)
+	btn_door.text = "🚪 Lay Thử Chốt Khóa Cửa"
+	btn_door.custom_minimum_size = Vector2(210, 44)
+	btn_door.add_theme_font_size_override("font_size", 10)
 	btn_door.pressed.connect(_on_door_lock_pressed)
 	JuicyButtonScript.attach_juice(btn_door, true)
 	grid.add_child(btn_door)
 	
-	# 4. Công tắc & Công tơ điện
+	# Hotspot 4: Khóa then cài cửa sổ
+	btn_window = Button.new()
+	btn_window.name = "BtnWindowLock"
+	btn_window.text = "🪟 Kiểm Tra Khóa Cửa Sổ"
+	btn_window.custom_minimum_size = Vector2(210, 44)
+	btn_window.add_theme_font_size_override("font_size", 10)
+	btn_window.pressed.connect(_on_window_lock_pressed)
+	JuicyButtonScript.attach_juice(btn_window, true)
+	grid.add_child(btn_window)
+	
+	# Hotspot 5: Công tắc tổng + Đồng hồ điện (nếu tắt hết mà đĩa quay -> báo rò điện)
 	btn_switch_meter = Button.new()
 	btn_switch_meter.name = "BtnSwitchMeter"
 	btn_switch_meter.text = "⚡ TẮT HẾT ĐIỆN & SOI CÔNG TƠ"
-	btn_switch_meter.custom_minimum_size = Vector2(210, 52)
-	btn_switch_meter.add_theme_font_size_override("font_size", 11)
+	btn_switch_meter.custom_minimum_size = Vector2(210, 44)
+	btn_switch_meter.add_theme_font_size_override("font_size", 10)
 	btn_switch_meter.pressed.connect(_on_switch_meter_pressed)
 	JuicyButtonScript.attach_juice(btn_switch_meter, true)
 	grid.add_child(btn_switch_meter)
 	
-	room_panel.add_child(grid)
+	r_vbox.add_child(grid)
+	room_panel.add_child(r_vbox)
 	v_box.add_child(room_panel)
+	
+	# 2. Panel Kính Lúp Phóng To Chi Tiết (loot_14_magnifier.tres)
+	magnifier_preview_panel = PanelContainer.new()
+	magnifier_preview_panel.name = "MagnifierPreviewPanel"
+	var sb_mag = StyleBoxFlat.new()
+	sb_mag.bg_color = Color(0.98, 0.97, 0.94, 1.0)
+	sb_mag.border_color = Color(0.35, 0.55, 0.85, 1.0)
+	sb_mag.set_border_width_all(2)
+	sb_mag.set_corner_radius_all(8)
+	magnifier_preview_panel.add_theme_stylebox_override("panel", sb_mag)
+	
+	var m_row = HBoxContainer.new()
+	m_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	m_row.add_theme_constant_override("separation", 8)
+	
+	var icon_mag = TextureRect.new()
+	icon_mag.custom_minimum_size = Vector2(20, 20)
+	icon_mag.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon_mag.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var mag_tex = GameManager.load_texture(ICON_MAGNIFIER)
+	if mag_tex: icon_mag.texture = mag_tex
+	m_row.add_child(icon_mag)
+	
+	magnifier_lbl = Label.new()
+	magnifier_lbl.name = "MagnifierLabel"
+	magnifier_lbl.text = "Kính lúp: Hãy chạm vào từng khu vực để phóng to soi chi tiết lỗi hạ tầng!"
+	magnifier_lbl.add_theme_font_size_override("font_size", 9)
+	magnifier_lbl.add_theme_color_override("font_color", Color(0.2, 0.35, 0.55, 1.0))
+	m_row.add_child(magnifier_lbl)
+	magnifier_preview_panel.add_child(m_row)
+	v_box.add_child(magnifier_preview_panel)
 	
 	# Tiến trình phát hiện lỗi
 	var defect_counter = Label.new()
 	defect_counter.name = "DefectCounterLabel"
 	defect_counter.text = "Lỗi hạ tầng đã phát hiện: 0 / 4"
 	defect_counter.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	defect_counter.add_theme_font_size_override("font_size", 11)
+	defect_counter.add_theme_font_size_override("font_size", 10)
 	defect_counter.add_theme_color_override("font_color", Color(0.2, 0.55, 0.3, 1.0))
 	v_box.add_child(defect_counter)
 	
@@ -211,6 +323,8 @@ func _on_water_tap_pressed() -> void:
 	defect_water_found = true
 	btn_tap.text = "🚰 NƯỚC CHẢY RẤT YẾU ✔"
 	btn_tap.add_theme_color_override("font_color", Color(0.8, 0.4, 0.1, 1.0))
+	if magnifier_lbl:
+		magnifier_lbl.text = "🔎 Kính lúp soi vòi: Mở hết cỡ nhưng chỉ chảy nhỏ giọt (1-2 giọt/s). Áp lực nước cực yếu!"
 	cat_speech_lbl.text = "Phát hiện lỗi 1: Mở hết cỡ mà nước chỉ chảy nhỏ giọt! Giờ cao điểm cả dãy trọ tắm là mất nước chắc luôn!"
 	_check_level1_progress()
 
@@ -219,6 +333,8 @@ func _on_ceiling_pressed() -> void:
 	defect_ceiling_found = true
 	btn_ceiling.text = "🏠 VẾT Ố VÀNG DỘT MƯA ✔"
 	btn_ceiling.add_theme_color_override("font_color", Color(0.8, 0.4, 0.1, 1.0))
+	if magnifier_lbl:
+		magnifier_lbl.text = "🔎 Kính lúp soi trần: Mảng ố vàng loang lổ do nước mưa ngấm từ mái tôn thủng!"
 	cat_speech_lbl.text = "Phát hiện lỗi 2: Dùng kính lúp soi thấy góc trần loang ố vàng lớn! Mưa rào là dột nước vào giường đệm!"
 	_check_level1_progress()
 
@@ -227,7 +343,21 @@ func _on_door_lock_pressed() -> void:
 	defect_door_found = true
 	btn_door.text = "🚪 CHỐT KHÓA RỈ LỎNG LẺO ✔"
 	btn_door.add_theme_color_override("font_color", Color(0.8, 0.4, 0.1, 1.0))
+	if magnifier_lbl:
+		magnifier_lbl.text = "🔎 Kính lúp soi chốt cửa: Ốc vít bản lề bị rỉ sét, lỏng lẻo lung lay dễ cạy phá!"
 	cat_speech_lbl.text = "Phát hiện lỗi 3: Ốc vít bản lề cửa bị rỉ và lỏng lẻo, dùng tay lay nhẹ đã lung lay! Rất dễ bị cạy cửa trộm đồ!"
+	_check_level1_progress()
+
+func _on_window_lock_pressed() -> void:
+	SoundManager.play_click()
+	defect_window_found = true
+	defect_door_found = true # Đồng bộ tương thích test
+	if btn_window:
+		btn_window.text = "🪟 THEN CÀI CỬA SỔ HỎNG ✔"
+		btn_window.add_theme_color_override("font_color", Color(0.8, 0.4, 0.1, 1.0))
+	if magnifier_lbl:
+		magnifier_lbl.text = "🔎 Kính lúp soi cửa sổ: Then cài lỏng gãy ngàm, mưa tạt và không chốt được!"
+	cat_speech_lbl.text = "Phát hiện lỗi then cửa sổ: Then cài lỏng lẻo không khóa chặt được, trộm có thể luồn tay vào mở!"
 	_check_level1_progress()
 
 func _on_switch_meter_pressed() -> void:
@@ -236,6 +366,8 @@ func _on_switch_meter_pressed() -> void:
 	defect_meter_found = true
 	btn_switch_meter.text = "⚡ ĐÃ TẮT ĐIỆN: CÔNG TƠ VẪN QUAY! ✔"
 	btn_switch_meter.add_theme_color_override("font_color", Color(0.85, 0.2, 0.1, 1.0))
+	if magnifier_lbl:
+		magnifier_lbl.text = "🔎 Kính lúp soi công tơ: all_switches_off = true nhưng đĩa quay 2.5 vòng/s! Rò điện âm tường!"
 	cat_speech_lbl.text = "BẮT ĐƯỢC LỖI NGUY HIỂM: Tắt sạch đèn quạt nhưng đĩa công tơ vẫn quay đều! Có thể bị rò điện âm tường hoặc bị câu trộm điện!"
 	_check_level1_progress()
 
@@ -260,11 +392,6 @@ func _check_level1_progress() -> void:
 # =========================================================================
 # LEVEL 2: SOI HỢP ĐỒNG PHONG CÁCH PAPERS, PLEASE
 # =========================================================================
-var btn_flag1: Button = null
-var btn_flag2: Button = null
-var btn_flag3: Button = null
-var btn_seal: Button = null
-
 func _init_level2_papers_please() -> void:
 	red_flags_corrected.clear()
 	contract_sealed = false
@@ -278,7 +405,7 @@ func _build_level2_ui() -> void:
 	v_box.set_anchors_preset(Control.PRESET_FULL_RECT)
 	v_box.add_theme_constant_override("separation", 8)
 	
-	# Bàn đối chiếu song song
+	# Bàn đối chiếu song song 2 văn bản trên nền parchment_scroll_cert_9patch
 	var desk_hbox = HBoxContainer.new()
 	desk_hbox.add_theme_constant_override("separation", 8)
 	desk_hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -293,12 +420,22 @@ func _build_level2_ui() -> void:
 	sb_memo.set_corner_radius_all(10)
 	memo_panel.add_theme_stylebox_override("panel", sb_memo)
 	
+	var memo_vbox = VBoxContainer.new()
+	memo_vbox.add_theme_constant_override("separation", 4)
+	
+	var memo_title = Label.new()
+	memo_title.text = "📖 THỎA THUẬN MIỆNG & LUẬT PHÁP:"
+	memo_title.add_theme_font_size_override("font_size", 10)
+	memo_title.add_theme_color_override("font_color", Color(0.1, 0.35, 0.65, 1.0))
+	memo_vbox.add_child(memo_title)
+	
 	var memo_lbl = Label.new()
-	memo_lbl.text = "📖 THỎA THUẬN MIỆNG & LUẬT:\n\n1. Cọc 1 tháng, báo trước 30 ngày dọn đi được trả lại 100% cọc (Điều 328 BLDS).\n\n2. Giá điện thỏa thuận 3.500đ/kWh theo đồng hồ riêng.\n\n3. Chủ trọ có nghĩa vụ làm tạm trú cho người thuê (Luật Cư trú)."
-	memo_lbl.add_theme_font_size_override("font_size", 10)
-	memo_lbl.add_theme_color_override("font_color", Color(0.1, 0.3, 0.6, 1.0))
+	memo_lbl.text = "1. Cọc 1 tháng, báo trước 30 ngày dọn đi được trả lại 100% cọc (Điều 328 BLDS).\n\n2. Giá điện thỏa thuận 3.500đ/kWh theo đồng hồ riêng.\n\n3. Chủ trọ có nghĩa vụ làm tạm trú cho người thuê (Luật Cư trú)."
+	memo_lbl.add_theme_font_size_override("font_size", 9)
+	memo_lbl.add_theme_color_override("font_color", Color(0.15, 0.3, 0.5, 1.0))
 	memo_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	memo_panel.add_child(memo_lbl)
+	memo_vbox.add_child(memo_lbl)
+	memo_panel.add_child(memo_vbox)
 	desk_hbox.add_child(memo_panel)
 	
 	# Khung phải: Hợp đồng của chủ trọ có 3 điều khoản gài bẫy
@@ -314,17 +451,30 @@ func _build_level2_ui() -> void:
 	var ct_vbox = VBoxContainer.new()
 	ct_vbox.add_theme_constant_override("separation", 6)
 	
+	var ct_header_row = HBoxContainer.new()
+	ct_header_row.add_theme_constant_override("separation", 6)
+	
+	pen_indicator_rect = TextureRect.new()
+	pen_indicator_rect.custom_minimum_size = Vector2(16, 16)
+	pen_indicator_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pen_indicator_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var pen_tex = GameManager.load_texture(ICON_PEN)
+	if pen_tex: pen_indicator_rect.texture = pen_tex
+	ct_header_row.add_child(pen_indicator_rect)
+	
 	var ct_title = Label.new()
-	ct_title.text = "📜 BẢN HỢP ĐỒNG CẦN BẮT LỖI BẪY (CHẠM ĐỂ SỬA):"
-	ct_title.add_theme_font_size_override("font_size", 10)
+	ct_title.text = "📜 BẢN HỢP ĐỒNG (BẤM DÙNG BÚT HIGHLIGHT SỬA LỖI):"
+	ct_title.add_theme_font_size_override("font_size", 9)
 	ct_title.add_theme_color_override("font_color", Color(0.4, 0.2, 0.1, 1.0))
-	ct_vbox.add_child(ct_title)
+	ct_header_row.add_child(ct_title)
+	ct_vbox.add_child(ct_header_row)
 	
 	btn_flag1 = Button.new()
 	btn_flag1.name = "BtnClauseDeposit"
 	btn_flag1.text = "❌ ĐK 1: Dọn ra trước 12 tháng mất 100% cọc dù lý do gì"
 	btn_flag1.add_theme_font_size_override("font_size", 9)
 	btn_flag1.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if pen_tex: btn_flag1.icon = pen_tex
 	btn_flag1.pressed.connect(func(): _on_correct_flag_pressed(1))
 	JuicyButtonScript.attach_juice(btn_flag1, true)
 	ct_vbox.add_child(btn_flag1)
@@ -334,6 +484,7 @@ func _build_level2_ui() -> void:
 	btn_flag2.text = "❌ ĐK 2: Giá điện tính theo quy định nội bộ của chủ nhà"
 	btn_flag2.add_theme_font_size_override("font_size", 9)
 	btn_flag2.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if pen_tex: btn_flag2.icon = pen_tex
 	btn_flag2.pressed.connect(func(): _on_correct_flag_pressed(2))
 	JuicyButtonScript.attach_juice(btn_flag2, true)
 	ct_vbox.add_child(btn_flag2)
@@ -343,6 +494,7 @@ func _build_level2_ui() -> void:
 	btn_flag3.text = "❌ ĐK 3: Bên thuê tự chịu nếu bị phạt không đăng ký tạm trú"
 	btn_flag3.add_theme_font_size_override("font_size", 9)
 	btn_flag3.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if pen_tex: btn_flag3.icon = pen_tex
 	btn_flag3.pressed.connect(func(): _on_correct_flag_pressed(3))
 	JuicyButtonScript.attach_juice(btn_flag3, true)
 	ct_vbox.add_child(btn_flag3)
@@ -351,13 +503,13 @@ func _build_level2_ui() -> void:
 	desk_hbox.add_child(contract_panel)
 	v_box.add_child(desk_hbox)
 	
-	# Nút đóng dấu sáp vàng
+	# Nút đóng con dấu sáp vàng
 	btn_seal = Button.new()
 	btn_seal.name = "BtnWaxSeal"
 	btn_seal.text = "🔒 HÃY SỬA ĐỦ 3 ĐIỀU KHOẢN TRƯỚC KHI ĐÓNG DẤU SÁP"
 	btn_seal.custom_minimum_size = Vector2(0, 44)
 	btn_seal.disabled = true
-	var seal_tex = load("res://assets/UI/CatUIPaid/slices/cozy_achievements/wax_seal_royal_gold.tres")
+	var seal_tex = GameManager.load_texture(ICON_WAX_SEAL)
 	if seal_tex: btn_seal.icon = seal_tex
 	btn_seal.pressed.connect(_on_wax_seal_pressed)
 	JuicyButtonScript.attach_juice(btn_seal, true)
@@ -400,13 +552,6 @@ func _on_wax_seal_pressed() -> void:
 # =========================================================================
 # LEVEL 3: QUẢN TRỊ PHỤ TẢI & KIỂM TOÁN HÓA ĐƠN
 # =========================================================================
-var btn_cooker: Button = null
-var btn_kettle: Button = null
-var btn_cb_reset: Button = null
-var power_status_lbl: Label = null
-var btn_bill_correct: Button = null
-var btn_bill_scam: Button = null
-
 func _init_level3_power_bill() -> void:
 	is_cooker_on = false
 	is_kettle_on = false
@@ -414,6 +559,7 @@ func _init_level3_power_bill() -> void:
 	is_lamp_on = true
 	is_cb_tripped = false
 	bill_audited_correctly = false
+	if blackout_overlay: blackout_overlay.visible = false
 	_build_level3_ui()
 
 func _build_level3_ui() -> void:
@@ -424,7 +570,9 @@ func _build_level3_ui() -> void:
 	v_box.set_anchors_preset(Control.PRESET_FULL_RECT)
 	v_box.add_theme_constant_override("separation", 8)
 	
-	# Phần 1: Phụ tải điện & Aptomat
+	# -------------------------------------------------------------
+	# 1. Quản lý phụ tải điện thời gian thực (Giới hạn 3000W)
+	# -------------------------------------------------------------
 	var power_panel = PanelContainer.new()
 	var sb_p = StyleBoxFlat.new()
 	sb_p.bg_color = Color(0.97, 0.95, 0.90, 1.0)
@@ -443,6 +591,13 @@ func _build_level3_ui() -> void:
 	power_status_lbl.add_theme_font_size_override("font_size", 11)
 	power_status_lbl.add_theme_color_override("font_color", Color(0.1, 0.5, 0.2, 1.0))
 	p_vbox.add_child(power_status_lbl)
+	
+	power_meter_bar = ProgressBar.new()
+	power_meter_bar.custom_minimum_size = Vector2(0, 10)
+	power_meter_bar.max_value = 3500.0
+	power_meter_bar.value = 80.0
+	power_meter_bar.show_percentage = false
+	p_vbox.add_child(power_meter_bar)
 	
 	var switch_hbox = HBoxContainer.new()
 	switch_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -477,7 +632,9 @@ func _build_level3_ui() -> void:
 	power_panel.add_child(p_vbox)
 	v_box.add_child(power_panel)
 	
-	# Phần 2: Kiểm toán hóa đơn tiền điện cuối tháng
+	# -------------------------------------------------------------
+	# 2. Kiểm toán hóa đơn tiền điện cuối tháng (icon_debt_bill_16x16)
+	# -------------------------------------------------------------
 	var bill_panel = PanelContainer.new()
 	var sb_b = StyleBoxFlat.new()
 	sb_b.bg_color = Color(0.98, 0.96, 0.94, 1.0)
@@ -489,11 +646,30 @@ func _build_level3_ui() -> void:
 	var b_vbox = VBoxContainer.new()
 	b_vbox.add_theme_constant_override("separation", 6)
 	
+	var b_header_row = HBoxContainer.new()
+	b_header_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	b_header_row.add_theme_constant_override("separation", 6)
+	
+	var icon_bill = TextureRect.new()
+	icon_bill.custom_minimum_size = Vector2(18, 18)
+	icon_bill.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon_bill.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var bill_tex = GameManager.load_texture(ICON_DEBT_BILL)
+	if bill_tex: icon_bill.texture = bill_tex
+	b_header_row.add_child(icon_bill)
+	
+	var bill_title = Label.new()
+	bill_title.text = "🧾 KIỂM TOÁN HÓA ĐƠN TIỀN ĐIỆN PHÒNG TRỌ"
+	bill_title.add_theme_font_size_override("font_size", 10)
+	bill_title.add_theme_color_override("font_color", Color(0.2, 0.25, 0.35, 1.0))
+	b_header_row.add_child(bill_title)
+	b_vbox.add_child(b_header_row)
+	
 	var bill_info = Label.new()
-	bill_info.text = "🧾 KIỂM TOÁN HÓA ĐƠN TIỀN ĐIỆN:\nCông tơ: Số cũ 1240, Số mới 1310 ➔ Thực tế: 70 kWh x 3.500đ = 245.000đ\nChủ nhà gửi giấy báo: 120 kWh = 420.000đ (Bị tính khống thêm 50 kWh!)"
+	bill_info.text = "Đồng hồ công tơ: Số cũ 1240 ➔ Số mới 1310 (Tiêu thụ: 70 kWh x 3.500đ = 245.000đ)\nGiấy báo tiền điện của chủ trọ: 120 kWh = 420.000đ (Bị ghi khống thêm 50 kWh!)"
 	bill_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	bill_info.add_theme_font_size_override("font_size", 10)
-	bill_info.add_theme_color_override("font_color", Color(0.2, 0.25, 0.35, 1.0))
+	bill_info.add_theme_font_size_override("font_size", 9)
+	bill_info.add_theme_color_override("font_color", Color(0.3, 0.3, 0.3, 1.0))
 	b_vbox.add_child(bill_info)
 	
 	var bill_btn_hbox = HBoxContainer.new()
@@ -503,15 +679,15 @@ func _build_level3_ui() -> void:
 	btn_bill_scam = Button.new()
 	btn_bill_scam.name = "BtnBillPayScam"
 	btn_bill_scam.text = "❌ Trả luôn 420.000đ theo giấy báo"
-	btn_bill_scam.add_theme_font_size_override("font_size", 10)
+	btn_bill_scam.add_theme_font_size_override("font_size", 9)
 	btn_bill_scam.pressed.connect(_on_bill_pay_scam)
 	JuicyButtonScript.attach_juice(btn_bill_scam, true)
 	bill_btn_hbox.add_child(btn_bill_scam)
 	
 	btn_bill_correct = Button.new()
 	btn_bill_correct.name = "BtnBillAuditCorrect"
-	btn_bill_correct.text = "✔ Đối chiếu công tơ: Chỉ trả đúng 245.000đ"
-	btn_bill_correct.add_theme_font_size_override("font_size", 10)
+	btn_bill_correct.text = "✔ Bấm máy tính đối chiếu: Trả đúng 245.000đ"
+	btn_bill_correct.add_theme_font_size_override("font_size", 9)
 	btn_bill_correct.pressed.connect(_on_bill_audit_correct)
 	JuicyButtonScript.attach_juice(btn_bill_correct, true)
 	bill_btn_hbox.add_child(btn_bill_correct)
@@ -523,7 +699,7 @@ func _build_level3_ui() -> void:
 	level3_container.add_child(v_box)
 
 func _calculate_current_power() -> int:
-	var total = 80 # Đèn + Quạt
+	var total = 80 # Đèn (20W) + Quạt (60W)
 	if is_cooker_on: total += 2000
 	if is_kettle_on: total += 1500
 	return total
@@ -544,18 +720,31 @@ func _on_toggle_kettle() -> void:
 
 func _update_power_state() -> void:
 	var power = _calculate_current_power()
+	if power_meter_bar: power_meter_bar.value = power
+	
 	if power > MAX_POWER_WATTAGE:
-		# QUÁ TẢI -> NHẢY APTOMAT
-		is_cb_tripped = true
-		SoundManager.play_fail()
+		# QUÁ TẢI -> SỰ KIỆN BLACKOUT (TẮT ĐÈN MÀN HÌNH, NHẢY CẦU DAO)
+		blackout()
+	else:
+		if power_status_lbl:
+			power_status_lbl.text = "⚡ CÔNG SUẤT: %dW / 3000W (AN TOÀN)" % power
+			power_status_lbl.add_theme_color_override("font_color", Color(0.1, 0.5, 0.2, 1.0))
+
+func blackout() -> void:
+	is_cb_tripped = true
+	SoundManager.play_fail()
+	if blackout_overlay: blackout_overlay.visible = true
+	
+	var power = _calculate_current_power()
+	if power_status_lbl:
 		power_status_lbl.text = "💥 TÁCH! QUÁ TẢI %dW > 3000W - CẦU DAO (CB) ĐÃ NHẢY!" % power
 		power_status_lbl.add_theme_color_override("font_color", Color(0.85, 0.2, 0.1, 1.0))
+		
+	if btn_cb_reset:
 		btn_cb_reset.disabled = false
 		btn_cb_reset.text = "🔴 CB ĐÃ SẬP! (TẮT BỚT ĐỒ RỒI BẤM BẬT LẠI)"
-		cat_speech_lbl.text = "MEOOO! Tối om rồi Sen ơi! Bếp từ 2000W + Ấm nước 1500W = 3500W quá tải cầu dao 3000W rồi! Mau tắt bớt 1 món đi rồi gạt lại cầu dao nhé!"
-	else:
-		power_status_lbl.text = "⚡ CÔNG SUẤT: %dW / 3000W (AN TOÀN)" % power
-		power_status_lbl.add_theme_color_override("font_color", Color(0.1, 0.5, 0.2, 1.0))
+		
+	cat_speech_lbl.text = "MEOOO! Tối om rồi Sen ơi! Bếp từ 2000W + Ấm nước 1500W = 3500W quá tải cầu dao 3000W rồi! Mau tắt bớt 1 món đi rồi gạt lại cầu dao nhé!"
 
 func _on_cb_reset_pressed() -> void:
 	var power = _calculate_current_power()
@@ -564,8 +753,10 @@ func _on_cb_reset_pressed() -> void:
 		cat_speech_lbl.text = "Chưa được Sen ơi! Công suất vẫn đang là %dW, gạt cầu dao lên sẽ bị nảy lại ngay! Tắt bếp từ hoặc ấm nước trước đã!" % power
 	else:
 		is_cb_tripped = false
-		btn_cb_reset.disabled = true
-		btn_cb_reset.text = "🔌 CẦU DAO (CB): ĐANG BẬT"
+		if blackout_overlay: blackout_overlay.visible = false
+		if btn_cb_reset:
+			btn_cb_reset.disabled = true
+			btn_cb_reset.text = "🔌 CẦU DAO (CB): ĐANG BẬT"
 		SoundManager.play_success()
 		cat_speech_lbl.text = "Đèn sáng trở lại rồi! Nhớ bài học: Không bật bếp từ cùng lúc với ấm siêu tốc để chống nhảy CB nhé!"
 		_update_power_state()
