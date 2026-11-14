@@ -7,6 +7,8 @@ extends Control
 signal minigame_completed(sim_steps)
 signal back_requested
 
+const JuicyButtonScript = preload("res://scripts/ui/JuicyButton.gd")
+
 @onready var btn_back: Button = $Header/BtnBack
 @onready var btn_guide: Button = $Header/BtnGuide
 @onready var title_lbl: Label = $Header/TitleLabel
@@ -95,6 +97,7 @@ var matched_pairs: Dictionary = {}
 var current_question_idx: int = 0
 var answered_current_question: bool = false
 var correct_answers_count: int = 0
+var cyber_polaroid_card: PanelContainer = null
 
 func _ready() -> void:
 	_setup_button_events()
@@ -108,25 +111,34 @@ func _setup_button_events() -> void:
 			SoundManager.play_click()
 			emit_signal("back_requested")
 		)
+		JuicyButtonScript.attach_juice(btn_back, true)
 	if btn_guide:
 		btn_guide.pressed.connect(_on_guide_pressed)
+		JuicyButtonScript.attach_juice(btn_guide, true)
 	if btn_close_guide:
 		btn_close_guide.pressed.connect(func():
 			SoundManager.play_click()
 			guide_modal.visible = false
 		)
+		JuicyButtonScript.attach_juice(btn_close_guide, true)
 	if btn_go_phase2:
 		btn_go_phase2.pressed.connect(_switch_to_phase2)
+		JuicyButtonScript.attach_juice(btn_go_phase2, true)
 	if btn_finish_game:
 		btn_finish_game.pressed.connect(_on_finish_game_pressed)
+		JuicyButtonScript.attach_juice(btn_finish_game, true)
 	if btn_claim_reward:
 		btn_claim_reward.pressed.connect(_on_claim_reward_pressed)
+		JuicyButtonScript.attach_juice(btn_claim_reward, true)
 	if btn_answer_true:
 		btn_answer_true.pressed.connect(func(): _on_answer_selected(true))
+		JuicyButtonScript.attach_juice(btn_answer_true, true)
 	if btn_answer_false:
 		btn_answer_false.pressed.connect(func(): _on_answer_selected(false))
+		JuicyButtonScript.attach_juice(btn_answer_false, true)
 	if btn_next_question:
 		btn_next_question.pressed.connect(_on_next_question_pressed)
+		JuicyButtonScript.attach_juice(btn_next_question, true)
 
 var shuffled_pairs_a: Array = []
 var shuffled_pairs_b: Array = []
@@ -213,6 +225,7 @@ func _render_matching_columns() -> void:
 			btn.add_theme_color_override("font_color", Color(0.25, 0.2, 0.15, 1.0))
 			
 		btn.pressed.connect(func(): _on_col_a_pressed(p["id"]))
+		JuicyButtonScript.attach_juice(btn, true)
 		col_a_vbox.add_child(btn)
 		
 	# Cột B (Đã xáo trộn)
@@ -246,6 +259,7 @@ func _render_matching_columns() -> void:
 			btn.add_theme_color_override("font_color", Color(0.25, 0.2, 0.15, 1.0))
 			
 		btn.pressed.connect(func(): _on_col_b_pressed(p["id"]))
+		JuicyButtonScript.attach_juice(btn, true)
 		col_b_vbox.add_child(btn)
 
 func _on_col_a_pressed(pair_id: String) -> void:
@@ -275,7 +289,15 @@ func _on_col_b_pressed(pair_id: String) -> void:
 			cat_speech_lbl.text = "🎉 XUẤT SẮC! Đã hiểu rõ khung chế tài xử phạt An ninh mạng! Bấm Tiếp Tục sang Game 2 nào! ✨"
 	else:
 		SoundManager.play_card_pop()
-		cat_speech_lbl.text = "Chưa đúng chế tài pháp lý rồi Sen ơi! Xem lại mức xử phạt hành chính hay trách nhiệm hình sự nhé!"
+		var law_text = ""
+		for p in MATCHING_PAIRS:
+			if p["id"] == selected_col_a_id:
+				law_text = p.get("law_ref", "")
+				break
+		if law_text != "":
+			cat_speech_lbl.text = "CHƯA ĐÚNG! 💡 Căn cứ pháp lý: %s" % law_text
+		else:
+			cat_speech_lbl.text = "Chưa đúng chế tài pháp lý rồi Sen ơi! Xem lại mức xử phạt hành chính hay trách nhiệm hình sự nhé!"
 
 func _switch_to_phase2() -> void:
 	SoundManager.play_click()
@@ -358,6 +380,58 @@ func _on_next_question_pressed() -> void:
 	current_question_idx += 1
 	_render_current_quiz()
 
+func _build_cyber_polaroid_badge() -> void:
+	if cyber_polaroid_card and is_instance_valid(cyber_polaroid_card):
+		cyber_polaroid_card.queue_free()
+		
+	cyber_polaroid_card = PanelContainer.new()
+	cyber_polaroid_card.name = "CyberPolaroidBadge"
+	cyber_polaroid_card.custom_minimum_size = Vector2(0, 110)
+	
+	var sb = load("res://assets/UI/CatUIPaid/slices/cozy_achievements/parchment_scroll_stylebox.tres")
+	if sb:
+		cyber_polaroid_card.add_theme_stylebox_override("panel", sb)
+	else:
+		var flat = StyleBoxFlat.new()
+		flat.bg_color = Color(0.94, 0.96, 1.0, 1.0)
+		flat.border_color = Color(0.2, 0.45, 0.85, 1.0)
+		flat.set_border_width_all(2)
+		flat.set_corner_radius_all(10)
+		cyber_polaroid_card.add_theme_stylebox_override("panel", flat)
+		
+	var v = VBoxContainer.new()
+	v.alignment = BoxContainer.ALIGNMENT_CENTER
+	v.add_theme_constant_override("separation", 4)
+	
+	var owner_name = GameManager.owner_name if "owner_name" in GameManager and GameManager.owner_name != "" else "Sen Thông Thái"
+	var room_name = GameManager.room_name if "room_name" in GameManager and GameManager.room_name != "" else "Phòng Trọ Số 1"
+	
+	var h_top = Label.new()
+	h_top.text = "🛡️ CHỨNG NHẬN: LÁ CHẮN AN NINH MẠNG"
+	h_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	h_top.add_theme_font_size_override("font_size", 11)
+	h_top.add_theme_color_override("font_color", Color(0.1, 0.3, 0.65, 1.0))
+	v.add_child(h_top)
+	
+	var desc = Label.new()
+	desc.text = "Cấp cho: %s • Địa chỉ: %s\nNắm chắc khung chế tài pháp luật & 4 quy tắc vàng bảo vệ dữ liệu số!" % [owner_name, room_name]
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.add_theme_font_size_override("font_size", 9)
+	desc.add_theme_color_override("font_color", Color(0.2, 0.25, 0.35, 1.0))
+	v.add_child(desc)
+	
+	cyber_polaroid_card.add_child(v)
+	
+	var vbox = victory_modal.get_node_or_null("ModalPanel/VBox")
+	if vbox:
+		var scroll = vbox.get_node_or_null("Scroll")
+		if scroll:
+			vbox.add_child(cyber_polaroid_card)
+			vbox.move_child(cyber_polaroid_card, scroll.get_index())
+		else:
+			vbox.add_child(cyber_polaroid_card)
+
 func _on_finish_game_pressed() -> void:
 	SoundManager.play_success()
 	var speech = "🎉 CHÚC MỪNG CHIẾN BINH AN TOÀN SỐ!\n\n"
@@ -372,6 +446,7 @@ func _on_finish_game_pressed() -> void:
 	speech += "  • Soi kỹ tên miền website trước khi đăng nhập tài khoản.\n\n"
 	speech += "🎖️ Nhận danh hiệu 'Lá Chắn An Ninh Mạng' & Thưởng +35 Cá Khô!"
 	victory_dialogue_lbl.text = speech
+	_build_cyber_polaroid_badge()
 	victory_modal.visible = true
 
 func _on_claim_reward_pressed() -> void:

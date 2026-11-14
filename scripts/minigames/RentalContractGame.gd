@@ -1,11 +1,13 @@
 extends Control
 
 # RentalContractGame.gd - Kỹ năng 1: Hiểu biết pháp luật cơ bản về Hợp đồng thuê nhà (Lesson 5)
-# Phase 1 (Game 1): Nối tình huống vi phạm pháp lý với giải pháp đúng / Soi điểm khác biệt
+# Phase 1 (Game 1): Soi hợp đồng & Nối tình huống vi phạm pháp lý với giải pháp đúng (Diegetic Inspection)
 # Phase 2 (Game 2): Kéo thả sắp xếp thứ tự 4 bước quy trình ký hợp đồng thuê nhà an toàn
 
 signal minigame_completed(sim_steps)
 signal back_requested
+
+const JuicyButtonScript = preload("res://scripts/ui/JuicyButton.gd")
 
 @onready var btn_back: Button = $Header/BtnBack
 @onready var btn_guide: Button = $Header/BtnGuide
@@ -42,20 +44,20 @@ const MATCHING_PAIRS = [
 	{
 		"id": "pair_1",
 		"col_a_text": "Chủ nhà yêu cầu tăng tiền nhà bất ngờ giữa thời hạn hợp đồng",
-		"col_b_text": "Vi phạm điều khoản về giá thuê đã cam kết",
-		"hint": "Giá thuê nhà đã ký kết cố định thì chủ nhà không được tự ý tăng giá giữa chừng!"
+		"col_b_text": "Vi phạm điều khoản về giá thuê đã cam kết (Điều 129 Luật Nhà Ở)",
+		"hint": "Điều 129 Luật Nhà Ở quy định: Giá thuê do các bên thỏa thuận, chủ nhà không được đơn phương tăng giá trong thời hạn đã ký kết!"
 	},
 	{
 		"id": "pair_2",
 		"col_a_text": "Bên cho thuê không đăng ký tạm trú cho người thuê",
-		"col_b_text": "Vi phạm quy định quản lý cư trú của pháp luật",
-		"hint": "Chủ trọ có nghĩa vụ phối hợp hoặc đăng ký tạm trú cho người thuê theo Luật Cư trú!"
+		"col_b_text": "Vi phạm quy định quản lý cư trú của pháp luật (Luật Cư trú)",
+		"hint": "Theo Luật Cư trú, chủ trọ có nghĩa vụ phối hợp hoặc đăng ký tạm trú cho người thuê để bảo đảm quyền công dân!"
 	},
 	{
 		"id": "pair_3",
 		"col_a_text": "Chủ nhà không trả lại tiền cọc khi kết thúc hợp đồng đúng hạn",
-		"col_b_text": "Bên thuê có quyền khiếu nại hoặc khởi kiện đòi lại tài sản",
-		"hint": "Hết hạn hợp đồng và phòng ốc nguyên vẹn thì bên thuê có quyền đòi lại 100% tiền cọc!"
+		"col_b_text": "Bên thuê có quyền khiếu nại hoặc khởi kiện đòi lại tài sản (Điều 328 BLDS)",
+		"hint": "Điều 328 Bộ luật Dân sự: Khi hợp đồng hoàn thành và phòng ốc nguyên vẹn, bên nhận đặt cọc phải trả lại 100% tiền cọc!"
 	}
 ]
 
@@ -97,6 +99,8 @@ var matched_pairs: Dictionary = {} # pair_id -> true
 
 var solved_contract_steps: Dictionary = {} # step (1..4) -> step_data
 var selected_step_card: Dictionary = {}
+var safe_failure_count: int = 0
+var contract_polaroid_card: PanelContainer = null
 
 func _ready() -> void:
 	_setup_button_events()
@@ -110,19 +114,25 @@ func _setup_button_events() -> void:
 			SoundManager.play_click()
 			emit_signal("back_requested")
 		)
+		JuicyButtonScript.attach_juice(btn_back, true)
 	if btn_guide:
 		btn_guide.pressed.connect(_on_guide_pressed)
+		JuicyButtonScript.attach_juice(btn_guide, true)
 	if btn_close_guide:
 		btn_close_guide.pressed.connect(func():
 			SoundManager.play_click()
 			guide_modal.visible = false
 		)
+		JuicyButtonScript.attach_juice(btn_close_guide, true)
 	if btn_go_phase2:
 		btn_go_phase2.pressed.connect(_switch_to_phase2)
+		JuicyButtonScript.attach_juice(btn_go_phase2, true)
 	if btn_finish_game:
 		btn_finish_game.pressed.connect(_on_finish_game_pressed)
+		JuicyButtonScript.attach_juice(btn_finish_game, true)
 	if btn_claim_reward:
 		btn_claim_reward.pressed.connect(_on_claim_reward_pressed)
+		JuicyButtonScript.attach_juice(btn_claim_reward, true)
 
 var shuffled_pairs_a: Array = []
 var shuffled_pairs_b: Array = []
@@ -135,6 +145,7 @@ func load_minigame(data: Dictionary) -> void:
 	selected_col_a_id = ""
 	solved_contract_steps.clear()
 	selected_step_card = {}
+	safe_failure_count = 0
 	
 	# Xáo trộn câu hỏi và đáp án
 	shuffled_pairs_a = MATCHING_PAIRS.duplicate()
@@ -147,15 +158,15 @@ func load_minigame(data: Dictionary) -> void:
 	_render_phase1()
 
 # =========================================================================
-# PHASE 1: NỐI TÌNH HUỐNG <-> GIẢI PHÁP PHÁP LÝ
+# PHASE 1: NỐI TÌNH HUỐNG <-> GIẢI PHÁP PHÁP LÝ (DIEGETIC INSPECTION)
 # =========================================================================
 func _render_phase1() -> void:
 	current_phase = 1
 	phase1_container.visible = true
 	phase2_container.visible = false
 	phase_badge_lbl.text = "GAME 1 / 2"
-	phase_status_lbl.text = "🔗 Nối tình huống pháp lý với giải pháp đúng"
-	cat_speech_lbl.text = "Meo meo! Chạm một tình huống ở Cột A, sau đó chạm giải pháp đúng ở Cột B để nối cặp nhé Sen! 🐾"
+	phase_status_lbl.text = "🔍 Soi điều khoản bẫy & Tìm giải pháp bảo vệ pháp lý"
+	cat_speech_lbl.text = "Meo meo! Hãy cùng Mochi soi 3 điều khoản cạm bẫy trong Hợp đồng thuê trọ ở Cột A và ghép với giải pháp pháp lý đúng ở Cột B nhé! 🐾"
 	btn_go_phase2.disabled = true
 	_render_matching_columns()
 
@@ -208,6 +219,7 @@ func _render_matching_columns() -> void:
 			btn.add_theme_color_override("font_color", Color(0.25, 0.2, 0.15, 1.0))
 			
 		btn.pressed.connect(func(): _on_col_a_pressed(p["id"]))
+		JuicyButtonScript.attach_juice(btn, true)
 		col_a_vbox.add_child(btn)
 		
 	# Cột B (Đã xáo trộn)
@@ -241,17 +253,18 @@ func _render_matching_columns() -> void:
 			btn.add_theme_color_override("font_color", Color(0.25, 0.2, 0.15, 1.0))
 			
 		btn.pressed.connect(func(): _on_col_b_pressed(p["id"]))
+		JuicyButtonScript.attach_juice(btn, true)
 		col_b_vbox.add_child(btn)
 
 func _on_col_a_pressed(pair_id: String) -> void:
 	SoundManager.play_card_pop()
 	selected_col_a_id = pair_id
 	_render_matching_columns()
-	cat_speech_lbl.text = "Đã chọn tình huống. Giờ hãy chọn giải pháp pháp lý đúng ở Cột B nhé!"
+	cat_speech_lbl.text = "Đã soi điều khoản. Giờ hãy chọn căn cứ pháp lý bảo vệ Sen ở Cột B nhé!"
 
 func _on_col_b_pressed(pair_id: String) -> void:
 	if selected_col_a_id == "":
-		cat_speech_lbl.text = "Sen hãy chạm chọn 1 tình huống ở Cột A trước nhé!"
+		cat_speech_lbl.text = "Sen hãy chạm chọn 1 điều khoản ở Cột A trước nhé!"
 		return
 		
 	if selected_col_a_id == pair_id:
@@ -259,14 +272,23 @@ func _on_col_b_pressed(pair_id: String) -> void:
 		matched_pairs[pair_id] = true
 		selected_col_a_id = ""
 		_render_matching_columns()
-		cat_speech_lbl.text = "Chính xác! Nối cặp pháp lý thành công! Tiếp tục nối các tình huống còn lại nào!"
+		cat_speech_lbl.text = "Chính xác! Nối cặp pháp lý thành công! Pháp luật luôn bảo vệ quyền lợi chính đáng của Sen!"
 		
 		if matched_pairs.size() == MATCHING_PAIRS.size():
 			btn_go_phase2.disabled = false
 			cat_speech_lbl.text = "🎉 XUẤT SẮC! Đã hiểu rõ toàn bộ giải pháp pháp lý! Bấm Tiếp Tục sang Game 2 nào! ✨"
 	else:
 		SoundManager.play_card_pop()
-		cat_speech_lbl.text = "Chưa đúng giải pháp pháp lý rồi Sen ơi! Thử lại cặp khác xem sao nhé!"
+		safe_failure_count += 1
+		var hint_text = ""
+		for p in MATCHING_PAIRS:
+			if p["id"] == selected_col_a_id:
+				hint_text = p.get("hint", "")
+				break
+		if hint_text != "":
+			cat_speech_lbl.text = "CHƯA ĐÚNG! 💡 Gợi ý Mochi: %s" % hint_text
+		else:
+			cat_speech_lbl.text = "Chưa đúng giải pháp pháp lý rồi Sen ơi! Thử lại cặp khác xem sao nhé!"
 
 func _switch_to_phase2() -> void:
 	SoundManager.play_click()
@@ -367,6 +389,7 @@ func _render_phase2_steps() -> void:
 				slot_btn.text = "👉 Chạm vào đây để đặt vào Bước %d" % s_idx
 				slot_btn.add_theme_color_override("font_color", Color(0.1, 0.45, 0.85, 1.0))
 			slot_btn.pressed.connect(func(): _on_phase2_slot_pressed(s_idx))
+			JuicyButtonScript.attach_juice(slot_btn, true)
 			vbox.add_child(slot_btn)
 			
 		hbox.add_child(vbox)
@@ -409,6 +432,7 @@ func _render_phase2_cards_pool() -> void:
 		btn.add_theme_color_override("font_color", Color(0.08, 0.35, 0.75, 1.0) if is_selected else Color(0.25, 0.2, 0.15, 1.0))
 		
 		btn.pressed.connect(func(): _on_phase2_card_tapped(s_info))
+		JuicyButtonScript.attach_juice(btn, true)
 		cards_pool.add_child(btn)
 
 func _on_phase2_card_tapped(s_info: Dictionary) -> void:
@@ -439,14 +463,70 @@ func _on_phase2_slot_pressed(target_step_idx: int) -> void:
 			cat_speech_lbl.text = "Chính xác! Bước %d đã hoàn tất! Tiếp tục đặt các bước còn lại nào!" % target_step_idx
 	else:
 		SoundManager.play_card_pop()
+		safe_failure_count += 1
 		var step_data = SAFE_CONTRACT_STEPS[target_step_idx - 1]
-		cat_speech_lbl.text = "CHƯA ĐÚNG! %s" % step_data.get("error_hint", "Thao tác này chưa đúng thứ tự!")
+		cat_speech_lbl.text = "CHƯA ĐÚNG! 💡 %s" % step_data.get("error_hint", "Thao tác này chưa đúng thứ tự!")
+
+func _build_rental_polaroid_certificate() -> void:
+	if contract_polaroid_card and is_instance_valid(contract_polaroid_card):
+		contract_polaroid_card.queue_free()
+	
+	contract_polaroid_card = PanelContainer.new()
+	contract_polaroid_card.name = "RentalPolaroidCertificate"
+	contract_polaroid_card.custom_minimum_size = Vector2(0, 110)
+	
+	var sb = load("res://assets/UI/CatUIPaid/slices/cozy_achievements/parchment_scroll_stylebox.tres")
+	if sb:
+		contract_polaroid_card.add_theme_stylebox_override("panel", sb)
+	else:
+		var flat = StyleBoxFlat.new()
+		flat.bg_color = Color(0.98, 0.95, 0.90, 1.0)
+		flat.border_color = Color(0.65, 0.45, 0.30, 1.0)
+		flat.set_border_width_all(2)
+		flat.set_corner_radius_all(10)
+		contract_polaroid_card.add_theme_stylebox_override("panel", flat)
+		
+	var v = VBoxContainer.new()
+	v.alignment = BoxContainer.ALIGNMENT_CENTER
+	v.add_theme_constant_override("separation", 4)
+	
+	var owner_name = GameManager.owner_name if "owner_name" in GameManager and GameManager.owner_name != "" else "Sen Trưởng Thành"
+	var room_name = GameManager.room_name if "room_name" in GameManager and GameManager.room_name != "" else "Phòng Trọ Số 1"
+	
+	var h_top = Label.new()
+	h_top.text = "📜 CHỨNG NHẬN: THÁM TỬ SOI HỢP ĐỒNG TRỌ"
+	h_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	h_top.add_theme_font_size_override("font_size", 11)
+	h_top.add_theme_color_override("font_color", Color(0.42, 0.22, 0.08, 1.0))
+	v.add_child(h_top)
+	
+	var desc = Label.new()
+	desc.text = "Cấp cho: %s • Địa chỉ: %s\nĐã bóc trần 3 bẫy pháp lý & thành thạo 4 bước ký HĐ an toàn!" % [owner_name, room_name]
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.add_theme_font_size_override("font_size", 9)
+	desc.add_theme_color_override("font_color", Color(0.35, 0.28, 0.22, 1.0))
+	v.add_child(desc)
+	
+	contract_polaroid_card.add_child(v)
+	
+	var vbox = victory_modal.get_node_or_null("ModalPanel/VBox")
+	if vbox:
+		var scroll = vbox.get_node_or_null("Scroll")
+		if scroll:
+			vbox.add_child(contract_polaroid_card)
+			vbox.move_child(contract_polaroid_card, scroll.get_index())
+		else:
+			vbox.add_child(contract_polaroid_card)
 
 func _on_finish_game_pressed() -> void:
 	SoundManager.play_success()
 	var speech = "🎉 CHÚC MỪNG BẬC THẦY HỢP ĐỒNG THUÊ TRỌ!\n\n"
 	speech += "Mèo con đã hoàn thành xuất sắc cả 2 Game pháp lý thuê trọ:\n\n"
-	speech += "✔ Game 1: Nắm chắc 3 giải pháp bảo vệ quyền lợi khi chủ nhà tăng giá, giữ cọc hoặc không đăng ký tạm trú.\n"
+	speech += "✔ Game 1: Nắm chắc 3 căn cứ pháp lý bảo vệ quyền lợi sinh viên:\n"
+	speech += "  • Chủ nhà tự ý tăng giá: Vi phạm Điều 129 Luật Nhà Ở.\n"
+	speech += "  • Không đăng ký tạm trú: Vi phạm Luật Cư trú của công dân.\n"
+	speech += "  • Không trả tiền cọc: Vi phạm Điều 328 Bộ luật Dân sự về bảo toàn tài sản đặt cọc.\n\n"
 	speech += "✔ Game 2: Thuộc lòng 4 bước ký kết hợp đồng an toàn:\n"
 	speech += "  1. Xác minh giấy tờ chủ sở hữu nhà.\n"
 	speech += "  2. Đọc & thỏa thuận rõ ràng tiền cọc, điện nước.\n"
@@ -455,6 +535,7 @@ func _on_finish_game_pressed() -> void:
 	speech += "Không sợ bị lừa cọc, an cư lạc nghiệp tự tin học tập!\n\n"
 	speech += "🎖️ Nhận danh hiệu 'Thám Tử Soi Hợp Đồng' & Thưởng +35 Cá Khô!"
 	victory_dialogue_lbl.text = speech
+	_build_rental_polaroid_certificate()
 	victory_modal.visible = true
 
 func _on_claim_reward_pressed() -> void:
@@ -482,3 +563,7 @@ func _on_guide_pressed() -> void:
 	guide_str += "  • Chụp ảnh vết nứt, thiết bị cũ đính kèm vào phụ lục hợp đồng."
 	guide_content_lbl.text = guide_str
 	guide_modal.visible = true
+
+
+
+

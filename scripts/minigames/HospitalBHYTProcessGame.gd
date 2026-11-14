@@ -8,6 +8,8 @@ extends Control
 signal minigame_completed(sim_steps)
 signal back_requested
 
+const JuicyButtonScript = preload("res://scripts/ui/JuicyButton.gd")
+
 # UI Nodes
 @onready var btn_back: Button = $Header/BtnBack
 @onready var btn_guide: Button = $Header/BtnGuide
@@ -45,6 +47,8 @@ signal back_requested
 @onready var victory_modal: Control = $VictoryModal
 @onready var victory_dialogue_lbl: Label = $VictoryModal/ModalPanel/VBox/Scroll/DialogueLabel
 @onready var btn_claim_reward: Button = $VictoryModal/ModalPanel/VBox/BtnClaimReward
+
+var bhyt_polaroid_card: PanelContainer = null
 
 # Dữ liệu 4 giấy tờ Phase 1
 const REQUIRED_DOCS = [
@@ -141,19 +145,25 @@ func _setup_button_events() -> void:
 			SoundManager.play_click()
 			emit_signal("back_requested")
 		)
+		JuicyButtonScript.attach_juice(btn_back, true)
 	if btn_guide:
 		btn_guide.pressed.connect(_on_guide_pressed)
+		JuicyButtonScript.attach_juice(btn_guide, true)
 	if btn_close_guide:
 		btn_close_guide.pressed.connect(func():
 			SoundManager.play_click()
 			guide_modal.visible = false
 		)
+		JuicyButtonScript.attach_juice(btn_close_guide, true)
 	if btn_go_phase2:
 		btn_go_phase2.pressed.connect(_switch_to_phase2)
+		JuicyButtonScript.attach_juice(btn_go_phase2, true)
 	if btn_finish_bhyt:
 		btn_finish_bhyt.pressed.connect(_on_finish_bhyt_pressed)
+		JuicyButtonScript.attach_juice(btn_finish_bhyt, true)
 	if btn_claim_reward:
 		btn_claim_reward.pressed.connect(_on_claim_reward_pressed)
+		JuicyButtonScript.attach_juice(btn_claim_reward, true)
 
 var shuffled_docs: Array = []
 var shuffled_steps_pool: Array = []
@@ -233,6 +243,7 @@ func _render_phase1_slots() -> void:
 			unpick_btn.text = "✖ Bỏ ra"
 			unpick_btn.add_theme_font_size_override("font_size", 9)
 			unpick_btn.pressed.connect(func(): _remove_doc_from_folder(it["id"]))
+			JuicyButtonScript.attach_juice(unpick_btn, true)
 			vbox.add_child(unpick_btn)
 			
 			slot_panel.add_child(vbox)
@@ -302,12 +313,13 @@ func _render_phase1_doc_pool() -> void:
 		btn.add_theme_font_size_override("font_size", 11)
 		
 		btn.pressed.connect(func(): _attempt_pack_doc(it))
+		JuicyButtonScript.attach_juice(btn, true)
 		doc_pool_container.add_child(btn)
 
 func _attempt_pack_doc(doc: Dictionary) -> void:
 	if not doc.get("is_required", false):
 		SoundManager.play_card_pop()
-		cat_speech_lbl.text = "ÚI GIỜI ƠI! %s 🐾" % doc.get("fail_msg", "Đồ thừa không cần mang!")
+		cat_speech_lbl.text = "ÚI GIỜI ƠI! %s 💡 Lời khuyên Mochi: Bệnh viện buổi sáng rất đông, hãy mang túi hồ sơ y tế nhỏ gọn để di chuyển thuận lợi nhé Sen! 🐾" % doc.get("fail_msg", "Đồ thừa không cần mang!")
 		return
 		
 	if packed_docs.size() >= 4:
@@ -447,6 +459,7 @@ func _render_phase2_hospital_steps() -> void:
 				slot_btn.add_theme_color_override("font_color", Color(0.1, 0.45, 0.85, 1.0))
 				
 			slot_btn.pressed.connect(func(): _on_slot_pressed(s_idx))
+			JuicyButtonScript.attach_juice(slot_btn, true)
 			info_vbox.add_child(slot_btn)
 			
 		hbox.add_child(info_vbox)
@@ -494,6 +507,7 @@ func _render_phase2_action_pool() -> void:
 		btn.add_theme_color_override("font_color", Color(0.2, 0.18, 0.15, 1.0))
 		
 		btn.pressed.connect(func(): _on_action_card_tapped(step_info))
+		JuicyButtonScript.attach_juice(btn, true)
 		action_cards_pool.add_child(btn)
 
 func _on_action_card_tapped(step_info: Dictionary) -> void:
@@ -529,6 +543,58 @@ func _on_slot_pressed(target_step_idx: int) -> void:
 		var step_data = BHYT_6_STEPS[target_step_idx - 1]
 		cat_speech_lbl.text = "SAI RỒI SEN ƠI! %s" % step_data.get("error_hint", "Thao tác này chưa đúng thứ tự quy trình bệnh viện!")
 
+func _build_bhyt_polaroid_prescription() -> void:
+	if bhyt_polaroid_card and is_instance_valid(bhyt_polaroid_card):
+		bhyt_polaroid_card.queue_free()
+		
+	bhyt_polaroid_card = PanelContainer.new()
+	bhyt_polaroid_card.name = "BhytPolaroidPrescription"
+	bhyt_polaroid_card.custom_minimum_size = Vector2(0, 110)
+	
+	var sb = load("res://assets/UI/CatUIPaid/slices/cozy_achievements/parchment_scroll_stylebox.tres")
+	if sb:
+		bhyt_polaroid_card.add_theme_stylebox_override("panel", sb)
+	else:
+		var flat = StyleBoxFlat.new()
+		flat.bg_color = Color(0.95, 0.98, 0.95, 1.0)
+		flat.border_color = Color(0.2, 0.65, 0.35, 1.0)
+		flat.set_border_width_all(2)
+		flat.set_corner_radius_all(10)
+		bhyt_polaroid_card.add_theme_stylebox_override("panel", flat)
+		
+	var v = VBoxContainer.new()
+	v.alignment = BoxContainer.ALIGNMENT_CENTER
+	v.add_theme_constant_override("separation", 4)
+	
+	var owner_name = GameManager.owner_name if "owner_name" in GameManager and GameManager.owner_name != "" else "Sen Khỏe Mạnh"
+	var room_name = GameManager.room_name if "room_name" in GameManager and GameManager.room_name != "" else "Phòng Trọ Số 1"
+	
+	var h_top = Label.new()
+	h_top.text = "🏥 SỔ KHÁM BỆNH BHYT: ĐÃ THẤU HIỂU QUY TRÌNH"
+	h_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	h_top.add_theme_font_size_override("font_size", 11)
+	h_top.add_theme_color_override("font_color", Color(0.12, 0.45, 0.22, 1.0))
+	v.add_child(h_top)
+	
+	var desc = Label.new()
+	desc.text = "Bệnh nhân: %s • Địa chỉ: %s\nHoàn tất 6 chặng khám BHYT đúng tuyến • Hưởng 80-100%% quyền lợi!" % [owner_name, room_name]
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.add_theme_font_size_override("font_size", 9)
+	desc.add_theme_color_override("font_color", Color(0.25, 0.35, 0.25, 1.0))
+	v.add_child(desc)
+	
+	bhyt_polaroid_card.add_child(v)
+	
+	var vbox = victory_modal.get_node_or_null("ModalPanel/VBox")
+	if vbox:
+		var scroll = vbox.get_node_or_null("Scroll")
+		if scroll:
+			vbox.add_child(bhyt_polaroid_card)
+			vbox.move_child(bhyt_polaroid_card, scroll.get_index())
+		else:
+			vbox.add_child(bhyt_polaroid_card)
+
 func _on_finish_bhyt_pressed() -> void:
 	SoundManager.play_success()
 	var speech = "🎉 CHÚC MỪNG BẬC THẦY BHYT ĐÚNG TUYẾN!\n\n"
@@ -542,6 +608,7 @@ func _on_finish_bhyt_pressed() -> void:
 	speech += "Không chen lấn, không đi nhầm khu dịch vụ, tiết kiệm tiền triệu viện phí cho sinh viên!\n\n"
 	speech += "🎖️ Nhận danh hiệu 'Bậc Thầy BHYT Không Bị Mắng' & Mở khóa 'Vỉ Kẹo Ngậm C Bệnh Viện'!"
 	victory_dialogue_lbl.text = speech
+	_build_bhyt_polaroid_prescription()
 	victory_modal.visible = true
 
 func _on_claim_reward_pressed() -> void:
