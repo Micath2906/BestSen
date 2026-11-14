@@ -1,7 +1,7 @@
 extends Node
 
 # TestHealthcareWellnessSimulation.gd - Bộ kiểm thử tự động Trụ Cột 4: Y Tế, BHYT & Sức Khỏe
-# Kiểm tra chi tiết 3 Cấp độ: Sơ cứu bỏng & Liều hạ sốt -> 5 Trạm BHYT & Né cò mồi -> Hơi thở 4-7-8 cùng Mochi
+# Kiểm tra chi tiết 3 Cấp độ: Sơ cứu bỏng & Liều hạ sốt -> 5 Trạm BHYT & Chuỗi chứng từ -> Say Caffeine & Hơi thở 4-7-8 cùng Mochi
 
 var pass_count: int = 0
 var fail_count: int = 0
@@ -45,6 +45,8 @@ func _run_all_tests() -> void:
 	sim.load_level(1)
 	_assert_test(sim.current_level == 1, "Level 1 khởi tạo chính xác")
 	_assert_test(sim.is_burn_cooled == false and sim.is_burn_bandaged == false, "Trạng thái ban đầu chưa sơ cứu")
+	_assert_test(sim.btn_toothpaste != null, "Lọ kem đánh răng (bẫy nhận thức) hiện diện bên cạnh vòi nước")
+	_assert_test(sim.water_progress_bar != null, "Thanh tiến trình vòi nước chảy mát 3s hiện diện")
 	
 	# Bẫy 1: Thử bôi kem đánh răng lên vết bỏng
 	sim._on_bad_burn_treatment_pressed("kem đánh răng")
@@ -53,7 +55,8 @@ func _run_all_tests() -> void:
 	
 	# Xử trí đúng: Ngâm/xả dưới vòi nước mát
 	sim._on_water_cool_pressed()
-	_assert_test(sim.is_burn_cooled == true, "Đã hạ nhiệt bằng vòi nước mát 15-20p")
+	_assert_test(sim.is_burn_cooled == true, "Đã hạ nhiệt bằng vòi nước mát")
+	_assert_test(sim.water_progress_bar.value == 100.0, "Tiến trình làm mát đạt 100%")
 	_assert_test(sim.btn_sterile_gauze.disabled == false, "Mở khóa nút băng gạc vô trùng")
 	
 	# Băng gạc vô trùng
@@ -73,14 +76,17 @@ func _run_all_tests() -> void:
 	# ---------------------------------------------------------
 	# [TEST CẤP ĐỘ 2: HÀNH TRÌNH 5 TRẠM BHYT & NÉ CÒ MỒI]
 	# ---------------------------------------------------------
-	print("\n--- [LEVEL 2] 5 Trạm BHYT & Né Cò Mồi ---")
+	print("\n--- [LEVEL 2] 5 Trạm BHYT, Bản Đồ Top-Down & Chuỗi Chứng Từ ---")
 	sim.load_level(2)
 	_assert_test(sim.current_level == 2, "Chuyển sang Level 2 BHYT thành công")
 	_assert_test(sim.current_station == 1, "Bắt đầu tại Trạm 1: Kiosk tự động")
+	_assert_test(sim.map_stations_container != null, "Bản đồ 2D Top-Down khu khám bệnh 5 trạm đã được khởi tạo")
+	_assert_test(sim.collected_documents.size() == 0, "Ban đầu khay hồ sơ chưa có chứng từ")
 	
 	# Trạm 1: Kiosk lấy số
 	sim._on_station_action_pressed()
 	_assert_test(sim.current_station == 2, "Tiến sang Trạm 2: Tiếp nhận hồ sơ BHYT")
+	_assert_test(sim.collected_documents.size() >= 1, "Sinh chứng từ Vé số thứ tự vào khay hồ sơ")
 	_assert_test(sim.btn_reject_tout.visible == true, "Cò mồi 300k xuất hiện tại cổng tiếp nhận")
 	
 	# Cố đi tiếp khi chưa xử lý cò mồi
@@ -94,34 +100,50 @@ func _run_all_tests() -> void:
 	# Tiếp tục xuất trình BHYT + CCCD
 	sim._on_station_action_pressed()
 	_assert_test(sim.current_station == 3, "Tiến sang Trạm 3: Bác sĩ chẩn đoán")
+	_assert_test(sim.collected_documents.size() >= 2, "Khay hồ sơ đã có Hồ sơ tiếp nhận BHYT")
 	
 	# Trạm 3: Khám bệnh
 	sim._on_station_action_pressed()
 	_assert_test(sim.current_station == 4, "Tiến sang Trạm 4: Quầy thanh toán viện phí đồng chi trả")
+	_assert_test(sim.collected_documents.size() >= 3, "Bác sĩ đã xuất Đơn thuốc & Bệnh án")
 	
 	# Trạm 4: Thanh toán viện phí
 	sim._on_station_action_pressed()
 	_assert_test(sim.current_station == 5, "Tiến sang Trạm 5: Quầy dược BHYT")
+	_assert_test(sim.collected_documents.size() >= 4, "Quầy viện phí đã xuất Hóa đơn & Bảng kê")
 	
 	# Trạm 5: Nhận thuốc BHYT
 	sim._on_station_action_pressed()
 	_assert_test(sim.completed_levels.has(2), "Hoàn thành toàn bộ 5 Trạm quy trình BHYT")
+	_assert_test(sim.collected_documents.size() == 5, "Khay hồ sơ thu thập đủ 5 chứng từ hoàn chỉnh")
 	
 	# ---------------------------------------------------------
 	# [TEST CẤP ĐỘ 3: NHỊP SINH HỌC & HƠI THỞ 4-7-8 CÙNG MOCHI]
 	# ---------------------------------------------------------
-	print("\n--- [LEVEL 3] Nhịp Sinh Học & Hơi Thở 4-7-8 Cùng Mochi ---")
+	print("\n--- [LEVEL 3] Nhịp Sinh Học, Say Caffeine & Hơi Thở 4-7-8 Cùng Mochi ---")
 	sim.load_level(3)
 	_assert_test(sim.current_level == 3, "Chuyển sang Level 3 Nhịp sinh học thành công")
-	_assert_test(sim.stress_stat == 85, "Mức độ căng thẳng ban đầu báo động: 85/100")
-	_assert_test(sim.btn_sleep_now.disabled == true, "Đang căng thẳng thì chưa thể ngủ sâu giấc")
+	_assert_test(sim.stress_stat == 85, "Mức độ căng thẳng ban đầu: 85/100")
+	_assert_test(sim.heart_rate_bpm == 75, "Nhịp tim ban đầu: 75 BPM")
+	_assert_test(sim.is_caffeine_jitter == false, "Ban đầu chưa say caffeine")
 	
-	# Kích hoạt bài tập thở 4-7-8
+	# Uống 2 ly cà phê liên tiếp ban đêm chạy deadline
+	sim._on_drink_coffee_pressed()
+	sim._on_drink_coffee_pressed()
+	_assert_test(sim.is_caffeine_jitter == true, "Uống >= 2 ly cà phê kích hoạt trạng thái say caffeine")
+	_assert_test(sim.vignette_rect.visible == true, "Áp dụng Vignette Shader mờ tối viền màn hình")
+	_assert_test(sim.heart_rate_bpm == 135, "Nhịp tim vọt lên mức quá tải 135 BPM")
+	_assert_test(sim.btn_sleep_now.disabled == true, "Đang say cà phê và tim đập nhanh không thể ngủ")
+	
+	# Kích hoạt bài tập thở 4-7-8 cùng Mochi
 	sim._on_start_breathing_pressed()
 	_assert_test(sim.breathing_phase == "INHALE_4", "Giai đoạn 1: Hít vào bằng mũi 4 giây")
 	
 	# Giả lập hoàn tất chu kỳ thở
 	sim._finish_breathing_cycle()
+	_assert_test(sim.is_caffeine_jitter == false, "Hơi thở 4-7-8 triệt tiêu trạng thái rung giật UI")
+	_assert_test(sim.vignette_rect.visible == false, "Tắt hiệu ứng Vignette Shader sau khi điều hòa thân tâm")
+	_assert_test(sim.heart_rate_bpm == 70, "Nhịp tim hạ về mức ổn định 70 BPM")
 	_assert_test(sim.stress_stat == 25, "Hơi thở 4-7-8 kích hoạt thần kinh phó giao cảm hạ stress xuống 25")
 	_assert_test(sim.focus_stat == 80, "Độ tập trung tinh thần tăng lên 80")
 	_assert_test(sim.btn_sleep_now.disabled == false, "Đã mở khóa nút đi ngủ phục hồi não bộ")
