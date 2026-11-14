@@ -102,7 +102,8 @@ const MINIGAME_SCENES = {
 	"motorbike_maintenance": preload("res://scenes/minigames/MotorbikeMaintenanceGame.tscn"),
 	"route_master": preload("res://scenes/minigames/RouteMasterMiniGame.tscn"),
 	"checkin_rush": preload("res://scenes/minigames/CheckInRushGame.tscn"),
-	"civilized_ride": preload("res://scenes/minigames/CivilizedRideGame.tscn")
+	"civilized_ride": preload("res://scenes/minigames/CivilizedRideGame.tscn"),
+	"transit_simulation": preload("res://scenes/minigames/TransitSimulation.tscn")
 }
 
 # DỮ LIỆU HÌNH ẢNH MINH HỌA & ASSETS CHO 16 BÀI HỌC KỸ NĂNG SỐNG
