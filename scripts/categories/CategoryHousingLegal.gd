@@ -15,13 +15,23 @@ func _init() -> void:
 	
 	minigames_list = [
 		{
+			"id": "housing_legal_simulation",
+			"lesson_id": 5,
+			"icon": "🏠",
+			"title": "Giả Lập Sinh Tồn Phòng Trọ & Thám Tử Hợp Đồng",
+			"desc": "3 Cấp độ thực chiến: Soi kính lúp 2.5D tìm lỗi phòng ẩn, Đối chiếu hợp đồng bẫy cọc & đóng dấu sáp Papers Please, Quản trị tải điện chống sập cầu dao & soi hóa đơn số nhảy.",
+			"type_badge": "Giả Lập Xúc Giác 3 Cấp Độ",
+			"scene_path": "res://scenes/minigames/HousingLegalSimulation.tscn",
+			"data_key": "5"
+		},
+		{
 			"id": "rental_contract",
 			"lesson_id": 5,
 			"icon": "📜",
 			"title": "Hiểu Biết Pháp Luật Hợp Đồng Thuê Nhà",
 			"desc": "Nối chế định pháp lý giải pháp & Sắp xếp 4 bước quy trình ký hợp đồng thuê nhà an toàn.",
 			"type_badge": "Nối & Sắp Xếp Quy Trình",
-			"scene_path": "res://scenes/minigames/RentalContractGame.tscn",
+			"scene_path": "res://scenes/minigames/HousingLegalSimulation.tscn",
 			"data_key": "5"
 		},
 		{
@@ -31,7 +41,7 @@ func _init() -> void:
 			"title": "Thám Tử PCCC: Khảo Sát An Toàn Phòng Trọ",
 			"desc": "Soi kính lúp tìm 3 điểm bẫy cháy nổ (chuồng cọp, bình chữa cháy mini, ổ điện) và lối thoát hiểm.",
 			"type_badge": "Soi Điểm Nguy Hiểm",
-			"scene_path": "res://scenes/minigames/AuditMiniGame.tscn",
+			"scene_path": "res://scenes/minigames/HousingLegalSimulation.tscn",
 			"data_key": "6"
 		},
 		{

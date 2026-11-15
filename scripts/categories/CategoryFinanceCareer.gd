@@ -15,13 +15,23 @@ func _init() -> void:
 	
 	minigames_list = [
 		{
+			"id": "finance_survival_simulation",
+			"lesson_id": 13,
+			"icon": "💰",
+			"title": "Giả Lập Sống Còn Tài Chính & Rà Soát Lừa Đảo Số",
+			"desc": "3 Cấp độ thực chiến: Máy quét siêu thị tính đơn giá 100g & bóc mẽ sale ảo, Quản lý dòng tiền 30 ngày & khay đóng băng cám dỗ 24h (+10 Dũng Cảm), Khám nghiệm tin nhắn số phát hiện thủ đoạn lừa đảo.",
+			"type_badge": "Giả Lập Xúc Giác 3 Cấp Độ",
+			"scene_path": "res://scenes/minigames/FinanceSurvivalSimulation.tscn",
+			"data_key": "13"
+		},
+		{
 			"id": "personal_finance",
 			"lesson_id": 13,
 			"icon": "💵",
 			"title": "Quản Lý Tài Chính & Sống Sót 5 Triệu Đồng",
 			"desc": "Nối 5 khoản chi phí (thiết yếu, sinh hoạt, tích lũy) & Tình huống sống sót với ngân sách 5 triệu/tháng.",
 			"type_badge": "Nối Chi Phí & Sinh Tồn",
-			"scene_path": "res://scenes/minigames/PersonalFinanceGame.tscn",
+			"scene_path": "res://scenes/minigames/FinanceSurvivalSimulation.tscn",
 			"data_key": "personal_finance"
 		},
 		{
@@ -41,7 +51,7 @@ func _init() -> void:
 			"title": "Luật An Ninh Mạng & Tránh Bẫy Lừa Đảo",
 			"desc": "Nối hành vi vi phạm mạng với hình thức xử lý & Trắc nghiệm Đúng/Sai đánh giá tính hợp pháp.",
 			"type_badge": "Nối Chế Tài & Đúng/Sai",
-			"scene_path": "res://scenes/minigames/CyberSecurityGame.tscn",
+			"scene_path": "res://scenes/minigames/FinanceSurvivalSimulation.tscn",
 			"data_key": "14"
 		},
 		{
@@ -61,7 +71,7 @@ func _init() -> void:
 			"title": "Thoát Bẫy Nợ Ví Trả Sau BNPL & Thấu Chi",
 			"desc": "Kích hoạt bộ lọc 'Phanh tiêu dùng 48h' trước khi chốt đơn online, tránh bẫy nợ tín dụng và đa cấp.",
 			"type_badge": "Phanh Tiêu Dùng 48H",
-			"scene_path": "res://scenes/minigames/BudgetMiniGame.tscn",
+			"scene_path": "res://scenes/minigames/FinanceSurvivalSimulation.tscn",
 			"data_key": "16"
 		},
 		{

@@ -15,6 +15,16 @@ func _init() -> void:
 	
 	minigames_list = [
 		{
+			"id": "healthcare_wellness_simulation",
+			"lesson_id": 3,
+			"icon": "🩺",
+			"title": "Giả Lập Y Tế & Thân Tâm Tự Lập",
+			"desc": "3 Cấp độ thực chiến: Sơ cứu bỏng nước mát 3s (né bẫy kem đánh răng) & đo sốt uống thuốc, Bản đồ 2D top-down 5 trạm khám BHYT & chuỗi chứng từ viện phí, Nhịp sinh học say caffeine & bài tập hít thở 4-7-8 cùng Mochi.",
+			"type_badge": "Giả Lập Xúc Giác 3 Cấp Độ",
+			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
+			"data_key": "3"
+		},
+		{
 			"id": "preparation_vali",
 			"lesson_id": 1,
 			"icon": "🧳",
@@ -31,7 +41,7 @@ func _init() -> void:
 			"title": "Lựa Chọn Bệnh Viện Chuyên Khoa Đúng Bệnh",
 			"desc": "Dựa trên tình hình bạn cùng phòng, trả lời câu hỏi và chọn đúng bệnh viện chuyên khoa. Sai quay lại đầu!",
 			"type_badge": "Chọn Bệnh Viện Chuyên Khoa",
-			"scene_path": "res://scenes/minigames/HospitalChoiceGame.tscn",
+			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
 			"data_key": "2"
 		},
 		{
@@ -41,7 +51,7 @@ func _init() -> void:
 			"title": "Xác Định Đúng Bệnh Trước Khi Uống Thuốc",
 			"desc": "Lượt 1: Dùng nhiệt kế/vật phẩm chẩn đoán -> Bảng thống kê triệu chứng -> Lượt 2: Chọn đúng thuốc hạ sốt.",
 			"type_badge": "Chẩn Đoán & Chọn Thuốc",
-			"scene_path": "res://scenes/minigames/SelfDiagnosisGame.tscn",
+			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
 			"data_key": "3"
 		},
 		{
@@ -51,7 +61,7 @@ func _init() -> void:
 			"title": "Quy Trình 6 Bước Khám BHYT Đúng Tuyến",
 			"desc": "Chuẩn bị 4 giấy tờ BHYT & Kéo thả / Sắp xếp 6 bước đúng quy trình khám BHYT không sợ bị mắng.",
 			"type_badge": "Kéo Thả 6 Bước BHYT",
-			"scene_path": "res://scenes/minigames/HospitalBHYTProcessGame.tscn",
+			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
 			"data_key": "10"
 		},
 		{
@@ -61,7 +71,7 @@ func _init() -> void:
 			"title": "Xếp Hộp Thuốc Cứu Thương Sinh Viên",
 			"desc": "Xếp 4 món y tế khẩn cấp vào hộp sơ cứu phòng trọ: hạ sốt, men tiêu hóa, băng gạc, oresol bù nước.",
 			"type_badge": "Kéo Thả Hộp Thuốc",
-			"scene_path": "res://scenes/minigames/PackingMiniGame.tscn",
+			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
 			"data_key": "11"
 		},
 		{

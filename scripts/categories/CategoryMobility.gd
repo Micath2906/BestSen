@@ -15,13 +15,23 @@ func _init() -> void:
 	
 	minigames_list = [
 		{
+			"id": "transit_simulation",
+			"lesson_id": 4,
+			"icon": "🚍",
+			"title": "Giả Lập Hệ Thống Giao Thông & Văn Hóa Đô Thị",
+			"desc": "3 Cấp độ thực chiến: Bắt đúng tuyến & quẹt thẻ NFC 0.6s, Quán tính tàu Metro & đeo balo trước ngực, Chẩn đoán hỏng xe máy tránh bị thợ chặt chém.",
+			"type_badge": "Giả Lập Xúc Giác 3 Cấp Độ",
+			"scene_path": "res://scenes/minigames/TransitSimulation.tscn",
+			"data_key": "4"
+		},
+		{
 			"id": "civilized_ride",
 			"lesson_id": 1,
-			"icon": "🚍",
+			"icon": "🚏",
 			"title": "Chuyến Đi Văn Minh - Xe Buýt Số 08",
 			"desc": "Quy tắc lên xuống xe buýt, chuẩn bị tiền lẻ, bấm chuông xuống trạm và cảnh giác chống móc túi.",
 			"type_badge": "Văn Hóa Xe Bus",
-			"scene_path": "res://scenes/minigames/CivilizedRideGame.tscn",
+			"scene_path": "res://scenes/minigames/TransitSimulation.tscn",
 			"data_key": "civilized_ride"
 		},
 		{
@@ -51,7 +61,7 @@ func _init() -> void:
 			"title": "Bật Xi-Nhan Thoát Bùng Binh An Toàn",
 			"desc": "Định vị la bàn và phản xạ bật đèn tín hiệu thoát bùng binh / vòng xuyến lớn an toàn.",
 			"type_badge": "Phản Xạ QTE",
-			"scene_path": "res://scenes/minigames/QteMiniGame.tscn",
+			"scene_path": "res://scenes/minigames/TransitSimulation.tscn",
 			"data_key": "12"
 		},
 		{
@@ -61,7 +71,7 @@ func _init() -> void:
 			"title": "Bảo Dưỡng & Sự Cố Xe Máy",
 			"desc": "Nối 5 dấu hiệu hỏng hóc (sên chùng, xả nhớt máy, đo áp suất lốp...) & 4 tình huống chẩn đoán sự cố.",
 			"type_badge": "Nối & Chẩn Đoán",
-			"scene_path": "res://scenes/minigames/MotorbikeMaintenanceGame.tscn",
+			"scene_path": "res://scenes/minigames/TransitSimulation.tscn",
 			"data_key": "motorbike_maintenance"
 		},
 		{
@@ -71,7 +81,7 @@ func _init() -> void:
 			"title": "An Toàn Giao Thông & Xử Lý Vi Phạm CSGT",
 			"desc": "Nối mức phạt vi phạm nồng độ cồn/không mũ & Sắp xếp 4 bước xử lý an toàn khi va chạm giao thông.",
 			"type_badge": "Nối & Trình Tự",
-			"scene_path": "res://scenes/minigames/TrafficSafetyGame.tscn",
+			"scene_path": "res://scenes/minigames/TransitSimulation.tscn",
 			"data_key": "4"
 		}
 	]

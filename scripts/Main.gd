@@ -26,6 +26,11 @@ var shop_view_scene = preload("res://scenes/ShopView.tscn")
 var house_dress_view_scene = preload("res://scenes/HouseAndDressView.tscn")
 var decor_studio_scene = preload("res://scenes/RoomDecorStudioView.tscn")
 
+var transit_simulation_scene = preload("res://scenes/minigames/TransitSimulation.tscn")
+var housing_legal_simulation_scene = preload("res://scenes/minigames/HousingLegalSimulation.tscn")
+var healthcare_wellness_simulation_scene = preload("res://scenes/minigames/HealthcareWellnessSimulation.tscn")
+var finance_survival_simulation_scene = preload("res://scenes/minigames/FinanceSurvivalSimulation.tscn")
+
 var category_scenes = {
 	1: preload("res://scenes/categories/CategoryMobility.tscn"),
 	2: preload("res://scenes/categories/CategoryHousingLegal.tscn"),
@@ -306,26 +311,20 @@ func start_lesson(lesson_id: int) -> void:
 	if lesson_id == 1:
 		_open_preparation_game(lesson_id)
 		return
-	if lesson_id == 2:
-		_open_hospital_choice_game(lesson_id)
+	if lesson_id == 2 or lesson_id == 3 or lesson_id == 10 or lesson_id == 11:
+		_open_healthcare_wellness_simulation(lesson_id)
 		return
-	if lesson_id == 3:
-		_open_self_diagnosis_game(lesson_id)
+	if lesson_id == 4 or lesson_id == 12:
+		_open_transit_simulation(lesson_id)
 		return
-	if lesson_id == 4:
-		_open_traffic_safety_game(lesson_id)
-		return
-	if lesson_id == 5:
-		_open_rental_contract_game(lesson_id)
+	if lesson_id == 5 or lesson_id == 6:
+		_open_housing_legal_simulation(lesson_id)
 		return
 	if lesson_id == 7:
 		_open_public_admin_game(lesson_id)
 		return
-	if lesson_id == 10:
-		_open_bhyt_process_game(lesson_id)
-		return
-	if lesson_id == 14:
-		_open_cyber_security_game(lesson_id)
+	if lesson_id == 13 or lesson_id == 14 or lesson_id == 16:
+		_open_finance_survival_simulation(lesson_id)
 		return
 	if lesson_id == 15:
 		_open_labor_rights_game(lesson_id)
@@ -353,14 +352,13 @@ func _open_preparation_game(lesson_id: int) -> void:
 		start_simulation(lesson_id, sim_steps, true)
 	)
 
-func _open_hospital_choice_game(lesson_id: int) -> void:
-	current_tab_name = "lesson_hospital"
+func _open_transit_simulation(lesson_id: int) -> void:
+	current_tab_name = "lesson_transit_simulation"
 	cat_profile_hud.visible = false
 	btn_handbook_quick.visible = false
 	bottom_paw_menu.visible = false
 	_clear_current_view()
-	var hosp_scene = load("res://scenes/minigames/HospitalChoiceGame.tscn")
-	current_view_node = hosp_scene.instantiate()
+	current_view_node = transit_simulation_scene.instantiate()
 	views_container.add_child(current_view_node)
 	var mg_data = GameManager.get_minigame_data(lesson_id)
 	current_view_node.load_minigame(mg_data)
@@ -368,54 +366,63 @@ func _open_hospital_choice_game(lesson_id: int) -> void:
 	current_view_node.minigame_completed.connect(func(sim_steps):
 		start_simulation(lesson_id, sim_steps, true)
 	)
+
+func _open_housing_legal_simulation(lesson_id: int) -> void:
+	current_tab_name = "lesson_housing_legal_simulation"
+	cat_profile_hud.visible = false
+	btn_handbook_quick.visible = false
+	bottom_paw_menu.visible = false
+	_clear_current_view()
+	current_view_node = housing_legal_simulation_scene.instantiate()
+	views_container.add_child(current_view_node)
+	var mg_data = GameManager.get_minigame_data(lesson_id)
+	current_view_node.load_minigame(mg_data)
+	current_view_node.back_requested.connect(switch_to_map)
+	current_view_node.minigame_completed.connect(func(sim_steps):
+		start_simulation(lesson_id, sim_steps, true)
+	)
+
+func _open_healthcare_wellness_simulation(lesson_id: int) -> void:
+	current_tab_name = "lesson_healthcare_wellness_simulation"
+	cat_profile_hud.visible = false
+	btn_handbook_quick.visible = false
+	bottom_paw_menu.visible = false
+	_clear_current_view()
+	current_view_node = healthcare_wellness_simulation_scene.instantiate()
+	views_container.add_child(current_view_node)
+	var mg_data = GameManager.get_minigame_data(lesson_id)
+	current_view_node.load_minigame(mg_data)
+	current_view_node.back_requested.connect(switch_to_map)
+	current_view_node.minigame_completed.connect(func(sim_steps):
+		start_simulation(lesson_id, sim_steps, true)
+	)
+
+func _open_finance_survival_simulation(lesson_id: int) -> void:
+	current_tab_name = "lesson_finance_survival_simulation"
+	cat_profile_hud.visible = false
+	btn_handbook_quick.visible = false
+	bottom_paw_menu.visible = false
+	_clear_current_view()
+	current_view_node = finance_survival_simulation_scene.instantiate()
+	views_container.add_child(current_view_node)
+	var mg_data = GameManager.get_minigame_data(lesson_id)
+	current_view_node.load_minigame(mg_data)
+	current_view_node.back_requested.connect(switch_to_map)
+	current_view_node.minigame_completed.connect(func(sim_steps):
+		start_simulation(lesson_id, sim_steps, true)
+	)
+
+func _open_hospital_choice_game(lesson_id: int) -> void:
+	_open_healthcare_wellness_simulation(lesson_id)
 
 func _open_self_diagnosis_game(lesson_id: int) -> void:
-	current_tab_name = "lesson_self_diag"
-	cat_profile_hud.visible = false
-	btn_handbook_quick.visible = false
-	bottom_paw_menu.visible = false
-	_clear_current_view()
-	var diag_scene = load("res://scenes/minigames/SelfDiagnosisGame.tscn")
-	current_view_node = diag_scene.instantiate()
-	views_container.add_child(current_view_node)
-	var mg_data = GameManager.get_minigame_data(lesson_id)
-	current_view_node.load_minigame(mg_data)
-	current_view_node.back_requested.connect(switch_to_map)
-	current_view_node.minigame_completed.connect(func(sim_steps):
-		start_simulation(lesson_id, sim_steps, true)
-	)
+	_open_healthcare_wellness_simulation(lesson_id)
 
 func _open_traffic_safety_game(lesson_id: int) -> void:
-	current_tab_name = "lesson_traffic_safety"
-	cat_profile_hud.visible = false
-	btn_handbook_quick.visible = false
-	bottom_paw_menu.visible = false
-	_clear_current_view()
-	var scn = load("res://scenes/minigames/TrafficSafetyGame.tscn")
-	current_view_node = scn.instantiate()
-	views_container.add_child(current_view_node)
-	var mg_data = GameManager.get_minigame_data(lesson_id)
-	current_view_node.load_minigame(mg_data)
-	current_view_node.back_requested.connect(switch_to_map)
-	current_view_node.minigame_completed.connect(func(sim_steps):
-		start_simulation(lesson_id, sim_steps, true)
-	)
+	_open_transit_simulation(lesson_id)
 
 func _open_rental_contract_game(lesson_id: int) -> void:
-	current_tab_name = "lesson_rental_contract"
-	cat_profile_hud.visible = false
-	btn_handbook_quick.visible = false
-	bottom_paw_menu.visible = false
-	_clear_current_view()
-	var scn = load("res://scenes/minigames/RentalContractGame.tscn")
-	current_view_node = scn.instantiate()
-	views_container.add_child(current_view_node)
-	var mg_data = GameManager.get_minigame_data(lesson_id)
-	current_view_node.load_minigame(mg_data)
-	current_view_node.back_requested.connect(switch_to_map)
-	current_view_node.minigame_completed.connect(func(sim_steps):
-		start_simulation(lesson_id, sim_steps, true)
-	)
+	_open_housing_legal_simulation(lesson_id)
 
 func _open_public_admin_game(lesson_id: int) -> void:
 	current_tab_name = "lesson_public_admin"
@@ -434,36 +441,10 @@ func _open_public_admin_game(lesson_id: int) -> void:
 	)
 
 func _open_bhyt_process_game(lesson_id: int) -> void:
-	current_tab_name = "lesson_bhyt_process"
-	cat_profile_hud.visible = false
-	btn_handbook_quick.visible = false
-	bottom_paw_menu.visible = false
-	_clear_current_view()
-	var scn = load("res://scenes/minigames/HospitalBHYTProcessGame.tscn")
-	current_view_node = scn.instantiate()
-	views_container.add_child(current_view_node)
-	var mg_data = GameManager.get_minigame_data(lesson_id)
-	current_view_node.load_minigame(mg_data)
-	current_view_node.back_requested.connect(switch_to_map)
-	current_view_node.minigame_completed.connect(func(sim_steps):
-		start_simulation(lesson_id, sim_steps, true)
-	)
+	_open_healthcare_wellness_simulation(lesson_id)
 
 func _open_cyber_security_game(lesson_id: int) -> void:
-	current_tab_name = "lesson_cyber_security"
-	cat_profile_hud.visible = false
-	btn_handbook_quick.visible = false
-	bottom_paw_menu.visible = false
-	_clear_current_view()
-	var scn = load("res://scenes/minigames/CyberSecurityGame.tscn")
-	current_view_node = scn.instantiate()
-	views_container.add_child(current_view_node)
-	var mg_data = GameManager.get_minigame_data(lesson_id)
-	current_view_node.load_minigame(mg_data)
-	current_view_node.back_requested.connect(switch_to_map)
-	current_view_node.minigame_completed.connect(func(sim_steps):
-		start_simulation(lesson_id, sim_steps, true)
-	)
+	_open_finance_survival_simulation(lesson_id)
 
 func _open_labor_rights_game(lesson_id: int) -> void:
 	current_tab_name = "lesson_labor_rights"
@@ -482,20 +463,7 @@ func _open_labor_rights_game(lesson_id: int) -> void:
 	)
 
 func _open_personal_finance_game(lesson_id: int) -> void:
-	current_tab_name = "lesson_personal_finance"
-	cat_profile_hud.visible = false
-	btn_handbook_quick.visible = false
-	bottom_paw_menu.visible = false
-	_clear_current_view()
-	var scn = load("res://scenes/minigames/PersonalFinanceGame.tscn")
-	current_view_node = scn.instantiate()
-	views_container.add_child(current_view_node)
-	var mg_data = GameManager.get_minigame_data(lesson_id)
-	current_view_node.load_minigame(mg_data)
-	current_view_node.back_requested.connect(switch_to_map)
-	current_view_node.minigame_completed.connect(func(sim_steps):
-		start_simulation(lesson_id, sim_steps, true)
-	)
+	_open_finance_survival_simulation(lesson_id)
 
 func _open_time_management_game(lesson_id: int) -> void:
 	current_tab_name = "lesson_time_management"
