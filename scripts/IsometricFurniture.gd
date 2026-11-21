@@ -21,8 +21,8 @@ enum FurnitureType {
 
 signal item_clicked(type)
 
-const FOOD_BOWL_EMPTY_PATH: String = "res://assets/UI/PetMobileGameAsset/PetMobileGameAsset/Bunnies/BunnyStuffs/FoodBowlEmpty.png"
-const FOOD_BOWL_FULL_PATH: String = "res://assets/UI/PetMobileGameAsset/PetMobileGameAsset/Bunnies/BunnyStuffs/FoodBowl.png"
+const FOOD_BOWL_EMPTY_PATH: String = "res://assets/sprites/room_decor/furniture_cat_bowl_empty.png"
+const FOOD_BOWL_FULL_PATH: String = "res://assets/sprites/room_decor/furniture_cat_bowl_full.png"
 
 var sprite_node: Sprite2D
 var shadow_pts: PackedVector2Array
@@ -30,10 +30,10 @@ var is_hovered: bool = false
 var is_bowl_filled: bool = false
 
 const TEXTURE_PATHS = {
-	FurnitureType.CUSHION_BED: "res://assets/sprites/room_items/cat_bed_pink_classic.png",
+	FurnitureType.CUSHION_BED: "res://assets/sprites/room_decor/furniture_cushion_bed.png",
 	FurnitureType.FOOD_BOWL: FOOD_BOWL_EMPTY_PATH,
-	FurnitureType.WATER_BOWL: "res://assets/sprites/room_items/mobile/bowl_mobile_green_water.png",
-	FurnitureType.LITTER_BOX: "res://assets/sprites/room_items/litter_box.png",
+	FurnitureType.WATER_BOWL: "res://assets/sprites/room_decor/furniture_cat_water_bowl.png",
+	FurnitureType.LITTER_BOX: "res://assets/sprites/room_decor/furniture_litter_box.png",
 }
 
 func _ready() -> void:

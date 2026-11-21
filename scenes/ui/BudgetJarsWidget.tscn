@@ -1,0 +1,190 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8m4p7k1v9w2q"]
+
+[ext_resource type="Script" path="res://scripts/ui/BudgetJarsWidget.gd" id="1_widget"]
+[ext_resource type="FontFile" path="res://assets/font/SVN-Retron 2000.ttf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.988235, 0.980392, 0.94902, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.4, 0.3, 0.25, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jar_box"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.75, 0.7, 0.65, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="BudgetJarsWidget" type="PanelContainer"]
+custom_minimum_size = Vector2(336, 150)
+offset_right = 336.0
+offset_bottom = 150.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+script = ExtResource("1_widget")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderHBox" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LblTotalSummary" type="Label" parent="VBox/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+text = "Tổng Ngân Sách: 90/90 Cá"
+vertical_alignment = 1
+
+[node name="BtnResetMonth" type="Button" parent="VBox/HeaderHBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "🔄 Cấp Tháng Mới"
+
+[node name="JarsHBox" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="JarEssential" type="PanelContainer" parent="VBox/JarsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jar_box")
+
+[node name="VBox" type="VBoxContainer" parent="VBox/JarsHBox/JarEssential"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="TextureRect" parent="VBox/JarsHBox/JarEssential/VBox"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="LblTitle" type="Label" parent="VBox/JarsHBox/JarEssential/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.2, 0.5, 0.2, 1)
+text = "1. Thiết Yếu"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="VBox/JarsHBox/JarEssential/VBox"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+max_value = 45.0
+value = 45.0
+show_percentage = false
+
+[node name="LblCount" type="Label" parent="VBox/JarsHBox/JarEssential/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.2, 0.4, 0.2, 1)
+text = "45/45"
+horizontal_alignment = 1
+
+[node name="JarGrowth" type="PanelContainer" parent="VBox/JarsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jar_box")
+
+[node name="VBox" type="VBoxContainer" parent="VBox/JarsHBox/JarGrowth"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="TextureRect" parent="VBox/JarsHBox/JarGrowth/VBox"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="LblTitle" type="Label" parent="VBox/JarsHBox/JarGrowth/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.45, 0.1, 1)
+text = "2. Phát Triển"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="VBox/JarsHBox/JarGrowth/VBox"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+max_value = 27.0
+value = 27.0
+show_percentage = false
+
+[node name="LblCount" type="Label" parent="VBox/JarsHBox/JarGrowth/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.35, 0.1, 1)
+text = "27/27"
+horizontal_alignment = 1
+
+[node name="JarEmergency" type="PanelContainer" parent="VBox/JarsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jar_box")
+
+[node name="VBox" type="VBoxContainer" parent="VBox/JarsHBox/JarEmergency"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="TextureRect" parent="VBox/JarsHBox/JarEmergency/VBox"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="LblTitle" type="Label" parent="VBox/JarsHBox/JarEmergency/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.7, 0.2, 0.2, 1)
+text = "3. Khẩn Cấp"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="VBox/JarsHBox/JarEmergency/VBox"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+max_value = 18.0
+value = 18.0
+show_percentage = false
+
+[node name="LblCount" type="Label" parent="VBox/JarsHBox/JarEmergency/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.2, 0.2, 1)
+text = "18/18"
+horizontal_alignment = 1
+
+[node name="LblAlert" type="Label" parent="VBox"]
+visible = false
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
+text = "Thông báo tài chính..."
+horizontal_alignment = 1

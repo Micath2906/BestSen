@@ -614,7 +614,7 @@ func set_cozy_sleep_mode(enabled: bool) -> void:
 		cozy_sleep_sprite.visible = enabled
 	if enabled:
 		set_state(State.SLEEP)
-		show_dialogue("Ngủ tiết kiệm sức chờ Sen về nè~ Zzz", 4.0)
+		show_dialogue("Zzz... Ngủ ngon chờ Sen về! 💤", 2.0)
 	else:
 		if current_state == State.SLEEP:
 			set_state(State.IDLE)

@@ -96,6 +96,8 @@ var wax_seal_stamp_rect: TextureRect = null
 var wax_glow_tween: Tween = null
 var fade_curtain: ColorRect = null
 var _is_stamping: bool = false
+var playtest_hub_modal: Control = null
+var btn_playtest: Button = null
 
 func _ready() -> void:
 	theme = MAIN_THEME
@@ -131,36 +133,349 @@ func _setup_fade_curtain() -> void:
 
 # --- HOME VIEW SETUP & EVENTS ---
 func _setup_home_view() -> void:
-	# Nút Play: Nếu đã có nhân vật mèo thì vào thẳng phòng, nếu mới chơi thì mở màn hình khởi tạo (Tắt âm thanh khi ấn chơi ngay)
+	var buttons_card := $HomeView/CenterVBox/ButtonsCard as PanelContainer
+	if buttons_card:
+		var card_sb := StyleBoxFlat.new()
+		card_sb.bg_color = Color("#FFFBF5")
+		card_sb.border_color = Color("#8D5B36")
+		card_sb.set_border_width_all(2)
+		card_sb.border_width_bottom = 5
+		card_sb.set_corner_radius_all(18)
+		card_sb.content_margin_left = 20
+		card_sb.content_margin_right = 20
+		card_sb.content_margin_top = 22
+		card_sb.content_margin_bottom = 22
+		card_sb.shadow_color = Color(0, 0, 0, 0.12)
+		card_sb.shadow_size = 8
+		card_sb.shadow_offset = Vector2(0, 4)
+		buttons_card.add_theme_stylebox_override("panel", card_sb)
+
+	var btn_vbox := $HomeView/CenterVBox/ButtonsCard/VBox as VBoxContainer
+	btn_vbox.set("theme_override_constants/separation", 12)
+
+	# Style Cozy Button Palettes
+	var cozy_playtest_sb := StyleBoxFlat.new()
+	cozy_playtest_sb.bg_color = Color("#D97706")
+	cozy_playtest_sb.border_color = Color("#F59E0B")
+	cozy_playtest_sb.set_border_width_all(2)
+	cozy_playtest_sb.border_width_bottom = 5
+	cozy_playtest_sb.set_corner_radius_all(14)
+	cozy_playtest_sb.content_margin_left = 16
+	cozy_playtest_sb.content_margin_right = 16
+	cozy_playtest_sb.content_margin_top = 10
+	cozy_playtest_sb.content_margin_bottom = 12
+
+	var cozy_cont_sb := StyleBoxFlat.new()
+	cozy_cont_sb.bg_color = Color("#3B6E47")
+	cozy_cont_sb.border_color = Color("#1D4226")
+	cozy_cont_sb.set_border_width_all(2)
+	cozy_cont_sb.border_width_bottom = 5
+	cozy_cont_sb.set_corner_radius_all(14)
+	cozy_cont_sb.content_margin_left = 16
+	cozy_cont_sb.content_margin_right = 16
+	cozy_cont_sb.content_margin_top = 10
+	cozy_cont_sb.content_margin_bottom = 12
+
+	var cozy_play_sb := StyleBoxFlat.new()
+	cozy_play_sb.bg_color = Color("#8D5B36")
+	cozy_play_sb.border_color = Color("#4A2E1B")
+	cozy_play_sb.set_border_width_all(2)
+	cozy_play_sb.border_width_bottom = 5
+	cozy_play_sb.set_corner_radius_all(14)
+	cozy_play_sb.content_margin_left = 16
+	cozy_play_sb.content_margin_right = 16
+	cozy_play_sb.content_margin_top = 10
+	cozy_play_sb.content_margin_bottom = 12
+
+	# 1. NÚT CHƠI THỬ MINIGAME MỚI (PLAYTEST HUB) - ĐẶT NỔI BẬT Ở ĐẦU
+	btn_playtest = btn_vbox.get_node_or_null("BtnPlaytestHub")
+	if not btn_playtest:
+		btn_playtest = Button.new()
+		btn_playtest.name = "BtnPlaytestHub"
+		btn_vbox.add_child(btn_playtest)
+	btn_vbox.move_child(btn_playtest, 0)
+	btn_playtest.text = "🎮 CHƠI THỬ MINIGAME MỚI"
+	btn_playtest.custom_minimum_size = Vector2(230, 48)
+	btn_playtest.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	btn_playtest.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	btn_playtest.add_theme_font_size_override("font_size", 14)
+	btn_playtest.add_theme_color_override("font_color", Color.WHITE)
+	btn_playtest.add_theme_stylebox_override("normal", cozy_playtest_sb)
+	btn_playtest.add_theme_stylebox_override("hover", cozy_playtest_sb)
+	btn_playtest.add_theme_stylebox_override("pressed", cozy_playtest_sb)
+	if not btn_playtest.pressed.is_connected(_on_playtest_hub_button_pressed):
+		btn_playtest.pressed.connect(_on_playtest_hub_button_pressed)
+	JuicyButton.attach_juice(btn_playtest, true)
+
+	# 2. Nút Tiếp tục vào phòng trọ (nếu đã xong onboarding)
+	if GameManager.has_completed_onboarding:
+		if btn_continue:
+			btn_continue.visible = true
+			btn_continue.text = "🐾 VÀO PHÒNG TRỌ MOCHI"
+			btn_continue.custom_minimum_size = Vector2(230, 46)
+			btn_continue.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			btn_continue.add_theme_font_size_override("font_size", 13)
+			btn_continue.add_theme_color_override("font_color", Color.WHITE)
+			btn_continue.add_theme_stylebox_override("normal", cozy_cont_sb)
+			btn_continue.add_theme_stylebox_override("hover", cozy_cont_sb)
+			btn_continue.add_theme_stylebox_override("pressed", cozy_cont_sb)
+			btn_continue.pressed.connect(func():
+				_go_to_game_scene()
+			)
+			JuicyButton.attach_juice(btn_continue, true)
+		btn_play.text = "📜 HỢP ĐỒNG & ĐẶT TÊN (SETUP)"
+	else:
+		if btn_continue:
+			btn_continue.visible = false
+		btn_play.text = "🐾 NHẬN NUÔI MOCHI (SETUP)"
+
+	btn_play.custom_minimum_size = Vector2(230, 44)
+	btn_play.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	btn_play.add_theme_font_size_override("font_size", 13)
+	btn_play.add_theme_stylebox_override("normal", cozy_play_sb)
+	btn_play.add_theme_stylebox_override("hover", cozy_play_sb)
+	btn_play.add_theme_stylebox_override("pressed", cozy_play_sb)
 	btn_play.pressed.connect(func():
-		if GameManager.has_completed_onboarding:
-			_go_to_game_scene()
-		else:
-			_open_cat_creation()
+		_open_cat_creation()
 	)
-	
-	if btn_continue:
-		btn_continue.visible = false
-		
+
+	btn_setting.custom_minimum_size = Vector2(230, 42)
+	btn_setting.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	btn_setting.pressed.connect(func():
 		SoundManager.play_click()
 		_open_setting_modal()
 	)
-	
+
 	if btn_exit:
+		btn_exit.custom_minimum_size = Vector2(230, 42)
+		btn_exit.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		btn_exit.pressed.connect(func():
 			SoundManager.play_click()
 			get_tree().quit()
 		)
-		
+
 	if btn_info:
 		btn_info.pressed.connect(func():
 			SoundManager.play_click()
 			_open_info_modal()
 		)
+
 	for b in [btn_play, btn_setting, btn_exit, btn_info]:
 		if b:
 			JuicyButton.attach_juice(b, true)
+
+	_setup_playtest_hub()
+
+func _setup_playtest_hub() -> void:
+	if playtest_hub_modal:
+		return
+	playtest_hub_modal = Control.new()
+	playtest_hub_modal.name = "PlaytestHubModal"
+	playtest_hub_modal.visible = false
+	playtest_hub_modal.z_index = 100
+	playtest_hub_modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var dim = ColorRect.new()
+	dim.name = "DimOverlay"
+	dim.color = Color(0, 0, 0, 0.6)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	playtest_hub_modal.add_child(dim)
+	dim.gui_input.connect(func(ev):
+		if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+			SoundManager.play_click()
+			playtest_hub_modal.visible = false
+	)
+
+	var center = CenterContainer.new()
+	center.name = "CenterContainer"
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_PASS
+	playtest_hub_modal.add_child(center)
+
+	var panel = PanelContainer.new()
+	panel.name = "Panel"
+	panel.custom_minimum_size = Vector2(460, 560)
+	panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
+	var panel_sb = StyleBoxFlat.new()
+	panel_sb.bg_color = Color("#FFFDF9")
+	panel_sb.border_color = Color("#8D5B36")
+	panel_sb.set_border_width_all(3)
+	panel_sb.border_width_bottom = 6
+	panel_sb.set_corner_radius_all(18)
+	panel_sb.content_margin_left = 20
+	panel_sb.content_margin_top = 20
+	panel_sb.content_margin_right = 20
+	panel_sb.content_margin_bottom = 20
+	panel_sb.shadow_color = Color(0, 0, 0, 0.25)
+	panel_sb.shadow_size = 12
+	panel_sb.shadow_offset = Vector2(0, 6)
+	panel.add_theme_stylebox_override("panel", panel_sb)
+	center.add_child(panel)
+
+	var vbox = VBoxContainer.new()
+	vbox.set("theme_override_constants/separation", 10)
+	panel.add_child(vbox)
+
+	var title = Label.new()
+	title.text = "🎮 TRẢI NGHIỆM MINIGAME MỚI"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 16)
+	title.add_theme_color_override("font_color", Color("#4A2E1B"))
+	vbox.add_child(title)
+
+	var subtitle = Label.new()
+	subtitle.text = "Bấm để trải nghiệm ngay các cơ chế gameplay thực tế:"
+	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	subtitle.add_theme_font_size_override("font_size", 10)
+	subtitle.add_theme_color_override("font_color", Color("#795548"))
+	vbox.add_child(subtitle)
+
+	var scroll = ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, 380)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vbox.add_child(scroll)
+
+	var list_vbox = VBoxContainer.new()
+	list_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list_vbox.set("theme_override_constants/separation", 8)
+	scroll.add_child(list_vbox)
+
+	var minigames_list = [
+		{
+			"title": "🧳 Xếp Vali Nhập Học (Tetris Inventory)",
+			"desc": "Tách 4 túi riêng: Quần áo, Hồ sơ, Y tế, Balo. Kéo thả khối Tetris xoay 90°",
+			"scene": "res://scenes/minigames/packing_tetris_game.tscn",
+			"color": "#D97706"
+		},
+		{
+			"title": "🔍 Soi Phòng Trọ & Bẫy Pháp Lý (Spot Diff)",
+			"desc": "3 Màn ảnh thực tế: Căn phòng trọ, Công tơ điện quay lén, Bẫy hợp đồng",
+			"scene": "res://scenes/minigames/room_inspection_diff_game.tscn",
+			"color": "#2563EB"
+		},
+		{
+			"title": "🩺 Bác Sĩ Mèo Nhí (Doctor Sim)",
+			"desc": "Mèo nằm viện sốt 39.2°C: Kẹp nhiệt kế, khăn ấm 35°C, tính liều Para 500mg, bù Oresol",
+			"scene": "res://scenes/minigames/doctor_simulation_game.tscn",
+			"color": "#059669"
+		},
+		{
+			"title": "💰 3 Hũ Ngân Sách 2.000.000 VNĐ",
+			"desc": "Vòng quay 30 ngày sinh tồn: Phân 3 hũ 50-30-20, né bẫy nợ 0%, xử lý hỏng xe",
+			"scene": "res://scenes/minigames/budget_jars_game.tscn",
+			"color": "#7C3AED"
+		},
+		{
+			"title": "🏠 Vào Phòng Trọ Mochi (Cozy Room)",
+			"desc": "Phòng trọ pixel ấm áp: Cửa sổ nắng, bàn học sinh viên, thảm boho, phòng thử đồ",
+			"scene": "res://scenes/Main.tscn",
+			"color": "#B45309"
+		}
+	]
+
+	for mg in minigames_list:
+		var card = _create_minigame_card(mg)
+		list_vbox.add_child(card)
+
+	var btn_close = Button.new()
+	btn_close.text = "✖ ĐÓNG BẢNG CHỌN"
+	btn_close.custom_minimum_size = Vector2(0, 38)
+	btn_close.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	var btn_close_sb = StyleBoxFlat.new()
+	btn_close_sb.bg_color = Color("#8D5B36")
+	btn_close_sb.border_color = Color("#4A2E1B")
+	btn_close_sb.set_border_width_all(2)
+	btn_close_sb.border_width_bottom = 4
+	btn_close_sb.set_corner_radius_all(10)
+	btn_close.add_theme_stylebox_override("normal", btn_close_sb)
+	btn_close.add_theme_stylebox_override("hover", btn_close_sb)
+	btn_close.add_theme_stylebox_override("pressed", btn_close_sb)
+	btn_close.add_theme_color_override("font_color", Color.WHITE)
+	btn_close.add_theme_font_size_override("font_size", 12)
+	btn_close.pressed.connect(func():
+		SoundManager.play_click()
+		playtest_hub_modal.visible = false
+	)
+	JuicyButton.attach_juice(btn_close, true)
+	vbox.add_child(btn_close)
+
+	add_child(playtest_hub_modal)
+
+func _create_minigame_card(mg: Dictionary) -> PanelContainer:
+	var pc = PanelContainer.new()
+	pc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var card_sb = StyleBoxFlat.new()
+	card_sb.bg_color = Color("#FFF8F0")
+	card_sb.border_color = Color(mg.get("color", "#8D5B36"))
+	card_sb.set_border_width_all(2)
+	card_sb.border_width_bottom = 4
+	card_sb.set_corner_radius_all(10)
+	card_sb.content_margin_left = 12
+	card_sb.content_margin_top = 8
+	card_sb.content_margin_right = 12
+	card_sb.content_margin_bottom = 8
+	pc.add_theme_stylebox_override("panel", card_sb)
+
+	var hbox = HBoxContainer.new()
+	hbox.set("theme_override_constants/separation", 8)
+	pc.add_child(hbox)
+
+	var text_vbox = VBoxContainer.new()
+	text_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_vbox.set("theme_override_constants/separation", 2)
+	hbox.add_child(text_vbox)
+
+	var lbl_name = Label.new()
+	lbl_name.text = mg.get("title", "")
+	lbl_name.add_theme_font_size_override("font_size", 12)
+	lbl_name.add_theme_color_override("font_color", Color("#2E1C0C"))
+	text_vbox.add_child(lbl_name)
+
+	var lbl_desc = Label.new()
+	lbl_desc.text = mg.get("desc", "")
+	lbl_desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lbl_desc.add_theme_font_size_override("font_size", 9)
+	lbl_desc.add_theme_color_override("font_color", Color("#6D4C41"))
+	text_vbox.add_child(lbl_desc)
+
+	var btn_play_mg = Button.new()
+	btn_play_mg.text = "CHƠI ▶"
+	btn_play_mg.custom_minimum_size = Vector2(75, 34)
+	btn_play_mg.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	var btn_sb = StyleBoxFlat.new()
+	btn_sb.bg_color = Color(mg.get("color", "#8D5B36"))
+	btn_sb.set_corner_radius_all(8)
+	btn_sb.border_width_bottom = 3
+	btn_sb.border_color = Color(mg.get("color", "#8D5B36")).darkened(0.2)
+	btn_play_mg.add_theme_stylebox_override("normal", btn_sb)
+	btn_play_mg.add_theme_stylebox_override("hover", btn_sb)
+	btn_play_mg.add_theme_stylebox_override("pressed", btn_sb)
+	btn_play_mg.add_theme_color_override("font_color", Color.WHITE)
+	btn_play_mg.add_theme_font_size_override("font_size", 11)
+
+	var target_scene = mg.get("scene", "")
+	btn_play_mg.pressed.connect(func():
+		SoundManager.play_click()
+		if target_scene != "":
+			get_tree().change_scene_to_file(target_scene)
+	)
+	JuicyButton.attach_juice(btn_play_mg, true)
+	hbox.add_child(btn_play_mg)
+
+	return pc
+
+func _on_playtest_hub_button_pressed() -> void:
+	SoundManager.play_click()
+	_open_playtest_hub()
+
+func _open_playtest_hub() -> void:
+	if not playtest_hub_modal:
+		_setup_playtest_hub()
+	playtest_hub_modal.visible = true
 
 func _update_home_mascot() -> void:
 	pass

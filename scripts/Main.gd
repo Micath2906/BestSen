@@ -27,8 +27,8 @@ var house_dress_view_scene = preload("res://scenes/HouseAndDressView.tscn")
 var decor_studio_scene = preload("res://scenes/RoomDecorStudioView.tscn")
 
 var transit_simulation_scene = preload("res://scenes/minigames/TransitSimulation.tscn")
-var housing_legal_simulation_scene = preload("res://scenes/minigames/HousingLegalSimulation.tscn")
-var healthcare_wellness_simulation_scene = preload("res://scenes/minigames/HealthcareWellnessSimulation.tscn")
+var housing_legal_simulation_scene = preload("res://scenes/minigames/room_inspection_diff_game.tscn")
+var healthcare_wellness_simulation_scene = preload("res://scenes/minigames/doctor_simulation_game.tscn")
 var finance_survival_simulation_scene = preload("res://scenes/minigames/FinanceSurvivalSimulation.tscn")
 
 var category_scenes = {
@@ -342,7 +342,7 @@ func _open_preparation_game(lesson_id: int) -> void:
 	btn_handbook_quick.visible = false
 	bottom_paw_menu.visible = false
 	_clear_current_view()
-	var prep_scene = load("res://scenes/minigames/PreparationValiGame.tscn")
+	var prep_scene = load("res://scenes/minigames/packing_minigame.tscn")
 	current_view_node = prep_scene.instantiate()
 	views_container.add_child(current_view_node)
 	var mg_data = GameManager.get_minigame_data(lesson_id)

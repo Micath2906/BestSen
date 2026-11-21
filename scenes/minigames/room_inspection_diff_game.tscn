@@ -1,0 +1,372 @@
+[gd_scene load_steps=8 format=3 uid="uid://d3m7p4k2v9r8x"]
+
+[ext_resource type="Script" path="res://scripts/minigames/room_inspection_diff_game.gd" id="1_diff"]
+[ext_resource type="FontFile" path="res://assets/font/SVN-Retron 2000.ttf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.980392, 0.960784, 0.921569, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.380392, 0.282353, 0.239216, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.75, 0.65, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frame"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.55, 0.45, 0.4, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.992157, 0.988235, 0.956863, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 4
+border_color = Color(0.243137, 0.152941, 0.137255, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 8
+
+[node name="RoomInspectionDiffGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_diff")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="HeaderBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 48.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="HBox" type="HBoxContainer" parent="HeaderBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnBack" type="Button" parent="HeaderBar/HBox"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+text = "◀"
+
+[node name="LblTitle" type="Label" parent="HeaderBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1, 0.95, 0.85, 1)
+text = "SOI PHÒNG TRỌ: TÌM ĐIỂM KHÁC BIỆT"
+vertical_alignment = 1
+
+[node name="LblCounter" type="Label" parent="HeaderBar/HBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+text = "Đã tìm: 0/5 lỗi"
+vertical_alignment = 1
+
+[node name="LblSafety" type="Label" parent="HeaderBar/HBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+text = "An toàn: 100/100"
+vertical_alignment = 1
+
+[node name="MascotBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 54.0
+offset_right = -12.0
+offset_bottom = 102.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="SpeechPanel" type="PanelContainer" parent="MascotBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="CatSpeechLabel" type="Label" parent="MascotBar/SpeechPanel"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.25, 0.18, 0.15, 1)
+text = "So sánh ảnh phòng mẫu quảng cáo và phòng trọ thực tế để tìm 5 khiếm khuyết nhé Sen!"
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ContentScroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 108.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ContentScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="LblModelTitle" type="Label" parent="ContentScroll/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.2, 0.5, 0.2, 1)
+text = "🌟 ẢNH MẪU QUẢNG CÁO CỦA CHỦ TRỌ (TIÊU CHUẨN)"
+
+[node name="FrameModel" type="PanelContainer" parent="ContentScroll/VBox"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_frame")
+
+[node name="TexModel" type="ColorRect" parent="ContentScroll/VBox/FrameModel"]
+layout_mode = 2
+color = Color(0.92, 0.95, 0.92, 1)
+
+[node name="LblCleanNote" type="Label" parent="ContentScroll/VBox/FrameModel"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.3, 0.4, 0.3, 0.8)
+text = "[Ảnh Mẫu: Trần phẳng đẹp, vòi nước mới, cửa an toàn, chuồng cọp có cửa thoát nạn]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblActualTitle" type="Label" parent="ContentScroll/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.8, 0.3, 0.1, 1)
+text = "🔍 PHÒNG TRỌ THỰC TẾ KHI TỚI XEM (CHẠM ĐỂ SOI LỖI)"
+
+[node name="FrameActual" type="PanelContainer" parent="ContentScroll/VBox"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_frame")
+
+[node name="TexActual" type="ColorRect" parent="ContentScroll/VBox/FrameActual"]
+layout_mode = 2
+color = Color(0.96, 0.92, 0.88, 1)
+
+[node name="MarkersLayer" type="Control" parent="ContentScroll/VBox/FrameActual"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="DefectModal" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -180.0
+offset_right = 160.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="DefectModal"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LblDefectName" type="Label" parent="DefectModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.75, 0.15, 0.15, 1)
+text = "🔍 Tên Khiếm Khuyết"
+
+[node name="LblDefectDesc" type="Label" parent="DefectModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.3, 0.25, 0.2, 1)
+text = "Mô tả sự khác biệt giữa ảnh mẫu và thực tế..."
+autowrap_mode = 2
+
+[node name="DangerPanel" type="PanelContainer" parent="DefectModal/VBox"]
+layout_mode = 2
+
+[node name="LblDanger" type="Label" parent="DefectModal/VBox/DangerPanel"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.85, 0.35, 0.1, 1)
+text = "⚠️ Rủi ro thực tế..."
+autowrap_mode = 2
+
+[node name="LegalPanel" type="PanelContainer" parent="DefectModal/VBox"]
+layout_mode = 2
+
+[node name="LblLegal" type="Label" parent="DefectModal/VBox/LegalPanel"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 0.55, 0.25, 1)
+text = "⚖️ Quyền lợi pháp lý..."
+autowrap_mode = 2
+
+[node name="BtnCloseDefect" type="Button" parent="DefectModal/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+text = "ĐÃ HIỂU & TIẾP TỤC SOI"
+
+[node name="VerdictModal" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -160.0
+offset_right = 160.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="VerdictModal"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LblVerdictTitle" type="Label" parent="VerdictModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+text = "PHÁN QUYẾT BÀN GIAO PHÒNG TRỌ"
+horizontal_alignment = 1
+
+[node name="BtnRepair" type="Button" parent="VerdictModal/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "1. Yêu Cầu Sửa Chữa Trước Khi Cọc"
+
+[node name="BtnReject" type="Button" parent="VerdictModal/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "2. Từ Chối Thuê Vì Thiếu An Toàn PCCC"
+
+[node name="BtnAcceptBlindly" type="Button" parent="VerdictModal/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "3. Ký Bừa Nhận Phòng (Thử Sai)"
+
+[node name="VictoryModal" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -120.0
+offset_right = 150.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="VictoryModal"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LblVictoryTitle" type="Label" parent="VictoryModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.2, 0.6, 0.2, 1)
+text = "🎉 BẬC THẦY THÁM TỬ PHÒNG TRỌ"
+horizontal_alignment = 1
+
+[node name="LblVictoryDesc" type="Label" parent="VictoryModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+text = "Bạn đã hoàn thành soi phòng trọ xuất sắc!"
+autowrap_mode = 2
+
+[node name="BtnFinish" type="Button" parent="VictoryModal/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+text = "NHẬN THƯỞNG 15 CÁ KHÔ"

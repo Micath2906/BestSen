@@ -141,6 +141,7 @@ texture = ExtResource("5_classic_bg")
 expand_mode = 1
 
 [node name="RoomCanvas" type="Node2D" parent="."]
+texture_filter = 1
 visible = false
 script = ExtResource("2_canvas")
 

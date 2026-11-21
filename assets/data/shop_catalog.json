@@ -11,11 +11,31 @@
       "icon": "👔",
       "color": "#b388eb",
       "subcategories": [
-        {"id": "all", "name": "Tất Cả", "icon": "✨"},
-        {"id": "clothes", "name": "Quần Áo", "icon": "👕"},
-        {"id": "hats", "name": "Mũ & Nón", "icon": "🎩"},
-        {"id": "bows", "name": "Nơ & Khăn", "icon": "🎀"},
-        {"id": "accessories", "name": "Phụ Kiện", "icon": "🎒"}
+        {
+          "id": "all",
+          "name": "Tất Cả",
+          "icon": "✨"
+        },
+        {
+          "id": "clothes",
+          "name": "Quần Áo",
+          "icon": "👕"
+        },
+        {
+          "id": "hats",
+          "name": "Mũ & Nón",
+          "icon": "🎩"
+        },
+        {
+          "id": "bows",
+          "name": "Nơ & Khăn",
+          "icon": "🎀"
+        },
+        {
+          "id": "accessories",
+          "name": "Phụ Kiện",
+          "icon": "🎒"
+        }
       ]
     },
     {
@@ -24,13 +44,41 @@
       "icon": "🏡",
       "color": "#f77f00",
       "subcategories": [
-        {"id": "all", "name": "Tất Cả", "icon": "✨"},
-        {"id": "beds", "name": "Giường & Đệm", "icon": "🛏️"},
-        {"id": "bowls", "name": "Bát Ăn Uống", "icon": "🥣"},
-        {"id": "rugs", "name": "Thảm Lát Sàn", "icon": "🧶"},
-        {"id": "wall", "name": "Tranh & Cửa Sổ", "icon": "🖼️"},
-        {"id": "plants", "name": "Cây Cảnh", "icon": "🪴"},
-        {"id": "comfort", "name": "Cách Nhiệt & Quạt", "icon": "🌬️"}
+        {
+          "id": "all",
+          "name": "Tất Cả",
+          "icon": "✨"
+        },
+        {
+          "id": "beds",
+          "name": "Giường & Đệm",
+          "icon": "🛏️"
+        },
+        {
+          "id": "bowls",
+          "name": "Bát Ăn Uống",
+          "icon": "🥣"
+        },
+        {
+          "id": "rugs",
+          "name": "Thảm Lát Sàn",
+          "icon": "🧶"
+        },
+        {
+          "id": "wall",
+          "name": "Tranh & Cửa Sổ",
+          "icon": "🖼️"
+        },
+        {
+          "id": "plants",
+          "name": "Cây Cảnh",
+          "icon": "🪴"
+        },
+        {
+          "id": "comfort",
+          "name": "Cách Nhiệt & Quạt",
+          "icon": "🌬️"
+        }
       ]
     },
     {
@@ -39,11 +87,31 @@
       "icon": "🧸",
       "color": "#06d6a0",
       "subcategories": [
-        {"id": "all", "name": "Tất Cả", "icon": "✨"},
-        {"id": "wands", "name": "Cần Câu", "icon": "🪶"},
-        {"id": "balls", "name": "Bóng & Len", "icon": "🧶"},
-        {"id": "scratchers", "name": "Bàn Cào Móng", "icon": "🪵"},
-        {"id": "boxes", "name": "Hộp & Ống Chui", "icon": "📦"}
+        {
+          "id": "all",
+          "name": "Tất Cả",
+          "icon": "✨"
+        },
+        {
+          "id": "wands",
+          "name": "Cần Câu",
+          "icon": "🪶"
+        },
+        {
+          "id": "balls",
+          "name": "Bóng & Len",
+          "icon": "🧶"
+        },
+        {
+          "id": "scratchers",
+          "name": "Bàn Cào Móng",
+          "icon": "🪵"
+        },
+        {
+          "id": "boxes",
+          "name": "Hộp & Ống Chui",
+          "icon": "📦"
+        }
       ]
     },
     {
@@ -52,11 +120,31 @@
       "icon": "🐟",
       "color": "#ffb703",
       "subcategories": [
-        {"id": "all", "name": "Tất Cả", "icon": "✨"},
-        {"id": "kibble", "name": "Túi Hạt", "icon": "🎒"},
-        {"id": "pate", "name": "Pate Tươi", "icon": "🥫"},
-        {"id": "treats", "name": "Súp & Snack", "icon": "🍖"},
-        {"id": "catnip", "name": "Cỏ & Catnip", "icon": "🌿"}
+        {
+          "id": "all",
+          "name": "Tất Cả",
+          "icon": "✨"
+        },
+        {
+          "id": "kibble",
+          "name": "Túi Hạt",
+          "icon": "🎒"
+        },
+        {
+          "id": "pate",
+          "name": "Pate Tươi",
+          "icon": "🥫"
+        },
+        {
+          "id": "treats",
+          "name": "Súp & Snack",
+          "icon": "🍖"
+        },
+        {
+          "id": "catnip",
+          "name": "Cỏ & Catnip",
+          "icon": "🌿"
+        }
       ]
     }
   ],
@@ -67,9 +155,12 @@
       "category": "costumes",
       "subcategory": "clothes",
       "icon": "🧥",
-      "price": 25,
+      "price": 75000,
       "required_level": 1,
-      "stat_boost": {"courage": 10, "mood": 15},
+      "stat_boost": {
+        "courage": 10,
+        "mood": 15
+      },
       "desc": "Áo nỉ màu xám ấm áp in logo tân sinh viên, mặc vào tự tin dạo phố không sợ rét."
     },
     {
@@ -78,9 +169,12 @@
       "category": "costumes",
       "subcategory": "clothes",
       "icon": "🧶",
-      "price": 40,
+      "price": 120000,
       "required_level": 2,
-      "stat_boost": {"courage": 15, "mood": 20},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 20
+      },
       "desc": "Chiếc áo len ấm áp mẹ đan gửi từ quê lên, thơm mùi nắng và ngập tràn tình thương."
     },
     {
@@ -89,9 +183,12 @@
       "category": "costumes",
       "subcategory": "clothes",
       "icon": "🎓",
-      "price": 75,
+      "price": 250000,
       "required_level": 4,
-      "stat_boost": {"courage": 35, "mood": 40},
+      "stat_boost": {
+        "courage": 35,
+        "mood": 40
+      },
       "desc": "Bộ lễ phục trang trọng ngày nhận bằng tốt nghiệp thủ khoa của Sen Toàn Năng!"
     },
     {
@@ -100,9 +197,12 @@
       "category": "costumes",
       "subcategory": "hats",
       "icon": "🧢",
-      "price": 20,
+      "price": 45000,
       "required_level": 1,
-      "stat_boost": {"courage": 10, "mood": 10},
+      "stat_boost": {
+        "courage": 10,
+        "mood": 10
+      },
       "desc": "Mũ lưỡi trai đội lệch sành điệu, che nắng gay gắt khi đứng chờ xe buýt liên quận."
     },
     {
@@ -111,9 +211,12 @@
       "category": "costumes",
       "subcategory": "hats",
       "icon": "🐰",
-      "price": 35,
+      "price": 60000,
       "required_level": 2,
-      "stat_boost": {"courage": 15, "mood": 25},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 25
+      },
       "desc": "Đôi tai thỏ lúc lắc mỗi khi Boss bước đi, đốn tim mọi bạn bè trong xóm trọ."
     },
     {
@@ -122,9 +225,12 @@
       "category": "costumes",
       "subcategory": "hats",
       "icon": "🪖",
-      "price": 50,
+      "price": 90000,
       "required_level": 3,
-      "stat_boost": {"courage": 30, "mood": 20},
+      "stat_boost": {
+        "courage": 30,
+        "mood": 20
+      },
       "desc": "Nón bảo hiểm đạt chuẩn an toàn giao thông đường bộ, Boss lên xe là chuẩn chỉnh."
     },
     {
@@ -133,9 +239,11 @@
       "category": "costumes",
       "subcategory": "bows",
       "icon": "🎀",
-      "price": 18,
+      "price": 35000,
       "required_level": 1,
-      "stat_boost": {"mood": 20},
+      "stat_boost": {
+        "mood": 20
+      },
       "desc": "Chiếc nơ nhung đỏ thắm biến Boss thành quý công tử sang chảnh trong nháy mắt."
     },
     {
@@ -144,9 +252,12 @@
       "category": "costumes",
       "subcategory": "bows",
       "icon": "🧣",
-      "price": 30,
+      "price": 50000,
       "required_level": 2,
-      "stat_boost": {"courage": 20, "mood": 15},
+      "stat_boost": {
+        "courage": 20,
+        "mood": 15
+      },
       "desc": "Biểu tượng thanh niên tình nguyện nhiệt huyết, xông xáo giúp đỡ bà con lối xóm."
     },
     {
@@ -155,9 +266,12 @@
       "category": "costumes",
       "subcategory": "accessories",
       "icon": "👓",
-      "price": 25,
+      "price": 45000,
       "required_level": 1,
-      "stat_boost": {"courage": 15, "mood": 15},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 15
+      },
       "desc": "Đeo kính tròn vào trông Boss thông minh uyên bác như giảng viên đại học."
     },
     {
@@ -166,9 +280,12 @@
       "category": "costumes",
       "subcategory": "accessories",
       "icon": "🎒",
-      "price": 45,
+      "price": 85000,
       "required_level": 3,
-      "stat_boost": {"courage": 25, "mood": 25},
+      "stat_boost": {
+        "courage": 25,
+        "mood": 25
+      },
       "desc": "Ba lô mini đựng giáo trình, thẻ xe buýt và hộp cơm trưa cưng xỉu."
     },
     {
@@ -179,7 +296,10 @@
       "icon": "📦",
       "price": 0,
       "required_level": 1,
-      "stat_boost": {"courage": 5, "mood": 10},
+      "stat_boost": {
+        "courage": 5,
+        "mood": 10
+      },
       "desc": "Chiếc hộp giấy carton quen thuộc của tân sinh viên, đơn sơ nhưng Boss cực kỳ mê tít!"
     },
     {
@@ -190,7 +310,10 @@
       "icon": "🥣",
       "price": 0,
       "required_level": 1,
-      "stat_boost": {"hunger": 10, "mood": 5},
+      "stat_boost": {
+        "hunger": 10,
+        "mood": 5
+      },
       "desc": "Chiếc bát ăn nhựa xanh tiện dụng, vật phẩm sinh tồn đầu tiên của căn phòng KTX."
     },
     {
@@ -199,9 +322,12 @@
       "category": "decor",
       "subcategory": "beds",
       "icon": "🛏️",
-      "price": 35,
+      "price": 80000,
       "required_level": 1,
-      "stat_boost": {"courage": 10, "mood": 25},
+      "stat_boost": {
+        "courage": 10,
+        "mood": 25
+      },
       "desc": "Nệm nỉ êm ái phong cách game mobile với viền chỉ nổi bật, giữ ấm cho Boss giấc ngủ say."
     },
     {
@@ -210,9 +336,12 @@
       "category": "decor",
       "subcategory": "beds",
       "icon": "🪵",
-      "price": 40,
+      "price": 75000,
       "required_level": 1,
-      "stat_boost": {"courage": 15, "mood": 25},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 25
+      },
       "desc": "Trụ cào móng quấn dây thừng sisal tự nhiên kèm bệ ngồi ngắm cảnh cho Boss."
     },
     {
@@ -221,9 +350,12 @@
       "category": "decor",
       "subcategory": "beds",
       "icon": "🛏️",
-      "price": 30,
+      "price": 70000,
       "required_level": 1,
-      "stat_boost": {"courage": 10, "mood": 25},
+      "stat_boost": {
+        "courage": 10,
+        "mood": 25
+      },
       "desc": "Đệm lót bông cao cấp êm như mây, chỗ ngủ trưa lý tưởng sau giờ học căng thẳng."
     },
     {
@@ -232,9 +364,12 @@
       "category": "decor",
       "subcategory": "beds",
       "icon": "🪜",
-      "price": 60,
+      "price": 140000,
       "required_level": 3,
-      "stat_boost": {"courage": 20, "mood": 35},
+      "stat_boost": {
+        "courage": 20,
+        "mood": 35
+      },
       "desc": "Thiết kế giường tầng sinh viên tiết kiệm diện tích, có cầu thang gỗ xinh xắn."
     },
     {
@@ -243,9 +378,12 @@
       "category": "decor",
       "subcategory": "bowls",
       "icon": "🥣",
-      "price": 25,
+      "price": 50000,
       "required_level": 1,
-      "stat_boost": {"courage": 10, "mood": 15},
+      "stat_boost": {
+        "courage": 10,
+        "mood": 15
+      },
       "desc": "Hai ngăn riêng biệt cho hạt giòn và nước lọc thanh khiết, chống gù lưng cho Mèo."
     },
     {
@@ -254,9 +392,12 @@
       "category": "decor",
       "subcategory": "bowls",
       "icon": "⛲",
-      "price": 55,
+      "price": 110000,
       "required_level": 2,
-      "stat_boost": {"courage": 15, "mood": 30},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 30
+      },
       "desc": "Dòng nước chảy róc rách kích thích Boss chăm uống nước, bảo vệ đường tiết niệu."
     },
     {
@@ -265,9 +406,11 @@
       "category": "decor",
       "subcategory": "rugs",
       "icon": "🧶",
-      "price": 35,
+      "price": 65000,
       "required_level": 1,
-      "stat_boost": {"mood": 25},
+      "stat_boost": {
+        "mood": 25
+      },
       "desc": "Họa tiết thổ cẩm ấm cúng xua tan cái lạnh nền gạch men của căn phòng trọ."
     },
     {
@@ -276,9 +419,12 @@
       "category": "decor",
       "subcategory": "rugs",
       "icon": "🐾",
-      "price": 50,
+      "price": 90000,
       "required_level": 3,
-      "stat_boost": {"courage": 15, "mood": 30},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 30
+      },
       "desc": "Sợi lông cừu mềm mượt chạm vào êm ái, in họa tiết bàn chân mèo xinh xắn."
     },
     {
@@ -287,9 +433,11 @@
       "category": "decor",
       "subcategory": "wall",
       "icon": "🖼️",
-      "price": 20,
+      "price": 40000,
       "required_level": 1,
-      "stat_boost": {"mood": 15},
+      "stat_boost": {
+        "mood": 15
+      },
       "desc": "Bức tranh truyền cảm hứng về sức sống kiên cường của loài xương rồng sa mạc."
     },
     {
@@ -298,9 +446,12 @@
       "category": "decor",
       "subcategory": "wall",
       "icon": "🪟",
-      "price": 45,
+      "price": 95000,
       "required_level": 2,
-      "stat_boost": {"courage": 20, "mood": 25},
+      "stat_boost": {
+        "courage": 20,
+        "mood": 25
+      },
       "desc": "Khung cửa sổ mở ra vạt nắng vàng xiên dịu ngọt, nơi Boss nằm sưởi ấm mỗi ban mai."
     },
     {
@@ -309,9 +460,12 @@
       "category": "decor",
       "subcategory": "plants",
       "icon": "🪴",
-      "price": 30,
+      "price": 60000,
       "required_level": 1,
-      "stat_boost": {"courage": 10, "mood": 20},
+      "stat_boost": {
+        "courage": 10,
+        "mood": 20
+      },
       "desc": "Tán lá xanh tươi thanh lọc không khí trong lành cho căn phòng trọ 15m2."
     },
     {
@@ -320,9 +474,12 @@
       "category": "decor",
       "subcategory": "plants",
       "icon": "🌵",
-      "price": 45,
+      "price": 85000,
       "required_level": 2,
-      "stat_boost": {"courage": 15, "mood": 25},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 25
+      },
       "desc": "Những bông sen đá nhỏ nhắn biểu trưng cho may mắn thi cử và tài chính ổn định."
     },
     {
@@ -331,9 +488,12 @@
       "category": "toys",
       "subcategory": "wands",
       "icon": "🪶",
-      "price": 15,
+      "price": 30000,
       "required_level": 1,
-      "stat_boost": {"courage": 15, "mood": 20},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 20
+      },
       "desc": "Lông vũ mềm mại gắn chuông leng keng kích thích bản năng săn mồi dũng mãnh."
     },
     {
@@ -342,9 +502,12 @@
       "category": "toys",
       "subcategory": "wands",
       "icon": "🐁",
-      "price": 35,
+      "price": 65000,
       "required_level": 2,
-      "stat_boost": {"courage": 25, "mood": 30},
+      "stat_boost": {
+        "courage": 25,
+        "mood": 30
+      },
       "desc": "Chú chuột bông ngộ nghĩnh khiến Mèo nhào lộn nhảy cao không biết mệt."
     },
     {
@@ -353,9 +516,12 @@
       "category": "toys",
       "subcategory": "balls",
       "icon": "🧶",
-      "price": 12,
+      "price": 25000,
       "required_level": 1,
-      "stat_boost": {"courage": 10, "mood": 15},
+      "stat_boost": {
+        "courage": 10,
+        "mood": 15
+      },
       "desc": "Cuộn len đan sợi màu nâu ấm áp, lăn lông lốc khắp sàn khiến Boss mèo đuổi bắt quên cả âu lo."
     },
     {
@@ -364,9 +530,12 @@
       "category": "toys",
       "subcategory": "balls",
       "icon": "🧶",
-      "price": 15,
+      "price": 30000,
       "required_level": 1,
-      "stat_boost": {"courage": 12, "mood": 18},
+      "stat_boost": {
+        "courage": 12,
+        "mood": 18
+      },
       "desc": "Cuộn len đan tay mềm mại, vờn bắt xả stress cực đã cho Sen và Mèo."
     },
     {
@@ -375,9 +544,12 @@
       "category": "toys",
       "subcategory": "balls",
       "icon": "🔔",
-      "price": 25,
+      "price": 45000,
       "required_level": 2,
-      "stat_boost": {"courage": 20, "mood": 20},
+      "stat_boost": {
+        "courage": 20,
+        "mood": 20
+      },
       "desc": "Tiếng chuông ngân vang vui tai giúp Mèo sảng khoái tinh thần sau buổi học bài."
     },
     {
@@ -386,9 +558,12 @@
       "category": "toys",
       "subcategory": "scratchers",
       "icon": "🪵",
-      "price": 25,
+      "price": 55000,
       "required_level": 1,
-      "stat_boost": {"courage": 20, "mood": 20},
+      "stat_boost": {
+        "courage": 20,
+        "mood": 20
+      },
       "desc": "Dây thừng gai sisal bền chắc giúp Mèo mài vuốt sắc bén, bảo vệ nệm ngủ an toàn."
     },
     {
@@ -397,9 +572,12 @@
       "category": "toys",
       "subcategory": "scratchers",
       "icon": "🍄",
-      "price": 45,
+      "price": 85000,
       "required_level": 3,
-      "stat_boost": {"courage": 30, "mood": 30},
+      "stat_boost": {
+        "courage": 30,
+        "mood": 30
+      },
       "desc": "Tạo hình cây nấm cổ tích rực rỡ biến góc phòng thành khu rừng thần tiên."
     },
     {
@@ -408,9 +586,12 @@
       "category": "toys",
       "subcategory": "boxes",
       "icon": "📦",
-      "price": 10,
+      "price": 20000,
       "required_level": 1,
-      "stat_boost": {"courage": 15, "mood": 25},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 25
+      },
       "desc": "Không có gì bí ẩn và lôi cuốn loài mèo hơn một chiếc thùng carton trống không!"
     },
     {
@@ -419,9 +600,12 @@
       "category": "toys",
       "subcategory": "boxes",
       "icon": "🎪",
-      "price": 40,
+      "price": 75000,
       "required_level": 2,
-      "stat_boost": {"courage": 25, "mood": 35},
+      "stat_boost": {
+        "courage": 25,
+        "mood": 35
+      },
       "desc": "Hầm chui bí mật giúp Boss chơi trò rình mồi ú òa cực kỳ hào hứng."
     },
     {
@@ -430,9 +614,13 @@
       "category": "food",
       "subcategory": "kibble",
       "icon": "🎒",
-      "price": 5,
+      "price": 35000,
       "required_level": 1,
-      "stat_boost": {"hunger": 20, "courage": 5, "mood": 10},
+      "stat_boost": {
+        "hunger": 20,
+        "courage": 5,
+        "mood": 10
+      },
       "desc": "Túi hạt dinh dưỡng cao cấp giàu Omega-3 giúp Boss óng ả mượt mà như tơ lụa."
     },
     {
@@ -441,9 +629,13 @@
       "category": "food",
       "subcategory": "kibble",
       "icon": "🎒",
-      "price": 10,
+      "price": 20000,
       "required_level": 1,
-      "stat_boost": {"hunger": 30, "courage": 10, "mood": 15},
+      "stat_boost": {
+        "hunger": 30,
+        "courage": 10,
+        "mood": 15
+      },
       "desc": "Cung cấp đạm nạc từ túi hạt thơm ngon, tăng cường thể lực bền bỉ cho ngày dài năng động."
     },
     {
@@ -452,9 +644,13 @@
       "category": "food",
       "subcategory": "pate",
       "icon": "🥫",
-      "price": 12,
+      "price": 35000,
       "required_level": 1,
-      "stat_boost": {"hunger": 40, "courage": 20, "mood": 30},
+      "stat_boost": {
+        "hunger": 40,
+        "courage": 20,
+        "mood": 30
+      },
       "desc": "Thịt cá ngừ nguyên thớ hòa quyện thạch mát lạnh, thơm nức mũi cả xóm trọ."
     },
     {
@@ -463,9 +659,13 @@
       "category": "food",
       "subcategory": "pate",
       "icon": "🥩",
-      "price": 20,
+      "price": 65000,
       "required_level": 2,
-      "stat_boost": {"hunger": 50, "courage": 30, "mood": 40},
+      "stat_boost": {
+        "hunger": 50,
+        "courage": 30,
+        "mood": 40
+      },
       "desc": "Bữa tiệc ẩm thực đẳng cấp 5 sao xua tan mọi mệt mỏi sau kỳ thi cam go."
     },
     {
@@ -474,9 +674,13 @@
       "category": "food",
       "subcategory": "treats",
       "icon": "🍖",
-      "price": 8,
+      "price": 25000,
       "required_level": 1,
-      "stat_boost": {"hunger": 15, "courage": 15, "mood": 35},
+      "stat_boost": {
+        "hunger": 15,
+        "courage": 15,
+        "mood": 35
+      },
       "desc": "Chỉ cần bẻ gói súp là Boss chạy ngay lại dụi đầu làm nũng xin ăn lia lịa."
     },
     {
@@ -485,9 +689,13 @@
       "category": "food",
       "subcategory": "treats",
       "icon": "🍗",
-      "price": 15,
+      "price": 30000,
       "required_level": 2,
-      "stat_boost": {"hunger": 25, "courage": 25, "mood": 30},
+      "stat_boost": {
+        "hunger": 25,
+        "courage": 25,
+        "mood": 30
+      },
       "desc": "Công nghệ sấy thăng hoa giữ trọn 98% dinh dưỡng tự nhiên của ức gà tươi."
     },
     {
@@ -496,9 +704,13 @@
       "category": "food",
       "subcategory": "catnip",
       "icon": "🌿",
-      "price": 6,
+      "price": 15000,
       "required_level": 1,
-      "stat_boost": {"hunger": 10, "courage": 10, "mood": 30},
+      "stat_boost": {
+        "hunger": 10,
+        "courage": 10,
+        "mood": 30
+      },
       "desc": "Chậu cỏ xanh mướt hỗ trợ tiêu búi lông, giúp hệ tiêu hóa của Mèo luôn khỏe re."
     },
     {
@@ -507,9 +719,12 @@
       "category": "food",
       "subcategory": "catnip",
       "icon": "🍃",
-      "price": 18,
+      "price": 40000,
       "required_level": 2,
-      "stat_boost": {"courage": 30, "mood": 50},
+      "stat_boost": {
+        "courage": 30,
+        "mood": 50
+      },
       "desc": "Cục lăn Catnip tự nhiên dán tường, liếm vào là Mèo lăn lộn đê mê ngây ngất!"
     },
     {
@@ -518,10 +733,13 @@
       "category": "decor",
       "subcategory": "wall",
       "icon": "🪟",
-      "price": 40,
+      "price": 150000,
       "required_level": 1,
       "upgrade_type": "heat_insulation",
-      "stat_boost": {"courage": 15, "mood": 25},
+      "stat_boost": {
+        "courage": 15,
+        "mood": 25
+      },
       "desc": "Nâng cấp cách nhiệt giúp giảm 5 độ C phòng trọ mái tôn, giúp Boss ngủ trưa mát rượi."
     },
     {
@@ -530,10 +748,13 @@
       "category": "decor",
       "subcategory": "comfort",
       "icon": "🌬️",
-      "price": 35,
+      "price": 120000,
       "required_level": 1,
       "upgrade_type": "mini_fan",
-      "stat_boost": {"courage": 10, "mood": 30},
+      "stat_boost": {
+        "courage": 10,
+        "mood": 30
+      },
       "desc": "Quạt mini tiết kiệm điện xua tan cái nóng mùa thi, tự động làm mát góc ngủ của Boss."
     }
   ]

@@ -308,6 +308,7 @@ func _make_iso_ellipse(center: Vector2, rx: float, ry: float, segments: int = 24
 
 func set_decor_grid_visible(active: bool) -> void:
 	show_iso_grid = active
+	visible = active
 	if not active:
 		hovered_grid_cell = Vector2i(-1, -1)
 	queue_redraw()

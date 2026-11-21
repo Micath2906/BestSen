@@ -240,6 +240,34 @@ func _style_sub_tabs(container: Container, active_id: String, sub_list: Array) -
 		btn.add_theme_stylebox_override("hover", style)
 		btn.add_theme_stylebox_override("pressed", style)
 
+func _apply_wearable_rect(rect: TextureRect, path: String, offset_y_from_cat_center: float, scale_factor: float = 3.6) -> void:
+	if not rect:
+		return
+	if path == "" or not (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+		rect.visible = false
+		rect.texture = null
+		return
+	var tex = GameManager.load_texture(path)
+	if not tex:
+		rect.visible = false
+		return
+	rect.texture = tex
+	rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var sz = tex.get_size() * scale_factor
+	rect.custom_minimum_size = sz
+	rect.size = sz
+	
+	var offset_x = 0.0
+	var eff_offset_y = offset_y_from_cat_center
+	if path.contains("backpack"):
+		offset_x = 28.0
+		eff_offset_y = 8.0
+
+	rect.position = Vector2((176.0 - sz.x) * 0.5 + offset_x, (220.0 - sz.y) * 0.5 + eff_offset_y)
+	rect.visible = true
+
 func _render_stage_cat() -> void:
 	if anim_stage_cat == null:
 		anim_stage_cat = AnimatedSprite2D.new()
@@ -255,50 +283,18 @@ func _render_stage_cat() -> void:
 	if not anim_stage_cat.is_playing() or anim_stage_cat.animation != "jump":
 		anim_stage_cat.play("idle2")
 		
-	# Cập nhật phụ kiện pixel-art trên sân khấu
+	# Cập nhật phụ kiện pixel-art trên sân khấu chuẩn giải phẫu mèo 32x32
 	var hat_id = preview_costumes.get("hats", "")
-	if hat_id != "":
-		var path = GameManager.get_costume_sprite_path(hat_id)
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			hat_rect.texture = GameManager.load_texture(path)
-			hat_rect.visible = true
-		else:
-			hat_rect.visible = false
-	else:
-		hat_rect.visible = false
+	_apply_wearable_rect(hat_rect, GameManager.get_costume_sprite_path(hat_id), -30.0, 3.6)
 		
 	var bow_id = preview_costumes.get("bows", "")
-	if bow_id != "":
-		var path = GameManager.get_costume_sprite_path(bow_id)
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			bow_rect.texture = GameManager.load_texture(path)
-			bow_rect.visible = true
-		else:
-			bow_rect.visible = false
-	else:
-		bow_rect.visible = false
+	_apply_wearable_rect(bow_rect, GameManager.get_costume_sprite_path(bow_id), 5.0, 3.6)
 		
 	var clothes_id = preview_costumes.get("clothes", "")
-	if clothes_id != "":
-		var path = GameManager.get_costume_sprite_path(clothes_id)
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			clothes_rect.texture = GameManager.load_texture(path)
-			clothes_rect.visible = true
-		else:
-			clothes_rect.visible = false
-	else:
-		clothes_rect.visible = false
+	_apply_wearable_rect(clothes_rect, GameManager.get_costume_sprite_path(clothes_id), 20.0, 3.6)
 		
 	var acc_id = preview_costumes.get("accessories", "")
-	if acc_id != "":
-		var path = GameManager.get_costume_sprite_path(acc_id)
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			acc_rect.texture = GameManager.load_texture(path)
-			acc_rect.visible = true
-		else:
-			acc_rect.visible = false
-	else:
-		acc_rect.visible = false
+	_apply_wearable_rect(acc_rect, GameManager.get_costume_sprite_path(acc_id), -14.0, 3.6)
 		
 	# Tính điểm phong cách
 	var score = _calc_preview_fashion_score()

@@ -18,10 +18,10 @@ func _init() -> void:
 			"id": "healthcare_wellness_simulation",
 			"lesson_id": 3,
 			"icon": "🩺",
-			"title": "Giả Lập Y Tế & Thân Tâm Tự Lập",
-			"desc": "3 Cấp độ thực chiến: Sơ cứu bỏng nước mát 3s (né bẫy kem đánh răng) & đo sốt uống thuốc, Bản đồ 2D top-down 5 trạm khám BHYT & chuỗi chứng từ viện phí, Nhịp sinh học say caffeine & bài tập hít thở 4-7-8 cùng Mochi.",
-			"type_badge": "Giả Lập Xúc Giác 3 Cấp Độ",
-			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
+			"title": "Giả Lập Bác Sĩ Mèo Nhí: Chẩn Đoán & Kê Đơn",
+			"desc": "3 Chặng thực chiến: Chẩn đoán 3 ca bệnh học đường, kê đơn đúng thuốc vào tủ sơ cứu & thủ tục khám BHYT đúng tuyến.",
+			"type_badge": "Giả Lập Bác Sĩ 2D Pixel",
+			"scene_path": "res://scenes/minigames/doctor_simulation_game.tscn",
 			"data_key": "3"
 		},
 		{
@@ -29,9 +29,9 @@ func _init() -> void:
 			"lesson_id": 1,
 			"icon": "🧳",
 			"title": "Lời Dặn Dò Của Mẹ Khi Chuẩn Bị Lên Đại Học",
-			"desc": "Kéo thả xếp đồ vào 4 ngăn Vali & Điền khuyết dán đúng nhãn công dụng thuốc và ghi nhớ lời dặn của Mẹ.",
-			"type_badge": "Kéo Thả & Điền Khuyết",
-			"scene_path": "res://scenes/minigames/PreparationValiGame.tscn",
+			"desc": "Kéo thả xếp đồ vào Vali tân sinh viên phong cách Unpacking 2D Pixel ấm cúng.",
+			"type_badge": "Xếp Vali Unpacking 2D",
+			"scene_path": "res://scenes/minigames/packing_minigame.tscn",
 			"data_key": "1"
 		},
 		{
@@ -39,9 +39,9 @@ func _init() -> void:
 			"lesson_id": 2,
 			"icon": "🏥",
 			"title": "Lựa Chọn Bệnh Viện Chuyên Khoa Đúng Bệnh",
-			"desc": "Dựa trên tình hình bạn cùng phòng, trả lời câu hỏi và chọn đúng bệnh viện chuyên khoa. Sai quay lại đầu!",
+			"desc": "Dựa trên tình hình bạn cùng phòng, trả lời câu hỏi và chọn đúng bệnh viện chuyên khoa.",
 			"type_badge": "Chọn Bệnh Viện Chuyên Khoa",
-			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
+			"scene_path": "res://scenes/minigames/doctor_simulation_game.tscn",
 			"data_key": "2"
 		},
 		{
@@ -49,19 +49,19 @@ func _init() -> void:
 			"lesson_id": 3,
 			"icon": "🌡️",
 			"title": "Xác Định Đúng Bệnh Trước Khi Uống Thuốc",
-			"desc": "Lượt 1: Dùng nhiệt kế/vật phẩm chẩn đoán -> Bảng thống kê triệu chứng -> Lượt 2: Chọn đúng thuốc hạ sốt.",
+			"desc": "Chẩn đoán triệu chứng sốt cảm, kê đúng liều hạ sốt và bù nước.",
 			"type_badge": "Chẩn Đoán & Chọn Thuốc",
-			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
+			"scene_path": "res://scenes/minigames/doctor_simulation_game.tscn",
 			"data_key": "3"
 		},
 		{
 			"id": "bhyt_process",
 			"lesson_id": 10,
 			"icon": "📋",
-			"title": "Quy Trình 6 Bước Khám BHYT Đúng Tuyến",
-			"desc": "Chuẩn bị 4 giấy tờ BHYT & Kéo thả / Sắp xếp 6 bước đúng quy trình khám BHYT không sợ bị mắng.",
-			"type_badge": "Kéo Thả 6 Bước BHYT",
-			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
+			"title": "Quy Trình Khám BHYT Đúng Tuyến",
+			"desc": "Chuẩn bị CCCD/VNeID, xuất trình thẻ BHYT và hoàn tất thủ tục khám.",
+			"type_badge": "Quy Trình BHYT Chuẩn",
+			"scene_path": "res://scenes/minigames/doctor_simulation_game.tscn",
 			"data_key": "10"
 		},
 		{
@@ -71,7 +71,7 @@ func _init() -> void:
 			"title": "Xếp Hộp Thuốc Cứu Thương Sinh Viên",
 			"desc": "Xếp 4 món y tế khẩn cấp vào hộp sơ cứu phòng trọ: hạ sốt, men tiêu hóa, băng gạc, oresol bù nước.",
 			"type_badge": "Kéo Thả Hộp Thuốc",
-			"scene_path": "res://scenes/minigames/HealthcareWellnessSimulation.tscn",
+			"scene_path": "res://scenes/minigames/doctor_simulation_game.tscn",
 			"data_key": "11"
 		},
 		{

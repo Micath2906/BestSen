@@ -227,6 +227,45 @@ func _update_fish_balance() -> void:
 # ==============================================================================
 # HỆ THỐNG MODEL MÈO & PHÒNG THỬ ĐỒ 2/3 MÀN HÌNH (FITTING ROOM STAGE)
 # ==============================================================================
+func _apply_wearable_rect(rect: TextureRect, path: String, offset_y_from_cat_center: float, scale_factor: float = 4.6) -> void:
+	if not rect:
+		return
+	if path == "" or not (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+		rect.visible = false
+		rect.texture = null
+		return
+	var tex = GameManager.load_texture(path)
+	if not tex:
+		rect.visible = false
+		return
+	rect.texture = tex
+	rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var sz = tex.get_size() * scale_factor
+	rect.custom_minimum_size = sz
+	rect.size = sz
+	
+	var offset_x = -2.0
+	var eff_offset_y = offset_y_from_cat_center
+	if path.contains("backpack"):
+		offset_x = 42.0
+		eff_offset_y = 22.0
+	elif path.contains("helmet"):
+		eff_offset_y = -46.0
+	elif path.contains("hat_cap"):
+		eff_offset_y = -44.0
+		
+	rect.anchor_left = 0.5
+	rect.anchor_right = 0.5
+	rect.anchor_top = 0.5
+	rect.anchor_bottom = 0.5
+	rect.offset_left = -sz.x * 0.5 + offset_x
+	rect.offset_right = sz.x * 0.5 + offset_x
+	rect.offset_top = 20.0 + eff_offset_y - sz.y * 0.5
+	rect.offset_bottom = 20.0 + eff_offset_y + sz.y * 0.5
+	rect.visible = true
+
 func _render_cat_model() -> void:
 	if anim_stage_cat == null:
 		anim_stage_cat = AnimatedSprite2D.new()
@@ -242,50 +281,18 @@ func _render_cat_model() -> void:
 	if not anim_stage_cat.is_playing() or anim_stage_cat.animation != "jump":
 		anim_stage_cat.play("idle2")
 		
-	# 1. Cập nhật các lớp trang phục hiển thị pixel-art trên Model Mèo dùng GameManager.load_texture
+	# 1. Cập nhật các lớp trang phục hiển thị pixel-art trên Model Mèo chuẩn giải phẫu 32x32
 	var hat_id = preview_costumes.get("hats", "")
-	if hat_id != "":
-		var path = GameManager.get_costume_sprite_path(hat_id)
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			hat_rect.texture = GameManager.load_texture(path)
-			hat_rect.visible = true
-		else:
-			hat_rect.visible = false
-	else:
-		hat_rect.visible = false
+	_apply_wearable_rect(hat_rect, GameManager.get_costume_sprite_path(hat_id), -38.0)
 		
 	var bow_id = preview_costumes.get("bows", "")
-	if bow_id != "":
-		var path = GameManager.get_costume_sprite_path(bow_id)
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			bow_rect.texture = GameManager.load_texture(path)
-			bow_rect.visible = true
-		else:
-			bow_rect.visible = false
-	else:
-		bow_rect.visible = false
+	_apply_wearable_rect(bow_rect, GameManager.get_costume_sprite_path(bow_id), 6.0)
 		
 	var clothes_id = preview_costumes.get("clothes", "")
-	if clothes_id != "":
-		var path = GameManager.get_costume_sprite_path(clothes_id)
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			clothes_rect.texture = GameManager.load_texture(path)
-			clothes_rect.visible = true
-		else:
-			clothes_rect.visible = false
-	else:
-		clothes_rect.visible = false
+	_apply_wearable_rect(clothes_rect, GameManager.get_costume_sprite_path(clothes_id), 26.0)
 		
 	var acc_id = preview_costumes.get("accessories", "")
-	if acc_id != "":
-		var path = GameManager.get_costume_sprite_path(acc_id)
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			acc_rect.texture = GameManager.load_texture(path)
-			acc_rect.visible = true
-		else:
-			acc_rect.visible = false
-	else:
-		acc_rect.visible = false
+	_apply_wearable_rect(acc_rect, GameManager.get_costume_sprite_path(acc_id), -18.0)
 
 	# 2. Tính toán điểm thời trang thực tế
 	var score = _calc_fashion_score(preview_costumes)

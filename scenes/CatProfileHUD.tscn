@@ -249,7 +249,7 @@ layout_mode = 2
 
 [node name="CoinPanel" type="NinePatchRect" parent="HUDContainer/HBox/RightInfo/CoinRow"]
 texture_filter = 1
-custom_minimum_size = Vector2(115, 22)
+custom_minimum_size = Vector2(130, 24)
 layout_mode = 2
 texture = ExtResource("12_scroll_coin")
 patch_margin_left = 8

@@ -68,7 +68,7 @@ var food_bowl_drop_zone: Control = null
 var food_bag_widget: TextureRect = null
 var food_bag_qty_lbl: Label = null
 var is_dragging_food_bag: bool = false
-var food_bag_base_pos: Vector2 = Vector2(338.0, 790.0)
+var food_bag_base_pos: Vector2 = Vector2(325.0, 770.0)
 
 var _floor_press_active: bool = false
 var _floor_press_elapsed: float = 0.0
@@ -84,12 +84,13 @@ func _ready() -> void:
 	room_canvas.origin = origin
 	iso_cat.origin = origin
 	
-	# Định vị 4 đồ nội thất thiết yếu trên mặt sàn phòng trọ 2D Classic (Y ~ 760-820, X ~ 85-440)
-	# 1 Giường ngủ, 1 Chén đồ ăn, 1 Chén nước, và 1 Chỗ đi vệ sinh (Litter box)
-	cushion_bed.position = Vector2(85.0, 765.0)
-	food_bowl.position = Vector2(195.0, 815.0)
-	water_bowl.position = Vector2(260.0, 815.0)
-	litter_box.position = Vector2(430.0, 790.0)
+	# Định vị 4 đồ nội thất thiết yếu trên mặt sàn gỗ Parquet ấm áp (Y ~ 680-740)
+	# 1 Giường ngủ mèo, 1 Chén đồ ăn, 1 Chén nước, và 1 Chỗ đi vệ sinh (Litter box)
+	cushion_bed.position = Vector2(75.0, 710.0)
+	food_bowl.position = Vector2(220.0, 730.0)
+	water_bowl.position = Vector2(275.0, 730.0)
+	litter_box.position = Vector2(430.0, 715.0)
+	food_bag_base_pos = Vector2(170.0, 700.0)
 	
 	# Cập nhật grid_coord để mèo đi đến chuẩn xác
 	cushion_bed.grid_coord = IsometricGrid.screen_to_grid(cushion_bed.position, origin)
@@ -98,7 +99,11 @@ func _ready() -> void:
 	litter_box.grid_coord = IsometricGrid.screen_to_grid(litter_box.position, origin)
 	_apply_saved_furniture_positions()
 	
-	# Cập nhật background Classic từ PetMobileGameAsset
+	# Đặt vị trí ban đầu của Boss Mèo Mochi trên thảm Bohemian ấm áp
+	iso_cat.position = Vector2(295.0, 550.0)
+	iso_cat.grid_pos = IsometricGrid.screen_to_grid(iso_cat.position, origin)
+	
+	# Cập nhật background Phòng Trọ Sinh Viên Ấm Áp (Cozy Parquet Studio)
 	_update_room_background()
 	GameManager.classic_bg_changed.connect(func(_bg_id): _update_room_background())
 	
@@ -191,6 +196,7 @@ func _ready() -> void:
 	toy_item.visible = false
 	_setup_food_bag_interaction()
 	_setup_decor_mode_ui()
+	_setup_cozy_room_decorations()
 	_setup_wall_achievement_board()
 	refresh_wall_achievement_board()
 	_update_comfort_badge()
@@ -208,6 +214,10 @@ func _update_room_title(room_name: String) -> void:
 
 func _update_room_background() -> void:
 	if room_background:
+		var cozy_bg_path = "res://assets/sprites/room_decor/cozy_student_room_bg.png"
+		if ResourceLoader.exists(cozy_bg_path) or FileAccess.file_exists(cozy_bg_path):
+			room_background.texture = GameManager.load_texture(cozy_bg_path)
+			return
 		var path = GameManager.get_classic_bg_path()
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 			room_background.texture = load(path)
@@ -219,7 +229,7 @@ func _setup_companion_cat() -> void:
 	var cur_breed = GameManager.selected_avatar_id
 	var comp_breed = 9 if cur_breed == 8 else 8
 	companion_cat._setup_sprite_frames(comp_breed)
-	companion_cat.position = Vector2(85.0, 775.0)
+	companion_cat.position = Vector2(95.0, 715.0)
 	companion_cat.grid_pos = IsometricGrid.screen_to_grid(companion_cat.position, origin)
 	companion_cat.set_state(companion_cat.State.SLEEP)
 	if companion_cat.dialogue_label:
@@ -1005,13 +1015,125 @@ func _spawn_kibble_pour_particles(target_pos: Vector2) -> void:
 		tw.parallel().tween_property(pellet, "modulate:a", 0.0, 0.36)
 		tw.tween_callback(pellet.queue_free)
 
+func _create_room_decor_item(node_name: String, tex_path: String, pos: Vector2, sz: Vector2, z_idx: int = 1, on_interact: Callable = Callable()) -> TextureRect:
+	var tr = TextureRect.new()
+	tr.name = node_name
+	tr.texture = GameManager.load_texture(tex_path)
+	tr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	tr.size = sz
+	tr.position = pos
+	if on_interact.is_valid():
+		tr.mouse_filter = Control.MOUSE_FILTER_STOP
+		tr.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		tr.gui_input.connect(func(ev: InputEvent):
+			if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+				on_interact.call()
+		)
+	else:
+		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(tr)
+	move_child(tr, z_idx)
+	return tr
+
+func _setup_cozy_room_decorations() -> void:
+	# 1. Dây cờ trang trí & Đèn đom đóm Fairy Lights (Mép gờ tường trên)
+	_create_room_decor_item("CozyFairyLights", "res://assets/sprites/room_decor/furniture_fairy_lights.png", Vector2(25, 156), Vector2(490, 26), 1)
+
+	# 2. Đồng hồ treo tường gỗ tròn (Phía trên tường bên phải)
+	_create_room_decor_item("CozyWallClock", "res://assets/sprites/room_decor/furniture_wall_clock.png", Vector2(375, 175), Vector2(36, 36), 1, func():
+		SoundManager.play_click()
+		var time_dict = Time.get_time_dict_from_system()
+		_spawn_floating_text(Vector2(375, 195), "🕒 Bây giờ là %02d:%02d • Trọ bình yên!" % [time_dict.hour, time_dict.minute], Color(0.95, 0.75, 0.3))
+	)
+
+	# 3. Lịch treo tường tháng sinh viên (Góc phải tường trên)
+	_create_room_decor_item("CozyWallCalendar", "res://assets/sprites/room_decor/furniture_wall_calendar.png", Vector2(440, 175), Vector2(40, 48), 1, func():
+		SoundManager.play_click()
+		_spawn_floating_text(Vector2(440, 195), "📅 Ngày %d/30: Còn %d ngày tới kỳ nộp tiền trọ!" % [GameManager.current_day, GameManager.days_until_rent_due], Color(0.95, 0.5, 0.3))
+	)
+
+	# 4. Cửa sổ lớn đón ánh nắng bầu trời mây trắng & Rèm cửa vàng ấm (Trung tâm tường)
+	_create_room_decor_item("CozySunlitWindow", "res://assets/sprites/room_decor/furniture_sunlit_window.png", Vector2(185, 175), Vector2(170, 145), 1, func():
+		SoundManager.play_purr()
+		_spawn_floating_text(Vector2(270, 220), "☀️ Nắng sớm chiếu rọi phòng trọ: +10 Mood! 🐦", Color(1.0, 0.85, 0.4))
+		GameManager.update_stats(0, 0, +5, +10)
+	)
+
+	# 5. Kệ sách treo tường đầy sách & chậu sen đá (Bên trái tường, dưới Bảng ghim thành tựu)
+	_create_room_decor_item("CozyWallBookshelf", "res://assets/sprites/room_decor/furniture_wall_bookshelf.png", Vector2(20, 248), Vector2(145, 45), 1, func():
+		SoundManager.play_confirm()
+		_spawn_floating_text(Vector2(90, 260), "📚 Kệ Sách Sinh Viên: Trau dồi kỹ năng sống!", Color(0.3, 0.7, 0.95))
+		emit_signal("open_skill_tree_requested")
+	)
+
+	# 6. Tranh treo tường nghệ thuật mèo (Bên phải cửa sổ)
+	_create_room_decor_item("CozyWallArt", "res://assets/sprites/room_items/wall_art.png", Vector2(375, 215), Vector2(50, 60), 1, func():
+		SoundManager.play_click()
+		_spawn_floating_text(Vector2(375, 230), "🖼️ Tranh nghệ thuật Boss Mèo: +5 Mood!", Color(0.95, 0.6, 0.7))
+		GameManager.update_stats(0, 0, +2, +5)
+	)
+
+	# 7. Tủ quần áo & Giá treo đồ sinh viên (Chân chạm len tường sàn gỗ Y=462)
+	_create_room_decor_item("CozyWardrobe", "res://assets/sprites/room_decor/furniture_wardrobe.png", Vector2(16, 292), Vector2(105, 170), 1, func():
+		SoundManager.play_click()
+		_spawn_floating_text(Vector2(68, 310), "👗 Tủ đồ sinh viên: Mở Phòng Thử Đồ Boss!", Color(0.85, 0.55, 0.9))
+		emit_signal("open_dressing_room_requested")
+	)
+
+	# 8. Bàn học sinh viên đầy đủ chi tiết + Ghế tựa (Dưới cửa sổ, chân chạm sàn Y=462)
+	_create_room_decor_item("CozyStudyDesk", "res://assets/sprites/room_decor/furniture_study_desk.png", Vector2(180, 322), Vector2(180, 140), 1, func():
+		SoundManager.play_confirm()
+		_spawn_floating_text(Vector2(270, 340), "💻 Bàn học: Nghiên cứu bài vở & quản lý chi tiêu! +15 EXP", Color(0.25, 0.75, 0.85))
+		GameManager.update_stats(0, 0, +10, +15)
+	)
+
+	# 9. Góc tiện ích sinh viên: Tủ lạnh mini + Ấm siêu tốc + Ly mì tôm (Cạnh bàn học)
+	_create_room_decor_item("CozyMiniPantry", "res://assets/sprites/room_decor/furniture_mini_pantry.png", Vector2(365, 342), Vector2(80, 120), 1, func():
+		SoundManager.play_chomp()
+		_spawn_floating_text(Vector2(405, 360), "🍜 Ly mì tôm ấm bụng đêm khuya: +15 No!", Color(0.95, 0.65, 0.2))
+		GameManager.update_stats(0, +15, 0, +5)
+	)
+
+	# 10. Nhà cây mèo & Trụ cào móng đa tầng (Góc phải tường, chân chạm sàn Y=462)
+	_create_room_decor_item("CozyCatTree", "res://assets/sprites/room_decor/furniture_cat_tree.png", Vector2(448, 322), Vector2(80, 140), 1, func():
+		SoundManager.play_purr()
+		_spawn_floating_text(Vector2(460, 340), "🐾 Trụ cào móng xịn xò: Boss mài vuốt thích mê! +15 Mood", Color(0.95, 0.45, 0.6))
+		GameManager.update_stats(0, 0, +5, +15)
+	)
+
+	# 11. Thảm đón cửa có dép gọn gàng
+	_create_room_decor_item("CozyShoeMat", "res://assets/sprites/room_decor/furniture_shoe_mat.png", Vector2(22, 465), Vector2(64, 32), 1)
+
+	# 12. Giường ngủ nệm sinh viên ấm cúng (Trải trên sàn tầng giữa)
+	_create_room_decor_item("CozyStudentBed", "res://assets/sprites/room_decor/furniture_student_bed.png", Vector2(18, 500), Vector2(165, 125), 1, func():
+		SoundManager.play_confirm()
+		_spawn_floating_text(Vector2(95, 520), "🛏️ Giường ngủ sinh viên êm ấm: Hồi phục thể lực!", Color(0.9, 0.6, 0.4))
+		GameManager.update_stats(0, 0, +5, +15)
+	)
+
+	# 13. Thảm trải sàn Bohemian lớn sang trọng (Trung tâm sàn gỗ)
+	_create_room_decor_item("CozyFloorRug", "res://assets/sprites/room_decor/furniture_cozy_rug.png", Vector2(175, 490), Vector2(260, 120), 1, func():
+		SoundManager.play_purr()
+		_spawn_floating_text(Vector2(300, 510), "🧶 Thảm dệt Bohemian êm ái: +10 Mood!", Color(0.9, 0.6, 0.3))
+		GameManager.update_stats(0, 0, +2, +10)
+	)
+
+	# 14. Chậu cây xanh Monstera tươi mát (Cạnh nhà cây mèo)
+	_create_room_decor_item("CozyPottedPlant", "res://assets/sprites/room_items/potted_monstera.png", Vector2(448, 485), Vector2(65, 125), 1, func():
+		SoundManager.play_click()
+		_spawn_floating_text(Vector2(460, 500), "🪴 Cây trầu bà Monstera xanh tươi: +5 Dũng!", Color(0.25, 0.8, 0.4))
+		GameManager.update_stats(0, 0, +5, +5)
+	)
+
 func _setup_wall_achievement_board() -> void:
 	if wall_cork_board != null:
 		return
 	wall_cork_board = PanelContainer.new()
 	wall_cork_board.name = "RoomAchievementCorkBoard"
-	wall_cork_board.position = Vector2(20, 148)
-	wall_cork_board.custom_minimum_size = Vector2(210, 86)
+	wall_cork_board.position = Vector2(20, 175)
+	wall_cork_board.custom_minimum_size = Vector2(150, 70)
 	wall_cork_board.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var cork_sb := StyleBoxTexture.new()
 	cork_sb.texture = CORK_BOARD_9PATCH

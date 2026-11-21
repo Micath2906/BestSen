@@ -17,11 +17,11 @@ func _init() -> void:
 		{
 			"id": "housing_legal_simulation",
 			"lesson_id": 5,
-			"icon": "🏠",
-			"title": "Giả Lập Sinh Tồn Phòng Trọ & Thám Tử Hợp Đồng",
-			"desc": "3 Cấp độ thực chiến: Soi kính lúp 2.5D tìm lỗi phòng ẩn, Đối chiếu hợp đồng bẫy cọc & đóng dấu sáp Papers Please, Quản trị tải điện chống sập cầu dao & soi hóa đơn số nhảy.",
-			"type_badge": "Giả Lập Xúc Giác 3 Cấp Độ",
-			"scene_path": "res://scenes/minigames/HousingLegalSimulation.tscn",
+			"icon": "🔍",
+			"title": "Soi Phòng Trọ 2D: Tìm Điểm Khác Biệt & Lỗi Ẩn",
+			"desc": "So sánh 2 căn phòng trọ bằng kính lúp, phát hiện 4 lỗi ngầm: vòi nước rò rỉ, công tơ điện quay lén, chốt cửa lỏng, vết dột trần.",
+			"type_badge": "Tìm Điểm Khác Biệt 2D Pixel",
+			"scene_path": "res://scenes/minigames/room_inspection_diff_game.tscn",
 			"data_key": "5"
 		},
 		{
@@ -29,9 +29,9 @@ func _init() -> void:
 			"lesson_id": 5,
 			"icon": "📜",
 			"title": "Hiểu Biết Pháp Luật Hợp Đồng Thuê Nhà",
-			"desc": "Nối chế định pháp lý giải pháp & Sắp xếp 4 bước quy trình ký hợp đồng thuê nhà an toàn.",
-			"type_badge": "Nối & Sắp Xếp Quy Trình",
-			"scene_path": "res://scenes/minigames/HousingLegalSimulation.tscn",
+			"desc": "Soi lỗi hạ tầng phòng trọ thực tế trước khi đặt bút ký cọc.",
+			"type_badge": "Soi Lỗi Hạ Tầng",
+			"scene_path": "res://scenes/minigames/room_inspection_diff_game.tscn",
 			"data_key": "5"
 		},
 		{
@@ -39,9 +39,9 @@ func _init() -> void:
 			"lesson_id": 6,
 			"icon": "🧯",
 			"title": "Thám Tử PCCC: Khảo Sát An Toàn Phòng Trọ",
-			"desc": "Soi kính lúp tìm 3 điểm bẫy cháy nổ (chuồng cọp, bình chữa cháy mini, ổ điện) và lối thoát hiểm.",
+			"desc": "Soi kính lúp tìm các điểm nguy cơ cháy nổ, kiểm tra công tơ và ổ cắm điện.",
 			"type_badge": "Soi Điểm Nguy Hiểm",
-			"scene_path": "res://scenes/minigames/HousingLegalSimulation.tscn",
+			"scene_path": "res://scenes/minigames/room_inspection_diff_game.tscn",
 			"data_key": "6"
 		},
 		{

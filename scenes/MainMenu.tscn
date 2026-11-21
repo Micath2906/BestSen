@@ -386,7 +386,7 @@ text = "Bé Mèo Tự Lập • Hành Trang Sinh Viên"
 horizontal_alignment = 1
 
 [node name="ButtonsCard" type="PanelContainer" parent="HomeView/CenterVBox"]
-custom_minimum_size = Vector2(250, 330)
+custom_minimum_size = Vector2(270, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -394,8 +394,18 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_bg_card")
 
 [node name="VBox" type="VBoxContainer" parent="HomeView/CenterVBox/ButtonsCard"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 alignment = 1
+
+[node name="BtnPlaytestHub" type="Button" parent="HomeView/CenterVBox/ButtonsCard/VBox"]
+custom_minimum_size = Vector2(230, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "🎮 CHƠI THỬ MINIGAME MỚI"
 
 [node name="BtnPlay" type="Button" parent="HomeView/CenterVBox/ButtonsCard/VBox"]
 custom_minimum_size = Vector2(170, 48)

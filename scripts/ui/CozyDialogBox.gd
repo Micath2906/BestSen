@@ -168,9 +168,13 @@ func _resize_bubble_to_fit(line_text: String) -> void:
 		est_lines += 2
 	var target_h: float = 54.0 + float(est_lines - 1) * 18.0
 	custom_minimum_size = Vector2(target_w, target_h + 12.0)
-	size = custom_minimum_size
+	if anchor_left == anchor_right and anchor_top == anchor_bottom:
+		size = custom_minimum_size
 	if bubble_panel:
-		bubble_panel.size = Vector2(target_w, target_h)
+		if bubble_panel.anchor_left == bubble_panel.anchor_right and bubble_panel.anchor_top == bubble_panel.anchor_bottom:
+			bubble_panel.size = Vector2(target_w, target_h)
+		else:
+			bubble_panel.custom_minimum_size = Vector2(target_w, target_h)
 
 func set_cat_mouth_offset_x(offset_x: float) -> void:
 	_target_mouth_offset_x = offset_x

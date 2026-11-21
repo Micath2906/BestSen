@@ -291,8 +291,8 @@ func update_hud() -> void:
 		
 	# 4. Cập nhật Tiền Cá Vàng
 	if lbl_fish_val:
-		lbl_fish_val.text = "%d" % GameManager.fish
-		if GameManager.fish < 15:
+		lbl_fish_val.text = GameManager.format_currency(GameManager.fish)
+		if GameManager.fish < 20000:
 			lbl_fish_val.add_theme_color_override("font_color", Color(0.9, 0.2, 0.2))
 		else:
 			lbl_fish_val.add_theme_color_override("font_color", Color(0.20, 0.14, 0.08))
@@ -301,7 +301,7 @@ func update_hud() -> void:
 	if GameManager.debt_amount > 0:
 		if lbl_debt_tag:
 			lbl_debt_tag.visible = true
-			lbl_debt_tag.text = "Nợ %d" % GameManager.debt_amount
+			lbl_debt_tag.text = "Nợ %s" % GameManager.format_currency(GameManager.debt_amount)
 		if debt_icon:
 			debt_icon.visible = true
 			if debt_tween == null or not debt_tween.is_valid():

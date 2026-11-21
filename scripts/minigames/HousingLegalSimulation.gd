@@ -193,130 +193,18 @@ func _build_level1_ui() -> void:
 	if not level1_container: return
 	for ch in level1_container.get_children(): ch.queue_free()
 	
-	var v_box = VBoxContainer.new()
-	v_box.set_anchors_preset(Control.PRESET_FULL_RECT)
-	v_box.add_theme_constant_override("separation", 8)
-	
-	# 1. Khung căn phòng 2.5D với 5 Hotspot tương tác
-	var room_panel = PanelContainer.new()
-	room_panel.custom_minimum_size = Vector2(0, 180)
-	var sb_room = StyleBoxFlat.new()
-	sb_room.bg_color = Color(0.95, 0.93, 0.88, 1.0)
-	sb_room.border_color = Color(0.7, 0.55, 0.4, 1.0)
-	sb_room.set_border_width_all(2)
-	sb_room.set_corner_radius_all(10)
-	room_panel.add_theme_stylebox_override("panel", sb_room)
-	
-	var r_vbox = VBoxContainer.new()
-	r_vbox.add_theme_constant_override("separation", 6)
-	
-	var room_title = Label.new()
-	room_title.text = "🔍 SƠ ĐỒ PHÒNG TRỌ 2.5D (RÀ KÍNH LÚP QUA 5 VÙNG NGHI VẤN):"
-	room_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	room_title.add_theme_font_size_override("font_size", 10)
-	room_title.add_theme_color_override("font_color", Color(0.35, 0.25, 0.15, 1.0))
-	r_vbox.add_child(room_title)
-	
-	var grid = GridContainer.new()
-	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 10)
-	grid.add_theme_constant_override("v_separation", 8)
-	
-	# Hotspot 1: Vòi nước (mở van xem tốc độ hạt nước)
-	btn_tap = Button.new()
-	btn_tap.name = "BtnWaterTap"
-	btn_tap.text = "🚰 Vòi Nước: Mở Van Kiểm Tra"
-	btn_tap.custom_minimum_size = Vector2(210, 44)
-	btn_tap.add_theme_font_size_override("font_size", 10)
-	btn_tap.pressed.connect(_on_water_tap_pressed)
-	JuicyButtonScript.attach_juice(btn_tap, true)
-	grid.add_child(btn_tap)
-	
-	# Hotspot 2: Vết ố trần nhà & mái tôn
-	btn_ceiling = Button.new()
-	btn_ceiling.name = "BtnCeilingStain"
-	btn_ceiling.text = "🏠 Soi Vết Ố Vàng Trần Nhà"
-	btn_ceiling.custom_minimum_size = Vector2(210, 44)
-	btn_ceiling.add_theme_font_size_override("font_size", 10)
-	btn_ceiling.pressed.connect(_on_ceiling_pressed)
-	JuicyButtonScript.attach_juice(btn_ceiling, true)
-	grid.add_child(btn_ceiling)
-	
-	# Hotspot 3: Chốt khóa cửa ra vào
-	btn_door = Button.new()
-	btn_door.name = "BtnDoorLock"
-	btn_door.text = "🚪 Lay Thử Chốt Khóa Cửa"
-	btn_door.custom_minimum_size = Vector2(210, 44)
-	btn_door.add_theme_font_size_override("font_size", 10)
-	btn_door.pressed.connect(_on_door_lock_pressed)
-	JuicyButtonScript.attach_juice(btn_door, true)
-	grid.add_child(btn_door)
-	
-	# Hotspot 4: Khóa then cài cửa sổ
-	btn_window = Button.new()
-	btn_window.name = "BtnWindowLock"
-	btn_window.text = "🪟 Kiểm Tra Khóa Cửa Sổ"
-	btn_window.custom_minimum_size = Vector2(210, 44)
-	btn_window.add_theme_font_size_override("font_size", 10)
-	btn_window.pressed.connect(_on_window_lock_pressed)
-	JuicyButtonScript.attach_juice(btn_window, true)
-	grid.add_child(btn_window)
-	
-	# Hotspot 5: Công tắc tổng + Đồng hồ điện (nếu tắt hết mà đĩa quay -> báo rò điện)
-	btn_switch_meter = Button.new()
-	btn_switch_meter.name = "BtnSwitchMeter"
-	btn_switch_meter.text = "⚡ TẮT HẾT ĐIỆN & SOI CÔNG TƠ"
-	btn_switch_meter.custom_minimum_size = Vector2(210, 44)
-	btn_switch_meter.add_theme_font_size_override("font_size", 10)
-	btn_switch_meter.pressed.connect(_on_switch_meter_pressed)
-	JuicyButtonScript.attach_juice(btn_switch_meter, true)
-	grid.add_child(btn_switch_meter)
-	
-	r_vbox.add_child(grid)
-	room_panel.add_child(r_vbox)
-	v_box.add_child(room_panel)
-	
-	# 2. Panel Kính Lúp Phóng To Chi Tiết (loot_14_magnifier.tres)
-	magnifier_preview_panel = PanelContainer.new()
-	magnifier_preview_panel.name = "MagnifierPreviewPanel"
-	var sb_mag = StyleBoxFlat.new()
-	sb_mag.bg_color = Color(0.98, 0.97, 0.94, 1.0)
-	sb_mag.border_color = Color(0.35, 0.55, 0.85, 1.0)
-	sb_mag.set_border_width_all(2)
-	sb_mag.set_corner_radius_all(8)
-	magnifier_preview_panel.add_theme_stylebox_override("panel", sb_mag)
-	
-	var m_row = HBoxContainer.new()
-	m_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	m_row.add_theme_constant_override("separation", 8)
-	
-	var icon_mag = TextureRect.new()
-	icon_mag.custom_minimum_size = Vector2(20, 20)
-	icon_mag.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon_mag.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	var mag_tex = GameManager.load_texture(ICON_MAGNIFIER)
-	if mag_tex: icon_mag.texture = mag_tex
-	m_row.add_child(icon_mag)
-	
-	magnifier_lbl = Label.new()
-	magnifier_lbl.name = "MagnifierLabel"
-	magnifier_lbl.text = "Kính lúp: Hãy chạm vào từng khu vực để phóng to soi chi tiết lỗi hạ tầng!"
-	magnifier_lbl.add_theme_font_size_override("font_size", 9)
-	magnifier_lbl.add_theme_color_override("font_color", Color(0.2, 0.35, 0.55, 1.0))
-	m_row.add_child(magnifier_lbl)
-	magnifier_preview_panel.add_child(m_row)
-	v_box.add_child(magnifier_preview_panel)
-	
-	# Tiến trình phát hiện lỗi
-	var defect_counter = Label.new()
-	defect_counter.name = "DefectCounterLabel"
-	defect_counter.text = "Lỗi hạ tầng đã phát hiện: 0 / 4"
-	defect_counter.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	defect_counter.add_theme_font_size_override("font_size", 10)
-	defect_counter.add_theme_color_override("font_color", Color(0.2, 0.55, 0.3, 1.0))
-	v_box.add_child(defect_counter)
-	
-	level1_container.add_child(v_box)
+	# Nhúng trực tiếp minigame Soi Phòng Trọ 2D Tìm Điểm Khác Biệt (Chuẩn visual pixel)
+	var diff_scene = preload("res://scenes/minigames/room_inspection_diff_game.tscn")
+	var diff_game = diff_scene.instantiate()
+	diff_game.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	level1_container.add_child(diff_game)
+	diff_game.minigame_completed.connect(func(_steps):
+		defect_water_found = true
+		defect_ceiling_found = true
+		defect_door_found = true
+		defect_meter_found = true
+		_check_level1_progress()
+	)
 
 func _on_water_tap_pressed() -> void:
 	SoundManager.play_click()

@@ -81,18 +81,21 @@ func _ready() -> void:
 	)
 
 func _apply_beige_popup_skin() -> void:
-	if not panel or not TEX_MODAL_BEIGE:
+	if not panel:
 		return
-	var sb := StyleBoxTexture.new()
-	sb.texture = TEX_MODAL_BEIGE
-	sb.texture_margin_left = 16.0
-	sb.texture_margin_top = 16.0
-	sb.texture_margin_right = 16.0
-	sb.texture_margin_bottom = 16.0
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color("#FFFBF5")
+	sb.border_color = Color("#8D5B36")
+	sb.set_border_width_all(3)
+	sb.border_width_bottom = 6
+	sb.set_corner_radius_all(14)
 	sb.content_margin_left = 22.0
 	sb.content_margin_top = 20.0
 	sb.content_margin_right = 22.0
 	sb.content_margin_bottom = 20.0
+	sb.shadow_color = Color(0, 0, 0, 0.25)
+	sb.shadow_size = 8
+	sb.shadow_offset = Vector2(0, 4)
 	panel.add_theme_stylebox_override("panel", sb)
 
 func _setup_audio_toggles() -> void:

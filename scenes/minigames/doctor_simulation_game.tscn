@@ -1,0 +1,409 @@
+[gd_scene load_steps=8 format=3 uid="uid://b2m8c7k5v4n1p"]
+
+[ext_resource type="Script" path="res://scripts/minigames/doctor_simulation_game.gd" id="1_doctor"]
+[ext_resource type="FontFile" path="res://assets/font/SVN-Retron 2000.ttf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.976471, 0.964706, 0.937255, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.380392, 0.282353, 0.239216, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.75, 0.65, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stage"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.94, 0.97, 0.98, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.5, 0.7, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.992157, 0.988235, 0.956863, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 4
+border_color = Color(0.243137, 0.152941, 0.137255, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 8
+
+[node name="DoctorSimulationGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_doctor")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="HeaderBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 48.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="HBox" type="HBoxContainer" parent="HeaderBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnBack" type="Button" parent="HeaderBar/HBox"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+text = "◀"
+
+[node name="LblTitle" type="Label" parent="HeaderBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1, 0.95, 0.85, 1)
+text = "BÁC SĨ MÈO NHÍ: CỨU THƯƠNG ĐÊM SỐT"
+vertical_alignment = 1
+
+[node name="LblTemp" type="Label" parent="HeaderBar/HBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
+text = "Nhiệt kế: 39.0°C"
+vertical_alignment = 1
+
+[node name="LblWeight" type="Label" parent="HeaderBar/HBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.9, 0.85, 0.7, 1)
+text = "Cân nặng: 40.0 kg"
+vertical_alignment = 1
+
+[node name="MascotBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 54.0
+offset_right = -12.0
+offset_bottom = 102.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="SpeechPanel" type="PanelContainer" parent="MascotBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+
+[node name="CatSpeechLabel" type="Label" parent="MascotBar/SpeechPanel"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.25, 0.18, 0.15, 1)
+text = "Sen ơi, Mèo bị sốt nóng rực người rồi... Mau lấy nhiệt kế kẹp đo giúp Mèo với!"
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="PatientStage" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 110.0
+offset_right = -12.0
+offset_bottom = 340.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stage")
+
+[node name="VBox" type="VBoxContainer" parent="PatientStage"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LblBedTitle" type="Label" parent="PatientStage/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.2, 0.4, 0.5, 1)
+text = "🏥 GIƯỜNG BỆNH MÈO CON (BỆNH NHÂN NHÍ)"
+horizontal_alignment = 1
+
+[node name="CatAvatar" type="TextureRect" parent="PatientStage/VBox"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_horizontal = 3
+stretch_mode = 5
+
+[node name="LblStatus" type="Label" parent="PatientStage/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
+text = "🔴 Trạng thái: Sốt nóng rực, chưa đo nhiệt độ"
+horizontal_alignment = 1
+
+[node name="ActionTray" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -280.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_stage")
+
+[node name="VBox" type="VBoxContainer" parent="ActionTray"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LblTrayTitle" type="Label" parent="ActionTray/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.2, 0.4, 0.5, 1)
+text = "🧰 BÀN DỤNG CỤ BÁC SĨ & TỦ THUỐC"
+horizontal_alignment = 1
+
+[node name="ToolsHBox" type="VBoxContainer" parent="ActionTray/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnThermo" type="Button" parent="ActionTray/VBox/ToolsHBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "1. 🌡️ Kẹp Nhiệt Kế Đo Thân Nhiệt"
+
+[node name="HBoxCooling" type="HBoxContainer" parent="ActionTray/VBox/ToolsHBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnWarmTowel" type="Button" parent="ActionTray/VBox/ToolsHBox/HBoxCooling"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "2. 💧 Khăn Nước Ấm 35°C"
+
+[node name="BtnIceTrap" type="Button" parent="ActionTray/VBox/ToolsHBox/HBoxCooling"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.3, 0.3, 1)
+text = "🧊 Chườm Đá Lạnh (Bẫy)"
+
+[node name="BtnCabinet" type="Button" parent="ActionTray/VBox/ToolsHBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "3. 💊 Mở Tủ Thuốc (Chọn Đúng Liều)"
+
+[node name="BtnOresol" type="Button" parent="ActionTray/VBox/ToolsHBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "4. 🥤 Pha Oresol Bù Điện Giải (200ml)"
+
+[node name="CabinetModal" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -160.0
+offset_right = 160.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="CabinetModal"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LblCabinetTitle" type="Label" parent="CabinetModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.3, 0.2, 0.15, 1)
+text = "TỦ THUỐC: CHỌN ĐÚNG BỆNH & LIỀU DÙNG"
+horizontal_alignment = 1
+
+[node name="Grid" type="VBoxContainer" parent="CabinetModal/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnPara500" type="Button" parent="CabinetModal/VBox/Grid"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "Vỉ Paracetamol 500mg (Liều chuẩn 40kg)"
+
+[node name="BtnBerberin" type="Button" parent="CabinetModal/VBox/Grid"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "Vỉ Berberin (Thuốc Đau Bụng Tiêu Chảy)"
+
+[node name="BtnAntibiotic" type="Button" parent="CabinetModal/VBox/Grid"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
+text = "Vỉ Kháng Sinh Amoxicillin (Bẫy Cảm Sốt)"
+
+[node name="BtnCloseCabinet" type="Button" parent="CabinetModal/VBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "ĐÓNG TỦ THUỐC"
+
+[node name="AdviceModal" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -120.0
+offset_right = 150.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="AdviceModal"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LblTitle" type="Label" parent="AdviceModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
+text = "CẢNH BÁO Y KHOA"
+
+[node name="LblDesc" type="Label" parent="AdviceModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+text = "Nội dung lời khuyên..."
+autowrap_mode = 2
+
+[node name="BtnCloseAdvice" type="Button" parent="AdviceModal/VBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+text = "ĐÃ HIỂU"
+
+[node name="VictoryModal" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -140.0
+offset_right = 150.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="VictoryModal"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LblVictoryTitle" type="Label" parent="VictoryModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.2, 0.6, 0.2, 1)
+text = "🎉 BÁC SĨ MÈO TỰ LẬP!"
+horizontal_alignment = 1
+
+[node name="LblVictoryDesc" type="Label" parent="VictoryModal/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.25, 0.2, 0.15, 1)
+text = "Mô tả kết quả cứu thương..."
+autowrap_mode = 2
+
+[node name="BtnFinish" type="Button" parent="VictoryModal/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+text = "NHẬN THƯỞNG 15 CÁ KHÔ"

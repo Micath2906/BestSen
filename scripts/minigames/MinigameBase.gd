@@ -27,6 +27,13 @@ var active_drag_id: int = -1
 var safe_failure_count: int = 0
 var data: Dictionary = {}
 
+func load_minigame(game_data: Dictionary = {}) -> void:
+	data = game_data
+	_on_load_minigame(game_data)
+
+func _on_load_minigame(_game_data: Dictionary) -> void:
+	pass
+
 var _intro_overlay: PanelContainer = null
 var _intro_label: Label = null
 var _intro_tween: Tween = null

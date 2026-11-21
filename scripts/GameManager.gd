@@ -21,7 +21,7 @@ signal minigame_hud_updated(time_left: float, progress_pct: float)
 var cozy_dialogs: Dictionary = {}
 
 # 3 CHỈ SỐ SINH TỒN CỐT LÕI & TÂM TRẠNG
-var fish: int = 90        # Đồng Vàng (Khởi điểm 90 Đồng Vàng / chu kỳ 30 ngày)
+var fish: int = 2000000   # Ngân sách sinh viên (2.000.000 VNĐ / chu kỳ 30 ngày)
 var hunger: int = 70      # Độ No (0 - 100 Điểm)
 var courage: int = 80     # Dũng Cảm (0 - 100 Điểm)
 var mood: int = 85        # Tâm Trạng (0 - 100 Điểm) Vui vẻ / Hạnh phúc
@@ -565,11 +565,15 @@ func _ready() -> void:
 		if not (sd in inventory_decor):
 			inventory_decor.append(sd)
 			
-	if equipped_costumes.get("clothes", "") == "":
-		equipped_costumes["clothes"] = "c_hoodie_student"
-		equipped_costume = "c_hoodie_student"
-	if equipped_costumes.get("hats", "") == "":
-		equipped_costumes["hats"] = "c_hat_cap"
+	# Mặc định để mèo cưng mộc mạc, đáng yêu tự nhiên không ép mặc đồ thùng thình
+	if not equipped_costumes.has("clothes"):
+		equipped_costumes["clothes"] = ""
+	if not equipped_costumes.has("hats"):
+		equipped_costumes["hats"] = ""
+	if not equipped_costumes.has("bows"):
+		equipped_costumes["bows"] = ""
+	if not equipped_costumes.has("accessories"):
+		equipped_costumes["accessories"] = ""
 		
 	if not equipped_decor.has("beds") or equipped_decor["beds"] == "":
 		equipped_decor["beds"] = "d_bed_box"
@@ -1444,9 +1448,11 @@ func set_room_name(new_name: String) -> void:
 
 # --- ĐỊNH DẠNG TIỀN TỆ & HỆ THỐNG PUZZLE CHỨNG NHẬN ---
 func format_currency(amount: int) -> String:
-	if amount >= 1000:
-		return "%sđ" % format_number_with_commas(amount)
-	return "%d.000đ" % amount
+	if amount == 0:
+		return "0đ"
+	if amount > 0 and amount < 1000:
+		return "%sđ" % format_number_with_commas(amount * 1000)
+	return "%sđ" % format_number_with_commas(amount)
 
 func format_number_with_commas(val: int) -> String:
 	var s = str(val)
@@ -1849,21 +1855,21 @@ func pay_monthly_expenses() -> bool:
 const COSTUME_SPRITE_PATHS = {
 	"c_hoodie_student": "res://assets/sprites/costumes/cloth_hoodie.png",
 	"c_sweater_wool": "res://assets/sprites/costumes/cloth_sweater.png",
-	"c_grad_robe": "res://assets/sprites/items/c_grad_robe.png",
+	"c_grad_robe": "res://assets/sprites/costumes/cloth_grad_robe.png",
 	"c_hat_cap": "res://assets/sprites/costumes/hat_cap_blue.png",
-	"c_hat_bunny": "res://assets/sprites/items/c_hat_bunny.png",
-	"c_hat_helmet": "res://assets/sprites/items/c_hat_helmet.png",
+	"c_hat_bunny": "res://assets/sprites/costumes/hat_bunny_ears.png",
+	"c_hat_helmet": "res://assets/sprites/costumes/hat_helmet_motor.png",
 	"c_hat_beret": "res://assets/sprites/costumes/hat_witch.png",
 	"c_hat_chef": "res://assets/sprites/costumes/hat_witch.png",
 	"c_bow_red": "res://assets/sprites/costumes/bow_red.png",
 	"c_bow_blue": "res://assets/sprites/costumes/bow_blue.png",
 	"c_bow_bell": "res://assets/sprites/costumes/bow_bell.png",
-	"c_scarf_volunteer": "res://assets/sprites/items/c_scarf_volunteer.png",
+	"c_scarf_volunteer": "res://assets/sprites/costumes/bow_scarf_volunteer.png",
 	"c_glasses_smart": "res://assets/sprites/costumes/acc_glasses.png",
 	"c_acc_glasses": "res://assets/sprites/costumes/acc_glasses.png",
-	"c_backpack_yellow": "res://assets/sprites/items/c_backpack_yellow.png",
+	"c_backpack_yellow": "res://assets/sprites/costumes/acc_backpack_yellow.png",
 	"c_acc_batman": "res://assets/sprites/costumes/acc_batman_mask.png",
-	"c_acc_backpack": "res://assets/sprites/items/c_backpack_yellow.png",
+	"c_acc_backpack": "res://assets/sprites/costumes/acc_backpack_yellow.png",
 }
 
 const FURNITURE_SPRITE_PATHS = {
@@ -2304,7 +2310,9 @@ func _apply_loaded_save_dict(data: Dictionary) -> void:
 	if data.is_empty():
 		return
 
-	fish = data.get("fish", 90)
+	fish = data.get("fish", 2000000)
+	if fish < 10000:
+		fish = 2000000
 	hunger = clampi(data.get("hunger", 70), 0, 100)
 	courage = clampi(data.get("courage", 80), 0, 100)
 	mood = clampi(data.get("mood", 85), 0, 100)
@@ -2327,10 +2335,10 @@ func _apply_loaded_save_dict(data: Dictionary) -> void:
 		"pate": 2,
 		"dry_fish": 3
 	})
-	equipped_costume = data.get("equipped_costume", "c_hoodie_student")
+	equipped_costume = data.get("equipped_costume", "")
 	equipped_costumes = data.get("equipped_costumes", {
-		"clothes": equipped_costume,
-		"hats": "c_hat_cap",
+		"clothes": "",
+		"hats": "",
 		"bows": "",
 		"accessories": ""
 	})
@@ -2391,7 +2399,7 @@ func _apply_loaded_save_dict(data: Dictionary) -> void:
 		last_active_unix = now_unix
 
 func reset_save_data() -> void:
-	fish = 90
+	fish = 2000000
 	hunger = 70
 	courage = 80
 	mood = 85
@@ -2428,10 +2436,10 @@ func reset_save_data() -> void:
 		"pate": 2,
 		"dry_fish": 3
 	}
-	equipped_costume = "c_hoodie_student"
+	equipped_costume = ""
 	equipped_costumes = {
-		"clothes": "c_hoodie_student",
-		"hats": "c_hat_cap",
+		"clothes": "",
+		"hats": "",
 		"bows": "",
 		"accessories": ""
 	}
